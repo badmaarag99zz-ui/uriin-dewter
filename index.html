@@ -228,7 +228,23 @@ button {
         placeholder="🔎 Нэрээр хайх..."
         onkeyup="showDebts()"
     >
-
+<select
+    id="sort"
+    onchange="showDebts()"
+    style="
+        width:100%;
+        padding:13px;
+        margin-bottom:10px;
+        border:1px solid #ccc;
+        border-radius:8px;
+        font-size:16px;
+    "
+>
+    <option value="due">📅 Төлөх хугацаагаар</option>
+    <option value="overdue">🔴 Хугацаа хэтэрсэн</option>
+    <option value="amount">💰 Их өртэй</option>
+    <option value="name">👤 Нэрээр</option>
+</select>
     <div id="list">
         <div class="empty">
             Одоогоор бүртгэлтэй өр алга.
