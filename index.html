@@ -665,8 +665,19 @@ function viewDebt(id) {
 
     }
 
+    alert(
+        "👤 " + debt.name +
+        "\n\n" +
+        "Нийт өр: " +
+        money(debt.amount) +
+        "\nТөлсөн: " +
+        money(debt.paid) +
+        "\nҮлдэгдэл: " +
+        money(remaining) +
+        history
+    );
 
-   
+}
 function showDebts() {
 
     var list =
