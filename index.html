@@ -661,19 +661,42 @@ function viewDebt(id) {
 
     }
 
-    alert(
+    var phone =
+        debt.phone ? debt.phone : "Бүртгэлгүй";
+
+    var message =
         "👤 " + debt.name +
-        "\n📞 Утас: " +
-        (debt.phone ? debt.phone : "Бүртгэлгүй") +
+        "\n📞 Утас: " + phone +
         "\n\n" +
-        "Нийт өр: " +
+        "💰 Нийт өр: " +
         money(debt.amount) +
-        "\nТөлсөн: " +
+        "\n💵 Төлсөн: " +
         money(debt.paid) +
-        "\nҮлдэгдэл: " +
+        "\n🔴 Үлдэгдэл: " +
         money(remaining) +
-        history
-    );
+        history;
+
+    if (debt.phone) {
+
+        var call = confirm(
+            message +
+            "\n\n📞 " +
+            debt.phone +
+            " дугаар руу залгах уу?"
+        );
+
+        if (call) {
+
+            window.location.href =
+                "tel:" + debt.phone;
+
+        }
+
+    } else {
+
+        alert(message);
+
+    }
 
 }
 function showDebts() {
