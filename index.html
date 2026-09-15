@@ -201,16 +201,21 @@ button {
     </div>
 
 
-    <div class="debt-box">
+   <div class="debt-box">
 
-        <h2>Өрийн жагсаалт</h2>
+    <h2>Өрийн жагсаалт</h2>
 
-        <div id="list">
-            <div class="empty">
-                Одоогоор бүртгэлтэй өр алга.
-            </div>
+    <input
+        id="search"
+        type="text"
+        placeholder="🔎 Нэрээр хайх..."
+        onkeyup="showDebts()"
+    >
+
+    <div id="list">
+        <div class="empty">
+            Одоогоор бүртгэлтэй өр алга.
         </div>
-
     </div>
 
 </div>
