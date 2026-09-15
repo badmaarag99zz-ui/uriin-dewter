@@ -493,14 +493,39 @@ function viewDebt(id) {
 
     var remaining = debt.amount - debt.paid;
 
-    alert(
-        "👤 " + debt.name +
-        "\n\n" +
-        "Нийт өр: " + money(debt.amount) +
-        "\nТөлсөн: " + money(debt.paid) +
-        "\nҮлдэгдэл: " + money(remaining)
-    );
+    var history = "";
 
+if (debt.payments && debt.payments.length > 0) {
+
+    history = "\n\n📋 Төлөлтийн түүх:\n";
+
+    for (var j = 0; j < debt.payments.length; j++) {
+
+        history +=
+            "\n" +
+            (j + 1) +
+            ". " +
+            money(debt.payments[j].amount) +
+            " — " +
+            debt.payments[j].date;
+
+    }
+
+} else {
+
+    history = "\n\n📋 Төлөлтийн түүх байхгүй.";
+
+}
+
+
+alert(
+    "👤 " + debt.name +
+    "\n\n" +
+    "Нийт өр: " + money(debt.amount) +
+    "\nТөлсөн: " + money(debt.paid) +
+    "\nҮлдэгдэл: " + money(remaining) +
+    history
+);
 }
 function showDebts() {
 
