@@ -818,16 +818,25 @@ debt.name +
 
         if (remaining > 0) {
 
-            html +=
-                '<button ' +
-                'class="pay" ' +
-                'onclick="payment(' +
-                debt.id +
-                ')">' +
-                '💵 Төлөлт бүртгэх' +
-                '</button>';
+    html +=
+        '<button ' +
+        'class="pay" ' +
+        'onclick="payment(' +
+        debt.id +
+        ')">' +
+        '💵 Төлөлт бүртгэх' +
+        '</button>';
 
-        }
+}
+
+html +=
+    '<button ' +
+    'class="pay" ' +
+    'onclick="addMoreDebt(' +
+    debt.id +
+    ')">' +
+    '➕ Өр нэмэх' +
+    '</button>';
 
 
         html +=
