@@ -327,8 +327,9 @@ function addDebt() {
 
     var amount =
         document.getElementById("debtAmount").value;
-var dueDate =
-    document.getElementById("dueDate").value;
+
+    var dueDate =
+        document.getElementById("dueDate").value;
 
     name = name.replace(/^\s+|\s+$/g, "");
 
@@ -353,19 +354,71 @@ var dueDate =
     }
 
 
-   debts.push({
+    /* БҮРТГЭЛТЭЙ ХҮНИЙГ ШАЛГАХ */
 
-    id: new Date().getTime(),
+    var existingDebt = null;
 
-    name: name,
+    for (var i = 0; i < debts.length; i++) {
 
-    amount: amount,
-dueDate: dueDate,
-    paid: 0,
+        if (
+            debts[i].name.toLowerCase() ==
+            name.toLowerCase()
+        ) {
 
-    payments: []
+            existingDebt = debts[i];
 
-});
+            break;
+
+        }
+
+    }
+
+
+    /* ХЭРЭВ БҮРТГЭЛТЭЙ БОЛ ӨР ДЭЭР НЭМЭХ */
+
+    if (existingDebt != null) {
+
+        existingDebt.amount =
+            existingDebt.amount + amount;
+
+        if (dueDate != "") {
+
+            existingDebt.dueDate = dueDate;
+
+        }
+
+        alert(
+            "✅ " +
+            existingDebt.name +
+            " дээр " +
+            money(amount) +
+            " өр нэмэгдлээ."
+        );
+
+    }
+
+
+    /* ШИНЭ ХҮН БОЛ ШИНЭЭР БҮРТГЭХ */
+
+    else {
+
+        debts.push({
+
+            id: new Date().getTime(),
+
+            name: name,
+
+            amount: amount,
+
+            dueDate: dueDate,
+
+            paid: 0,
+
+            payments: []
+
+        });
+
+    }
 
 
     saveData();
@@ -374,12 +427,13 @@ dueDate: dueDate,
     document.getElementById("personName").value = "";
 
     document.getElementById("debtAmount").value = "";
-document.getElementById("dueDate").value = "";
+
+    document.getElementById("dueDate").value = "";
+
 
     showDebts();
 
 }
-
 
 /* ТӨЛӨЛТ БҮРТГЭХ */
 
