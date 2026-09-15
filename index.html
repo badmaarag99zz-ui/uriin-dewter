@@ -278,7 +278,12 @@ function saveData() {
 
 }
 /* НӨӨЦ ФАЙЛ ТАТАХ */
-
+<input
+    type="file"
+    id="backupFile"
+    accept=".json"
+    onchange="restoreData(event)"
+>
 function backupData() {
 
     var data =
