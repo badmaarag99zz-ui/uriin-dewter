@@ -289,7 +289,8 @@ function addDebt() {
 
     var amount =
         document.getElementById("debtAmount").value;
-
+var dueDate =
+    document.getElementById("dueDate").value;
 
     name = name.replace(/^\s+|\s+$/g, "");
 
@@ -321,7 +322,7 @@ function addDebt() {
     name: name,
 
     amount: amount,
-
+dueDate: dueDate,
     paid: 0,
 
     payments: []
@@ -335,7 +336,7 @@ function addDebt() {
     document.getElementById("personName").value = "";
 
     document.getElementById("debtAmount").value = "";
-
+document.getElementById("dueDate").value = "";
 
     showDebts();
 
