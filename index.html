@@ -277,7 +277,35 @@ function saveData() {
     }
 
 }
+/* НӨӨЦ ФАЙЛ ТАТАХ */
 
+function backupData() {
+
+    var data =
+        JSON.stringify(debts, null, 2);
+
+    var blob =
+        new Blob(
+            [data],
+            { type: "application/json" }
+        );
+
+    var url =
+        URL.createObjectURL(blob);
+
+    var a =
+        document.createElement("a");
+
+    a.href = url;
+
+    a.download =
+        "uriin-dewter-backup.json";
+
+    a.click();
+
+    URL.revokeObjectURL(url);
+
+}
 
 /* МӨНГИЙГ ФОРМАТЛАХ */
 
