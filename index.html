@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <title>Өрийн дэвтэр</title>
 
   <style>
@@ -14,19 +15,19 @@
     }
 
     body {
-      background: #f5f6fa;
-      color: #222;
+      background: #f3f4f6;
+      color: #111827;
     }
 
     header {
       background: #111827;
       color: white;
-      padding: 20px;
+      padding: 24px 15px;
       text-align: center;
     }
 
     header h1 {
-      font-size: 26px;
+      font-size: 28px;
     }
 
     header p {
@@ -36,7 +37,7 @@
 
     .container {
       max-width: 900px;
-      margin: 30px auto;
+      margin: 25px auto;
       padding: 0 15px;
     }
 
@@ -44,14 +45,14 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 15px;
-      margin-bottom: 25px;
+      margin-bottom: 20px;
     }
 
     .card {
       background: white;
       padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+      border-radius: 14px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
     }
 
     .card small {
@@ -62,55 +63,55 @@
       margin-top: 8px;
     }
 
-    .form {
+    .form,
+    .debts {
       background: white;
       padding: 20px;
-      border-radius: 12px;
-      margin-bottom: 25px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+      border-radius: 14px;
+      margin-bottom: 20px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
     }
 
-    .form h2 {
+    .form h2,
+    .debts h2 {
       margin-bottom: 15px;
     }
 
     input {
       width: 100%;
-      padding: 12px;
+      padding: 13px;
       margin-bottom: 10px;
       border: 1px solid #d1d5db;
-      border-radius: 8px;
+      border-radius: 9px;
       font-size: 15px;
     }
 
     button {
-      width: 100%;
-      padding: 12px;
       border: none;
-      border-radius: 8px;
+      border-radius: 9px;
+      padding: 11px 15px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .add-button {
+      width: 100%;
       background: #111827;
       color: white;
       font-size: 15px;
-      cursor: pointer;
     }
 
-    button:hover {
+    .add-button:hover {
       background: #374151;
-    }
-
-    .debts {
-      background: white;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
     }
 
     .debt {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 15px;
       padding: 15px 0;
-      border-bottom: 1px solid #eee;
+      border-bottom: 1px solid #e5e7eb;
     }
 
     .debt:last-child {
@@ -119,22 +120,39 @@
 
     .name {
       font-weight: bold;
+      font-size: 16px;
     }
 
     .amount {
       color: #dc2626;
       font-weight: bold;
+      margin-top: 5px;
+    }
+
+    .delete-button {
+      background: #fee2e2;
+      color: #b91c1c;
+      margin-left: 10px;
     }
 
     .empty {
       text-align: center;
       color: #9ca3af;
-      padding: 20px;
+      padding: 25px;
     }
 
     @media (max-width: 600px) {
       .summary {
         grid-template-columns: 1fr;
+      }
+
+      .debt {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .delete-button {
+        margin-left: 0;
       }
     }
   </style>
@@ -150,13 +168,14 @@
   <div class="container">
 
     <div class="summary">
+
       <div class="card">
         <small>Нийт өр</small>
         <h2 id="totalDebt">0₮</h2>
       </div>
 
       <div class="card">
-        <small>Хүний тоо</small>
+        <small>Өртэй хүн</small>
         <h2 id="personCount">0</h2>
       </div>
 
@@ -164,86 +183,198 @@
         <small>Төлөгдсөн</small>
         <h2 id="paidAmount">0₮</h2>
       </div>
+
     </div>
 
     <div class="form">
+
       <h2>Шинэ өр бүртгэх</h2>
 
-      <input id="name" type="text" placeholder="Хүний нэр">
+      <input
+        id="name"
+        type="text"
+        placeholder="Хүний нэр"
+      >
 
-      <input id="amount" type="number" placeholder="Өрийн дүн">
+      <input
+        id="amount"
+        type="number"
+        placeholder="Өрийн дүн"
+      >
 
-      <button onclick="addDebt()">+ Өр бүртгэх</button>
+      <button
+        class="add-button"
+        onclick="addDebt()"
+      >
+        + Өр бүртгэх
+      </button>
+
     </div>
 
     <div class="debts">
+
       <h2>Өрийн жагсаалт</h2>
 
-      <div id="debtList">
-        <div class="empty">
-          Одоогоор бүртгэлтэй өр алга.
-        </div>
-      </div>
+      <div id="debtList"></div>
+
     </div>
 
   </div>
 
   <script>
-    let debts = [];
+
+    let debts = JSON.parse(
+      localStorage.getItem("debts")
+    ) || [];
+
+    function saveDebts() {
+
+      localStorage.setItem(
+        "debts",
+        JSON.stringify(debts)
+      );
+
+    }
 
     function addDebt() {
-      const name = document.getElementById("name").value;
-      const amount = Number(document.getElementById("amount").value);
+
+      const name =
+        document.getElementById("name").value.trim();
+
+      const amount =
+        Number(
+          document.getElementById("amount").value
+        );
 
       if (!name || !amount) {
-        alert("Нэр болон өрийн дүнгээ оруулна уу.");
+
+        alert(
+          "Нэр болон өрийн дүнгээ оруулна уу."
+        );
+
         return;
       }
 
       debts.push({
+
+        id: Date.now(),
+
         name: name,
+
         amount: amount
+
       });
 
+      saveDebts();
+
       document.getElementById("name").value = "";
+
       document.getElementById("amount").value = "";
 
       renderDebts();
+
+    }
+
+    function deleteDebt(id) {
+
+      if (
+        !confirm(
+          "Энэ өрийг устгах уу?"
+        )
+      ) {
+
+        return;
+
+      }
+
+      debts = debts.filter(
+        function(debt) {
+
+          return debt.id !== id;
+
+        }
+      );
+
+      saveDebts();
+
+      renderDebts();
+
     }
 
     function renderDebts() {
-      const list = document.getElementById("debtList");
+
+      const list =
+        document.getElementById("debtList");
 
       list.innerHTML = "";
 
-      debts.forEach(function(debt) {
-        const div = document.createElement("div");
+      if (debts.length === 0) {
 
-        div.className = "debt";
+        list.innerHTML =
+          '<div class="empty">Одоогоор бүртгэлтэй өр алга.</div>';
 
-        div.innerHTML = `
-          <div>
-            <div class="name">${debt.name}</div>
-          </div>
+      }
 
-          <div class="amount">
-            ${debt.amount.toLocaleString()}₮
-          </div>
-        `;
+      debts.forEach(
+        function(debt) {
 
-        list.appendChild(div);
-      });
+          const div =
+            document.createElement("div");
 
-      const total = debts.reduce(function(sum, debt) {
-        return sum + debt.amount;
-      }, 0);
+          div.className = "debt";
 
-      document.getElementById("totalDebt").textContent =
+          div.innerHTML = `
+
+            <div>
+
+              <div class="name">
+                ${debt.name}
+              </div>
+
+              <div class="amount">
+                ${debt.amount.toLocaleString()}₮
+              </div>
+
+            </div>
+
+            <button
+              class="delete-button"
+              onclick="deleteDebt(${debt.id})"
+            >
+              Устгах
+            </button>
+
+          `;
+
+          list.appendChild(div);
+
+        }
+      );
+
+      const total =
+        debts.reduce(
+          function(sum, debt) {
+
+            return sum + debt.amount;
+
+          },
+          0
+        );
+
+      document.getElementById(
+        "totalDebt"
+      ).textContent =
         total.toLocaleString() + "₮";
 
-      document.getElementById("personCount").textContent =
+      document.getElementById(
+        "personCount"
+      ).textContent =
         debts.length;
+
     }
+
+    renderDebts();
+
   </script>
 
 </body>
