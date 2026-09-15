@@ -770,7 +770,25 @@ function showDebts() {
 
     var list =
         document.getElementById("list");
+    debts.sort(function(a, b) {
 
+        var today = new Date();
+        today.setHours(0, 0, 0, 0);
+
+        var dateA = a.dueDate
+            ? new Date(a.dueDate)
+            : new Date("9999-12-31");
+
+        var dateB = b.dueDate
+            ? new Date(b.dueDate)
+            : new Date("9999-12-31");
+
+        dateA.setHours(0, 0, 0, 0);
+        dateB.setHours(0, 0, 0, 0);
+
+        return dateA - dateB;
+
+    });
     var searchInput =
         document.getElementById("search");
 
