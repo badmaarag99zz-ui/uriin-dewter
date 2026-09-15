@@ -409,21 +409,21 @@ var phone =
 
         debts.push({
 
-            id: new Date().getTime(),
+    id: new Date().getTime(),
 
-            name: name,
+    name: name,
 
-            amount: amount,
+    phone: phone,
 
-            dueDate: dueDate,
+    amount: amount,
 
-            paid: 0,
+    dueDate: dueDate,
 
-            payments: []
+    paid: 0,
 
-        });
+    payments: []
 
-    }
+});
 
 
     saveData();
@@ -431,10 +431,9 @@ var phone =
 
     document.getElementById("personName").value = "";
 
-    document.getElementById("debtAmount").value = "";
+document.getElementById("personPhone").value = "";
 
-    document.getElementById("dueDate").value = "";
-
+document.getElementById("debtAmount").value = "";
 
     showDebts();
 
