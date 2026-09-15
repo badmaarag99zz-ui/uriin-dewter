@@ -722,27 +722,58 @@ function editDebt(id) {
 
     if (debt.payments && debt.payments.length > 0) {
 
-        history =
-            "\n\n📋 Төлөлтийн түүх:\n";
+    content +=
+        "<div style='margin-top:20px;'>" +
 
-        for (var j = 0; j < debt.payments.length; j++) {
+            "<h3 style='margin-bottom:10px;color:#0f172a;'>" +
+                "📋 Төлөлтийн түүх" +
+            "</h3>";
 
-            history +=
-                "\n" +
-                (j + 1) +
-                ". " +
-                money(debt.payments[j].amount) +
-                " — " +
-                debt.payments[j].date;
+    for (var j = 0; j < debt.payments.length; j++) {
 
-        }
+        content +=
 
-    } else {
+            "<div style='" +
+                "display:flex;" +
+                "justify-content:space-between;" +
+                "align-items:center;" +
+                "padding:12px;" +
+                "margin-bottom:8px;" +
+                "background:#f8fafc;" +
+                "border-radius:10px;" +
+            "'>" +
 
-        history =
-            "\n\n📋 Төлөлтийн түүх байхгүй.";
+                "<div>" +
+
+                    "<div style='font-weight:600;color:#15803d;'>" +
+                        "💵 +" +
+                        money(debt.payments[j].amount) +
+                    "</div>" +
+
+                    "<div style='font-size:12px;color:#64748b;margin-top:3px;'>" +
+                        debt.payments[j].date +
+                    "</div>" +
+
+                "</div>" +
+
+                "<div style='font-size:18px;'>" +
+                    "✓" +
+                "</div>" +
+
+            "</div>";
 
     }
+
+    content += "</div>";
+
+} else {
+
+    content +=
+        "<div style='margin-top:20px;padding:15px;background:#f8fafc;border-radius:10px;color:#64748b;text-align:center;'>" +
+            "📋 Төлөлтийн түүх байхгүй." +
+        "</div>";
+
+}
 
     var phone =
         debt.phone ? debt.phone : "Бүртгэлгүй";
