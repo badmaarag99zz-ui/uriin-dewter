@@ -1131,6 +1131,63 @@ document.getElementById("addButton").onclick =
 showDebts();
 
 </script>
+<div
+    id="detailModal"
+    style="
+        display:none;
+        position:fixed;
+        top:0;
+        left:0;
+        width:100%;
+        height:100%;
+        background:rgba(0,0,0,0.5);
+        z-index:1000;
+        align-items:center;
+        justify-content:center;
+    "
+>
+    <div
+        style="
+            background:white;
+            width:90%;
+            max-width:500px;
+            max-height:80vh;
+            overflow-y:auto;
+            border-radius:15px;
+            padding:20px;
+            box-sizing:border-box;
+        "
+    >
 
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+            "
+        >
+
+            <h2 id="detailName">
+                👤 Хүний мэдээлэл
+            </h2>
+
+            <button
+                type="button"
+                onclick="closeDetail()"
+                style="
+                    background:#fee2e2;
+                    color:#991b1b;
+                    font-size:20px;
+                "
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div id="detailContent"></div>
+
+    </div>
+</div>
 </body>
 </html>
