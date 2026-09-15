@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Өрийн дэвтэр</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #f5f6fa;
+      color: #222;
+    }
+
+    header {
+      background: #111827;
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 26px;
+    }
+
+    header p {
+      margin-top: 6px;
+      color: #cbd5e1;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 30px auto;
+      padding: 0 15px;
+    }
+
+    .summary {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      margin-bottom: 25px;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    }
+
+    .card small {
+      color: #6b7280;
+    }
+
+    .card h2 {
+      margin-top: 8px;
+    }
+
+    .form {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 25px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    }
+
+    .form h2 {
+      margin-bottom: 15px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 15px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #111827;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #374151;
+    }
+
+    .debts {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    }
+
+    .debt {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+      border-bottom: 1px solid #eee;
+    }
+
+    .debt:last-child {
+      border-bottom: none;
+    }
+
+    .name {
+      font-weight: bold;
+    }
+
+    .amount {
+      color: #dc2626;
+      font-weight: bold;
+    }
+
+    .empty {
+      text-align: center;
+      color: #9ca3af;
+      padding: 20px;
+    }
+
+    @media (max-width: 600px) {
+      .summary {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>Өрийн дэвтэр</h1>
+    <p>Өр зээлээ хялбархан бүртгэе</p>
+  </header>
+
+  <div class="container">
+
+    <div class="summary">
+      <div class="card">
+        <small>Нийт өр</small>
+        <h2 id="totalDebt">0₮</h2>
+      </div>
+
+      <div class="card">
+        <small>Хүний тоо</small>
+        <h2 id="personCount">0</h2>
+      </div>
+
+      <div class="card">
+        <small>Төлөгдсөн</small>
+        <h2 id="paidAmount">0₮</h2>
+      </div>
+    </div>
+
+    <div class="form">
+      <h2>Шинэ өр бүртгэх</h2>
+
+      <input id="name" type="text" placeholder="Хүний нэр">
+
+      <input id="amount" type="number" placeholder="Өрийн дүн">
+
+      <button onclick="addDebt()">+ Өр бүртгэх</button>
+    </div>
+
+    <div class="debts">
+      <h2>Өрийн жагсаалт</h2>
+
+      <div id="debtList">
+        <div class="empty">
+          Одоогоор бүртгэлтэй өр алга.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let debts = [];
+
+    function addDebt() {
+      const name = document.getElementById("name").value;
+      const amount = Number(document.getElementById("amount").value);
+
+      if (!name || !amount) {
+        alert("Нэр болон өрийн дүнгээ оруулна уу.");
+        return;
+      }
+
+      debts.push({
+        name: name,
+        amount: amount
+      });
+
+      document.getElementById("name").value = "";
+      document.getElementById("amount").value = "";
+
+      renderDebts();
+    }
+
+    function renderDebts() {
+      const list = document.getElementById("debtList");
+
+      list.innerHTML = "";
+
+      debts.forEach(function(debt) {
+        const div = document.createElement("div");
+
+        div.className = "debt";
+
+        div.innerHTML = `
+          <div>
+            <div class="name">${debt.name}</div>
+          </div>
+
+          <div class="amount">
+            ${debt.amount.toLocaleString()}₮
+          </div>
+        `;
+
+        list.appendChild(div);
+      });
+
+      const total = debts.reduce(function(sum, debt) {
+        return sum + debt.amount;
+      }, 0);
+
+      document.getElementById("totalDebt").textContent =
+        total.toLocaleString() + "₮";
+
+      document.getElementById("personCount").textContent =
+        debts.length;
+    }
+  </script>
+
+</body>
+</html>
