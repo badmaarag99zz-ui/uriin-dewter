@@ -616,7 +616,74 @@ function removeDebt(id) {
 
 }
 function viewDebt(id) {
+function editDebt(id) {
 
+    var debt = null;
+
+    for (var i = 0; i < debts.length; i++) {
+
+        if (debts[i].id == id) {
+            debt = debts[i];
+            break;
+        }
+
+    }
+
+    if (debt == null) {
+        return;
+    }
+
+    var newName =
+        prompt(
+            "Хүний нэр:",
+            debt.name
+        );
+
+    if (newName == null) {
+        return;
+    }
+
+    newName =
+        newName.replace(/^\s+|\s+$/g, "");
+
+    if (newName == "") {
+        alert("Нэр хоосон байж болохгүй.");
+        return;
+    }
+
+    var newPhone =
+        prompt(
+            "Утасны дугаар:",
+            debt.phone || ""
+        );
+
+    if (newPhone == null) {
+        return;
+    }
+
+    var newDueDate =
+        prompt(
+            "Төлөх хугацаа (YYYY-MM-DD):",
+            debt.dueDate || ""
+        );
+
+    if (newDueDate == null) {
+        return;
+    }
+
+    debt.name = newName;
+
+    debt.phone = newPhone;
+
+    debt.dueDate = newDueDate;
+
+    saveData();
+
+    showDebts();
+
+    alert("✅ Мэдээлэл амжилттай шинэчлэгдлээ.");
+
+}
     var debt = null;
 
     for (var i = 0; i < debts.length; i++) {
