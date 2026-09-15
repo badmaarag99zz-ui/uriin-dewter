@@ -615,7 +615,6 @@ function removeDebt(id) {
     showDebts();
 
 }
-function viewDebt(id) {
 function editDebt(id) {
 
     var debt = null;
@@ -961,7 +960,14 @@ html +=
     ')">' +
     '➕ Өр нэмэх' +
     '</button>';
-
+html +=
+    '<button ' +
+    'class="pay" ' +
+    'onclick="editDebt(' +
+    debt.id +
+    ')">' +
+    '✏️ Засах' +
+    '</button>';
 
         html +=
             '<button ' +
