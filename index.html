@@ -285,50 +285,6 @@ function saveData() {
     onchange="restoreData(event)"
 >
 function backupData() {
-function restoreData(event) {
-
-    var file =
-        event.target.files[0];
-
-    if (!file) {
-        return;
-    }
-
-    var reader =
-        new FileReader();
-
-    reader.onload =
-        function(e) {
-
-            try {
-
-                var data =
-                    JSON.parse(e.target.result);
-
-                if (!Array.isArray(data)) {
-
-                    alert("Нөөц файл буруу байна.");
-
-                    return;
-                }
-
-                debts = data;
-
-                saveData();
-
-                showDebts();
-
-                alert("✅ Нөөц амжилттай сэргээгдлээ.");
-
-            } catch(error) {
-
-                alert("❌ Нөөц файлыг уншихад алдаа гарлаа.");
-
-            }
-
-        };
-
-    reader.readAsText(file);
 
 }
     var data =
