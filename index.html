@@ -786,10 +786,71 @@ function showDebts() {
 
     var list =
         document.getElementById("list");
+        var sortInput =
+        document.getElementById("sort");
+
+    var sort =
+        sortInput
+            ? sortInput.value
+            : "due";
+
     debts.sort(function(a, b) {
 
-        var today = new Date();
-        today.setHours(0, 0, 0, 0);
+        var remainingA =
+            a.amount - a.paid;
+
+        var remainingB =
+            b.amount - b.paid;
+
+        if (sort == "amount") {
+
+            return remainingB - remainingA;
+
+        }
+
+        if (sort == "name") {
+
+            return a.name.localeCompare(b.name);
+
+        }
+
+        if (sort == "overdue") {
+
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
+
+            var dateA = a.dueDate
+                ? new Date(a.dueDate)
+                : new Date("9999-12-31");
+
+            var dateB = b.dueDate
+                ? new Date(b.dueDate)
+                : new Date("9999-12-31");
+
+            dateA.setHours(0, 0, 0, 0);
+            dateB.setHours(0, 0, 0, 0);
+
+            var overdueA =
+                a.dueDate &&
+                remainingA > 0 &&
+                dateA < today;
+
+            var overdueB =
+                b.dueDate &&
+                remainingB > 0 &&
+                dateB < today;
+
+            if (overdueA && !overdueB) {
+                return -1;
+            }
+
+            if (!overdueA && overdueB) {
+                return 1;
+            }
+
+            return dateA - dateB;
+
+        }
 
         var dateA = a.dueDate
             ? new Date(a.dueDate)
