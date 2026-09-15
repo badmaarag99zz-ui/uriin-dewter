@@ -457,7 +457,34 @@ function removeDebt(id) {
 
 
 /* ЖАГСААЛТ */
+function viewDebt(id) {
 
+    var debt = null;
+
+    for (var i = 0; i < debts.length; i++) {
+
+        if (debts[i].id == id) {
+            debt = debts[i];
+            break;
+        }
+
+    }
+
+    if (debt == null) {
+        return;
+    }
+
+    var remaining = debt.amount - debt.paid;
+
+    alert(
+        "👤 " + debt.name +
+        "\n\n" +
+        "Нийт өр: " + money(debt.amount) +
+        "\nТөлсөн: " + money(debt.paid) +
+        "\nҮлдэгдэл: " + money(remaining)
+    );
+
+}
 function showDebts() {
 
     var list =
