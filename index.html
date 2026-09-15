@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
   <title>Өрийн дэвтэр</title>
 
   <style>
@@ -101,15 +100,7 @@
       font-size: 15px;
     }
 
-    .add-button:hover {
-      background: #374151;
-    }
-
     .debt {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
       padding: 15px 0;
       border-bottom: 1px solid #e5e7eb;
     }
@@ -118,9 +109,16 @@
       border-bottom: none;
     }
 
+    .debt-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+    }
+
     .name {
       font-weight: bold;
-      font-size: 16px;
+      font-size: 17px;
     }
 
     .amount {
@@ -129,10 +127,25 @@
       margin-top: 5px;
     }
 
+    .paid {
+      color: #16a34a;
+    }
+
+    .actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .pay-button {
+      background: #dcfce7;
+      color: #166534;
+    }
+
     .delete-button {
       background: #fee2e2;
       color: #b91c1c;
-      margin-left: 10px;
     }
 
     .empty {
@@ -146,13 +159,9 @@
         grid-template-columns: 1fr;
       }
 
-      .debt {
+      .debt-top {
         align-items: flex-start;
         flex-direction: column;
-      }
-
-      .delete-button {
-        margin-left: 0;
       }
     }
   </style>
@@ -170,7 +179,7 @@
     <div class="summary">
 
       <div class="card">
-        <small>Нийт өр</small>
+        <small>Нийт үлдэгдэл өр</small>
         <h2 id="totalDebt">0₮</h2>
       </div>
 
@@ -180,7 +189,7 @@
       </div>
 
       <div class="card">
-        <small>Төлөгдсөн</small>
+        <small>Нийт төлөгдсөн</small>
         <h2 id="paidAmount">0₮</h2>
       </div>
 
@@ -246,10 +255,10 @@
           document.getElementById("amount").value
         );
 
-      if (!name || !amount) {
+      if (!name || !amount || amount <= 0) {
 
         alert(
-          "Нэр болон өрийн дүнгээ оруулна уу."
+          "Нэр болон зөв өрийн дүн оруулна уу."
         );
 
         return;
@@ -261,7 +270,9 @@
 
         name: name,
 
-        amount: amount
+        amount: amount,
+
+        paid: 0
 
       });
 
@@ -270,6 +281,52 @@
       document.getElementById("name").value = "";
 
       document.getElementById("amount").value = "";
+
+      renderDebts();
+
+    }
+
+    function makePayment(id) {
+
+      const debt =
+        debts.find(
+          function(item) {
+            return item.id === id;
+          }
+        );
+
+      if (!debt) return;
+
+      const remaining =
+        debt.amount - debt.paid;
+
+      const payment =
+        Number(
+          prompt(
+            "Хэдэн төгрөг төлсөн бэ?\nҮлдэгдэл: " +
+            remaining.toLocaleString() + "₮"
+          )
+        );
+
+      if (!payment || payment <= 0) {
+
+        return;
+
+      }
+
+      if (payment > remaining) {
+
+        alert(
+          "Төлөх дүн үлдэгдлээс их байна."
+        );
+
+        return;
+
+      }
+
+      debt.paid += payment;
+
+      saveDebts();
 
       renderDebts();
 
@@ -287,13 +344,14 @@
 
       }
 
-      debts = debts.filter(
-        function(debt) {
+      debts =
+        debts.filter(
+          function(debt) {
 
-          return debt.id !== id;
+            return debt.id !== id;
 
-        }
-      );
+          }
+        );
 
       saveDebts();
 
@@ -318,6 +376,9 @@
       debts.forEach(
         function(debt) {
 
+          const remaining =
+            debt.amount - debt.paid;
+
           const div =
             document.createElement("div");
 
@@ -325,24 +386,60 @@
 
           div.innerHTML = `
 
-            <div>
+            <div class="debt-top">
 
-              <div class="name">
-                ${debt.name}
-              </div>
+              <div>
 
-              <div class="amount">
-                ${debt.amount.toLocaleString()}₮
+                <div class="name">
+                  ${debt.name}
+                </div>
+
+                <div class="amount ${remaining === 0 ? "paid" : ""}">
+                  ${remaining === 0
+                    ? "Бүрэн төлөгдсөн"
+                    : "Үлдэгдэл: " +
+                      remaining.toLocaleString() +
+                      "₮"
+                  }
+                </div>
+
+                <div>
+                  Нийт өр:
+                  ${debt.amount.toLocaleString()}₮
+                </div>
+
+                <div>
+                  Төлсөн:
+                  ${debt.paid.toLocaleString()}₮
+                </div>
+
               </div>
 
             </div>
 
-            <button
-              class="delete-button"
-              onclick="deleteDebt(${debt.id})"
-            >
-              Устгах
-            </button>
+            <div class="actions">
+
+              ${
+                remaining > 0
+                ? `
+                  <button
+                    class="pay-button"
+                    onclick="makePayment(${debt.id})"
+                  >
+                    💵 Төлөлт бүртгэх
+                  </button>
+                `
+                : ""
+              }
+
+              <button
+                class="delete-button"
+                onclick="deleteDebt(${debt.id})"
+              >
+                🗑 Устгах
+              </button>
+
+            </div>
 
           `;
 
@@ -351,11 +448,22 @@
         }
       );
 
-      const total =
+      const totalDebt =
         debts.reduce(
           function(sum, debt) {
 
-            return sum + debt.amount;
+            return sum +
+              (debt.amount - debt.paid);
+
+          },
+          0
+        );
+
+      const totalPaid =
+        debts.reduce(
+          function(sum, debt) {
+
+            return sum + debt.paid;
 
           },
           0
@@ -364,12 +472,21 @@
       document.getElementById(
         "totalDebt"
       ).textContent =
-        total.toLocaleString() + "₮";
+        totalDebt.toLocaleString() + "₮";
 
       document.getElementById(
         "personCount"
       ).textContent =
-        debts.length;
+        debts.filter(
+          function(debt) {
+            return debt.amount - debt.paid > 0;
+          }
+        ).length;
+
+      document.getElementById(
+        "paidAmount"
+      ).textContent =
+        totalPaid.toLocaleString() + "₮";
 
     }
 
