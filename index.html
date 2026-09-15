@@ -328,8 +328,10 @@ function addDebt() {
 
     var name =
         document.getElementById("personName").value;
-var phone =
-    document.getElementById("personPhone").value;
+
+    var phone =
+        document.getElementById("personPhone").value;
+
     var amount =
         document.getElementById("debtAmount").value;
 
@@ -340,7 +342,6 @@ var phone =
 
     amount = Number(amount);
 
-
     if (name == "") {
 
         alert("Хүний нэрээ оруулна уу.");
@@ -349,7 +350,6 @@ var phone =
 
     }
 
-
     if (amount <= 0 || isNaN(amount)) {
 
         alert("Өрийн дүнгээ зөв оруулна уу.");
@@ -357,9 +357,6 @@ var phone =
         return;
 
     }
-
-
-    /* БҮРТГЭЛТЭЙ ХҮНИЙГ ШАЛГАХ */
 
     var existingDebt = null;
 
@@ -378,18 +375,17 @@ var phone =
 
     }
 
-
-    /* ХЭРЭВ БҮРТГЭЛТЭЙ БОЛ ӨР ДЭЭР НЭМЭХ */
-
     if (existingDebt != null) {
 
         existingDebt.amount =
             existingDebt.amount + amount;
 
+        if (phone != "") {
+            existingDebt.phone = phone;
+        }
+
         if (dueDate != "") {
-
             existingDebt.dueDate = dueDate;
-
         }
 
         alert(
@@ -400,53 +396,41 @@ var phone =
             " өр нэмэгдлээ."
         );
 
-    }
-
-
-    /* ШИНЭ ХҮН БОЛ ШИНЭЭР БҮРТГЭХ */
-
-    else {
+    } else {
 
         debts.push({
 
-    id: new Date().getTime(),
+            id: new Date().getTime(),
 
-    name: name,
+            name: name,
 
-    phone: phone,
+            phone: phone,
 
-    amount: amount,
+            amount: amount,
 
-    dueDate: dueDate,
+            dueDate: dueDate,
 
-    paid: 0,
+            paid: 0,
 
-    payments: []
+            payments: []
 
-});
+        });
 
+    }
 
     saveData();
 
-
     document.getElementById("personName").value = "";
 
-document.getElementById("personPhone").value = "";
+    document.getElementById("personPhone").value = "";
 
-document.getElementById("debtAmount").value = "";
+    document.getElementById("debtAmount").value = "";
 
-document.getElementById("dueDate").value = "";
-
-    showDebts();
-
-}
-
-}
+    document.getElementById("dueDate").value = "";
 
     showDebts();
 
 }
-
 /* ТӨЛӨЛТ БҮРТГЭХ */
 
 function payment(id) {
