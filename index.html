@@ -407,14 +407,27 @@ function payment(id) {
 
     }
 
+debt.paid =
+    debt.paid + amount;
 
-    debt.paid =
-        debt.paid + amount;
+
+if (!debt.payments) {
+    debt.payments = [];
+}
 
 
-    saveData();
+debt.payments.push({
 
-    showDebts();
+    amount: amount,
+
+    date: new Date().toLocaleString()
+
+});
+
+
+saveData();
+
+showDebts();
 
 }
 
