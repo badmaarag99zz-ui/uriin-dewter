@@ -561,9 +561,11 @@ function showDebts() {
         html +=
             '<div class="debt">' +
 
-            '<div class="debt-name">' +
-            debt.name +
-            '</div>' +
+            '<div class="debt-name" ' +
+'onclick="viewDebt(' + debt.id + ')" ' +
+'style="cursor:pointer;">' +
+debt.name +
+'</div>' +
 
             '<div class="' +
             (remaining == 0
