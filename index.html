@@ -557,7 +557,7 @@ function showDebts() {
     var people = 0;
 
     var visibleCount = 0;
-
+var overdue = 0;
     var i;
 
 
@@ -623,7 +623,22 @@ if (debt.dueDate && remaining > 0) {
         if (remaining > 0) {
             people++;
         }
+if (
+    debt.dueDate &&
+    remaining > 0
+) {
 
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var due = new Date(debt.dueDate);
+    due.setHours(0, 0, 0, 0);
+
+    if (due < today) {
+        overdue++;
+    }
+
+}
 
         /*
         Хайлтын хэсэг
@@ -754,7 +769,8 @@ debt.name +
 
     document.getElementById("paid").innerHTML =
         money(paidTotal);
-
+document.getElementById("overdue").innerHTML =
+    overdue;
 }
 
 /* ТОВЧИЙГ АЖИЛЛУУЛАХ */
