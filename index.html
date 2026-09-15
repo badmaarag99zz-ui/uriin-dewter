@@ -3,152 +3,144 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Өрийн дэвтэр</title>
 
 <style>
-* {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-}
-
 body {
-  margin: 0;
-  background: #f3f4f6;
-  color: #111827;
+    margin: 0;
+    padding: 0;
+    background: #f2f4f7;
+    font-family: Arial, sans-serif;
+    color: #111;
 }
 
 header {
-  background: #111827;
-  color: white;
-  padding: 25px 15px;
-  text-align: center;
+    background: #111827;
+    color: white;
+    text-align: center;
+    padding: 25px 15px;
 }
 
 header h1 {
-  margin: 0;
-  font-size: 28px;
+    margin: 0;
+    font-size: 28px;
 }
 
 header p {
-  margin: 8px 0 0;
-  color: #cbd5e1;
+    margin: 8px 0 0;
 }
 
 .container {
-  max-width: 900px;
-  margin: 25px auto;
-  padding: 0 15px;
+    max-width: 800px;
+    margin: 25px auto;
+    padding: 0 15px;
 }
 
-.summary {
-  display: flex;
-  gap: 15px;
-  margin-bottom: 20px;
+.cards {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
 }
 
 .card {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  flex: 1;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-}
-
-.card small {
-  color: #6b7280;
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    flex: 1;
 }
 
 .card h2 {
-  margin: 8px 0 0;
+    margin: 8px 0 0;
 }
 
-.form,
-.debts {
-  background: white;
-  padding: 20px;
-  border-radius: 14px;
-  margin-bottom: 20px;
-  box-shadow: 0 3px 12px rgba(0,0,0,0.06);
-}
-
-.form h2,
-.debts h2 {
-  margin-top: 0;
+.form {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
 }
 
 input {
-  width: 100%;
-  padding: 13px;
-  margin-bottom: 10px;
-  border: 1px solid #d1d5db;
-  border-radius: 9px;
-  font-size: 15px;
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
 }
 
 button {
-  border: none;
-  border-radius: 9px;
-  padding: 12px 15px;
-  cursor: pointer;
-  font-size: 14px;
+    padding: 12px 15px;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
 }
 
-.add-button {
-  width: 100%;
-  background: #111827;
-  color: white;
-  font-size: 16px;
+.add {
+    width: 100%;
+    background: #111827;
+    color: white;
+}
+
+.debt-box {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
 }
 
 .debt {
-  padding: 15px 0;
-  border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid #ddd;
+    padding: 15px 0;
 }
 
-.name {
-  font-weight: bold;
-  font-size: 18px;
+.debt:last-child {
+    border-bottom: 0;
 }
 
-.amount {
-  color: #dc2626;
-  font-weight: bold;
-  margin-top: 6px;
+.debt-name {
+    font-size: 18px;
+    font-weight: bold;
 }
 
-.paid {
-  color: #16a34a;
+.remaining {
+    color: #dc2626;
+    font-weight: bold;
+    margin-top: 5px;
 }
 
-.actions {
-  margin-top: 12px;
+.complete {
+    color: green;
 }
 
-.pay-button {
-  background: #dcfce7;
-  color: #166534;
-  margin-right: 8px;
+.pay {
+    background: #dcfce7;
+    color: #166534;
+    margin-top: 10px;
+    margin-right: 5px;
 }
 
-.delete-button {
-  background: #fee2e2;
-  color: #b91c1c;
+.delete {
+    background: #fee2e2;
+    color: #991b1b;
+    margin-top: 10px;
 }
 
 .empty {
-  text-align: center;
-  color: #9ca3af;
-  padding: 25px;
+    text-align: center;
+    color: #888;
+    padding: 30px;
 }
 
-@media (max-width: 600px) {
-  .summary {
-    display: block;
-  }
+@media(max-width:600px) {
+    .cards {
+        display: block;
+    }
 
-  .card {
-    margin-bottom: 10px;
-  }
+    .card {
+        margin-bottom: 10px;
+    }
 }
 </style>
 </head>
@@ -156,424 +148,454 @@ button {
 <body>
 
 <header>
-  <h1>Өрийн дэвтэр</h1>
-  <p>Өр зээлээ хялбархан бүртгэе</p>
+    <h1>Өрийн дэвтэр</h1>
+    <p>Өр зээлээ хялбархан бүртгэе</p>
 </header>
 
 <div class="container">
 
-  <div class="summary">
+    <div class="cards">
 
-    <div class="card">
-      <small>Нийт үлдэгдэл өр</small>
-      <h2 id="totalDebt">0₮</h2>
+        <div class="card">
+            <div>Нийт үлдэгдэл өр</div>
+            <h2 id="total">0₮</h2>
+        </div>
+
+        <div class="card">
+            <div>Өртэй хүн</div>
+            <h2 id="people">0</h2>
+        </div>
+
+        <div class="card">
+            <div>Нийт төлөгдсөн</div>
+            <h2 id="paid">0₮</h2>
+        </div>
+
     </div>
 
-    <div class="card">
-      <small>Өртэй хүн</small>
-      <h2 id="personCount">0</h2>
+
+    <div class="form">
+
+        <h2>Шинэ өр бүртгэх</h2>
+
+        <input
+            id="personName"
+            type="text"
+            placeholder="Хүний нэр"
+        >
+
+        <input
+            id="debtAmount"
+            type="number"
+            placeholder="Өрийн дүн"
+        >
+
+        <button
+            class="add"
+            id="addButton"
+            type="button"
+        >
+            + Өр бүртгэх
+        </button>
+
     </div>
 
-    <div class="card">
-      <small>Нийт төлөгдсөн</small>
-      <h2 id="paidAmount">0₮</h2>
+
+    <div class="debt-box">
+
+        <h2>Өрийн жагсаалт</h2>
+
+        <div id="list">
+            <div class="empty">
+                Одоогоор бүртгэлтэй өр алга.
+            </div>
+        </div>
+
     </div>
-
-  </div>
-
-  <div class="form">
-
-    <h2>Шинэ өр бүртгэх</h2>
-
-    <input
-      id="name"
-      type="text"
-      placeholder="Хүний нэр"
-    >
-
-    <input
-      id="amount"
-      type="number"
-      placeholder="Өрийн дүн"
-    >
-
-    <button
-      class="add-button"
-      onclick="addDebt()"
-    >
-      + Өр бүртгэх
-    </button>
-
-  </div>
-
-  <div class="debts">
-
-    <h2>Өрийн жагсаалт</h2>
-
-    <div id="debtList"></div>
-
-  </div>
 
 </div>
 
 
 <script>
-alert("JAVASCRIPT АЖИЛЛАЖ БАЙНА");
-</script> <script type="text/javascript">
+
+/* ӨРҮҮД */
 
 var debts = [];
 
 
-/* Хадгалсан мэдээлэл унших */
+/* ХАДГАЛСАН ӨРҮҮДИЙГ УНШИХ */
+
 try {
 
-  var saved = localStorage.getItem("debts");
+    var oldData = localStorage.getItem("myDebts");
 
-  if (saved) {
-    debts = JSON.parse(saved);
-  }
+    if (oldData) {
+        debts = JSON.parse(oldData);
+    }
 
-} catch (e) {
+} catch(error) {
 
-  debts = [];
-
-}
-
-
-/* Хадгалах */
-function saveDebts() {
-
-  try {
-
-    localStorage.setItem(
-      "debts",
-      JSON.stringify(debts)
-    );
-
-  } catch (e) {
-
-  }
+    debts = [];
 
 }
 
 
-/* ӨР БҮРТГЭХ */
+/* ХАДГАЛАХ */
+
+function saveData() {
+
+    try {
+
+        localStorage.setItem(
+            "myDebts",
+            JSON.stringify(debts)
+        );
+
+    } catch(error) {
+
+        /* хадгалалт боломжгүй байсан ч
+           програм ажиллана */
+
+    }
+
+}
+
+
+/* МӨНГИЙГ ФОРМАТЛАХ */
+
+function money(number) {
+
+    return Number(number).toLocaleString() + "₮";
+
+}
+
+
+/* ӨР НЭМЭХ */
+
 function addDebt() {
 
-  var nameInput =
-    document.getElementById("name");
+    var name =
+        document.getElementById("personName").value;
 
-  var amountInput =
-    document.getElementById("amount");
-
-  var name =
-    nameInput.value;
-
-  var amount =
-    Number(amountInput.value);
+    var amount =
+        document.getElementById("debtAmount").value;
 
 
-  name = name.replace(/^\s+|\s+$/g, "");
+    name = name.replace(/^\s+|\s+$/g, "");
+
+    amount = Number(amount);
 
 
-  if (name == "") {
+    if (name == "") {
 
-    alert("Хүний нэр оруулна уу.");
+        alert("Хүний нэрээ оруулна уу.");
 
-    return;
-  }
-
-
-  if (amount <= 0 || isNaN(amount)) {
-
-    alert("Зөв өрийн дүн оруулна уу.");
-
-    return;
-  }
-
-
-  var newDebt = {
-
-    id: new Date().getTime(),
-
-    name: name,
-
-    amount: amount,
-
-    paid: 0
-
-  };
-
-
-  debts.push(newDebt);
-
-
-  saveDebts();
-
-
-  nameInput.value = "";
-
-  amountInput.value = "";
-
-
-  renderDebts();
-
-}
-
-
-/* ТӨЛӨЛТ */
-function makePayment(id) {
-
-  var debt = null;
-
-  var i;
-
-
-  for (i = 0; i < debts.length; i++) {
-
-    if (debts[i].id == id) {
-
-      debt = debts[i];
-
-      break;
+        return;
 
     }
 
-  }
 
+    if (amount <= 0 || isNaN(amount)) {
 
-  if (debt == null) {
+        alert("Өрийн дүнгээ зөв оруулна уу.");
 
-    return;
-
-  }
-
-
-  var remaining =
-    debt.amount - debt.paid;
-
-
-  var payment =
-    prompt(
-      "Хэдэн төгрөг төлсөн бэ?\nҮлдэгдэл: " +
-      remaining.toLocaleString() +
-      "₮"
-    );
-
-
-  if (payment == null) {
-
-    return;
-
-  }
-
-
-  payment = Number(payment);
-
-
-  if (payment <= 0 || isNaN(payment)) {
-
-    alert("Зөв дүн оруулна уу.");
-
-    return;
-
-  }
-
-
-  if (payment > remaining) {
-
-    alert(
-      "Төлөх дүн үлдэгдлээс их байна."
-    );
-
-    return;
-
-  }
-
-
-  debt.paid =
-    debt.paid + payment;
-
-
-  saveDebts();
-
-  renderDebts();
-
-}
-
-
-/* УСТГАХ */
-function deleteDebt(id) {
-
-  if (!confirm("Энэ өрийг устгах уу?")) {
-
-    return;
-
-  }
-
-
-  var newList = [];
-
-  var i;
-
-
-  for (i = 0; i < debts.length; i++) {
-
-    if (debts[i].id != id) {
-
-      newList.push(debts[i]);
+        return;
 
     }
 
-  }
+
+    debts.push({
+
+        id: new Date().getTime(),
+
+        name: name,
+
+        amount: amount,
+
+        paid: 0
+
+    });
 
 
-  debts = newList;
+    saveData();
 
 
-  saveDebts();
+    document.getElementById("personName").value = "";
 
-  renderDebts();
+    document.getElementById("debtAmount").value = "";
+
+
+    showDebts();
 
 }
 
 
-/* ДЭЛГЭЦЭН ДЭЭР ХАРУУЛАХ */
-function renderDebts() {
+/* ТӨЛӨЛТ БҮРТГЭХ */
 
-  var list =
-    document.getElementById("debtList");
+function payment(id) {
 
+    var debt = null;
 
-  var totalDebt = 0;
-
-  var totalPaid = 0;
-
-  var personCount = 0;
-
-  var html = "";
-
-  var i;
+    var i;
 
 
-  if (debts.length == 0) {
+    for (i = 0; i < debts.length; i++) {
 
-    html =
-      '<div class="empty">' +
-      'Одоогоор бүртгэлтэй өр алга.' +
-      '</div>';
+        if (debts[i].id == id) {
 
-  }
+            debt = debts[i];
+
+            break;
+
+        }
+
+    }
 
 
-  for (i = 0; i < debts.length; i++) {
+    if (debt == null) {
 
-    var debt = debts[i];
+        return;
+
+    }
+
 
     var remaining =
-      debt.amount - debt.paid;
+        debt.amount - debt.paid;
 
 
-    totalDebt =
-      totalDebt + remaining;
+    var input =
+        prompt(
+            "Төлсөн мөнгөн дүн:\nҮлдэгдэл: " +
+            money(remaining)
+        );
 
 
-    totalPaid =
-      totalPaid + debt.paid;
+    if (input == null) {
 
-
-    if (remaining > 0) {
-
-      personCount++;
-
-    }
-
-
-    html +=
-      '<div class="debt">' +
-
-      '<div class="name">' +
-      debt.name +
-      '</div>' +
-
-      '<div class="' +
-      (remaining == 0 ? "amount paid" : "amount") +
-      '">' +
-
-      (remaining == 0
-        ? "Бүрэн төлөгдсөн"
-        : "Үлдэгдэл: " +
-          remaining.toLocaleString() +
-          "₮") +
-
-      '</div>' +
-
-      '<div>Нийт өр: ' +
-      debt.amount.toLocaleString() +
-      '₮</div>' +
-
-      '<div>Төлсөн: ' +
-      debt.paid.toLocaleString() +
-      '₮</div>' +
-
-      '<div class="actions">';
-
-
-    if (remaining > 0) {
-
-      html +=
-        '<button ' +
-        'class="pay-button" ' +
-        'onclick="makePayment(' +
-        debt.id +
-        ')">' +
-        '💵 Төлөлт бүртгэх' +
-        '</button>';
+        return;
 
     }
 
 
-    html +=
-      '<button ' +
-      'class="delete-button" ' +
-      'onclick="deleteDebt(' +
-      debt.id +
-      ')">' +
-      '🗑 Устгах' +
-      '</button>' +
-
-      '</div>' +
-
-      '</div>';
-
-  }
+    var amount =
+        Number(input);
 
 
-  list.innerHTML = html;
+    if (amount <= 0 || isNaN(amount)) {
+
+        alert("Зөв мөнгөн дүн оруулна уу.");
+
+        return;
+
+    }
 
 
-  document.getElementById(
-    "totalDebt"
-  ).innerHTML =
-    totalDebt.toLocaleString() + "₮";
+    if (amount > remaining) {
+
+        alert("Үлдэгдлээс их мөнгө оруулах боломжгүй.");
+
+        return;
+
+    }
 
 
-  document.getElementById(
-    "personCount"
-  ).innerHTML =
-    personCount;
+    debt.paid =
+        debt.paid + amount;
 
 
-  document.getElementById(
-    "paidAmount"
-  ).innerHTML =
-    totalPaid.toLocaleString() + "₮";
+    saveData();
+
+    showDebts();
 
 }
 
 
-/* ЭХЛЭХ */
-renderDebts();
+/* ӨР УСТГАХ */
+
+function removeDebt(id) {
+
+    var answer =
+        confirm("Энэ өрийг устгах уу?");
+
+
+    if (!answer) {
+
+        return;
+
+    }
+
+
+    var newDebts = [];
+
+    var i;
+
+
+    for (i = 0; i < debts.length; i++) {
+
+        if (debts[i].id != id) {
+
+            newDebts.push(debts[i]);
+
+        }
+
+    }
+
+
+    debts = newDebts;
+
+
+    saveData();
+
+    showDebts();
+
+}
+
+
+/* ЖАГСААЛТ */
+
+function showDebts() {
+
+    var list =
+        document.getElementById("list");
+
+
+    var html = "";
+
+    var total = 0;
+
+    var paidTotal = 0;
+
+    var people = 0;
+
+    var i;
+
+
+    if (debts.length == 0) {
+
+        html =
+            '<div class="empty">' +
+            'Одоогоор бүртгэлтэй өр алга.' +
+            '</div>';
+
+    }
+
+
+    for (i = 0; i < debts.length; i++) {
+
+        var debt = debts[i];
+
+        var remaining =
+            debt.amount - debt.paid;
+
+
+        total =
+            total + remaining;
+
+
+        paidTotal =
+            paidTotal + debt.paid;
+
+
+        if (remaining > 0) {
+
+            people++;
+
+        }
+
+
+        html +=
+            '<div class="debt">' +
+
+            '<div class="debt-name">' +
+            debt.name +
+            '</div>' +
+
+            '<div class="' +
+            (remaining == 0
+                ? "remaining complete"
+                : "remaining") +
+            '">' +
+
+            (
+                remaining == 0
+                ? "Бүрэн төлөгдсөн"
+                : "Үлдэгдэл: " +
+                  money(remaining)
+            ) +
+
+            '</div>' +
+
+            '<div>Нийт өр: ' +
+            money(debt.amount) +
+            '</div>' +
+
+            '<div>Төлсөн: ' +
+            money(debt.paid) +
+            '</div>' +
+
+            '<div>';
+
+
+        if (remaining > 0) {
+
+            html +=
+                '<button ' +
+                'class="pay" ' +
+                'onclick="payment(' +
+                debt.id +
+                ')">' +
+                '💵 Төлөлт бүртгэх' +
+                '</button>';
+
+        }
+
+
+        html +=
+            '<button ' +
+            'class="delete" ' +
+            'onclick="removeDebt(' +
+            debt.id +
+            ')">' +
+            '🗑 Устгах' +
+            '</button>' +
+
+            '</div>' +
+
+            '</div>';
+
+    }
+
+
+    list.innerHTML = html;
+
+
+    document.getElementById("total").innerHTML =
+        money(total);
+
+
+    document.getElementById("people").innerHTML =
+        people;
+
+
+    document.getElementById("paid").innerHTML =
+        money(paidTotal);
+
+}
+
+
+/* ТОВЧИЙГ АЖИЛЛУУЛАХ */
+
+document.getElementById("addButton").onclick =
+    function() {
+
+        addDebt();
+
+    };
+
+
+/* ЭХЛҮҮЛЭХ */
+
+showDebts();
 
 </script>
 
