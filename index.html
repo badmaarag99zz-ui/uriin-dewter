@@ -666,31 +666,7 @@ function viewDebt(id) {
     }
 
 
-    var addMore =
-        confirm(
-            "👤 " + debt.name +
-            "\n\n" +
-            "Нийт өр: " +
-            money(debt.amount) +
-            "\nТөлсөн: " +
-            money(debt.paid) +
-            "\nҮлдэгдэл: " +
-            money(remaining) +
-            history +
-            "\n\n➕ Энэ хүнд дахин өр нэмэх үү?"
-        );
-
-
-    if (addMore) {
-
-        document.getElementById("personName").value =
-            debt.name;
-
-        document.getElementById("debtAmount").focus();
-
-    }
-
-}
+   
 function showDebts() {
 
     var list =
