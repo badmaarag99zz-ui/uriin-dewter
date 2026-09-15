@@ -463,6 +463,14 @@ function showDebts() {
     var list =
         document.getElementById("list");
 
+    var searchInput =
+        document.getElementById("search");
+
+    var search = "";
+
+    if (searchInput) {
+        search = searchInput.value.toLowerCase();
+    }
 
     var html = "";
 
@@ -472,17 +480,9 @@ function showDebts() {
 
     var people = 0;
 
+    var visibleCount = 0;
+
     var i;
-
-
-    if (debts.length == 0) {
-
-        html =
-            '<div class="empty">' +
-            'Одоогоор бүртгэлтэй өр алга.' +
-            '</div>';
-
-    }
 
 
     for (i = 0; i < debts.length; i++) {
@@ -493,19 +493,42 @@ function showDebts() {
             debt.amount - debt.paid;
 
 
+        /*
+        Нийт дүнг хайлтаас үл хамаараад
+        бүгдээр нь тооцно
+        */
+
         total =
             total + remaining;
-
 
         paidTotal =
             paidTotal + debt.paid;
 
 
         if (remaining > 0) {
-
             people++;
+        }
+
+
+        /*
+        Хайлтын хэсэг
+        */
+
+        var debtName =
+            debt.name.toLowerCase();
+
+
+        if (
+            search != "" &&
+            debtName.indexOf(search) == -1
+        ) {
+
+            continue;
 
         }
+
+
+        visibleCount++;
 
 
         html +=
@@ -571,6 +594,24 @@ function showDebts() {
     }
 
 
+    if (debts.length == 0) {
+
+        html =
+            '<div class="empty">' +
+            'Одоогоор бүртгэлтэй өр алга.' +
+            '</div>';
+
+    }
+    else if (visibleCount == 0) {
+
+        html =
+            '<div class="empty">' +
+            'Хайсан хүн олдсонгүй.' +
+            '</div>';
+
+    }
+
+
     list.innerHTML = html;
 
 
@@ -586,7 +627,6 @@ function showDebts() {
         money(paidTotal);
 
 }
-
 
 /* ТОВЧИЙГ АЖИЛЛУУЛАХ */
 
