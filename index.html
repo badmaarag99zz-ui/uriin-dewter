@@ -564,7 +564,46 @@ function showDebts() {
 
         var remaining =
             debt.amount - debt.paid;
+var dueText = "";
 
+if (debt.dueDate && remaining > 0) {
+
+    var today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    var due = new Date(debt.dueDate);
+    due.setHours(0, 0, 0, 0);
+
+    var diff =
+        Math.ceil(
+            (due - today) /
+            (1000 * 60 * 60 * 24)
+        );
+
+    if (diff < 0) {
+
+        dueText =
+            "🔴 Хугацаа хэтэрсэн";
+
+    } else if (diff == 0) {
+
+        dueText =
+            "🟡 Өнөөдөр төлөх";
+
+    } else if (diff == 1) {
+
+        dueText =
+            "🟡 Маргааш төлөх";
+
+    } else {
+
+        dueText =
+            "🟢 " + diff +
+            " хоног үлдсэн";
+
+    }
+
+}
 
         /*
         Нийт дүнг хайлтаас үл хамаараад
