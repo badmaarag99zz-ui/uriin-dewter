@@ -311,17 +311,19 @@ function addDebt() {
     }
 
 
-    debts.push({
+   debts.push({
 
-        id: new Date().getTime(),
+    id: new Date().getTime(),
 
-        name: name,
+    name: name,
 
-        amount: amount,
+    amount: amount,
 
-        paid: 0
+    paid: 0,
 
-    });
+    payments: []
+
+});
 
 
     saveData();
