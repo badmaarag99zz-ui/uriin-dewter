@@ -635,7 +635,13 @@ debt.name +
             '<div>Төлсөн: ' +
             money(debt.paid) +
             '</div>' +
-
+'<div>Төлөх хугацаа: ' +
+(
+    debt.dueDate
+    ? debt.dueDate
+    : "Тодорхойгүй"
+) +
+'</div>' +
             '<div>';
 
 
