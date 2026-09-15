@@ -570,6 +570,55 @@ function removeDebt(id) {
 
 
 /* ЖАГСААЛТ */
+    function addMoreDebt(id) {
+
+    var debt = null;
+
+    for (var i = 0; i < debts.length; i++) {
+
+        if (debts[i].id == id) {
+
+            debt = debts[i];
+
+            break;
+
+        }
+
+    }
+
+    if (debt == null) {
+        return;
+    }
+
+    var input =
+        prompt(
+            debt.name +
+            " дээр нэмэх өрийн дүн:"
+        );
+
+    if (input == null) {
+        return;
+    }
+
+    var amount =
+        Number(input);
+
+    if (amount <= 0 || isNaN(amount)) {
+
+        alert("Зөв мөнгөн дүн оруулна уу.");
+
+        return;
+
+    }
+
+    debt.amount =
+        debt.amount + amount;
+
+    saveData();
+
+    showDebts();
+
+}
 function viewDebt(id) {
 
     var debt = null;
