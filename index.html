@@ -663,6 +663,8 @@ function viewDebt(id) {
 
     alert(
         "👤 " + debt.name +
+        "\n📞 Утас: " +
+        (debt.phone ? debt.phone : "Бүртгэлгүй") +
         "\n\n" +
         "Нийт өр: " +
         money(debt.amount) +
