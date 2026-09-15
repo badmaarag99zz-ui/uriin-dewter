@@ -763,25 +763,59 @@ function editDebt(id) {
         "👤 " + debt.name;
 
     var content =
-        "<p>📞 Утас: " +
-        (debt.phone ? debt.phone : "Бүртгэлгүй") +
-        "</p>" +
 
-        "<p>💰 Нийт өр: " +
-        money(debt.amount) +
-        "</p>" +
+    "<div style='margin-bottom:15px;'>" +
 
-        "<p>💵 Төлсөн: " +
-        money(debt.paid) +
-        "</p>" +
+        "<div style='font-size:14px;color:#64748b;margin-bottom:5px;'>" +
+            "📞 Утас" +
+        "</div>" +
 
-        "<p>🔴 Үлдэгдэл: " +
-        money(remaining) +
-        "</p>" +
+        "<div style='font-size:17px;font-weight:600;'>" +
+            (debt.phone ? debt.phone : "Бүртгэлгүй") +
+        "</div>" +
 
-        "<p>📅 Төлөх хугацаа: " +
-        (debt.dueDate ? debt.dueDate : "Тодорхойгүй") +
-        "</p>";
+    "</div>" +
+
+
+    "<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px;'>" +
+
+        "<div style='background:#eff6ff;padding:15px;border-radius:12px;'>" +
+            "<div style='font-size:13px;color:#64748b;'>💰 Нийт өр</div>" +
+            "<div style='font-size:19px;font-weight:700;color:#1d4ed8;margin-top:5px;'>" +
+                money(debt.amount) +
+            "</div>" +
+        "</div>" +
+
+        "<div style='background:#f0fdf4;padding:15px;border-radius:12px;'>" +
+            "<div style='font-size:13px;color:#64748b;'>💵 Төлсөн</div>" +
+            "<div style='font-size:19px;font-weight:700;color:#15803d;margin-top:5px;'>" +
+                money(debt.paid) +
+            "</div>" +
+        "</div>" +
+
+    "</div>" +
+
+
+    "<div style='background:#fef2f2;padding:16px;border-radius:12px;margin-bottom:15px;'>" +
+
+        "<div style='font-size:13px;color:#64748b;'>🔴 Үлдэгдэл өр</div>" +
+
+        "<div style='font-size:25px;font-weight:800;color:#dc2626;margin-top:5px;'>" +
+            money(remaining) +
+        "</div>" +
+
+    "</div>" +
+
+
+    "<div style='padding:12px;background:#f8fafc;border-radius:10px;'>" +
+
+        "<span style='color:#64748b;'>📅 Төлөх хугацаа: </span>" +
+
+        "<strong>" +
+            (debt.dueDate ? debt.dueDate : "Тодорхойгүй") +
+        "</strong>" +
+
+    "</div>";
 
     if (debt.payments && debt.payments.length > 0) {
 
