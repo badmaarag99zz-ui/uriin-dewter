@@ -587,41 +587,60 @@ function viewDebt(id) {
         return;
     }
 
-    var remaining = debt.amount - debt.paid;
+    var remaining =
+        debt.amount - debt.paid;
 
     var history = "";
 
-if (debt.payments && debt.payments.length > 0) {
+    if (debt.payments && debt.payments.length > 0) {
 
-    history = "\n\n📋 Төлөлтийн түүх:\n";
+        history =
+            "\n\n📋 Төлөлтийн түүх:\n";
 
-    for (var j = 0; j < debt.payments.length; j++) {
+        for (var j = 0; j < debt.payments.length; j++) {
 
-        history +=
-            "\n" +
-            (j + 1) +
-            ". " +
-            money(debt.payments[j].amount) +
-            " — " +
-            debt.payments[j].date;
+            history +=
+                "\n" +
+                (j + 1) +
+                ". " +
+                money(debt.payments[j].amount) +
+                " — " +
+                debt.payments[j].date;
+
+        }
+
+    } else {
+
+        history =
+            "\n\n📋 Төлөлтийн түүх байхгүй.";
 
     }
 
-} else {
 
-    history = "\n\n📋 Төлөлтийн түүх байхгүй.";
+    var addMore =
+        confirm(
+            "👤 " + debt.name +
+            "\n\n" +
+            "Нийт өр: " +
+            money(debt.amount) +
+            "\nТөлсөн: " +
+            money(debt.paid) +
+            "\nҮлдэгдэл: " +
+            money(remaining) +
+            history +
+            "\n\n➕ Энэ хүнд дахин өр нэмэх үү?"
+        );
 
-}
 
+    if (addMore) {
 
-alert(
-    "👤 " + debt.name +
-    "\n\n" +
-    "Нийт өр: " + money(debt.amount) +
-    "\nТөлсөн: " + money(debt.paid) +
-    "\nҮлдэгдэл: " + money(remaining) +
-    history
-);
+        document.getElementById("personName").value =
+            debt.name;
+
+        document.getElementById("debtAmount").focus();
+
+    }
+
 }
 function showDebts() {
 
