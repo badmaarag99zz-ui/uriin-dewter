@@ -759,27 +759,74 @@ function editDebt(id) {
         money(remaining) +
         history;
 
-    if (debt.phone) {
+        document.getElementById("detailName").innerHTML =
+        "👤 " + debt.name;
 
-        var call = confirm(
-            message +
-            "\n\n📞 " +
-            debt.phone +
-            " дугаар руу залгах уу?"
-        );
+    var content =
+        "<p>📞 Утас: " +
+        (debt.phone ? debt.phone : "Бүртгэлгүй") +
+        "</p>" +
 
-        if (call) {
+        "<p>💰 Нийт өр: " +
+        money(debt.amount) +
+        "</p>" +
 
-            window.location.href =
-                "tel:" + debt.phone;
+        "<p>💵 Төлсөн: " +
+        money(debt.paid) +
+        "</p>" +
+
+        "<p>🔴 Үлдэгдэл: " +
+        money(remaining) +
+        "</p>" +
+
+        "<p>📅 Төлөх хугацаа: " +
+        (debt.dueDate ? debt.dueDate : "Тодорхойгүй") +
+        "</p>";
+
+    if (debt.payments && debt.payments.length > 0) {
+
+        content +=
+            "<h3>📋 Төлөлтийн түүх</h3>";
+
+        for (var j = 0; j < debt.payments.length; j++) {
+
+            content +=
+                "<p>" +
+                (j + 1) +
+                ". " +
+                money(debt.payments[j].amount) +
+                " — " +
+                debt.payments[j].date +
+                "</p>";
 
         }
 
     } else {
 
-        alert(message);
+        content +=
+            "<p>📋 Төлөлтийн түүх байхгүй.</p>";
 
     }
+
+    if (debt.phone) {
+
+        content +=
+            '<button ' +
+            'type="button" ' +
+            'onclick="window.location.href=\'tel:' +
+            debt.phone +
+            '\'" ' +
+            'style="background:#dcfce7;color:#166534;width:100%;margin-top:10px;">' +
+            '📞 Залгах' +
+            '</button>';
+
+    }
+
+    document.getElementById("detailContent").innerHTML =
+        content;
+
+    document.getElementById("detailModal").style.display =
+        "flex";
 
 }
 function showDebts() {
