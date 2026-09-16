@@ -742,215 +742,123 @@ function editDebt(id) {
 
 }
     function viewDebt(id) {
+   function viewDebt(id) {
+
     var debt = null;
 
     for (var i = 0; i < debts.length; i++) {
-
         if (debts[i].id == id) {
             debt = debts[i];
             break;
         }
-
     }
 
     if (debt == null) {
         return;
     }
 
-    var remaining =
-        debt.amount - debt.paid;
+    var remaining = debt.amount - debt.paid;
 
-    var history = "";
+    var content = "";
 
-    if (debt.payments && debt.payments.length > 0) {
-
-    content +=
-        "<div style='margin-top:20px;'>" +
-
-            "<h3 style='margin-bottom:10px;color:#0f172a;'>" +
-                "📋 Төлөлтийн түүх" +
-            "</h3>";
-
-    for (var j = 0; j < debt.payments.length; j++) {
-
-        content +=
-
-            "<div style='" +
-                "display:flex;" +
-                "justify-content:space-between;" +
-                "align-items:center;" +
-                "padding:12px;" +
-                "margin-bottom:8px;" +
-                "background:#f8fafc;" +
-                "border-radius:10px;" +
-            "'>" +
-
-                "<div>" +
-
-                    "<div style='font-weight:600;color:#15803d;'>" +
-                        "💵 +" +
-                        money(debt.payments[j].amount) +
-                    "</div>" +
-
-                    "<div style='font-size:12px;color:#64748b;margin-top:3px;'>" +
-                        debt.payments[j].date +
-                    "</div>" +
-
-                "</div>" +
-
-                "<div style='font-size:18px;'>" +
-                    "✓" +
-                "</div>" +
-
-            "</div>";
-
-    }
-
-    content += "</div>";
-
-} else {
-
-    content +=
-        "<div style='margin-top:20px;padding:15px;background:#f8fafc;border-radius:10px;color:#64748b;text-align:center;'>" +
-            "📋 Төлөлтийн түүх байхгүй." +
-        "</div>";
-
-}
-
-    var phone =
-        debt.phone ? debt.phone : "Бүртгэлгүй";
-
-    var message =
-        "👤 " + debt.name +
-        "\n📞 Утас: " + phone +
-        "\n\n" +
-        "💰 Нийт өр: " +
-        money(debt.amount) +
-        "\n💵 Төлсөн: " +
-        money(debt.paid) +
-        "\n🔴 Үлдэгдэл: " +
-        money(remaining) +
-        history;
-
-        document.getElementById("detailName").innerHTML =
+    document.getElementById("detailName").innerHTML =
         "👤 " + debt.name;
 
-    var content =
-
-    "<div style='margin-bottom:15px;'>" +
-
-        "<div style='font-size:14px;color:#64748b;margin-bottom:5px;'>" +
-            "📞 Утас" +
-        "</div>" +
-
-        "<div style='font-size:17px;font-weight:600;'>" +
-            (debt.phone ? debt.phone : "Бүртгэлгүй") +
-        "</div>" +
-
-    "</div>" +
-
-
-    "<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px;'>" +
-
-        "<div style='background:#eff6ff;padding:15px;border-radius:12px;'>" +
-            "<div style='font-size:13px;color:#64748b;'>💰 Нийт өр</div>" +
-            "<div style='font-size:19px;font-weight:700;color:#1d4ed8;margin-top:5px;'>" +
-                money(debt.amount) +
+    content +=
+        "<div style='margin-bottom:15px;'>" +
+            "<div style='font-size:14px;color:#64748b;margin-bottom:5px;'>📞 Утас</div>" +
+            "<div style='font-size:17px;font-weight:600;'>" +
+                (debt.phone ? debt.phone : "Бүртгэлгүй") +
             "</div>" +
-        "</div>" +
+        "</div>";
 
-        "<div style='background:#f0fdf4;padding:15px;border-radius:12px;'>" +
-            "<div style='font-size:13px;color:#64748b;'>💵 Төлсөн</div>" +
-            "<div style='font-size:19px;font-weight:700;color:#15803d;margin-top:5px;'>" +
-                money(debt.paid) +
+    content +=
+        "<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px;'>" +
+
+            "<div style='background:#eff6ff;padding:15px;border-radius:12px;'>" +
+                "<div style='font-size:13px;color:#64748b;'>💰 Нийт өр</div>" +
+                "<div style='font-size:19px;font-weight:700;color:#1d4ed8;margin-top:5px;'>" +
+                    money(debt.amount) +
+                "</div>" +
             "</div>" +
-        "</div>" +
 
-    "</div>" +
+            "<div style='background:#f0fdf4;padding:15px;border-radius:12px;'>" +
+                "<div style='font-size:13px;color:#64748b;'>💵 Төлсөн</div>" +
+                "<div style='font-size:19px;font-weight:700;color:#15803d;margin-top:5px;'>" +
+                    money(debt.paid) +
+                "</div>" +
+            "</div>" +
 
+        "</div>";
 
-    "<div style='background:#fef2f2;padding:16px;border-radius:12px;margin-bottom:15px;'>" +
+    content +=
+        "<div style='background:#fef2f2;padding:16px;border-radius:12px;margin-bottom:15px;'>" +
+            "<div style='font-size:13px;color:#64748b;'>🔴 Үлдэгдэл өр</div>" +
+            "<div style='font-size:25px;font-weight:800;color:#dc2626;margin-top:5px;'>" +
+                money(remaining) +
+            "</div>" +
+        "</div>";
 
-        "<div style='font-size:13px;color:#64748b;'>🔴 Үлдэгдэл өр</div>" +
+    content +=
+        "<div style='padding:12px;background:#f8fafc;border-radius:10px;'>" +
+            "<span style='color:#64748b;'>📅 Төлөх хугацаа: </span>" +
+            "<strong>" +
+                (debt.dueDate ? debt.dueDate : "Тодорхойгүй") +
+            "</strong>" +
+        "</div>";
 
-        "<div style='font-size:25px;font-weight:800;color:#dc2626;margin-top:5px;'>" +
-            money(remaining) +
-        "</div>" +
-
-    "</div>" +
-
-
-    "<div style='padding:12px;background:#f8fafc;border-radius:10px;'>" +
-
-        "<span style='color:#64748b;'>📅 Төлөх хугацаа: </span>" +
-
-        "<strong>" +
-            (debt.dueDate ? debt.dueDate : "Тодорхойгүй") +
-        "</strong>" +
-
-    "</div>";
+    content +=
+        "<h3 style='margin-top:20px;'>📋 Төлөлтийн түүх</h3>";
 
     if (debt.payments && debt.payments.length > 0) {
-
-        content +=
-            "<h3>📋 Төлөлтийн түүх</h3>";
 
         for (var j = 0; j < debt.payments.length; j++) {
 
             content +=
-                "<p>" +
-                (j + 1) +
-                ". " +
-                money(debt.payments[j].amount) +
-                " — " +
-                debt.payments[j].date +
-                "</p>";
+                "<div style='padding:12px;margin-bottom:8px;background:#f8fafc;border-radius:10px;'>" +
+                    "<div style='font-weight:600;color:#15803d;'>" +
+                        "💵 +" + money(debt.payments[j].amount) +
+                    "</div>" +
+                    "<div style='font-size:12px;color:#64748b;margin-top:3px;'>" +
+                        debt.payments[j].date +
+                    "</div>" +
+                "</div>";
 
         }
 
     } else {
 
         content +=
-            "<p>📋 Төлөлтийн түүх байхгүй.</p>";
+            "<div style='padding:15px;background:#f8fafc;border-radius:10px;color:#64748b;text-align:center;'>" +
+                "Төлөлтийн түүх байхгүй." +
+            "</div>";
 
     }
 
     if (debt.phone) {
 
         content +=
-            '<button ' +
-            'type="button" ' +
-            'onclick="window.location.href=\'tel:' +
-            debt.phone +
-            '\'" ' +
-            'style="background:#dcfce7;color:#166534;width:100%;margin-top:10px;">' +
+            '<button type="button" ' +
+            'onclick="window.location.href=\'tel:' + debt.phone + '\'" ' +
+            'style="background:#dcfce7;color:#166534;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;">' +
             '📞 Залгах' +
             '</button>';
 
     }
-content +=
-    "<button " +
-    "type='button' " +
-    "onclick='payment(" + debt.id + "); closeDetail();' " +
-    "style='" +
-        "background:#2563eb;" +
-        "color:white;" +
-        "width:100%;" +
-        "margin-top:10px;" +
-        "padding:13px;" +
-        "border:none;" +
-        "border-radius:10px;" +
-        "font-size:16px;" +
-        "font-weight:600;" +
-    "'>" +
+
+    content +=
+        "<button " +
+        "type='button' " +
+        "onclick='payment(" + debt.id + "); closeDetail();' " +
+        "style='background:#2563eb;color:white;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;font-size:16px;font-weight:600;'>" +
         "💵 Төлөлт бүртгэх" +
-    "</button>";
+        "</button>";
+
     document.getElementById("detailContent").innerHTML =
         content;
 
     document.getElementById("detailModal").style.display =
         "flex";
-
 }
 function showDebts() {
 
