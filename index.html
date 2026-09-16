@@ -384,6 +384,15 @@ function money(number) {
 
 function addDebt() {
 
+   async function addDebt() {
+
+    var loggedIn = await checkUser();
+
+    if (!loggedIn) {
+        alert("Эхлээд нэвтэрнэ үү.");
+        return;
+    }
+
     var name =
         document.getElementById("personName").value;
 
@@ -391,29 +400,21 @@ function addDebt() {
         document.getElementById("personPhone").value;
 
     var amount =
-        document.getElementById("debtAmount").value;
+        Number(document.getElementById("debtAmount").value);
 
     var dueDate =
         document.getElementById("dueDate").value;
 
     name = name.replace(/^\s+|\s+$/g, "");
 
-    amount = Number(amount);
-
     if (name == "") {
-
         alert("Хүний нэрээ оруулна уу.");
-
         return;
-
     }
 
     if (amount <= 0 || isNaN(amount)) {
-
         alert("Өрийн дүнгээ зөв оруулна уу.");
-
         return;
-
     }
 
     var existingDebt = null;
@@ -428,22 +429,45 @@ function addDebt() {
             existingDebt = debts[i];
 
             break;
-
         }
-
     }
+
+    /* Өмнө бүртгэлтэй хүн бол өр дээр нь нэмнэ */
 
     if (existingDebt != null) {
 
-        existingDebt.amount =
-            existingDebt.amount + amount;
+        var newAmount =
+            Number(existingDebt.amount) + amount;
+
+        var updateData = {
+            amount: newAmount
+        };
 
         if (phone != "") {
-            existingDebt.phone = phone;
+            updateData.phone = phone;
         }
 
         if (dueDate != "") {
-            existingDebt.dueDate = dueDate;
+            updateData.due_date = dueDate;
+        }
+
+        var updateResult =
+            await supabaseClient
+                .from("debts")
+                .update(updateData)
+                .eq("id", existingDebt.id)
+                .eq("user_id", currentUser.id);
+
+        if (updateResult.error) {
+
+            console.error(updateResult.error);
+
+            alert(
+                "Өр нэмэхэд алдаа гарлаа:\n" +
+                updateResult.error.message
+            );
+
+            return;
         }
 
         alert(
@@ -454,39 +478,49 @@ function addDebt() {
             " өр нэмэгдлээ."
         );
 
-    } else {
+    }
 
-        debts.push({
+    /* Шинэ хүн бол шинэ өр үүсгэнэ */
 
-            id: new Date().getTime(),
+    else {
 
-            name: name,
+        var insertResult =
+            await supabaseClient
+                .from("debts")
+                .insert({
+                    user_id: currentUser.id,
+                    name: name,
+                    phone: phone,
+                    amount: amount,
+                    paid: 0,
+                    due_date: dueDate || null,
+                    payments: []
+                })
+                .select()
+                .single();
 
-            phone: phone,
+        if (insertResult.error) {
 
-            amount: amount,
+            console.error(insertResult.error);
 
-            dueDate: dueDate,
+            alert(
+                "Өр бүртгэхэд алдаа гарлаа:\n" +
+                insertResult.error.message
+            );
 
-            paid: 0,
-
-            payments: []
-
-        });
+            return;
+        }
 
     }
 
-    saveData();
+    /* Дахин Supabase-ээс уншина */
+
+    await loadDebts();
 
     document.getElementById("personName").value = "";
-
     document.getElementById("personPhone").value = "";
-
     document.getElementById("debtAmount").value = "";
-
     document.getElementById("dueDate").value = "";
-
-    showDebts();
 
 }
 /* ТӨЛӨЛТ БҮРТГЭХ */
