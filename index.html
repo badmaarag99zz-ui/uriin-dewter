@@ -268,7 +268,24 @@ const supabaseClient = window.supabase.createClient(
 /* ӨРҮҮД */
 
 var debts = [];
+var currentUser = null;
 
+async function checkUser() {
+
+    var result =
+        await supabaseClient.auth.getUser();
+
+    if (result.error || !result.data.user) {
+
+        currentUser = null;
+
+        return false;
+    }
+
+    currentUser = result.data.user;
+
+    return true;
+}
 
 /* ХАДГАЛСАН ӨРҮҮДИЙГ УНШИХ */
 
