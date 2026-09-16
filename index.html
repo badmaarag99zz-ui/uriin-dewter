@@ -198,6 +198,13 @@ button {
 <div id="appContent" style="display:none;">
 
 <header>
+    <button
+    type="button"
+    onclick="logoutUser()"
+    style="position:absolute;right:20px;top:20px;background:#dc2626;color:white;border:0;padding:10px 16px;border-radius:8px;cursor:pointer;"
+>
+    🚪 Гарах
+</button>
     <h1>Өрийн дэвтэр</h1>
     <p>Өр зээлээ хялбархан бүртгэе</p>
 </header>
@@ -1841,7 +1848,21 @@ document.getElementById("addButton").onclick =
 ========================= */
 
 loadDebts();
+async function logoutUser() {
 
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+        alert("Гарахад алдаа гарлаа: " + error.message);
+        return;
+    }
+
+    currentUser = null;
+    debts = [];
+
+    document.getElementById("appContent").style.display = "none";
+    document.getElementById("loginScreen").style.display = "block";
+}
 </script>
 ```
 
