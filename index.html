@@ -317,9 +317,9 @@ async function loadDebts() {
         return;
     }
 
-    debts = result.data || [];
+   debts = result.data || [];
 
-    loadDebts();
+showDebts();
 }
 
 /* ХАДГАЛАХ */
@@ -1298,7 +1298,7 @@ document.getElementById("addButton").onclick =
 
 /* ЭХЛҮҮЛЭХ */
 
-showDebts();
+loadDebts();
 function closeDetail() {
 
     document.getElementById("detailModal").style.display =
