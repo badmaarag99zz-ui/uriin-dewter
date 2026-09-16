@@ -257,18 +257,28 @@ button {
 </div>
 
 
+```html
 <script>
 const SUPABASE_URL = "https://eyijwypbpxrdtmwwmoef.supabase.co";
-const SUPABASE_KEY = "sb_publishable_lnZn7Z5-WCQJY2nKIe_ltQ_RPZXlqVK";
+const SUPABASE_KEY = "ЭНД ӨӨРИЙН PUBLISHABLE KEY-ГЭЭ ТАВИНА";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
-/* ӨРҮҮД */
+
+
+/* =========================
+   ӨРИЙН ӨГӨГДӨЛ
+========================= */
 
 var debts = [];
 var currentUser = null;
+
+
+/* =========================
+   ХЭРЭГЛЭГЧ ШАЛГАХ
+========================= */
 
 async function checkUser() {
 
@@ -287,28 +297,40 @@ async function checkUser() {
     return true;
 }
 
-/* ХАДГАЛСАН ӨРҮҮДИЙГ УНШИХ */
+
+/* =========================
+   ӨРҮҮДИЙГ SUPABASE-ЭЭС УНШИХ
+========================= */
 
 async function loadDebts() {
 
     var loggedIn = await checkUser();
 
     if (!loggedIn) {
+
         debts = [];
+
         showDebts();
+
         return;
     }
 
-    var result = await supabaseClient
-        .from("debts")
-        .select("*")
-        .eq("user_id", currentUser.id);
+
+    var result =
+        await supabaseClient
+            .from("debts")
+            .select("*")
+            .eq("user_id", currentUser.id);
+
 
     if (result.error) {
 
         console.error(result.error);
 
-        alert("Өрийн мэдээлэл ачаалахад алдаа гарлаа.");
+        alert(
+            "Өрийн мэдээлэл ачаалахад алдаа гарлаа:\n" +
+            result.error.message
+        );
 
         debts = [];
 
@@ -317,107 +339,153 @@ async function loadDebts() {
         return;
     }
 
-   debts = result.data || [];
 
-showDebts();
+    /*
+       Supabase-ийн due_date
+       → програмын dueDate
+    */
+
+    debts =
+        (result.data || []).map(function(row) {
+
+            return {
+
+                id: row.id,
+
+                user_id: row.user_id,
+
+                name: row.name,
+
+                phone: row.phone || "",
+
+                amount: Number(row.amount || 0),
+
+                paid: Number(row.paid || 0),
+
+                dueDate: row.due_date || "",
+
+                payments: row.payments || []
+
+            };
+
+        });
+
+
+    showDebts();
 }
 
-/* ХАДГАЛАХ */
 
-function saveData() {
+/* =========================
+   МӨНГӨ ФОРМАТЛАХ
+========================= */
 
-    try {
+function money(number) {
 
-        localStorage.setItem(
-            "myDebts",
-            JSON.stringify(debts)
-        );
-
-    } catch(error) {
-
-        /* хадгалалт боломжгүй байсан ч
-           програм ажиллана */
-
-    }
+    return Number(number || 0)
+        .toLocaleString("mn-MN") + "₮";
 
 }
-/* НӨӨЦ ФАЙЛ ТАТАХ */
+
+
+/* =========================
+   BACKUP
+========================= */
 
 function backupData() {
 
     var data =
         JSON.stringify(debts, null, 2);
 
+
     var blob =
         new Blob(
             [data],
-            { type: "application/json" }
+            {
+                type: "application/json"
+            }
         );
+
 
     var url =
         URL.createObjectURL(blob);
 
+
     var a =
         document.createElement("a");
 
+
     a.href = url;
+
 
     a.download =
         "uriin-dewter-backup.json";
 
+
     a.click();
 
+
     URL.revokeObjectURL(url);
-
-}
-
-/* МӨНГИЙГ ФОРМАТЛАХ */
-
-function money(number) {
-
-    return Number(number).toLocaleString() + "₮";
-
 }
 
 
-/* ӨР НЭМЭХ */
+/* =========================
+   ШИНЭ ӨР БҮРТГЭХ
+========================= */
 
+async function addDebt() {
 
+    var loggedIn =
+        await checkUser();
 
-   async function addDebt() {
-
-    var loggedIn = await checkUser();
 
     if (!loggedIn) {
+
         alert("Эхлээд нэвтэрнэ үү.");
+
         return;
     }
+
 
     var name =
         document.getElementById("personName").value;
 
+
     var phone =
         document.getElementById("personPhone").value;
 
+
     var amount =
-        Number(document.getElementById("debtAmount").value);
+        Number(
+            document.getElementById("debtAmount").value
+        );
+
 
     var dueDate =
         document.getElementById("dueDate").value;
 
-    name = name.replace(/^\s+|\s+$/g, "");
+
+    name =
+        name.replace(/^\s+|\s+$/g, "");
+
 
     if (name == "") {
+
         alert("Хүний нэрээ оруулна уу.");
+
         return;
     }
 
-    if (amount <= 0 || isNaN(amount)) {
+
+    if (isNaN(amount) || amount <= 0) {
+
         alert("Өрийн дүнгээ зөв оруулна уу.");
+
         return;
     }
+
 
     var existingDebt = null;
+
 
     for (var i = 0; i < debts.length; i++) {
 
@@ -432,24 +500,35 @@ function money(number) {
         }
     }
 
-    /* Өмнө бүртгэлтэй хүн бол өр дээр нь нэмнэ */
+
+    /* ӨМНӨ БҮРТГЭЛТЭЙ ХҮН */
 
     if (existingDebt != null) {
 
         var newAmount =
             Number(existingDebt.amount) + amount;
 
+
         var updateData = {
+
             amount: newAmount
+
         };
 
+
         if (phone != "") {
+
             updateData.phone = phone;
+
         }
 
+
         if (dueDate != "") {
+
             updateData.due_date = dueDate;
+
         }
+
 
         var updateResult =
             await supabaseClient
@@ -458,9 +537,8 @@ function money(number) {
                 .eq("id", existingDebt.id)
                 .eq("user_id", currentUser.id);
 
-        if (updateResult.error) {
 
-            console.error(updateResult.error);
+        if (updateResult.error) {
 
             alert(
                 "Өр нэмэхэд алдаа гарлаа:\n" +
@@ -469,6 +547,7 @@ function money(number) {
 
             return;
         }
+
 
         alert(
             "✅ " +
@@ -480,7 +559,8 @@ function money(number) {
 
     }
 
-    /* Шинэ хүн бол шинэ өр үүсгэнэ */
+
+    /* ШИНЭ ХҮН */
 
     else {
 
@@ -488,20 +568,27 @@ function money(number) {
             await supabaseClient
                 .from("debts")
                 .insert({
+
                     user_id: currentUser.id,
+
                     name: name,
+
                     phone: phone,
+
                     amount: amount,
+
                     paid: 0,
+
                     due_date: dueDate || null,
+
                     payments: []
+
                 })
                 .select()
                 .single();
 
-        if (insertResult.error) {
 
-            console.error(insertResult.error);
+        if (insertResult.error) {
 
             alert(
                 "Өр бүртгэхэд алдаа гарлаа:\n" +
@@ -511,47 +598,76 @@ function money(number) {
             return;
         }
 
+
+        alert("✅ Өр амжилттай бүртгэгдлээ.");
     }
 
-    /* Дахин Supabase-ээс уншина */
-
-    await loadDebts();
 
     document.getElementById("personName").value = "";
+
     document.getElementById("personPhone").value = "";
+
     document.getElementById("debtAmount").value = "";
+
     document.getElementById("dueDate").value = "";
 
+
+    await loadDebts();
 }
-/* ТӨЛӨЛТ БҮРТГЭХ */
+
+
+/* =========================
+   ТӨЛӨЛТ БҮРТГЭХ
+========================= */
 
 async function payment(id) {
 
-    var loggedIn = await checkUser();
+    var loggedIn =
+        await checkUser();
+
 
     if (!loggedIn) {
+
         alert("Эхлээд нэвтэрнэ үү.");
+
         return;
     }
+
 
     var debt = null;
 
+
     for (var i = 0; i < debts.length; i++) {
 
-        if (debts[i].id == id) {
+        if (String(debts[i].id) == String(id)) {
+
             debt = debts[i];
+
             break;
         }
-
     }
 
+
     if (debt == null) {
+
         alert("Өр олдсонгүй.");
+
         return;
     }
 
+
     var remaining =
-        Number(debt.amount) - Number(debt.paid);
+        Number(debt.amount) -
+        Number(debt.paid);
+
+
+    if (remaining <= 0) {
+
+        alert("Энэ өр бүрэн төлөгдсөн байна.");
+
+        return;
+    }
+
 
     var input =
         prompt(
@@ -559,45 +675,70 @@ async function payment(id) {
             money(remaining)
         );
 
+
     if (input == null) {
+
         return;
     }
 
-    var amount = Number(input);
+
+    var amount =
+        Number(input);
+
 
     if (isNaN(amount) || amount <= 0) {
+
         alert("Зөв мөнгөн дүн оруулна уу.");
+
         return;
     }
+
 
     if (amount > remaining) {
-        alert("Үлдэгдлээс их мөнгө оруулах боломжгүй.");
+
+        alert(
+            "Үлдэгдлээс их мөнгө оруулах боломжгүй."
+        );
+
         return;
     }
 
-    var payments = debt.payments || [];
+
+    var payments =
+        Array.isArray(debt.payments)
+            ? debt.payments.slice()
+            : [];
+
 
     payments.push({
+
         amount: amount,
-        date: new Date().toLocaleString("mn-MN")
+
+        date:
+            new Date().toLocaleString("mn-MN")
+
     });
+
 
     var newPaid =
         Number(debt.paid) + amount;
+
 
     var result =
         await supabaseClient
             .from("debts")
             .update({
+
                 paid: newPaid,
+
                 payments: payments
+
             })
             .eq("id", id)
             .eq("user_id", currentUser.id);
 
-    if (result.error) {
 
-        console.error(result.error);
+    if (result.error) {
 
         alert(
             "Төлөлт хадгалахад алдаа гарлаа:\n" +
@@ -607,77 +748,57 @@ async function payment(id) {
         return;
     }
 
+
     alert(
         "✅ " +
         money(amount) +
         " төлөлт амжилттай бүртгэгдлээ."
     );
 
+
     await loadDebts();
 }
 
 
-/* ӨР УСТГАХ */
+/* =========================
+   ӨР НЭМЭХ
+========================= */
 
-function removeDebt(id) {
+async function addMoreDebt(id) {
 
-    var answer =
-        confirm("Энэ өрийг устгах уу?");
+    var loggedIn =
+        await checkUser();
 
 
-    if (!answer) {
+    if (!loggedIn) {
+
+        alert("Эхлээд нэвтэрнэ үү.");
 
         return;
-
     }
 
-
-    var newDebts = [];
-
-    var i;
-
-
-    for (i = 0; i < debts.length; i++) {
-
-        if (debts[i].id != id) {
-
-            newDebts.push(debts[i]);
-
-        }
-
-    }
-
-
-    debts = newDebts;
-
-
-    saveData();
-
-    showDebts();
-
-}
-
-
-/* ЖАГСААЛТ */
-    function addMoreDebt(id) {
 
     var debt = null;
 
+
     for (var i = 0; i < debts.length; i++) {
 
-        if (debts[i].id == id) {
+        if (String(debts[i].id) == String(id)) {
 
             debt = debts[i];
 
             break;
-
         }
-
     }
+
 
     if (debt == null) {
+
+        alert("Өр олдсонгүй.");
+
         return;
     }
+
 
     var input =
         prompt(
@@ -685,45 +806,102 @@ function removeDebt(id) {
             " дээр нэмэх өрийн дүн:"
         );
 
+
     if (input == null) {
+
         return;
     }
+
 
     var amount =
         Number(input);
 
-    if (amount <= 0 || isNaN(amount)) {
+
+    if (isNaN(amount) || amount <= 0) {
 
         alert("Зөв мөнгөн дүн оруулна уу.");
 
         return;
-
     }
 
-    debt.amount =
-        debt.amount + amount;
 
-    saveData();
+    var newAmount =
+        Number(debt.amount) + amount;
 
-    showDebts();
 
+    var result =
+        await supabaseClient
+            .from("debts")
+            .update({
+
+                amount: newAmount
+
+            })
+            .eq("id", id)
+            .eq("user_id", currentUser.id);
+
+
+    if (result.error) {
+
+        alert(
+            "Өр нэмэхэд алдаа гарлаа:\n" +
+            result.error.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "✅ " +
+        money(amount) +
+        " нэмэгдлээ."
+    );
+
+
+    await loadDebts();
 }
-function editDebt(id) {
+
+
+/* =========================
+   ӨР ЗАСАХ
+========================= */
+
+async function editDebt(id) {
+
+    var loggedIn =
+        await checkUser();
+
+
+    if (!loggedIn) {
+
+        alert("Эхлээд нэвтэрнэ үү.");
+
+        return;
+    }
+
 
     var debt = null;
 
+
     for (var i = 0; i < debts.length; i++) {
 
-        if (debts[i].id == id) {
+        if (String(debts[i].id) == String(id)) {
+
             debt = debts[i];
+
             break;
         }
-
     }
+
 
     if (debt == null) {
+
+        alert("Өр олдсонгүй.");
+
         return;
     }
+
 
     var newName =
         prompt(
@@ -731,17 +909,24 @@ function editDebt(id) {
             debt.name
         );
 
+
     if (newName == null) {
+
         return;
     }
+
 
     newName =
         newName.replace(/^\s+|\s+$/g, "");
 
+
     if (newName == "") {
+
         alert("Нэр хоосон байж болохгүй.");
+
         return;
     }
+
 
     var newPhone =
         prompt(
@@ -749,9 +934,12 @@ function editDebt(id) {
             debt.phone || ""
         );
 
+
     if (newPhone == null) {
+
         return;
     }
+
 
     var newDueDate =
         prompt(
@@ -759,307 +947,371 @@ function editDebt(id) {
             debt.dueDate || ""
         );
 
+
     if (newDueDate == null) {
+
         return;
     }
 
-    debt.name = newName;
 
-    debt.phone = newPhone;
+    var result =
+        await supabaseClient
+            .from("debts")
+            .update({
 
-    debt.dueDate = newDueDate;
+                name: newName,
 
-    saveData();
+                phone: newPhone,
 
-    showDebts();
+                due_date:
+                    newDueDate || null
 
-    alert("✅ Мэдээлэл амжилттай шинэчлэгдлээ.");
+            })
+            .eq("id", id)
+            .eq("user_id", currentUser.id);
 
+
+    if (result.error) {
+
+        alert(
+            "Мэдээлэл шинэчлэхэд алдаа гарлаа:\n" +
+            result.error.message
+        );
+
+        return;
+    }
+
+
+    alert(
+        "✅ Мэдээлэл амжилттай шинэчлэгдлээ."
+    );
+
+
+    await loadDebts();
 }
-   
-   function viewDebt(id) {
+
+
+/* =========================
+   ӨР УСТГАХ
+========================= */
+
+async function removeDebt(id) {
+
+    var loggedIn =
+        await checkUser();
+
+
+    if (!loggedIn) {
+
+        alert("Эхлээд нэвтэрнэ үү.");
+
+        return;
+    }
+
+
+    var answer =
+        confirm(
+            "Энэ өрийг бүрмөсөн устгах уу?"
+        );
+
+
+    if (!answer) {
+
+        return;
+    }
+
+
+    var result =
+        await supabaseClient
+            .from("debts")
+            .delete()
+            .eq("id", id)
+            .eq("user_id", currentUser.id);
+
+
+    if (result.error) {
+
+        alert(
+            "Өр устгахад алдаа гарлаа:\n" +
+            result.error.message
+        );
+
+        return;
+    }
+
+
+    alert("🗑 Өр устгагдлаа.");
+
+
+    await loadDebts();
+}
+
+
+/* =========================
+   ӨР ДЭЛГЭРЭНГҮЙ
+========================= */
+
+function viewDebt(id) {
 
     var debt = null;
 
+
     for (var i = 0; i < debts.length; i++) {
-        if (debts[i].id == id) {
+
+        if (String(debts[i].id) == String(id)) {
+
             debt = debts[i];
+
             break;
         }
     }
 
+
     if (debt == null) {
+
         return;
     }
 
-    var remaining = debt.amount - debt.paid;
+
+    var remaining =
+        Number(debt.amount) -
+        Number(debt.paid);
+
 
     var content = "";
+
 
     document.getElementById("detailName").innerHTML =
         "👤 " + debt.name;
 
+
     content +=
         "<div style='margin-bottom:15px;'>" +
-            "<div style='font-size:14px;color:#64748b;margin-bottom:5px;'>📞 Утас</div>" +
-            "<div style='font-size:17px;font-weight:600;'>" +
-                (debt.phone ? debt.phone : "Бүртгэлгүй") +
-            "</div>" +
+
+        "<div style='font-size:14px;color:#64748b;margin-bottom:5px;'>" +
+        "📞 Утас" +
+        "</div>" +
+
+        "<div style='font-size:17px;font-weight:600;'>" +
+
+        (debt.phone
+            ? debt.phone
+            : "Бүртгэлгүй") +
+
+        "</div>" +
+
         "</div>";
+
 
     content +=
         "<div style='display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px;'>" +
 
-            "<div style='background:#eff6ff;padding:15px;border-radius:12px;'>" +
-                "<div style='font-size:13px;color:#64748b;'>💰 Нийт өр</div>" +
-                "<div style='font-size:19px;font-weight:700;color:#1d4ed8;margin-top:5px;'>" +
-                    money(debt.amount) +
-                "</div>" +
-            "</div>" +
+        "<div style='background:#eff6ff;padding:15px;border-radius:12px;'>" +
 
-            "<div style='background:#f0fdf4;padding:15px;border-radius:12px;'>" +
-                "<div style='font-size:13px;color:#64748b;'>💵 Төлсөн</div>" +
-                "<div style='font-size:19px;font-weight:700;color:#15803d;margin-top:5px;'>" +
-                    money(debt.paid) +
-                "</div>" +
-            "</div>" +
+        "<div style='font-size:13px;color:#64748b;'>" +
+        "💰 Нийт өр" +
+        "</div>" +
+
+        "<div style='font-size:19px;font-weight:700;color:#1d4ed8;margin-top:5px;'>" +
+
+        money(debt.amount) +
+
+        "</div>" +
+
+        "</div>" +
+
+
+        "<div style='background:#f0fdf4;padding:15px;border-radius:12px;'>" +
+
+        "<div style='font-size:13px;color:#64748b;'>" +
+        "💵 Төлсөн" +
+        "</div>" +
+
+        "<div style='font-size:19px;font-weight:700;color:#15803d;margin-top:5px;'>" +
+
+        money(debt.paid) +
+
+        "</div>" +
+
+        "</div>" +
 
         "</div>";
+
 
     content +=
         "<div style='background:#fef2f2;padding:16px;border-radius:12px;margin-bottom:15px;'>" +
-            "<div style='font-size:13px;color:#64748b;'>🔴 Үлдэгдэл өр</div>" +
-            "<div style='font-size:25px;font-weight:800;color:#dc2626;margin-top:5px;'>" +
-                money(remaining) +
-            "</div>" +
+
+        "<div style='font-size:13px;color:#64748b;'>" +
+        "🔴 Үлдэгдэл өр" +
+        "</div>" +
+
+        "<div style='font-size:25px;font-weight:800;color:#dc2626;margin-top:5px;'>" +
+
+        money(remaining) +
+
+        "</div>" +
+
         "</div>";
+
 
     content +=
         "<div style='padding:12px;background:#f8fafc;border-radius:10px;'>" +
-            "<span style='color:#64748b;'>📅 Төлөх хугацаа: </span>" +
-            "<strong>" +
-                (debt.dueDate ? debt.dueDate : "Тодорхойгүй") +
-            "</strong>" +
+
+        "<span style='color:#64748b;'>" +
+        "📅 Төлөх хугацаа: " +
+        "</span>" +
+
+        "<strong>" +
+
+        (
+            debt.dueDate
+                ? debt.dueDate
+                : "Тодорхойгүй"
+        ) +
+
+        "</strong>" +
+
         "</div>";
 
+
     content +=
-        "<h3 style='margin-top:20px;'>📋 Төлөлтийн түүх</h3>";
+        "<h3 style='margin-top:20px;'>" +
+        "📋 Төлөлтийн түүх" +
+        "</h3>";
 
-    if (debt.payments && debt.payments.length > 0) {
 
-        for (var j = 0; j < debt.payments.length; j++) {
+    if (
+        Array.isArray(debt.payments) &&
+        debt.payments.length > 0
+    ) {
+
+        for (
+            var j = 0;
+            j < debt.payments.length;
+            j++
+        ) {
 
             content +=
                 "<div style='padding:12px;margin-bottom:8px;background:#f8fafc;border-radius:10px;'>" +
-                    "<div style='font-weight:600;color:#15803d;'>" +
-                        "💵 +" + money(debt.payments[j].amount) +
-                    "</div>" +
-                    "<div style='font-size:12px;color:#64748b;margin-top:3px;'>" +
-                        debt.payments[j].date +
-                    "</div>" +
-                "</div>";
 
+                "<div style='font-weight:600;color:#15803d;'>" +
+
+                "💵 +" +
+                money(debt.payments[j].amount) +
+
+                "</div>" +
+
+                "<div style='font-size:12px;color:#64748b;margin-top:3px;'>" +
+
+                debt.payments[j].date +
+
+                "</div>" +
+
+                "</div>";
         }
 
     } else {
 
         content +=
             "<div style='padding:15px;background:#f8fafc;border-radius:10px;color:#64748b;text-align:center;'>" +
-                "Төлөлтийн түүх байхгүй." +
-            "</div>";
 
+            "Төлөлтийн түүх байхгүй." +
+
+            "</div>";
     }
+
 
     if (debt.phone) {
 
         content +=
-            '<button type="button" ' +
-            'onclick="window.location.href=\'tel:' + debt.phone + '\'" ' +
-            'style="background:#dcfce7;color:#166534;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;">' +
-            '📞 Залгах' +
-            '</button>';
+            "<button type='button' " +
 
+            "onclick=\"window.location.href='tel:" +
+            debt.phone +
+            "'\" " +
+
+            "style='background:#dcfce7;color:#166534;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;'>" +
+
+            "📞 Залгах" +
+
+            "</button>";
     }
 
-    content +=
-        "<button " +
-        "type='button' " +
-        "onclick='payment(" + debt.id + "); closeDetail();' " +
-        "style='background:#2563eb;color:white;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;font-size:16px;font-weight:600;'>" +
-        "💵 Төлөлт бүртгэх" +
-        "</button>";
+
+    if (remaining > 0) {
+
+        content +=
+            "<button type='button' " +
+
+            "onclick=\"payment('" +
+            debt.id +
+            "'); closeDetail();\" " +
+
+            "style='background:#2563eb;color:white;width:100%;margin-top:10px;padding:13px;border:none;border-radius:10px;font-size:16px;font-weight:600;'>" +
+
+            "💵 Төлөлт бүртгэх" +
+
+            "</button>";
+    }
+
 
     document.getElementById("detailContent").innerHTML =
         content;
 
+
     document.getElementById("detailModal").style.display =
         "flex";
 }
-```js
+
+
+/* =========================
+   ДЭЛГЭРЭНГҮЙ ЦОНХ ХААХ
+========================= */
+
+function closeDetail() {
+
+    document.getElementById("detailModal").style.display =
+        "none";
+}
+
+
+/* =========================
+   ЖАГСААЛТ
+========================= */
+
 function showDebts() {
-    var list = document.getElementById("debtList");
+
+    var list =
+        document.getElementById("list");
+
 
     if (!list) {
-        console.error("debtList олдсонгүй.");
+
+        console.error("list олдсонгүй.");
+
         return;
     }
 
-    if (debts.length == 0) {
-        list.innerHTML =
-            '<div style="text-align:center;padding:30px;color:#777;">' +
-            'Одоогоор бүртгэлтэй өр алга.' +
-            '</div>';
-        return;
-    }
 
-    var html = "";
-
-    for (var i = 0; i < debts.length; i++) {
-        var debt = debts[i];
-
-        var amount = Number(debt.amount || 0);
-        var paid = Number(debt.paid || 0);
-        var remaining = amount - paid;
-
-        html +=
-            '<div class="debt">' +
-
-            '<div class="debt-name" ' +
-            'onclick="viewDebt(\'' + debt.id + '\')" ' +
-            'style="cursor:pointer;">' +
-            debt.name +
-            '</div>' +
-
-            '<div class="debt-info">' +
-            '📞 ' + (debt.phone || "Утасгүй") +
-            '</div>' +
-
-            '<div class="debt-info">' +
-            '💰 Нийт өр: ' + money(amount) +
-            '</div>' +
-
-            '<div class="debt-info">' +
-            '💵 Төлсөн: ' + money(paid) +
-            '</div>' +
-
-            '<div class="debt-info">' +
-            '🔴 Үлдэгдэл: ' + money(remaining) +
-            '</div>' +
-
-            '<div class="debt-info">' +
-            '📅 Төлөх хугацаа: ' +
-            (debt.dueDate || "Тодорхойгүй") +
-            '</div>';
-
-        if (remaining > 0) {
-            html +=
-                '<button ' +
-                'class="pay" ' +
-                'onclick="payment(\'' +
-                debt.id +
-                '\')">' +
-                '💵 Төлөлт бүртгэх' +
-                '</button>';
-        }
-
-        html +=
-            '<button ' +
-            'class="pay" ' +
-            'onclick="addMoreDebt(\'' +
-            debt.id +
-            '\')">' +
-            '➕ Өр нэмэх' +
-            '</button>';
-
-        html +=
-            '<button ' +
-            'class="pay" ' +
-            'onclick="editDebt(\'' +
-            debt.id +
-            '\')">' +
-            '✏️ Засах' +
-            '</button>';
-
-        html +=
-            '<button ' +
-            'class="delete" ' +
-            'onclick="removeDebt(\'' +
-            debt.id +
-            '\')">' +
-            '🗑 Устгах' +
-            '</button>';
-
-        html +=
-            '</div>';
-    }
-
-    list.innerHTML = html;
-}
-```
-
-
-        if (sort == "overdue") {
-
-            var today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            var dateA = a.dueDate
-                ? new Date(a.dueDate)
-                : new Date("9999-12-31");
-
-            var dateB = b.dueDate
-                ? new Date(b.dueDate)
-                : new Date("9999-12-31");
-
-            dateA.setHours(0, 0, 0, 0);
-            dateB.setHours(0, 0, 0, 0);
-
-            var overdueA =
-                a.dueDate &&
-                remainingA > 0 &&
-                dateA < today;
-
-            var overdueB =
-                b.dueDate &&
-                remainingB > 0 &&
-                dateB < today;
-
-            if (overdueA && !overdueB) {
-                return -1;
-            }
-
-            if (!overdueA && overdueB) {
-                return 1;
-            }
-
-            return dateA - dateB;
-
-        }
-
-        var dateA = a.dueDate
-            ? new Date(a.dueDate)
-            : new Date("9999-12-31");
-
-        var dateB = b.dueDate
-            ? new Date(b.dueDate)
-            : new Date("9999-12-31");
-
-        dateA.setHours(0, 0, 0, 0);
-        dateB.setHours(0, 0, 0, 0);
-
-        return dateA - dateB;
-
-    });
     var searchInput =
         document.getElementById("search");
 
-    var search = "";
 
-    if (searchInput) {
-        search = searchInput.value.toLowerCase();
-    }
+    var sortInput =
+        document.getElementById("sort");
 
-    var html = "";
+
+    var search =
+        searchInput
+            ? searchInput.value.toLowerCase()
+            : "";
+
+
+    var sort =
+        sortInput
+            ? sortInput.value
+            : "due";
+
 
     var total = 0;
 
@@ -1067,96 +1319,205 @@ function showDebts() {
 
     var people = 0;
 
-    var visibleCount = 0;
-var overdue = 0;
-    var i;
+    var overdue = 0;
 
 
-    for (i = 0; i < debts.length; i++) {
+    /* НИЙТ ДҮН */
 
-        var debt = debts[i];
+    for (
+        var i = 0;
+        i < debts.length;
+        i++
+    ) {
 
-        var remaining =
-            debt.amount - debt.paid;
-var dueText = "";
-
-if (debt.dueDate && remaining > 0) {
-
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    var due = new Date(debt.dueDate);
-    due.setHours(0, 0, 0, 0);
-
-    var diff =
-        Math.ceil(
-            (due - today) /
-            (1000 * 60 * 60 * 24)
-        );
-
-    if (diff < 0) {
-
-        dueText =
-            "🔴 Хугацаа хэтэрсэн";
-
-    } else if (diff == 0) {
-
-        dueText =
-            "🟡 Өнөөдөр төлөх";
-
-    } else if (diff == 1) {
-
-        dueText =
-            "🟡 Маргааш төлөх";
-
-    } else {
-
-        dueText =
-            "🟢 " + diff +
-            " хоног үлдсэн";
-
-    }
-
-}
-
-        /*
-        Нийт дүнг хайлтаас үл хамаараад
-        бүгдээр нь тооцно
-        */
-
-        total =
-            total + remaining;
-
-        paidTotal =
-            paidTotal + debt.paid;
+        var allDebt =
+            debts[i];
 
 
-        if (remaining > 0) {
+        var allRemaining =
+            Number(allDebt.amount || 0) -
+            Number(allDebt.paid || 0);
+
+
+        total +=
+            allRemaining;
+
+
+        paidTotal +=
+            Number(allDebt.paid || 0);
+
+
+        if (allRemaining > 0) {
+
             people++;
         }
-if (
-    debt.dueDate &&
-    remaining > 0
-) {
 
-    var today = new Date();
-    today.setHours(0, 0, 0, 0);
 
-    var due = new Date(debt.dueDate);
-    due.setHours(0, 0, 0, 0);
+        if (
+            allDebt.dueDate &&
+            allRemaining > 0
+        ) {
 
-    if (due < today) {
-        overdue++;
+            var today =
+                new Date();
+
+            today.setHours(
+                0, 0, 0, 0
+            );
+
+
+            var due =
+                new Date(
+                    allDebt.dueDate
+                );
+
+            due.setHours(
+                0, 0, 0, 0
+            );
+
+
+            if (due < today) {
+
+                overdue++;
+            }
+        }
     }
 
-}
 
-        /*
-        Хайлтын хэсэг
-        */
+    /* ХУУЛБАРЛААД ЭРЭМБЭЛНЭ */
+
+    var sortedDebts =
+        debts.slice();
+
+
+    sortedDebts.sort(
+        function(a, b) {
+
+            var remainingA =
+                Number(a.amount || 0) -
+                Number(a.paid || 0);
+
+
+            var remainingB =
+                Number(b.amount || 0) -
+                Number(b.paid || 0);
+
+
+            if (sort == "amount") {
+
+                return (
+                    remainingB -
+                    remainingA
+                );
+            }
+
+
+            if (sort == "name") {
+
+                return a.name.localeCompare(
+                    b.name,
+                    "mn"
+                );
+            }
+
+
+            var dateA =
+                a.dueDate
+                    ? new Date(a.dueDate)
+                    : new Date("9999-12-31");
+
+
+            var dateB =
+                b.dueDate
+                    ? new Date(b.dueDate)
+                    : new Date("9999-12-31");
+
+
+            dateA.setHours(
+                0, 0, 0, 0
+            );
+
+            dateB.setHours(
+                0, 0, 0, 0
+            );
+
+
+            if (sort == "overdue") {
+
+                var today =
+                    new Date();
+
+                today.setHours(
+                    0, 0, 0, 0
+                );
+
+
+                var overdueA =
+                    a.dueDate &&
+                    remainingA > 0 &&
+                    dateA < today;
+
+
+                var overdueB =
+                    b.dueDate &&
+                    remainingB > 0 &&
+                    dateB < today;
+
+
+                if (
+                    overdueA &&
+                    !overdueB
+                ) {
+
+                    return -1;
+                }
+
+
+                if (
+                    !overdueA &&
+                    overdueB
+                ) {
+
+                    return 1;
+                }
+            }
+
+
+            return dateA - dateB;
+        }
+    );
+
+
+    var html = "";
+
+    var visibleCount = 0;
+
+
+    for (
+        var k = 0;
+        k < sortedDebts.length;
+        k++
+    ) {
+
+        var debt =
+            sortedDebts[k];
+
+
+        var amount =
+            Number(debt.amount || 0);
+
+
+        var paid =
+            Number(debt.paid || 0);
+
+
+        var remaining =
+            amount - paid;
+
 
         var debtName =
-            debt.name.toLowerCase();
+            (debt.name || "")
+                .toLowerCase();
 
 
         if (
@@ -1165,125 +1526,236 @@ if (
         ) {
 
             continue;
-
         }
 
 
         visibleCount++;
 
 
+        var dueText = "";
+
+
+        if (
+            debt.dueDate &&
+            remaining > 0
+        ) {
+
+            var today2 =
+                new Date();
+
+            today2.setHours(
+                0, 0, 0, 0
+            );
+
+
+            var due2 =
+                new Date(
+                    debt.dueDate
+                );
+
+            due2.setHours(
+                0, 0, 0, 0
+            );
+
+
+            var diff =
+                Math.ceil(
+                    (
+                        due2 -
+                        today2
+                    ) /
+                    (
+                        1000 *
+                        60 *
+                        60 *
+                        24
+                    )
+                );
+
+
+            if (diff < 0) {
+
+                dueText =
+                    "🔴 Хугацаа хэтэрсэн";
+
+            } else if (diff == 0) {
+
+                dueText =
+                    "🟡 Өнөөдөр төлөх";
+
+            } else if (diff == 1) {
+
+                dueText =
+                    "🟡 Маргааш төлөх";
+
+            } else {
+
+                dueText =
+                    "🟢 " +
+                    diff +
+                    " хоног үлдсэн";
+            }
+        }
+
+
         html +=
-            '<div class="debt">' +
+            "<div class='debt'>" +
 
-            '<div class="debt-name" ' +
-'onclick="viewDebt(' + debt.id + ')" ' +
-'style="cursor:pointer;">' +
-debt.name +
-'</div>' +
 
-            '<div class="' +
-            (remaining == 0
-                ? "remaining complete"
-                : "remaining") +
-            '">' +
+            "<div class='debt-name' " +
+
+            "onclick=\"viewDebt('" +
+            debt.id +
+            "')\" " +
+
+            "style='cursor:pointer;'>" +
+
+            debt.name +
+
+            "</div>" +
+
+
+            "<div class='" +
 
             (
                 remaining == 0
-                ? "Бүрэн төлөгдсөн"
-                : "Үлдэгдэл: " +
-                  money(remaining)
+                    ? "remaining complete"
+                    : "remaining"
             ) +
 
-            '</div>' +
+            "'>" +
 
-            '<div>Нийт өр: ' +
-            money(debt.amount) +
-            '</div>' +
+            (
+                remaining == 0
+                    ? "Бүрэн төлөгдсөн"
+                    : "Үлдэгдэл: " +
+                      money(remaining)
+            ) +
 
-            '<div>Төлсөн: ' +
-            money(debt.paid) +
-            '</div>' +
-'<div>Төлөх хугацаа: ' +
-(
-    debt.dueDate
-    ? debt.dueDate
-    : "Тодорхойгүй"
-) +
-'</div>' +
+            "</div>" +
 
-(
-    dueText
-    ? '<div>' + dueText + '</div>'
-    : ''
-) +
-            '<div>';
+
+            "<div>Нийт өр: " +
+            money(amount) +
+            "</div>" +
+
+
+            "<div>Төлсөн: " +
+            money(paid) +
+            "</div>" +
+
+
+            "<div>Төлөх хугацаа: " +
+
+            (
+                debt.dueDate
+                    ? debt.dueDate
+                    : "Тодорхойгүй"
+            ) +
+
+            "</div>" +
+
+
+            (
+                dueText
+                    ? "<div>" +
+                      dueText +
+                      "</div>"
+                    : ""
+            ) +
+
+
+            "<div>";
 
 
         if (remaining > 0) {
 
-    html +=
-        '<button ' +
-        'class="pay" ' +
-        'onclick="payment(' +
-        debt.id +
-        ')">' +
-        '💵 Төлөлт бүртгэх' +
-        '</button>';
+            html +=
+                "<button " +
 
-}
+                "class='pay' " +
 
-html +=
-    '<button ' +
-    'class="pay" ' +
-    'onclick="addMoreDebt(' +
-    debt.id +
-    ')">' +
-    '➕ Өр нэмэх' +
-    '</button>';
-html +=
-    '<button ' +
-    'class="pay" ' +
-    'onclick="editDebt(' +
-    debt.id +
-    ')">' +
-    '✏️ Засах' +
-    '</button>';
+                "onclick=\"payment('" +
+                debt.id +
+                "')\">" +
+
+                "💵 Төлөлт бүртгэх" +
+
+                "</button>";
+        }
+
 
         html +=
-            '<button ' +
-            'class="delete" ' +
-            'onclick="removeDebt(' +
+            "<button " +
+
+            "class='pay' " +
+
+            "onclick=\"addMoreDebt('" +
             debt.id +
-            ')">' +
-            '🗑 Устгах' +
-            '</button>' +
+            "')\">" +
 
-            '</div>' +
+            "➕ Өр нэмэх" +
 
-            '</div>';
+            "</button>";
 
+
+        html +=
+            "<button " +
+
+            "class='pay' " +
+
+            "onclick=\"editDebt('" +
+            debt.id +
+            "')\">" +
+
+            "✏️ Засах" +
+
+            "</button>";
+
+
+        html +=
+            "<button " +
+
+            "class='delete' " +
+
+            "onclick=\"removeDebt('" +
+            debt.id +
+            "')\">" +
+
+            "🗑 Устгах" +
+
+            "</button>" +
+
+
+            "</div>" +
+
+
+            "</div>";
     }
 
 
     if (debts.length == 0) {
 
         html =
-            '<div class="empty">' +
-            'Одоогоор бүртгэлтэй өр алга.' +
-            '</div>';
+            "<div class='empty'>" +
 
-    }
-    else if (visibleCount == 0) {
+            "Одоогоор бүртгэлтэй өр алга." +
+
+            "</div>";
+
+    } else if (visibleCount == 0) {
 
         html =
-            '<div class="empty">' +
-            'Хайсан хүн олдсонгүй.' +
-            '</div>';
+            "<div class='empty'>" +
 
+            "Хайсан хүн олдсонгүй." +
+
+            "</div>";
     }
 
 
-    list.innerHTML = html;
+    list.innerHTML =
+        html;
 
 
     document.getElementById("total").innerHTML =
@@ -1296,11 +1768,16 @@ html +=
 
     document.getElementById("paid").innerHTML =
         money(paidTotal);
-document.getElementById("overdue").innerHTML =
-    overdue;
+
+
+    document.getElementById("overdue").innerHTML =
+        overdue;
 }
 
-/* ТОВЧИЙГ АЖИЛЛУУЛАХ */
+
+/* =========================
+   ӨР БҮРТГЭХ ТОВЧ
+========================= */
 
 document.getElementById("addButton").onclick =
     function() {
@@ -1310,15 +1787,15 @@ document.getElementById("addButton").onclick =
     };
 
 
-/* ЭХЛҮҮЛЭХ */
+/* =========================
+   ЭХЛҮҮЛЭХ
+========================= */
 
 loadDebts();
-function closeDetail() {
 
-    document.getElementById("detailModal").style.display =
-        "none";
+</script>
+```
 
-}
 </script>
 <div
     id="detailModal"
