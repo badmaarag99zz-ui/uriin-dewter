@@ -289,20 +289,38 @@ async function checkUser() {
 
 /* ХАДГАЛСАН ӨРҮҮДИЙГ УНШИХ */
 
-try {
+async function loadDebts() {
 
-    var oldData = localStorage.getItem("myDebts");
+    var loggedIn = await checkUser();
 
-    if (oldData) {
-        debts = JSON.parse(oldData);
+    if (!loggedIn) {
+        debts = [];
+        showDebts();
+        return;
     }
 
-} catch(error) {
+    var result = await supabaseClient
+        .from("debts")
+        .select("*")
+        .eq("user_id", currentUser.id);
 
-    debts = [];
+    if (result.error) {
 
+        console.error(result.error);
+
+        alert("Өрийн мэдээлэл ачаалахад алдаа гарлаа.");
+
+        debts = [];
+
+        showDebts();
+
+        return;
+    }
+
+    debts = result.data || [];
+
+    loadDebts();
 }
-
 
 /* ХАДГАЛАХ */
 
