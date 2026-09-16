@@ -895,37 +895,108 @@ function editDebt(id) {
     document.getElementById("detailModal").style.display =
         "flex";
 }
+```js
 function showDebts() {
+    var list = document.getElementById("debtList");
 
-    var list =
-        document.getElementById("list");
-        var sortInput =
-        document.getElementById("sort");
+    if (!list) {
+        console.error("debtList олдсонгүй.");
+        return;
+    }
 
-    var sort =
-        sortInput
-            ? sortInput.value
-            : "due";
+    if (debts.length == 0) {
+        list.innerHTML =
+            '<div style="text-align:center;padding:30px;color:#777;">' +
+            'Одоогоор бүртгэлтэй өр алга.' +
+            '</div>';
+        return;
+    }
 
-    debts.sort(function(a, b) {
+    var html = "";
 
-        var remainingA =
-            a.amount - a.paid;
+    for (var i = 0; i < debts.length; i++) {
+        var debt = debts[i];
 
-        var remainingB =
-            b.amount - b.paid;
+        var amount = Number(debt.amount || 0);
+        var paid = Number(debt.paid || 0);
+        var remaining = amount - paid;
 
-        if (sort == "amount") {
+        html +=
+            '<div class="debt">' +
 
-            return remainingB - remainingA;
+            '<div class="debt-name" ' +
+            'onclick="viewDebt(\'' + debt.id + '\')" ' +
+            'style="cursor:pointer;">' +
+            debt.name +
+            '</div>' +
 
+            '<div class="debt-info">' +
+            '📞 ' + (debt.phone || "Утасгүй") +
+            '</div>' +
+
+            '<div class="debt-info">' +
+            '💰 Нийт өр: ' + money(amount) +
+            '</div>' +
+
+            '<div class="debt-info">' +
+            '💵 Төлсөн: ' + money(paid) +
+            '</div>' +
+
+            '<div class="debt-info">' +
+            '🔴 Үлдэгдэл: ' + money(remaining) +
+            '</div>' +
+
+            '<div class="debt-info">' +
+            '📅 Төлөх хугацаа: ' +
+            (debt.dueDate || "Тодорхойгүй") +
+            '</div>';
+
+        if (remaining > 0) {
+            html +=
+                '<button ' +
+                'class="pay" ' +
+                'onclick="payment(\'' +
+                debt.id +
+                '\')">' +
+                '💵 Төлөлт бүртгэх' +
+                '</button>';
         }
 
-        if (sort == "name") {
+        html +=
+            '<button ' +
+            'class="pay" ' +
+            'onclick="addMoreDebt(\'' +
+            debt.id +
+            '\')">' +
+            '➕ Өр нэмэх' +
+            '</button>';
 
-            return a.name.localeCompare(b.name);
+        html +=
+            '<button ' +
+            'class="pay" ' +
+            'onclick="editDebt(\'' +
+            debt.id +
+            '\')">' +
+            '✏️ Засах' +
+            '</button>';
 
-        }
+        html +=
+            '<button ' +
+            'class="delete" ' +
+            'onclick="removeDebt(\'' +
+            debt.id +
+            '\')">' +
+            '🗑 Устгах' +
+            '</button>';
+
+        html +=
+            '</div>';
+    }
+
+    list.innerHTML = html;
+}
+```
+
 
         if (sort == "overdue") {
 
