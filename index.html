@@ -525,36 +525,33 @@ function money(number) {
 }
 /* ТӨЛӨЛТ БҮРТГЭХ */
 
-function payment(id) {
+async function payment(id) {
+
+    var loggedIn = await checkUser();
+
+    if (!loggedIn) {
+        alert("Эхлээд нэвтэрнэ үү.");
+        return;
+    }
 
     var debt = null;
 
-    var i;
-
-
-    for (i = 0; i < debts.length; i++) {
+    for (var i = 0; i < debts.length; i++) {
 
         if (debts[i].id == id) {
-
             debt = debts[i];
-
             break;
-
         }
 
     }
 
-
     if (debt == null) {
-
+        alert("Өр олдсонгүй.");
         return;
-
     }
 
-
     var remaining =
-        debt.amount - debt.paid;
-
+        Number(debt.amount) - Number(debt.paid);
 
     var input =
         prompt(
@@ -562,57 +559,61 @@ function payment(id) {
             money(remaining)
         );
 
-
     if (input == null) {
-
         return;
-
     }
 
+    var amount = Number(input);
 
-    var amount =
-        Number(input);
-
-
-    if (amount <= 0 || isNaN(amount)) {
-
+    if (isNaN(amount) || amount <= 0) {
         alert("Зөв мөнгөн дүн оруулна уу.");
-
         return;
-
     }
-
 
     if (amount > remaining) {
-
         alert("Үлдэгдлээс их мөнгө оруулах боломжгүй.");
-
         return;
-
     }
 
-debt.paid =
-    debt.paid + amount;
+    var payments = debt.payments || [];
 
+    payments.push({
+        amount: amount,
+        date: new Date().toLocaleString("mn-MN")
+    });
 
-if (!debt.payments) {
-    debt.payments = [];
-}
+    var newPaid =
+        Number(debt.paid) + amount;
 
+    var result =
+        await supabaseClient
+            .from("debts")
+            .update({
+                paid: newPaid,
+                payments: payments
+            })
+            .eq("id", id)
+            .eq("user_id", currentUser.id);
 
-debt.payments.push({
+    if (result.error) {
 
-    amount: amount,
+        console.error(result.error);
 
-   date: new Date().toLocaleString("mn-MN")
+        alert(
+            "Төлөлт хадгалахад алдаа гарлаа:\n" +
+            result.error.message
+        );
 
-});
+        return;
+    }
 
+    alert(
+        "✅ " +
+        money(amount) +
+        " төлөлт амжилттай бүртгэгдлээ."
+    );
 
-saveData();
-
-showDebts();
-
+    await loadDebts();
 }
 
 
