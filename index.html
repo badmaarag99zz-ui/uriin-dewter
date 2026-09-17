@@ -981,6 +981,35 @@
     ========================================== */
 
     let debts = [];
+    function getOfflineKey(userId) {
+    return `uriin_dewter_debts_${userId}`;
+}
+
+function saveDebtsOffline(userId) {
+    if (!userId) return;
+
+    localStorage.setItem(
+        getOfflineKey(userId),
+        JSON.stringify(debts)
+    );
+}
+
+function loadDebtsOffline(userId) {
+    if (!userId) return [];
+
+    const saved = localStorage.getItem(
+        getOfflineKey(userId)
+    );
+
+    if (!saved) return [];
+
+    try {
+        return JSON.parse(saved);
+    } catch (error) {
+        console.error("Offline data error:", error);
+        return [];
+    }
+}
 // ===============================
 // OFFLINE STORAGE
 // ===============================
