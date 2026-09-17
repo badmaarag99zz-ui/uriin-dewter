@@ -2048,33 +2048,49 @@ async function registerUser() {
 
 
 async function loginUser() {
-alert("LOGIN FUNCTION ажиллаж байна");
-    const email =
-        document.getElementById("authEmail").value;
+
+    const phone =
+        document.getElementById("authPhone").value.trim();
 
     const password =
         document.getElementById("authPassword").value;
 
+    if (!phone || !password) {
+        alert("Утасны дугаар болон нууц үгээ оруулна уу.");
+        return;
+    }
+
+    const cleanPhone = phone.replace(/\D/g, "");
+
+    if (cleanPhone.length < 8) {
+        alert("Утасны дугаараа зөв оруулна уу.");
+        return;
+    }
+
+    const internalEmail =
+        "phone_" + cleanPhone + "@uriindewter.local";
+
     const { data, error } =
         await supabaseClient.auth.signInWithPassword({
-            email: email,
+            email: internalEmail,
             password: password
         });
 
     if (error) {
-
         document.getElementById("authMessage").innerText =
-            "❌ " + error.message;
-
+            "❌ Утасны дугаар эсвэл нууц үг буруу байна.";
         return;
     }
 
+    currentUser = data.user;
+
     document.getElementById("authMessage").innerText =
         "✅ Амжилттай нэвтэрлээ.";
-document.getElementById("loginScreen").style.display = "none";
-document.getElementById("appContent").style.display = "block";
 
-loadDebts();
+    document.getElementById("loginScreen").style.display = "none";
+    document.getElementById("appContent").style.display = "block";
+
+    loadDebts();
 }
     async function checkLoginOnLoad() {
     const { data, error } = await supabaseClient.auth.getSession();
