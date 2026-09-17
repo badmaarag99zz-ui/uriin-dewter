@@ -2785,7 +2785,50 @@
     /* ==========================================
        CALL
     ========================================== */
+    document.getElementById("detailModal")
+        .classList.add("show");
 
+}
+
+
+/* ==========================================
+   TOGGLE HISTORY
+========================================== */
+
+function toggleHistory(id) {
+
+    const panel =
+        document.getElementById(id);
+
+    if (!panel) return;
+
+    panel.classList.toggle("show");
+
+}
+
+
+/* ==========================================
+   CALL
+========================================== */
+
+function callPerson(phone) {
+
+    const cleanPhone =
+        normalizePhone(phone);
+
+    if (!cleanPhone) {
+
+        alert(
+            "Утасны дугаар байхгүй байна."
+        );
+
+        return;
+    }
+
+    window.location.href =
+        "tel:" + cleanPhone;
+
+}
     function callPerson(phone) {
 
         const cleanPhone =
