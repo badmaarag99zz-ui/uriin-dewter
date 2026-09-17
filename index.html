@@ -571,46 +571,71 @@ font-size: 12px;
     </div>
 
 
-    <div class="form">
-
-        <h2>Шинэ өр бүртгэх</h2>
-<button
-    type="button"
-    onclick="backupData()"
->
-    📥 Нөөц файл татах
+ <!-- ӨР БҮРТГЭХ ТОВЧ -->
+<button type="button" class="floating-add-btn" onclick="openDebtModal()">
+    ➕ Өр бүртгэх
 </button>
-        <input
-            id="personName"
-            type="text"
-            placeholder="Хүний нэр"
-        >
-<input
-    id="personPhone"
-    type="tel"
-    placeholder="Утасны дугаар"
->
-        <input
-            id="debtAmount"
-            type="number"
-            placeholder="Өрийн дүн"
-        >
-<label for="dueDate">Төлөх хугацаа сонгох</label>
 
-<input
-    id="dueDate"
-    type="date"
->
-        <button
-            class="add"
-            id="addButton"
-            type="button"
-        >
-            + Өр бүртгэх
-        </button>
+<!-- ӨР БҮРТГЭХ ЦОНХ -->
+<div id="debtModal" class="debt-modal">
+    <div class="debt-modal-box">
+
+        <div class="debt-modal-header">
+            <div>
+                <h2>Шинэ өр бүртгэх</h2>
+                <p>Шинэ өрийн мэдээллийг оруулна уу</p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeDebtModal()"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="debt-form">
+
+            <label>Хүний нэр</label>
+            <input
+                id="personName"
+                type="text"
+                placeholder="Жишээ: Бат"
+            >
+
+            <label>Утасны дугаар</label>
+            <input
+                id="personPhone"
+                type="tel"
+                placeholder="Жишээ: 99112233"
+            >
+
+            <label>Өрийн дүн</label>
+            <input
+                id="debtAmount"
+                type="number"
+                placeholder="Жишээ: 150000"
+            >
+
+            <label>Төлөх хугацаа</label>
+            <input
+                id="dueDate"
+                type="date"
+            >
+
+            <button
+                type="button"
+                class="modal-save-btn"
+                id="addButton"
+            >
+                💾 Өр бүртгэх
+            </button>
+
+        </div>
 
     </div>
-
+</div>
 
    <div class="debt-box">
 
