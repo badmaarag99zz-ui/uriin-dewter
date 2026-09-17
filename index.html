@@ -2332,287 +2332,384 @@
        DETAIL
     ========================================== */
 
-    function openDetailModal(id) {
+   function openDetailModal(id) {
 
-        const debt =
-            debts.find(
-                d => d.id === id
-            );
+    const debt = debts.find(d => d.id === id);
 
+    if (!debt) return;
 
-        if (!debt) return;
+    const remaining = Math.max(
+        0,
+        debt.amount - debt.paid
+    );
 
-
-        const remaining =
-            Math.max(
-                0,
-                debt.amount -
-                debt.paid
-            );
+    const isDone = remaining <= 0;
 
 
-        const isDone =
-            remaining <= 0;
+    /* =========================
+       НЭМЭГДСЭН ӨРҮҮД
+    ========================= */
+
+    let additionsHtml = "";
+
+    if (
+        debt.additions &&
+        debt.additions.length
+    ) {
+
+        additionsHtml = debt.additions
+            .slice()
+            .reverse()
+            .map(addition => {
+
+                const date = addition.createdAt
+                    ? new Date(
+                        addition.createdAt
+                    ).toLocaleString("mn-MN")
+                    : "";
+
+                return `
+                    <div class="history-item">
+
+                        <div>
+                            ➕
+                            <strong>
+                                ${formatMoney(
+                                    addition.amount
+                                )}
+                            </strong>
+                        </div>
+
+                        <small>
+                            ${date}
+                        </small>
+
+                    </div>
+                `;
+
+            })
+            .join("");
+
+    } else {
+
+        additionsHtml = `
+            <div class="history-empty">
+                Нэмсэн өр байхгүй.
+            </div>
+        `;
+
+    }
 
 
-        let paymentsHtml = "";
+    /* =========================
+       ТӨЛӨЛТИЙН ТҮҮХ
+    ========================= */
+
+    let paymentsHtml = "";
+
+    if (
+        debt.payments &&
+        debt.payments.length
+    ) {
+
+        paymentsHtml = debt.payments
+            .slice()
+            .reverse()
+            .map(payment => {
+
+                const date = payment.createdAt
+                    ? new Date(
+                        payment.createdAt
+                    ).toLocaleString("mn-MN")
+                    : "";
+
+                return `
+                    <div class="history-item">
+
+                        <div>
+                            💰
+                            <strong>
+                                ${formatMoney(
+                                    payment.amount
+                                )}
+                            </strong>
+                        </div>
+
+                        <small>
+                            ${date}
+                        </small>
+
+                    </div>
+                `;
+
+            })
+            .join("");
+
+    } else {
+
+        paymentsHtml = `
+            <div class="history-empty">
+                Төлөлт байхгүй.
+            </div>
+        `;
+
+    }
 
 
-        if (
-            debt.payments &&
-            debt.payments.length
-        ) {
+    /* =========================
+       DETAIL
+    ========================= */
 
-            paymentsHtml =
-                debt.payments
-                    .slice()
-                    .reverse()
-                    .map(payment => {
+    document.getElementById("detailContent")
+        .innerHTML = `
 
-                        const date =
-                            payment.createdAt
-                                ? new Date(
-                                    payment.createdAt
-                                  ).toLocaleString(
-                                    "mn-MN"
-                                  )
-                                : "";
+            <h2 style="
+                margin:0 0 5px;
+                font-size:24px;
+            ">
+
+                👤
+                ${escapeHtml(debt.name)}
+
+            </h2>
 
 
-                        return `
+            <div style="
+                color:#64748b;
+                margin-bottom:20px;
+            ">
 
-                            <div class="payment-item">
+                📞
+                ${
+                    debt.phone
+                        ? escapeHtml(debt.phone)
+                        : "Утас байхгүй"
+                }
 
-                                💰
-                                <strong>
-                                    ${formatMoney(
-                                        payment.amount
-                                    )}
-                                </strong>
+            </div>
 
-                                <br>
 
-                                <small>
-                                    ${date}
-                                </small>
+            <!-- ҮЛДЭГДЭЛ ӨР -->
 
-                            </div>
+            <div
+                class="detail-balance clickable-detail"
+                onclick="toggleHistory('additionHistory')"
+            >
 
-                        `;
+                <div class="detail-balance-label">
 
-                    })
-                    .join("");
+                    Үлдэгдэл өр
 
-        } else {
+                    <span class="click-arrow">
+                        ▼
+                    </span>
 
-            paymentsHtml = `
+                </div>
+
+
+                <div class="
+                    detail-balance-value
+                    ${isDone ? "done" : ""}
+                ">
+
+                    ${formatMoney(debt.amount)}
+
+                </div>
+
+
                 <div style="
+                    margin-top:7px;
+                    font-size:13px;
                     color:#64748b;
-                    padding:10px 0;
-                ">
-                    Төлөлт байхгүй.
-                </div>
-            `;
-
-        }
-
-
-        document.getElementById("detailContent")
-            .innerHTML = `
-
-                <h2 style="
-                    margin:0 0 5px;
-                    font-size:24px;
                 ">
 
-                    👤
-                    ${escapeHtml(
-                        debt.name
-                    )}
-
-                </h2>
-
-
-                <div style="
-                    color:#64748b;
-                    margin-bottom:5px;
-                ">
-
-                    📞
-                    ${
-                        debt.phone
-                            ? escapeHtml(
-                                debt.phone
-                              )
-                            : "Утас байхгүй"
-                    }
-
-                </div>
-
-
-                <div class="detail-balance">
-
-                    <div class="detail-balance-label">
-                        Үлдэгдэл өр
-                    </div>
-
-                    <div class="
-                        detail-balance-value
-                        ${isDone ? "done" : ""}
-                    ">
-
-                        ${
-                            isDone
-                                ? "ДУУССАН"
-                                : formatMoney(
-                                    remaining
-                                  )
-                        }
-
-                    </div>
-
-                </div>
-
-
-                <div class="detail-stats">
-
-                    <div class="detail-stat">
-
-                        <div class="detail-stat-label">
-                            Нийт өр
-                        </div>
-
-                        <div class="detail-stat-value">
-                            ${formatMoney(
-                                debt.amount
-                            )}
-                        </div>
-
-                    </div>
-
-
-                    <div class="detail-stat">
-
-                        <div class="detail-stat-label">
-                            Төлсөн
-                        </div>
-
-                        <div class="detail-stat-value">
-                            ${formatMoney(
-                                debt.paid
-                            )}
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div style="
-                    padding:14px 0;
-                    border-bottom:1px solid #e2e8f0;
-                    margin-bottom:5px;
-                ">
-
-                    📅
+                    Төлөгдөөгүй:
                     <strong>
-                        Төлөх хугацаа:
+                        ${formatMoney(remaining)}
                     </strong>
 
-                    ${debt.dueDate ||
-                        "Тодорхойгүй"}
+                </div>
+
+            </div>
+
+
+            <!-- НЭМЭГДСЭН ӨРИЙН ТҮҮХ -->
+
+            <div
+                id="additionHistory"
+                class="history-panel"
+            >
+
+                <div class="history-title">
+                    ➕ Нэмсэн өрийн жагсаалт
+                </div>
+
+                ${additionsHtml}
+
+            </div>
+
+
+            <!-- НИЙТ ӨР / ТӨЛСӨН -->
+
+            <div class="detail-stats">
+
+
+                <div
+                    class="detail-stat"
+                >
+
+                    <div class="detail-stat-label">
+                        Нийт өр
+                    </div>
+
+                    <div class="detail-stat-value">
+                        ${formatMoney(debt.amount)}
+                    </div>
 
                 </div>
 
 
-                <!-- ACTIONS -->
+                <div
+                    class="
+                        detail-stat
+                        clickable-detail-stat
+                    "
+                    onclick="toggleHistory('paymentHistory')"
+                >
 
-                <div class="detail-actions">
+                    <div class="detail-stat-label">
 
-                    ${
-                        debt.phone
-                            ? `
-                                <button
-                                    type="button"
-                                    class="detail-call"
-                                    onclick="callPerson('${escapeHtml(
-                                        debt.phone
-                                    )}')"
-                                >
-                                    📞 Залгах
-                                </button>
-                              `
-                            : `
-                                <button
-                                    type="button"
-                                    class="detail-call"
-                                    disabled
-                                >
-                                    📞 Залгах
-                                </button>
-                              `
-                    }
+                        Төлсөн
 
+                        <span class="click-arrow">
+                            ▼
+                        </span>
 
-                    <button
-                        type="button"
-                        class="detail-edit"
-                        onclick="editDebt('${debt.id}')"
-                    >
-                        ✏️ Засах
-                    </button>
+                    </div>
 
+                    <div class="detail-stat-value">
 
-                    <button
-                        type="button"
-                        class="detail-pay"
-                        onclick="payDebt('${debt.id}')"
-                    >
-                        💰 Төлөлт
-                    </button>
+                        ${formatMoney(debt.paid)}
 
-
-                    <button
-                        type="button"
-                        class="detail-more"
-                        onclick="addMoreDebt('${debt.id}')"
-                    >
-                        ➕ Өр нэмэх
-                    </button>
-
-
-                    <button
-                        type="button"
-                        class="detail-delete"
-                        onclick="deleteDebt('${debt.id}')"
-                    >
-                        🗑 Устгах
-                    </button>
+                    </div>
 
                 </div>
 
 
-                <hr style="
-                    margin:25px 0 20px;
-                    border:0;
-                    border-top:1px solid #e2e8f0;
-                ">
+            </div>
 
 
-                <h3>
+            <!-- ТӨЛӨЛТИЙН ТҮҮХ -->
+
+            <div
+                id="paymentHistory"
+                class="history-panel"
+            >
+
+                <div class="history-title">
                     💰 Төлөлтийн түүх
-                </h3>
-
+                </div>
 
                 ${paymentsHtml}
 
-            `;
+            </div>
 
 
-        document.getElementById("detailModal")
-            .classList.add("show");
+            <!-- ТӨЛӨХ ХУГАЦАА -->
 
-    }
+            <div style="
+                padding:14px 0;
+                border-bottom:1px solid #e2e8f0;
+                margin-bottom:5px;
+            ">
+
+                📅
+                <strong>
+                    Төлөх хугацаа:
+                </strong>
+
+                ${
+                    debt.dueDate ||
+                    "Тодорхойгүй"
+                }
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="detail-actions">
+
+
+                ${
+                    debt.phone
+                        ? `
+                            <button
+                                type="button"
+                                class="detail-call"
+                                onclick="callPerson('${escapeHtml(
+                                    debt.phone
+                                )}')"
+                            >
+                                📞 Залгах
+                            </button>
+                          `
+                        : `
+                            <button
+                                type="button"
+                                class="detail-call"
+                                disabled
+                            >
+                                📞 Залгах
+                            </button>
+                          `
+                }
+
+
+                <button
+                    type="button"
+                    class="detail-edit"
+                    onclick="editDebt('${debt.id}')"
+                >
+                    ✏️ Засах
+                </button>
+
+
+                <button
+                    type="button"
+                    class="detail-pay"
+                    onclick="payDebt('${debt.id}')"
+                >
+                    💰 Төлөлт
+                </button>
+
+
+                <button
+                    type="button"
+                    class="detail-more"
+                    onclick="addMoreDebt('${debt.id}')"
+                >
+                    ➕ Өр нэмэх
+                </button>
+
+
+                <button
+                    type="button"
+                    class="detail-delete"
+                    onclick="deleteDebt('${debt.id}')"
+                >
+                    🗑 Устгах
+                </button>
+
+            </div>
+
+        `;
+
+
+    document.getElementById("detailModal")
+        .classList.add("show");
+
+}
 
 
     /* ==========================================
