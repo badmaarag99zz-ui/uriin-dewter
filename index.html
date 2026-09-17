@@ -212,153 +212,71 @@
         }
 
         /* =========================
-           DEBT CARD
+           SIMPLE DEBT CARD
         ========================= */
 
         .debt-card {
             border: 1px solid #e2e8f0;
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 14px;
-            background: #fff;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 10px;
+            background: white;
+            cursor: pointer;
+            transition: 0.15s;
         }
 
-        .debt-top {
+        .debt-card:hover {
+            border-color: #2563eb;
+            box-shadow: 0 5px 18px rgba(37, 99, 235, 0.08);
+        }
+
+        .debt-main-row {
             display: flex;
+            align-items: center;
             justify-content: space-between;
-            align-items: flex-start;
             gap: 15px;
         }
 
+        .debt-person {
+            min-width: 0;
+        }
+
         .person-name {
-            font-size: 19px;
+            font-size: 18px;
             font-weight: 800;
             color: #111827;
         }
 
         .person-phone {
-            margin-top: 4px;
+            margin-top: 5px;
             color: #64748b;
             font-size: 14px;
         }
 
-        .remaining {
-            font-size: 23px;
-            font-weight: 900;
-            color: #2563eb;
+        .debt-summary {
             text-align: right;
+            flex-shrink: 0;
         }
 
-        .remaining.done {
+        .debt-total {
+            font-size: 18px;
+            font-weight: 900;
+            color: #2563eb;
+        }
+
+        .debt-total.done {
             color: #16a34a;
         }
 
-        .mini-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .mini-stat {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 12px;
-        }
-
-        .mini-stat-label {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 4px;
-        }
-
-        .mini-stat-value {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .debt-info {
-            margin-top: 15px;
+        .debt-due {
+            margin-top: 5px;
             font-size: 13px;
             color: #64748b;
-            line-height: 1.7;
         }
 
-        .status {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 5px 9px;
-            border-radius: 8px;
-            font-size: 12px;
+        .debt-due.overdue {
+            color: #dc2626;
             font-weight: 700;
-        }
-
-        .status.normal {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .status.warning {
-            background: #fef3c7;
-            color: #b45309;
-        }
-
-        .status.overdue {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .status.done {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .addition-history {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .addition-title {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .addition-item {
-            font-size: 13px;
-            color: #475569;
-            margin-top: 4px;
-        }
-
-        .debt-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-top: 15px;
-        }
-
-        .debt-actions button {
-            min-height: 42px;
-            border: 0;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
-        }
-
-        .pay {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .more-debt {
-            background: #ede9fe;
-            color: #6d28d9;
-        }
-
-        .delete {
-            background: #fee2e2;
-            color: #b91c1c;
         }
 
         .empty {
@@ -368,7 +286,7 @@
         }
 
         /* =========================
-           FLOATING ADD BUTTON
+           FLOATING ADD
         ========================= */
 
         .floating-add-btn {
@@ -389,15 +307,12 @@
             box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
         }
 
-        .floating-add-btn:hover {
-            background: #1d4ed8;
-        }
-
         /* =========================
-           DEBT MODAL
+           MODALS
         ========================= */
 
-        .debt-modal {
+        .debt-modal,
+        #detailModal {
             position: fixed;
             inset: 0;
             z-index: 1000;
@@ -409,32 +324,21 @@
             backdrop-filter: blur(5px);
         }
 
-        .debt-modal.show {
+        .debt-modal.show,
+        #detailModal.show {
             display: flex;
         }
 
-        .debt-modal-box {
+        .debt-modal-box,
+        .detail-box {
             width: 100%;
-            max-width: 450px;
+            max-width: 500px;
             max-height: 90vh;
             overflow-y: auto;
             background: white;
             border-radius: 22px;
             padding: 24px;
             box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
-            animation: debtModalIn 0.2s ease;
-        }
-
-        @keyframes debtModalIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px) scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
         }
 
         .debt-modal-header {
@@ -456,7 +360,8 @@
             color: #64748b;
         }
 
-        .modal-close {
+        .modal-close,
+        .detail-close {
             width: 38px;
             height: 38px;
             border: 0;
@@ -465,6 +370,10 @@
             color: #475569;
             font-size: 18px;
             cursor: pointer;
+        }
+
+        .detail-close {
+            float: right;
         }
 
         .debt-form label {
@@ -487,12 +396,6 @@
             outline: none;
         }
 
-        .debt-form input:focus {
-            border-color: #2563eb;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-
         .modal-save-btn {
             width: 100%;
             height: 50px;
@@ -506,42 +409,102 @@
         }
 
         /* =========================
-           DETAIL MODAL
+           DETAIL
         ========================= */
 
-        #detailModal {
-            position: fixed;
-            inset: 0;
-            z-index: 1100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(15, 23, 42, 0.6);
+        .detail-balance {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 16px;
+            margin: 20px 0;
         }
 
-        #detailModal.show {
-            display: flex;
+        .detail-balance-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-bottom: 5px;
         }
 
-        .detail-box {
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 22px;
-            padding: 24px;
+        .detail-balance-value {
+            font-size: 28px;
+            font-weight: 900;
+            color: #2563eb;
         }
 
-        .detail-close {
-            float: right;
+        .detail-balance-value.done {
+            color: #16a34a;
+        }
+
+        .detail-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .detail-stat {
+            background: #f8fafc;
+            padding: 13px;
+            border-radius: 12px;
+        }
+
+        .detail-stat-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 5px;
+        }
+
+        .detail-stat-value {
+            font-weight: 800;
+        }
+
+        .detail-actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 7px;
+            margin-top: 22px;
+        }
+
+        .detail-actions button {
+            min-height: 48px;
             border: 0;
-            background: #f1f5f9;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
+            border-radius: 12px;
+            font-weight: 700;
             cursor: pointer;
+            font-size: 12px;
+        }
+
+        .detail-call {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .detail-edit {
+            background: #f1f5f9;
+            color: #334155;
+        }
+
+        .detail-pay {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .detail-more {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .detail-delete {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .payment-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .payment-item small {
+            color: #64748b;
         }
 
         /* =========================
@@ -549,6 +512,7 @@
         ========================= */
 
         @media (max-width: 700px) {
+
             .cards {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -557,20 +521,10 @@
                 grid-template-columns: 1fr;
             }
 
-            .debt-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .debt-top {
-                flex-direction: column;
-            }
-
-            .remaining {
-                text-align: left;
-            }
         }
 
         @media (max-width: 480px) {
+
             .container {
                 padding: 15px 12px 95px;
             }
@@ -583,16 +537,34 @@
                 font-size: 18px;
             }
 
-            .debt-modal {
+            .debt-main-row {
+                align-items: flex-start;
+            }
+
+            .debt-total {
+                font-size: 16px;
+            }
+
+            .debt-modal,
+            #detailModal {
                 align-items: flex-end;
                 padding: 0;
             }
 
-            .debt-modal-box {
+            .debt-modal-box,
+            .detail-box {
                 max-width: none;
                 max-height: 92vh;
                 border-radius: 22px 22px 0 0;
                 padding: 22px 18px;
+            }
+
+            .detail-actions {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .detail-actions button:first-child {
+                grid-column: span 2;
             }
 
             .floating-add-btn {
@@ -600,125 +572,12 @@
                 width: calc(100% - 24px);
             }
         }
-        /* =========================
-   SIMPLE DEBT LIST
-========================= */
-
-.debt-card {
-    border: 1px solid #e2e8f0;
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 10px;
-    background: white;
-    cursor: pointer;
-    transition: 0.15s;
-}
-
-.debt-card:hover {
-    border-color: #2563eb;
-    box-shadow: 0 5px 18px rgba(37, 99, 235, 0.08);
-}
-
-.debt-main-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.debt-person {
-    min-width: 0;
-}
-
-.person-name {
-    font-size: 18px;
-    font-weight: 800;
-    color: #111827;
-}
-
-.person-phone {
-    margin-top: 5px;
-    color: #64748b;
-    font-size: 14px;
-}
-
-.debt-summary {
-    text-align: right;
-    flex-shrink: 0;
-}
-
-.debt-total {
-    font-size: 18px;
-    font-weight: 900;
-    color: #2563eb;
-}
-
-.debt-due {
-    margin-top: 5px;
-    font-size: 13px;
-    color: #64748b;
-}
-
-.debt-due.overdue {
-    color: #dc2626;
-    font-weight: 700;
-}
-
-.detail-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-    margin-top: 22px;
-}
-
-.detail-actions button {
-    min-height: 48px;
-    border: 0;
-    border-radius: 12px;
-    font-weight: 700;
-    cursor: pointer;
-}
-
-.detail-pay {
-    background: #dbeafe;
-    color: #1d4ed8;
-}
-
-.detail-more {
-    background: #ede9fe;
-    color: #6d28d9;
-}
-
-.detail-delete {
-    background: #fee2e2;
-    color: #b91c1c;
-}
-
-@media (max-width: 480px) {
-    .debt-main-row {
-        align-items: flex-start;
-    }
-
-    .debt-summary {
-        text-align: right;
-    }
-
-    .debt-total {
-        font-size: 16px;
-    }
-
-    .detail-actions {
-        grid-template-columns: 1fr;
-    }
-}
     </style>
 </head>
 
 <body>
 
-<!-- =========================
-     LOGIN SCREEN
-========================= -->
+<!-- LOGIN -->
 
 <div id="loginScreen">
 
@@ -768,9 +627,7 @@
 </div>
 
 
-<!-- =========================
-     MAIN APP
-========================= -->
+<!-- APP -->
 
 <div id="appContent" style="display:none;">
 
@@ -812,7 +669,6 @@
                 </div>
             </div>
 
-
             <div class="card">
                 <div class="card-label">
                     Нийт өр
@@ -826,7 +682,6 @@
                 </div>
             </div>
 
-
             <div class="card">
                 <div class="card-label">
                     Төлсөн
@@ -839,7 +694,6 @@
                     0 ₮
                 </div>
             </div>
-
 
             <div class="card">
                 <div class="card-label">
@@ -857,11 +711,11 @@
         </div>
 
 
-        <!-- DEBT LIST -->
+        <!-- LIST -->
 
         <div class="debt-box">
 
-            <h2>Өрийн жагсаалт</h2>
+            <h2>Өртэй хүмүүс</h2>
 
             <div class="tools">
 
@@ -897,7 +751,6 @@
 
             </div>
 
-
             <div id="list"></div>
 
         </div>
@@ -905,7 +758,7 @@
     </div>
 
 
-    <!-- FLOATING BUTTON -->
+    <!-- ADD BUTTON -->
 
     <button
         type="button"
@@ -916,7 +769,7 @@
     </button>
 
 
-    <!-- ADD DEBT MODAL -->
+    <!-- ADD MODAL -->
 
     <div
         id="debtModal"
@@ -933,11 +786,11 @@
 
                 <div>
 
-                    <h2>
+                    <h2 id="debtModalTitle">
                         Шинэ өр бүртгэх
                     </h2>
 
-                    <p>
+                    <p id="debtModalSubtitle">
                         Шинэ өрийн мэдээллийг оруулна уу
                     </p>
 
@@ -1063,10 +916,12 @@
 
 
     /* ==========================================
-       GLOBAL DATA
+       GLOBAL
     ========================================== */
 
     let debts = [];
+
+    let editingDebtId = null;
 
 
     /* ==========================================
@@ -1075,7 +930,8 @@
 
     function formatMoney(value) {
 
-        return Number(value || 0).toLocaleString("mn-MN") + " ₮";
+        return Number(value || 0)
+            .toLocaleString("mn-MN") + " ₮";
 
     }
 
@@ -1119,10 +975,13 @@
     async function registerUser() {
 
         const phone =
-            document.getElementById("authPhone").value.trim();
+            document.getElementById("authPhone")
+                .value.trim();
 
         const password =
-            document.getElementById("authPassword").value;
+            document.getElementById("authPassword")
+                .value;
+
 
         if (!phone || !password) {
 
@@ -1146,10 +1005,14 @@
         }
 
 
-        const email = phoneEmail(phone);
+        const email =
+            phoneEmail(phone);
 
 
-        const { data, error } =
+        const {
+            data,
+            error
+        } =
             await supabaseClient.auth.signUp({
                 email,
                 password
@@ -1178,7 +1041,9 @@
         }
 
 
-        const { error: profileError } =
+        const {
+            error: profileError
+        } =
             await supabaseClient
                 .from("profiles")
                 .insert({
@@ -1214,10 +1079,12 @@
     async function loginUser() {
 
         const phone =
-            document.getElementById("authPhone").value.trim();
+            document.getElementById("authPhone")
+                .value.trim();
 
         const password =
-            document.getElementById("authPassword").value;
+            document.getElementById("authPassword")
+                .value;
 
 
         if (!phone || !password) {
@@ -1231,14 +1098,18 @@
         }
 
 
-        const email = phoneEmail(phone);
+        const email =
+            phoneEmail(phone);
 
 
-        const { error } =
-            await supabaseClient.auth.signInWithPassword({
-                email,
-                password
-            });
+        const {
+            error
+        } =
+            await supabaseClient.auth
+                .signInWithPassword({
+                    email,
+                    password
+                });
 
 
         if (error) {
@@ -1269,11 +1140,11 @@
 
         debts = [];
 
-        document.getElementById("appContent").style.display =
-            "none";
+        document.getElementById("appContent")
+            .style.display = "none";
 
-        document.getElementById("loginScreen").style.display =
-            "flex";
+        document.getElementById("loginScreen")
+            .style.display = "flex";
 
     }
 
@@ -1288,26 +1159,27 @@
             data: {
                 session
             }
-        } = await supabaseClient.auth.getSession();
+        } =
+            await supabaseClient.auth.getSession();
 
 
         if (session) {
 
-            document.getElementById("loginScreen").style.display =
-                "none";
+            document.getElementById("loginScreen")
+                .style.display = "none";
 
-            document.getElementById("appContent").style.display =
-                "block";
+            document.getElementById("appContent")
+                .style.display = "block";
 
             await loadDebts();
 
         } else {
 
-            document.getElementById("loginScreen").style.display =
-                "flex";
+            document.getElementById("loginScreen")
+                .style.display = "flex";
 
-            document.getElementById("appContent").style.display =
-                "none";
+            document.getElementById("appContent")
+                .style.display = "none";
 
         }
 
@@ -1315,7 +1187,7 @@
 
 
     /* ==========================================
-       LOAD DEBTS
+       LOAD
     ========================================== */
 
     async function loadDebts() {
@@ -1324,7 +1196,8 @@
             data: {
                 user
             }
-        } = await supabaseClient.auth.getUser();
+        } =
+            await supabaseClient.auth.getUser();
 
 
         if (!user) return;
@@ -1333,13 +1206,17 @@
         const {
             data,
             error
-        } = await supabaseClient
-            .from("debts")
-            .select("*")
-            .eq("user_id", user.id)
-            .order("created_at", {
-                ascending: false
-            });
+        } =
+            await supabaseClient
+                .from("debts")
+                .select("*")
+                .eq("user_id", user.id)
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
 
 
         if (error) {
@@ -1350,27 +1227,34 @@
         }
 
 
-        debts = (data || []).map(row => ({
+        debts =
+            (data || []).map(row => ({
 
-            id: row.id,
+                id: row.id,
 
-            name: row.name || "",
+                name: row.name || "",
 
-            phone: row.phone || "",
+                phone: row.phone || "",
 
-            amount: Number(row.amount || 0),
+                amount:
+                    Number(row.amount || 0),
 
-            paid: Number(row.paid || 0),
+                paid:
+                    Number(row.paid || 0),
 
-            dueDate: row.due_date || "",
+                dueDate:
+                    row.due_date || "",
 
-            createdAt: row.created_at || "",
+                createdAt:
+                    row.created_at || "",
 
-            additions: row.additions || [],
+                additions:
+                    row.additions || [],
 
-            payments: row.payments || []
+                payments:
+                    row.payments || []
 
-        }));
+            }));
 
 
         showDebts();
@@ -1382,223 +1266,307 @@
        SHOW DEBTS
     ========================================== */
 
-  function showDebts() {
+    function showDebts() {
 
-    const list =
-        document.getElementById("list");
+        const list =
+            document.getElementById("list");
 
-    const search =
-        document.getElementById("search")
-            .value
-            .trim()
-            .toLowerCase();
+        const search =
+            document.getElementById("search")
+                .value
+                .trim()
+                .toLowerCase();
 
-    const sort =
-        document.getElementById("sort").value;
-
-
-    let filtered = debts.filter(debt => {
-
-        return (
-            debt.name.toLowerCase().includes(search) ||
-            debt.phone.toLowerCase().includes(search)
-        );
-
-    });
+        const sort =
+            document.getElementById("sort")
+                .value;
 
 
-    filtered.sort((a, b) => {
+        let filtered =
+            debts.filter(debt => {
 
-        if (sort === "highest") {
-            return (
-                (b.amount - b.paid) -
-                (a.amount - a.paid)
-            );
-        }
+                return (
+                    debt.name
+                        .toLowerCase()
+                        .includes(search) ||
 
-        if (sort === "lowest") {
-            return (
-                (a.amount - a.paid) -
-                (b.amount - b.paid)
-            );
-        }
-
-        if (sort === "oldest") {
-            return new Date(a.createdAt || 0) -
-                new Date(b.createdAt || 0);
-        }
-
-        if (sort === "due") {
-            return new Date(a.dueDate || "9999-12-31") -
-                new Date(b.dueDate || "9999-12-31");
-        }
-
-        return new Date(b.createdAt || 0) -
-            new Date(a.createdAt || 0);
-
-    });
-
-
-    /* DASHBOARD */
-
-    const totalPeople = debts.length;
-
-    const totalDebt =
-        debts.reduce(
-            (sum, d) => sum + d.amount,
-            0
-        );
-
-    const totalPaid =
-        debts.reduce(
-            (sum, d) => sum + d.paid,
-            0
-        );
-
-    const totalRemaining =
-        totalDebt - totalPaid;
-
-
-    document.getElementById("totalPeople")
-        .textContent = totalPeople;
-
-    document.getElementById("totalDebt")
-        .textContent = formatMoney(totalDebt);
-
-    document.getElementById("totalPaid")
-        .textContent = formatMoney(totalPaid);
-
-    document.getElementById("totalRemaining")
-        .textContent = formatMoney(totalRemaining);
-
-
-    /* EMPTY */
-
-    if (filtered.length === 0) {
-
-        list.innerHTML = `
-            <div class="empty">
-                <div style="font-size:40px;">📭</div>
-
-                <div style="margin-top:10px;">
-                    Өрийн бүртгэл алга байна.
-                </div>
-            </div>
-        `;
-
-        return;
-    }
-
-
-    /* LIST */
-
-    list.innerHTML = filtered.map(debt => {
-
-        const remaining =
-            Math.max(
-                0,
-                debt.amount - debt.paid
-            );
-
-
-        const isDone =
-            remaining <= 0;
-
-
-        let dueClass = "";
-        let dueText =
-            debt.dueDate
-                ? `📅 ${debt.dueDate}`
-                : "📅 Төлөх хугацаа: Тодорхойгүй";
-
-
-        if (debt.dueDate && !isDone) {
-
-            const today = new Date();
-
-            today.setHours(0, 0, 0, 0);
-
-            const due =
-                new Date(
-                    debt.dueDate + "T00:00:00"
+                    debt.phone
+                        .toLowerCase()
+                        .includes(search)
                 );
 
+            });
 
-            if (due < today) {
 
-                dueClass = "overdue";
-                dueText =
-                    `⚠️ ${debt.dueDate} — Хугацаа хэтэрсэн`;
+        filtered.sort((a, b) => {
+
+            if (sort === "highest") {
+
+                return (
+                    (b.amount - b.paid) -
+                    (a.amount - a.paid)
+                );
 
             }
 
-        }
+
+            if (sort === "lowest") {
+
+                return (
+                    (a.amount - a.paid) -
+                    (b.amount - b.paid)
+                );
+
+            }
 
 
-        return `
+            if (sort === "oldest") {
 
-            <div
-                class="debt-card"
-                onclick="openDetailModal('${debt.id}')"
-            >
+                return new Date(
+                    a.createdAt || 0
+                ) -
+                new Date(
+                    b.createdAt || 0
+                );
 
-                <div class="debt-main-row">
+            }
 
-                    <div class="debt-person">
 
-                        <div class="person-name">
-                            👤 ${escapeHtml(debt.name)}
-                        </div>
+            if (sort === "due") {
 
-                        <div class="person-phone">
+                return new Date(
+                    a.dueDate ||
+                    "9999-12-31"
+                ) -
+                new Date(
+                    b.dueDate ||
+                    "9999-12-31"
+                );
 
-                            ${
-                                debt.phone
-                                    ? `
-                                        📞 ${escapeHtml(debt.phone)}
-                                      `
-                                    : `
-                                        📞 Утас байхгүй
-                                      `
-                            }
+            }
 
-                        </div>
 
+            return new Date(
+                b.createdAt || 0
+            ) -
+            new Date(
+                a.createdAt || 0
+            );
+
+        });
+
+
+        /* DASHBOARD */
+
+        const totalPeople =
+            debts.length;
+
+
+        const totalDebt =
+            debts.reduce(
+                (sum, d) =>
+                    sum + d.amount,
+                0
+            );
+
+
+        const totalPaid =
+            debts.reduce(
+                (sum, d) =>
+                    sum + d.paid,
+                0
+            );
+
+
+        const totalRemaining =
+            totalDebt - totalPaid;
+
+
+        document.getElementById("totalPeople")
+            .textContent =
+                totalPeople;
+
+
+        document.getElementById("totalDebt")
+            .textContent =
+                formatMoney(totalDebt);
+
+
+        document.getElementById("totalPaid")
+            .textContent =
+                formatMoney(totalPaid);
+
+
+        document.getElementById("totalRemaining")
+            .textContent =
+                formatMoney(totalRemaining);
+
+
+        /* EMPTY */
+
+        if (filtered.length === 0) {
+
+            list.innerHTML = `
+                <div class="empty">
+
+                    <div style="font-size:40px;">
+                        📭
                     </div>
 
-
-                    <div class="debt-summary">
-
-                        <div class="debt-total">
-
-                            ${
-                                isDone
-                                    ? "ДУУССАН"
-                                    : formatMoney(remaining)
-                            }
-
-                        </div>
-
-                        <div class="debt-due ${dueClass}">
-
-                            ${dueText}
-
-                        </div>
-
+                    <div style="margin-top:10px;">
+                        Өрийн бүртгэл алга байна.
                     </div>
 
                 </div>
+            `;
 
-            </div>
+            return;
+        }
 
-        `;
 
-    }).join("");
+        /* LIST */
 
-}
+        list.innerHTML =
+            filtered.map(debt => {
+
+                const remaining =
+                    Math.max(
+                        0,
+                        debt.amount -
+                        debt.paid
+                    );
+
+
+                const isDone =
+                    remaining <= 0;
+
+
+                let dueClass = "";
+
+                let dueText =
+                    debt.dueDate
+                        ? `📅 ${debt.dueDate}`
+                        : "📅 Төлөх хугацаа: Тодорхойгүй";
+
+
+                if (
+                    debt.dueDate &&
+                    !isDone
+                ) {
+
+                    const today =
+                        new Date();
+
+                    today.setHours(
+                        0, 0, 0, 0
+                    );
+
+
+                    const due =
+                        new Date(
+                            debt.dueDate +
+                            "T00:00:00"
+                        );
+
+
+                    if (due < today) {
+
+                        dueClass =
+                            "overdue";
+
+                        dueText =
+                            `⚠️ ${debt.dueDate} — Хугацаа хэтэрсэн`;
+
+                    }
+
+                }
+
+
+                return `
+
+                    <div
+                        class="debt-card"
+                        onclick="openDetailModal('${debt.id}')"
+                    >
+
+                        <div class="debt-main-row">
+
+                            <div class="debt-person">
+
+                                <div class="person-name">
+
+                                    👤
+                                    ${escapeHtml(
+                                        debt.name
+                                    )}
+
+                                </div>
+
+
+                                <div class="person-phone">
+
+                                    ${
+                                        debt.phone
+                                            ? `
+                                                📞
+                                                ${escapeHtml(
+                                                    debt.phone
+                                                )}
+                                              `
+                                            : `
+                                                📞 Утас байхгүй
+                                              `
+                                    }
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="debt-summary">
+
+                                <div
+                                    class="debt-total ${
+                                        isDone
+                                            ? "done"
+                                            : ""
+                                    }"
+                                >
+
+                                    ${
+                                        isDone
+                                            ? "ДУУССАН"
+                                            : formatMoney(
+                                                remaining
+                                              )
+                                    }
+
+                                </div>
+
+
+                                <div
+                                    class="debt-due ${dueClass}"
+                                >
+
+                                    ${dueText}
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            }).join("");
+
+    }
+
 
     /* ==========================================
-       ESCAPE HTML
+       ESCAPE
     ========================================== */
 
     function escapeHtml(value) {
@@ -1614,57 +1582,62 @@
 
 
     /* ==========================================
-       OPEN ADD MODAL
+       ADD MODAL
     ========================================== */
 
     function openDebtModal() {
 
-        const modal =
-            document.getElementById("debtModal");
+        editingDebtId = null;
 
 
-        if (!modal) {
-
-            console.log("debtModal олдсонгүй");
-
-            return;
-        }
+        document.getElementById("debtModalTitle")
+            .textContent =
+                "Шинэ өр бүртгэх";
 
 
-        modal.classList.add("show");
+        document.getElementById("debtModalSubtitle")
+            .textContent =
+                "Шинэ өрийн мэдээллийг оруулна уу";
+
+
+        document.getElementById("addButton")
+            .textContent =
+                "💾 Өр бүртгэх";
+
+
+        document.getElementById("personName")
+            .value = "";
+
+        document.getElementById("personPhone")
+            .value = "";
+
+        document.getElementById("debtAmount")
+            .value = "";
+
+        document.getElementById("dueDate")
+            .value = "";
+
+
+        document.getElementById("debtModal")
+            .classList.add("show");
 
 
         setTimeout(() => {
 
-            const input =
-                document.getElementById("personName");
-
-            if (input) {
-
-                input.focus();
-
-            }
+            document.getElementById("personName")
+                .focus();
 
         }, 100);
 
     }
 
 
-    /* ==========================================
-       CLOSE ADD MODAL
-    ========================================== */
-
     function closeDebtModal() {
 
-        const modal =
-            document.getElementById("debtModal");
+        document.getElementById("debtModal")
+            .classList.remove("show");
 
-
-        if (modal) {
-
-            modal.classList.remove("show");
-
-        }
+        editingDebtId = null;
 
     }
 
@@ -1683,21 +1656,32 @@
 
 
     /* ==========================================
-       ADD DEBT
+       ADD / EDIT
     ========================================== */
 
     async function addDebt() {
+
+        if (editingDebtId) {
+
+            await updateDebt();
+
+            return;
+        }
+
 
         const {
             data: {
                 user
             }
-        } = await supabaseClient.auth.getUser();
+        } =
+            await supabaseClient.auth.getUser();
 
 
         if (!user) {
 
-            alert("Эхлээд нэвтэрнэ үү.");
+            alert(
+                "Эхлээд нэвтэрнэ үү."
+            );
 
             return;
         }
@@ -1729,7 +1713,9 @@
 
         if (!name) {
 
-            alert("Хүний нэр оруулна уу.");
+            alert(
+                "Хүний нэр оруулна уу."
+            );
 
             return;
         }
@@ -1737,62 +1723,84 @@
 
         if (!amount || amount <= 0) {
 
-            alert("Өрийн дүнгээ зөв оруулна уу.");
+            alert(
+                "Өрийн дүнгээ зөв оруулна уу."
+            );
 
             return;
         }
 
 
-        /* SAME PERSON */
-
         const existing =
             debts.find(
                 d =>
-                    d.name.trim().toLowerCase() ===
-                    name.trim().toLowerCase()
+                    d.name
+                        .trim()
+                        .toLowerCase() ===
+                    name
+                        .trim()
+                        .toLowerCase()
             );
 
 
         if (existing) {
 
             const newAmount =
-                existing.amount + amount;
+                existing.amount +
+                amount;
 
 
             const additions =
-                Array.isArray(existing.additions)
-                    ? existing.additions
+                Array.isArray(
+                    existing.additions
+                )
+                    ? [
+                        ...existing.additions
+                      ]
                     : [];
 
 
             additions.push({
 
-                amount: amount,
+                amount,
 
                 createdAt:
-                    new Date().toISOString()
+                    new Date()
+                        .toISOString()
 
             });
 
 
             const {
                 error
-            } = await supabaseClient
-                .from("debts")
-                .update({
+            } =
+                await supabaseClient
+                    .from("debts")
+                    .update({
 
-                    amount: newAmount,
+                        amount:
+                            newAmount,
 
-                    phone: phone || existing.phone,
+                        phone:
+                            phone ||
+                            existing.phone,
 
-                    due_date:
-                        dueDate || existing.dueDate || null,
+                        due_date:
+                            dueDate ||
+                            existing.dueDate ||
+                            null,
 
-                    additions
+                        additions
 
-                })
-                .eq("id", existing.id)
-                .eq("user_id", user.id);
+                    })
+                    .eq(
+                        "id",
+                        existing.id
+                    )
+                    .eq(
+                        "user_id",
+                        user.id
+                    );
 
 
             if (error) {
@@ -1810,28 +1818,31 @@
 
             const {
                 error
-            } = await supabaseClient
-                .from("debts")
-                .insert({
+            } =
+                await supabaseClient
+                    .from("debts")
+                    .insert({
 
-                    user_id: user.id,
+                        user_id:
+                            user.id,
 
-                    name,
+                        name,
 
-                    phone,
+                        phone,
 
-                    amount,
+                        amount,
 
-                    paid: 0,
+                        paid: 0,
 
-                    due_date:
-                        dueDate || null,
+                        due_date:
+                            dueDate ||
+                            null,
 
-                    payments: [],
+                        payments: [],
 
-                    additions: []
+                        additions: []
 
-                });
+                    });
 
 
             if (error) {
@@ -1848,27 +1859,189 @@
         }
 
 
-        /* CLEAR FORM */
-
-        document.getElementById("personName")
-            .value = "";
-
-        document.getElementById("personPhone")
-            .value = "";
-
-        document.getElementById("debtAmount")
-            .value = "";
-
-        document.getElementById("dueDate")
-            .value = "";
-
-
-        /* CLOSE MODAL */
-
         closeDebtModal();
 
+        await loadDebts();
 
-        /* RELOAD */
+    }
+
+
+    /* ==========================================
+       EDIT DEBT
+    ========================================== */
+
+    function editDebt(id) {
+
+        const debt =
+            debts.find(
+                d => d.id === id
+            );
+
+
+        if (!debt) return;
+
+
+        editingDebtId = id;
+
+
+        document.getElementById("debtModalTitle")
+            .textContent =
+                "✏️ Өр засах";
+
+
+        document.getElementById("debtModalSubtitle")
+            .textContent =
+                "Мэдээллээ өөрчлөөд хадгална уу";
+
+
+        document.getElementById("personName")
+            .value =
+                debt.name;
+
+
+        document.getElementById("personPhone")
+            .value =
+                debt.phone;
+
+
+        document.getElementById("debtAmount")
+            .value =
+                debt.amount;
+
+
+        document.getElementById("dueDate")
+            .value =
+                debt.dueDate;
+
+
+        document.getElementById("addButton")
+            .textContent =
+                "💾 Өөрчлөлт хадгалах";
+
+
+        closeDetailModal();
+
+
+        document.getElementById("debtModal")
+            .classList.add("show");
+
+    }
+
+
+    async function updateDebt() {
+
+        const {
+            data: {
+                user
+            }
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (!user) {
+
+            alert(
+                "Эхлээд нэвтэрнэ үү."
+            );
+
+            return;
+        }
+
+
+        const debt =
+            debts.find(
+                d => d.id === editingDebtId
+            );
+
+
+        if (!debt) return;
+
+
+        const name =
+            document.getElementById("personName")
+                .value
+                .trim();
+
+
+        const phone =
+            document.getElementById("personPhone")
+                .value
+                .trim();
+
+
+        const amount =
+            Number(
+                document.getElementById("debtAmount")
+                    .value
+            );
+
+
+        const dueDate =
+            document.getElementById("dueDate")
+                .value;
+
+
+        if (!name) {
+
+            alert(
+                "Хүний нэр оруулна уу."
+            );
+
+            return;
+        }
+
+
+        if (!amount || amount <= 0) {
+
+            alert(
+                "Өрийн дүнгээ зөв оруулна уу."
+            );
+
+            return;
+        }
+
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("debts")
+                .update({
+
+                    name,
+
+                    phone,
+
+                    amount,
+
+                    due_date:
+                        dueDate ||
+                        null
+
+                })
+                .eq(
+                    "id",
+                    editingDebtId
+                )
+                .eq(
+                    "user_id",
+                    user.id
+                );
+
+
+        if (error) {
+
+            console.log(error);
+
+            alert(
+                "Засах үед алдаа гарлаа."
+            );
+
+            return;
+        }
+
+
+        closeDebtModal();
 
         await loadDebts();
 
@@ -1882,7 +2055,9 @@
     async function payDebt(id) {
 
         const debt =
-            debts.find(d => d.id === id);
+            debts.find(
+                d => d.id === id
+            );
 
 
         if (!debt) return;
@@ -1915,10 +2090,14 @@
 
 
         const remaining =
-            debt.amount - debt.paid;
+            debt.amount -
+            debt.paid;
 
 
-        if (paymentAmount > remaining) {
+        if (
+            paymentAmount >
+            remaining
+        ) {
 
             alert(
                 "Үлдэгдлээс их дүн төлөх боломжгүй."
@@ -1929,37 +2108,49 @@
 
 
         const payments =
-            Array.isArray(debt.payments)
-                ? debt.payments
+            Array.isArray(
+                debt.payments
+            )
+                ? [
+                    ...debt.payments
+                  ]
                 : [];
 
 
         payments.push({
 
-            amount: paymentAmount,
+            amount:
+                paymentAmount,
 
             createdAt:
-                new Date().toISOString()
+                new Date()
+                    .toISOString()
 
         });
 
 
         const newPaid =
-            debt.paid + paymentAmount;
+            debt.paid +
+            paymentAmount;
 
 
         const {
             error
-        } = await supabaseClient
-            .from("debts")
-            .update({
+        } =
+            await supabaseClient
+                .from("debts")
+                .update({
 
-                paid: newPaid,
+                    paid:
+                        newPaid,
 
-                payments
+                    payments
 
-            })
-            .eq("id", id);
+                })
+                .eq(
+                    "id",
+                    id
+                );
 
 
         if (error) {
@@ -1976,6 +2167,8 @@
 
         await loadDebts();
 
+        openDetailModal(id);
+
     }
 
 
@@ -1986,7 +2179,9 @@
     async function addMoreDebt(id) {
 
         const debt =
-            debts.find(d => d.id === id);
+            debts.find(
+                d => d.id === id
+            );
 
 
         if (!debt) return;
@@ -2005,7 +2200,10 @@
             Number(amountText);
 
 
-        if (!amount || amount <= 0) {
+        if (
+            !amount ||
+            amount <= 0
+        ) {
 
             alert(
                 "Өрийн дүнг зөв оруулна уу."
@@ -2016,8 +2214,12 @@
 
 
         const additions =
-            Array.isArray(debt.additions)
-                ? debt.additions
+            Array.isArray(
+                debt.additions
+            )
+                ? [
+                    ...debt.additions
+                  ]
                 : [];
 
 
@@ -2026,24 +2228,30 @@
             amount,
 
             createdAt:
-                new Date().toISOString()
+                new Date()
+                    .toISOString()
 
         });
 
 
         const {
             error
-        } = await supabaseClient
-            .from("debts")
-            .update({
+        } =
+            await supabaseClient
+                .from("debts")
+                .update({
 
-                amount:
-                    debt.amount + amount,
+                    amount:
+                        debt.amount +
+                        amount,
 
-                additions
+                    additions
 
-            })
-            .eq("id", id);
+                })
+                .eq(
+                    "id",
+                    id
+                );
 
 
         if (error) {
@@ -2060,6 +2268,8 @@
 
         await loadDebts();
 
+        openDetailModal(id);
+
     }
 
 
@@ -2070,7 +2280,9 @@
     async function deleteDebt(id) {
 
         const debt =
-            debts.find(d => d.id === id);
+            debts.find(
+                d => d.id === id
+            );
 
 
         if (!debt) return;
@@ -2087,10 +2299,14 @@
 
         const {
             error
-        } = await supabaseClient
-            .from("debts")
-            .delete()
-            .eq("id", id);
+        } =
+            await supabaseClient
+                .from("debts")
+                .delete()
+                .eq(
+                    "id",
+                    id
+                );
 
 
         if (error) {
@@ -2105,74 +2321,91 @@
         }
 
 
+        closeDetailModal();
+
         await loadDebts();
 
     }
 
 
     /* ==========================================
-       DETAIL MODAL
+       DETAIL
     ========================================== */
 
     function openDetailModal(id) {
 
-    const debt =
-        debts.find(d => d.id === id);
-
-    if (!debt) return;
-
-
-    const remaining =
-        Math.max(
-            0,
-            debt.amount - debt.paid
-        );
+        const debt =
+            debts.find(
+                d => d.id === id
+            );
 
 
-    let paymentsHtml = "";
+        if (!debt) return;
 
 
-    if (
-        debt.payments &&
-        debt.payments.length
-    ) {
+        const remaining =
+            Math.max(
+                0,
+                debt.amount -
+                debt.paid
+            );
 
-        paymentsHtml =
-            debt.payments.map(payment => {
 
-                const date =
-                    payment.createdAt
-                        ? new Date(
+        const isDone =
+            remaining <= 0;
+
+
+        let paymentsHtml = "";
+
+
+        if (
+            debt.payments &&
+            debt.payments.length
+        ) {
+
+            paymentsHtml =
+                debt.payments
+                    .slice()
+                    .reverse()
+                    .map(payment => {
+
+                        const date =
                             payment.createdAt
-                          ).toLocaleString(
-                            "mn-MN"
-                          )
-                        : "";
+                                ? new Date(
+                                    payment.createdAt
+                                  ).toLocaleString(
+                                    "mn-MN"
+                                  )
+                                : "";
 
 
-                return `
-                    <div style="
-                        padding:10px 0;
-                        border-bottom:1px solid #e2e8f0;
-                    ">
+                        return `
 
-                        💰 ${formatMoney(payment.amount)}
+                            <div class="payment-item">
 
-                        <br>
+                                💰
+                                <strong>
+                                    ${formatMoney(
+                                        payment.amount
+                                    )}
+                                </strong>
 
-                        <small>
-                            ${date}
-                        </small>
+                                <br>
 
-                    </div>
-                `;
+                                <small>
+                                    ${date}
+                                </small>
 
-            }).join("");
+                            </div>
 
-    } else {
+                        `;
 
-        paymentsHtml =
-            `
+                    })
+                    .join("");
+
+        } else {
+
+            paymentsHtml = `
                 <div style="
                     color:#64748b;
                     padding:10px 0;
@@ -2181,174 +2414,236 @@
                 </div>
             `;
 
-    }
+        }
 
 
-    document.getElementById("detailContent")
-        .innerHTML = `
+        document.getElementById("detailContent")
+            .innerHTML = `
 
-            <h2 style="
-                margin:0 0 5px;
-                font-size:24px;
-            ">
-                👤 ${escapeHtml(debt.name)}
-            </h2>
+                <h2 style="
+                    margin:0 0 5px;
+                    font-size:24px;
+                ">
 
+                    👤
+                    ${escapeHtml(
+                        debt.name
+                    )}
 
-            <div style="
-                color:#64748b;
-                margin-bottom:20px;
-            ">
-                📞 ${escapeHtml(debt.phone || "Утас байхгүй")}
-            </div>
+                </h2>
 
-
-            <div style="
-                background:#f8fafc;
-                border-radius:15px;
-                padding:16px;
-                margin-bottom:20px;
-            ">
 
                 <div style="
-                    font-size:13px;
                     color:#64748b;
                     margin-bottom:5px;
                 ">
-                    Үлдэгдэл өр
-                </div>
 
-                <div style="
-                    font-size:28px;
-                    font-weight:900;
-                    color:${remaining > 0 ? "#2563eb" : "#16a34a"};
-                ">
-                    ${remaining > 0
-                        ? formatMoney(remaining)
-                        : "ДУУССАН"
+                    📞
+                    ${
+                        debt.phone
+                            ? escapeHtml(
+                                debt.phone
+                              )
+                            : "Утас байхгүй"
                     }
+
                 </div>
 
-            </div>
 
+                <div class="detail-balance">
 
-            <div style="
-                display:grid;
-                grid-template-columns:1fr 1fr;
-                gap:10px;
-                margin-bottom:20px;
-            ">
-
-                <div style="
-                    background:#f8fafc;
-                    padding:12px;
-                    border-radius:12px;
-                ">
-
-                    <div style="
-                        font-size:12px;
-                        color:#64748b;
-                    ">
-                        Нийт өр
+                    <div class="detail-balance-label">
+                        Үлдэгдэл өр
                     </div>
 
-                    <strong>
-                        ${formatMoney(debt.amount)}
-                    </strong>
+                    <div class="
+                        detail-balance-value
+                        ${isDone ? "done" : ""}
+                    ">
+
+                        ${
+                            isDone
+                                ? "ДУУССАН"
+                                : formatMoney(
+                                    remaining
+                                  )
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-stats">
+
+                    <div class="detail-stat">
+
+                        <div class="detail-stat-label">
+                            Нийт өр
+                        </div>
+
+                        <div class="detail-stat-value">
+                            ${formatMoney(
+                                debt.amount
+                            )}
+                        </div>
+
+                    </div>
+
+
+                    <div class="detail-stat">
+
+                        <div class="detail-stat-label">
+                            Төлсөн
+                        </div>
+
+                        <div class="detail-stat-value">
+                            ${formatMoney(
+                                debt.paid
+                            )}
+                        </div>
+
+                    </div>
 
                 </div>
 
 
                 <div style="
-                    background:#f8fafc;
-                    padding:12px;
-                    border-radius:12px;
+                    padding:14px 0;
+                    border-bottom:1px solid #e2e8f0;
+                    margin-bottom:5px;
                 ">
 
-                    <div style="
-                        font-size:12px;
-                        color:#64748b;
-                    ">
-                        Төлсөн
-                    </div>
-
+                    📅
                     <strong>
-                        ${formatMoney(debt.paid)}
+                        Төлөх хугацаа:
                     </strong>
+
+                    ${debt.dueDate ||
+                        "Тодорхойгүй"}
 
                 </div>
 
-            </div>
+
+                <!-- ACTIONS -->
+
+                <div class="detail-actions">
+
+                    ${
+                        debt.phone
+                            ? `
+                                <button
+                                    type="button"
+                                    class="detail-call"
+                                    onclick="callPerson('${escapeHtml(
+                                        debt.phone
+                                    )}')"
+                                >
+                                    📞 Залгах
+                                </button>
+                              `
+                            : `
+                                <button
+                                    type="button"
+                                    class="detail-call"
+                                    disabled
+                                >
+                                    📞 Залгах
+                                </button>
+                              `
+                    }
 
 
-            <div style="
-                padding:12px 0;
-                border-top:1px solid #e2e8f0;
-                border-bottom:1px solid #e2e8f0;
-                margin-bottom:5px;
-            ">
-
-                📅 <strong>Төлөх хугацаа:</strong>
-
-                ${debt.dueDate || "Тодорхойгүй"}
-
-            </div>
+                    <button
+                        type="button"
+                        class="detail-edit"
+                        onclick="editDebt('${debt.id}')"
+                    >
+                        ✏️ Засах
+                    </button>
 
 
-            <!-- ACTION BUTTONS -->
-
-            <div class="detail-actions">
-
-                <button
-                    type="button"
-                    class="detail-pay"
-                    onclick="payDebt('${debt.id}')"
-                >
-                    💰 Төлөлт
-                </button>
+                    <button
+                        type="button"
+                        class="detail-pay"
+                        onclick="payDebt('${debt.id}')"
+                    >
+                        💰 Төлөлт
+                    </button>
 
 
-                <button
-                    type="button"
-                    class="detail-more"
-                    onclick="addMoreDebt('${debt.id}')"
-                >
-                    ➕ Өр нэмэх
-                </button>
+                    <button
+                        type="button"
+                        class="detail-more"
+                        onclick="addMoreDebt('${debt.id}')"
+                    >
+                        ➕ Өр нэмэх
+                    </button>
 
 
-                <button
-                    type="button"
-                    class="detail-delete"
-                    onclick="deleteDebt('${debt.id}')"
-                >
-                    🗑 Устгах
-                </button>
+                    <button
+                        type="button"
+                        class="detail-delete"
+                        onclick="deleteDebt('${debt.id}')"
+                    >
+                        🗑 Устгах
+                    </button>
 
-            </div>
-
-
-            <hr style="
-                margin:25px 0 20px;
-                border:0;
-                border-top:1px solid #e2e8f0;
-            ">
+                </div>
 
 
-            <h3>
-                💰 Төлөлтийн түүх
-            </h3>
+                <hr style="
+                    margin:25px 0 20px;
+                    border:0;
+                    border-top:1px solid #e2e8f0;
+                ">
 
 
-            ${paymentsHtml}
+                <h3>
+                    💰 Төлөлтийн түүх
+                </h3>
 
-        `;
+
+                ${paymentsHtml}
+
+            `;
 
 
-    document.getElementById("detailModal")
-        .classList.add("show");
+        document.getElementById("detailModal")
+            .classList.add("show");
 
-}
+    }
+
+
+    /* ==========================================
+       CALL
+    ========================================== */
+
+    function callPerson(phone) {
+
+        const cleanPhone =
+            normalizePhone(phone);
+
+
+        if (!cleanPhone) {
+
+            alert(
+                "Утасны дугаар байхгүй байна."
+            );
+
+            return;
+        }
+
+
+        window.location.href =
+            "tel:" + cleanPhone;
+
+    }
+
+
+    /* ==========================================
+       CLOSE DETAIL
+    ========================================== */
 
     function closeDetailModal() {
 
@@ -2361,7 +2656,8 @@
     function closeDetailModalOutside(event) {
 
         if (
-            event.target.id === "detailModal"
+            event.target.id ===
+            "detailModal"
         ) {
 
             closeDetailModal();
@@ -2403,7 +2699,10 @@
         "keydown",
         function(event) {
 
-            if (event.key === "Escape") {
+            if (
+                event.key ===
+                "Escape"
+            ) {
 
                 closeDebtModal();
 
