@@ -1546,9 +1546,22 @@
     👤 ${escapeHtml(debt.name)}
 </div>
 
-                            <div class="person-phone">
-                                📞 ${escapeHtml(debt.phone || "Утас байхгүй")}
-                            </div>
+                           <div class="person-phone">
+    ${
+        debt.phone
+            ? `<a
+                href="tel:${escapeHtml(debt.phone)}"
+                style="
+                    color:#2563eb;
+                    text-decoration:none;
+                    font-weight:600;
+                "
+              >
+                📞 ${escapeHtml(debt.phone)}
+              </a>`
+            : "📞 Утас байхгүй"
+    }
+</div>
 
                         </div>
 
