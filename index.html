@@ -2245,49 +2245,79 @@
         }
 
 
-        document.getElementById("detailContent")
-            .innerHTML = `
+       document.getElementById("detailContent")
+    .innerHTML = `
 
-                <h2>
-                    ${escapeHtml(debt.name)}
-                </h2>
+        <h2>
+            ${escapeHtml(debt.name)}
+        </h2>
 
-                <p>
-                    📞 ${escapeHtml(debt.phone)}
-                </p>
+        <p>
+            📞 ${escapeHtml(debt.phone || "Утас байхгүй")}
+        </p>
 
-                <hr>
+        ${
+            debt.phone
+                ? `
+                    <a
+                        href="tel:${escapeHtml(debt.phone)}"
+                        style="
+                            display:block;
+                            width:100%;
+                            text-align:center;
+                            padding:13px;
+                            margin:15px 0;
+                            background:#16a34a;
+                            color:white;
+                            text-decoration:none;
+                            border-radius:12px;
+                            font-weight:700;
+                            box-sizing:border-box;
+                        "
+                    >
+                        📞 Залгах
+                    </a>
+                `
+                : ""
+        }
 
-                <p>
-                    Нийт өр:
-                    <strong>
-                        ${formatMoney(debt.amount)}
-                    </strong>
-                </p>
+        <hr>
 
-                <p>
-                    Төлсөн:
-                    <strong>
-                        ${formatMoney(debt.paid)}
-                    </strong>
-                </p>
+        <p>
+            Нийт өр:
+            <strong>
+                ${formatMoney(debt.amount)}
+            </strong>
+        </p>
 
-                <p>
-                    Үлдэгдэл:
-                    <strong>
-                        ${formatMoney(remaining)}
-                    </strong>
-                </p>
+        <p>
+            Төлсөн:
+            <strong>
+                ${formatMoney(debt.paid)}
+            </strong>
+        </p>
 
-                <hr>
+        <p>
+            Үлдэгдэл:
+            <strong>
+                ${formatMoney(
+                    Math.max(
+                        0,
+                        debt.amount - debt.paid
+                    )
+                )}
+            </strong>
+        </p>
 
-                <h3>
-                    💰 Төлөлтийн түүх
-                </h3>
+        <hr>
 
-                ${paymentsHtml}
+        <h3>
+            💰 Төлөлтийн түүх
+        </h3>
 
-            `;
+        ${paymentsHtml}
+
+    `;
 
 
         document.getElementById("detailModal")
