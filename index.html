@@ -2039,5 +2039,27 @@ document.getElementById("appContent").style.display = "block";
 
 loadDebts();
 }
+    async function checkLoginOnLoad() {
+    const { data, error } = await supabaseClient.auth.getSession();
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    if (data.session) {
+        currentUser = data.session.user;
+
+        document.getElementById("loginScreen").style.display = "none";
+        document.getElementById("appContent").style.display = "block";
+
+        loadDebts();
+    } else {
+        document.getElementById("loginScreen").style.display = "block";
+        document.getElementById("appContent").style.display = "none";
+    }
+}
+
+checkLoginOnLoad();
 </script>
 </html>
