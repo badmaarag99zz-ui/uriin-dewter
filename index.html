@@ -142,10 +142,19 @@ button:hover {
 }
 
 .pay {
-    background: #dcfce7;
-    color: #166534;
-    margin-top: 10px;
-    margin-right: 5px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    width: 100%;
+    min-height: 42px;
+    font-weight: 600;
+}
+
+.delete {
+    background: #fee2e2;
+    color: #991b1b;
+    width: 100%;
+    min-height: 42px;
+    font-weight: 600;
 }
 
 .delete {
@@ -1500,212 +1509,148 @@ function closeDetail() {
 
 function showDebts() {
 
-    var list =
-        document.getElementById("list");
-
+    var list = document.getElementById("list");
 
     if (!list) {
-
         console.error("list олдсонгүй.");
-
         return;
     }
 
+    var searchInput = document.getElementById("search");
+    var sortInput = document.getElementById("sort");
 
-    var searchInput =
-        document.getElementById("search");
+    var search = searchInput
+        ? searchInput.value.toLowerCase().trim()
+        : "";
 
-
-    var sortInput =
-        document.getElementById("sort");
-
-
-    var search =
-        searchInput
-            ? searchInput.value.toLowerCase()
-            : "";
-
-
-    var sort =
-        sortInput
-            ? sortInput.value
-            : "due";
-
+    var sort = sortInput
+        ? sortInput.value
+        : "due";
 
     var total = 0;
-
     var paidTotal = 0;
-
     var people = 0;
-
     var overdue = 0;
 
 
-    /* НИЙТ ДҮН */
+    /* =========================
+       НИЙТ ДҮН
+    ========================= */
 
-    for (
-        var i = 0;
-        i < debts.length;
-        i++
-    ) {
+    for (var i = 0; i < debts.length; i++) {
 
-        var allDebt =
-            debts[i];
-
+        var allDebt = debts[i];
 
         var allRemaining =
             Number(allDebt.amount || 0) -
             Number(allDebt.paid || 0);
 
+        total += allRemaining;
 
-        total +=
-            allRemaining;
-
-
-        paidTotal +=
-            Number(allDebt.paid || 0);
-
+        paidTotal += Number(allDebt.paid || 0);
 
         if (allRemaining > 0) {
-
             people++;
         }
-
 
         if (
             allDebt.dueDate &&
             allRemaining > 0
         ) {
 
-            var today =
-                new Date();
+            var today = new Date();
+            today.setHours(0, 0, 0, 0);
 
-            today.setHours(
-                0, 0, 0, 0
-            );
-
-
-            var due =
-                new Date(
-                    allDebt.dueDate
-                );
-
-            due.setHours(
-                0, 0, 0, 0
-            );
-
+            var due = new Date(allDebt.dueDate);
+            due.setHours(0, 0, 0, 0);
 
             if (due < today) {
-
                 overdue++;
             }
         }
     }
 
 
-    /* ХУУЛБАРЛААД ЭРЭМБЭЛНЭ */
+    /* =========================
+       ЭРЭМБЭЛЭЛТ
+    ========================= */
 
-    var sortedDebts =
-        debts.slice();
+    var sortedDebts = debts.slice();
 
+    sortedDebts.sort(function(a, b) {
 
-    sortedDebts.sort(
-        function(a, b) {
+        var remainingA =
+            Number(a.amount || 0) -
+            Number(a.paid || 0);
 
-            var remainingA =
-                Number(a.amount || 0) -
-                Number(a.paid || 0);
-
-
-            var remainingB =
-                Number(b.amount || 0) -
-                Number(b.paid || 0);
+        var remainingB =
+            Number(b.amount || 0) -
+            Number(b.paid || 0);
 
 
-            if (sort == "amount") {
-
-                return (
-                    remainingB -
-                    remainingA
-                );
-            }
-
-
-            if (sort == "name") {
-
-                return a.name.localeCompare(
-                    b.name,
-                    "mn"
-                );
-            }
-
-
-            var dateA =
-                a.dueDate
-                    ? new Date(a.dueDate)
-                    : new Date("9999-12-31");
-
-
-            var dateB =
-                b.dueDate
-                    ? new Date(b.dueDate)
-                    : new Date("9999-12-31");
-
-
-            dateA.setHours(
-                0, 0, 0, 0
-            );
-
-            dateB.setHours(
-                0, 0, 0, 0
-            );
-
-
-            if (sort == "overdue") {
-
-                var today =
-                    new Date();
-
-                today.setHours(
-                    0, 0, 0, 0
-                );
-
-
-                var overdueA =
-                    a.dueDate &&
-                    remainingA > 0 &&
-                    dateA < today;
-
-
-                var overdueB =
-                    b.dueDate &&
-                    remainingB > 0 &&
-                    dateB < today;
-
-
-                if (
-                    overdueA &&
-                    !overdueB
-                ) {
-
-                    return -1;
-                }
-
-
-                if (
-                    !overdueA &&
-                    overdueB
-                ) {
-
-                    return 1;
-                }
-            }
-
-
-            return dateA - dateB;
+        if (sort == "amount") {
+            return remainingB - remainingA;
         }
-    );
 
+
+        if (sort == "name") {
+            return (a.name || "").localeCompare(
+                b.name || "",
+                "mn"
+            );
+        }
+
+
+        var dateA =
+            a.dueDate
+                ? new Date(a.dueDate)
+                : new Date("9999-12-31");
+
+        var dateB =
+            b.dueDate
+                ? new Date(b.dueDate)
+                : new Date("9999-12-31");
+
+
+        dateA.setHours(0, 0, 0, 0);
+        dateB.setHours(0, 0, 0, 0);
+
+
+        if (sort == "overdue") {
+
+            var today = new Date();
+
+            today.setHours(0, 0, 0, 0);
+
+
+            var overdueA =
+                a.dueDate &&
+                remainingA > 0 &&
+                dateA < today;
+
+            var overdueB =
+                b.dueDate &&
+                remainingB > 0 &&
+                dateB < today;
+
+
+            if (overdueA && !overdueB) {
+                return -1;
+            }
+
+            if (!overdueA && overdueB) {
+                return 1;
+            }
+        }
+
+
+        return dateA - dateB;
+    });
+
+
+    /* =========================
+       ӨРИЙН CARD
+    ========================= */
 
     var html = "";
 
@@ -1718,32 +1663,26 @@ function showDebts() {
         k++
     ) {
 
-        var debt =
-            sortedDebts[k];
-
+        var debt = sortedDebts[k];
 
         var amount =
             Number(debt.amount || 0);
 
-
         var paid =
             Number(debt.paid || 0);
-
 
         var remaining =
             amount - paid;
 
 
         var debtName =
-            (debt.name || "")
-                .toLowerCase();
+            (debt.name || "").toLowerCase();
 
 
         if (
             search != "" &&
             debtName.indexOf(search) == -1
         ) {
-
             continue;
         }
 
@@ -1751,61 +1690,48 @@ function showDebts() {
         visibleCount++;
 
 
-        var dueText = "";
+        /* =========================
+           ХУГАЦААНЫ STATUS
+        ========================= */
 
+        var dueText = "";
+        var dueClass = "";
 
         if (
             debt.dueDate &&
             remaining > 0
         ) {
 
-            var today2 =
-                new Date();
-
-            today2.setHours(
-                0, 0, 0, 0
-            );
-
+            var today2 = new Date();
+            today2.setHours(0, 0, 0, 0);
 
             var due2 =
-                new Date(
-                    debt.dueDate
-                );
+                new Date(debt.dueDate);
 
-            due2.setHours(
-                0, 0, 0, 0
-            );
+            due2.setHours(0, 0, 0, 0);
 
 
             var diff =
                 Math.ceil(
-                    (
-                        due2 -
-                        today2
-                    ) /
-                    (
-                        1000 *
-                        60 *
-                        60 *
-                        24
-                    )
+                    (due2 - today2) /
+                    (1000 * 60 * 60 * 24)
                 );
 
 
             if (diff < 0) {
 
-                dueText =
-                    "🔴 Хугацаа хэтэрсэн";
+                dueText = "🔴 Хугацаа хэтэрсэн";
+                dueClass = "overdue";
 
             } else if (diff == 0) {
 
-                dueText =
-                    "🟡 Өнөөдөр төлөх";
+                dueText = "🟡 Өнөөдөр төлөх";
+                dueClass = "today";
 
             } else if (diff == 1) {
 
-                dueText =
-                    "🟡 Маргааш төлөх";
+                dueText = "🟡 Маргааш төлөх";
+                dueClass = "soon";
 
             } else {
 
@@ -1813,58 +1739,157 @@ function showDebts() {
                     "🟢 " +
                     diff +
                     " хоног үлдсэн";
+
+                dueClass = "normal";
             }
         }
 
 
+        /* =========================
+           НЭМЭЛТ ӨРИЙН ТҮҮХ
+        ========================= */
+
+        var additionsHTML = "";
+
+        if (
+            debt.additions &&
+            debt.additions.length > 0
+        ) {
+
+            additionsHTML =
+                "<div style='margin-top:14px;padding:12px;background:#f8fafc;border-radius:10px;'>" +
+
+                "<div style='font-weight:600;font-size:14px;margin-bottom:7px;'>" +
+                "➕ Нэмсэн өрүүд" +
+                "</div>" +
+
+                debt.additions.map(function(addition) {
+
+                    return (
+                        "<div style='font-size:13px;color:#64748b;padding:4px 0;display:flex;justify-content:space-between;gap:10px;'>" +
+
+                        "<span>" +
+                        money(addition.amount) +
+                        "</span>" +
+
+                        "<span>" +
+                        new Date(addition.createdAt)
+                            .toLocaleString("mn-MN", {
+                                year: "numeric",
+                                month: "2-digit",
+                                day: "2-digit",
+                                hour: "2-digit",
+                                minute: "2-digit"
+                            }) +
+                        "</span>" +
+
+                        "</div>"
+                    );
+
+                }).join("") +
+
+                "</div>";
+        }
+
+
+        /* =========================
+           CARD HTML
+        ========================= */
+
         html +=
-            "<div class='debt'>" +
+
+            "<div class='debt' style='" +
+
+            "background:white;" +
+            "border:1px solid #e5e7eb;" +
+            "border-radius:16px;" +
+            "padding:18px;" +
+            "margin-bottom:12px;" +
+            "box-shadow:0 3px 10px rgba(0,0,0,0.04);" +
+
+            "'>" +
 
 
-            "<div class='debt-name' " +
+            /* НЭР */
+
+            "<div " +
 
             "onclick=\"viewDebt('" +
             debt.id +
             "')\" " +
 
-            "style='cursor:pointer;'>" +
+            "style='" +
+            "cursor:pointer;" +
+            "font-size:20px;" +
+            "font-weight:700;" +
+            "margin-bottom:8px;" +
+            "color:#111827;" +
+            "'>" +
 
+            "👤 " +
             debt.name +
 
             "</div>" +
 
 
-            "<div class='" +
+            /* ҮЛДЭГДЭЛ */
+
+            "<div style='" +
+
+            "font-size:25px;" +
+            "font-weight:800;" +
+            "margin-bottom:14px;" +
 
             (
                 remaining == 0
-                    ? "remaining complete"
-                    : "remaining"
+                    ? "color:#16a34a;"
+                    : "color:#dc2626;"
             ) +
 
             "'>" +
 
             (
                 remaining == 0
-                    ? "Бүрэн төлөгдсөн"
-                    : "Үлдэгдэл: " +
-                      money(remaining)
+                    ? "✓ Бүрэн төлөгдсөн"
+                    : money(remaining)
             ) +
 
             "</div>" +
 
 
-            "<div>Нийт өр: " +
+            /* ДҮНГҮҮД */
+
+            "<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;'>" +
+
+            "<div style='background:#f8fafc;padding:10px;border-radius:10px;'>" +
+
+            "<div style='font-size:12px;color:#64748b;'>Нийт өр</div>" +
+
+            "<div style='font-weight:700;margin-top:3px;'>" +
             money(amount) +
             "</div>" +
 
-
-            "<div>Төлсөн: " +
-            money(paid) +
             "</div>" +
 
 
-            "<div>Төлөх хугацаа: " +
+            "<div style='background:#f8fafc;padding:10px;border-radius:10px;'>" +
+
+            "<div style='font-size:12px;color:#64748b;'>Төлсөн</div>" +
+
+            "<div style='font-weight:700;margin-top:3px;color:#16a34a;'>" +
+            money(paid) +
+            "</div>" +
+
+            "</div>" +
+
+            "</div>" +
+
+
+            /* ТӨЛӨХ ХУГАЦАА */
+
+            "<div style='font-size:14px;color:#475569;margin-bottom:6px;'>" +
+
+            "📅 Төлөх хугацаа: " +
 
             (
                 debt.dueDate
@@ -1873,115 +1898,96 @@ function showDebts() {
             ) +
 
             "</div>" +
-"<div style='color:#666;font-size:13px;margin-top:4px;'>" +
-(
-    debt.additions &&
-    debt.additions.length > 0
-        ? "<div style='margin-top:8px;'>" +
-          "<b>➕ Нэмсэн өрүүд:</b>" +
-          debt.additions.map(function(addition) {
 
-              return (
-                  "<div style='font-size:13px;color:#666;margin-top:3px;'>" +
-                  money(addition.amount) +
-                  " — " +
-                  new Date(addition.createdAt).toLocaleString("mn-MN", {
-                      year: "numeric",
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "2-digit",
-                      minute: "2-digit"
-                  }) +
-                  "</div>"
-              );
 
-          }).join("") +
-          "</div>"
-        : ""
-) +
-(
-    debt.createdAt
-        ? "🕒 Үүсгэсэн: " +
-          new Date(debt.createdAt).toLocaleString("mn-MN", {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit"
-          })
-        : ""
-) +
-
-"</div>" +
+            /* STATUS */
 
             (
                 dueText
-                    ? "<div>" +
+                    ? "<div style='display:inline-block;padding:6px 10px;border-radius:8px;font-size:13px;margin-bottom:6px;" +
+
+                      (
+                          dueClass == "overdue"
+                              ? "background:#fee2e2;color:#991b1b;"
+                              : dueClass == "today"
+                              ? "background:#fef3c7;color:#92400e;"
+                              : "background:#dcfce7;color:#166534;"
+                      ) +
+
+                      "'>" +
+
                       dueText +
+
                       "</div>"
                     : ""
             ) +
 
 
-            "<div>";
+            /* ҮҮССЭН ОГНОО */
+
+            (
+                debt.createdAt
+                    ? "<div style='font-size:12px;color:#94a3b8;margin-top:5px;'>" +
+
+                      "🕒 Үүсгэсэн: " +
+
+                      new Date(debt.createdAt)
+                          .toLocaleString("mn-MN", {
+                              year: "numeric",
+                              month: "2-digit",
+                              day: "2-digit",
+                              hour: "2-digit",
+                              minute: "2-digit"
+                          }) +
+
+                      "</div>"
+                    : ""
+            ) +
 
 
-        if (remaining > 0) {
-
-            html +=
-                "<button " +
-
-                "class='pay' " +
-
-                "onclick=\"payment('" +
-                debt.id +
-                "')\">" +
-
-                "💵 Төлөлт бүртгэх" +
-
-                "</button>";
-        }
+            additionsHTML +
 
 
-        html +=
-            "<button " +
+            /* ТОВЧНУУД */
 
-            "class='pay' " +
+            "<div style='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:15px;'>" +
 
+
+            (
+                remaining > 0
+
+                    ? "<button class='pay' " +
+                      "onclick=\"payment('" +
+                      debt.id +
+                      "')\">" +
+                      "💵 Төлөлт" +
+                      "</button>"
+
+                    : ""
+            ) +
+
+
+            "<button class='pay' " +
             "onclick=\"addMoreDebt('" +
             debt.id +
             "')\">" +
-
             "➕ Өр нэмэх" +
+            "</button>" +
 
-            "</button>";
 
-
-        html +=
-            "<button " +
-
-            "class='pay' " +
-
+            "<button class='pay' " +
             "onclick=\"editDebt('" +
             debt.id +
             "')\">" +
-
             "✏️ Засах" +
+            "</button>" +
 
-            "</button>";
 
-
-        html +=
-            "<button " +
-
-            "class='delete' " +
-
+            "<button class='delete' " +
             "onclick=\"removeDebt('" +
             debt.id +
             "')\">" +
-
             "🗑 Устгах" +
-
             "</button>" +
 
 
@@ -1992,46 +1998,45 @@ function showDebts() {
     }
 
 
+    /* =========================
+       ХООСОН ҮЕД
+    ========================= */
+
     if (debts.length == 0) {
 
         html =
             "<div class='empty'>" +
-
             "Одоогоор бүртгэлтэй өр алга." +
-
             "</div>";
 
     } else if (visibleCount == 0) {
 
         html =
             "<div class='empty'>" +
-
-            "Хайсан хүн олдсонгүй." +
-
+            "🔎 Хайсан хүн олдсонгүй." +
             "</div>";
     }
 
 
-    list.innerHTML =
-        html;
+    list.innerHTML = html;
 
+
+    /* =========================
+       DASHBOARD
+    ========================= */
 
     document.getElementById("total").innerHTML =
         money(total);
 
-
     document.getElementById("people").innerHTML =
         people;
-
 
     document.getElementById("paid").innerHTML =
         money(paidTotal);
 
-
     document.getElementById("overdue").innerHTML =
         overdue;
 }
-
 
 /* =========================
    ӨР БҮРТГЭХ ТОВЧ
