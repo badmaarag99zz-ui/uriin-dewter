@@ -1538,9 +1538,13 @@
 
                         <div>
 
-                            <div class="person-name">
-                                👤 ${escapeHtml(debt.name)}
-                            </div>
+                           <div
+    class="person-name"
+    style="cursor:pointer;"
+    onclick="openDetailModal('${debt.id}')"
+>
+    👤 ${escapeHtml(debt.name)}
+</div>
 
                             <div class="person-phone">
                                 📞 ${escapeHtml(debt.phone || "Утас байхгүй")}
