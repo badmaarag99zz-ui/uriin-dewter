@@ -7,111 +7,138 @@
 <title>Өрийн дэвтэр</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     padding: 0;
-    background: #f2f4f7;
+    background: #f6f7fb;
     font-family: Arial, sans-serif;
-    color: #111;
+    color: #111827;
 }
 
 header {
-    background: #111827;
+    position: relative;
+    background: linear-gradient(135deg, #111827, #1f2937);
     color: white;
     text-align: center;
-    padding: 25px 15px;
+    padding: 30px 20px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
 }
 
 header h1 {
     margin: 0;
-    font-size: 28px;
+    font-size: 30px;
 }
 
 header p {
     margin: 8px 0 0;
+    color: #d1d5db;
 }
 
 .container {
-    max-width: 800px;
+    width: 100%;
+    max-width: 1000px;
     margin: 25px auto;
-    padding: 0 15px;
+    padding: 0 18px;
 }
 
+/* DASHBOARD */
+
 .cards {
-    display: flex;
-    gap: 15px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
     margin-bottom: 20px;
 }
 
 .card {
     background: white;
     padding: 20px;
-    border-radius: 12px;
-    flex: 1;
+    border-radius: 16px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    border: 1px solid #eef0f4;
+}
+
+.card div {
+    color: #6b7280;
+    font-size: 14px;
 }
 
 .card h2 {
     margin: 8px 0 0;
+    font-size: 25px;
 }
 
-.form {
+/* FORM */
+
+.form,
+.debt-box {
     background: white;
-    padding: 20px;
-    border-radius: 12px;
+    padding: 22px;
+    border-radius: 16px;
     margin-bottom: 20px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.05);
+    border: 1px solid #eef0f4;
 }
 
-input {
-    width: 100%;
-    padding: 13px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 16px;
+.form h2,
+.debt-box h2 {
+    margin-top: 0;
+    margin-bottom: 18px;
 }
+
+input,
+select {
+    width: 100%;
+    padding: 13px 14px;
+    margin-bottom: 10px;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    font-size: 16px;
+    background: white;
+    outline: none;
+    transition: 0.2s;
+}
+
+input:focus,
+select:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+}
+
+label {
+    display: block;
+    margin: 4px 0 7px;
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* BUTTON */
 
 button {
-    padding: 12px 15px;
+    padding: 11px 15px;
     border: 0;
-    border-radius: 8px;
+    border-radius: 10px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+button:hover {
+    transform: translateY(-1px);
+    opacity: 0.92;
 }
 
 .add {
     width: 100%;
-    background: #111827;
+    background: #2563eb;
     color: white;
-}
-
-.debt-box {
-    background: white;
-    padding: 20px;
-    border-radius: 12px;
-}
-
-.debt {
-    border-bottom: 1px solid #ddd;
-    padding: 15px 0;
-}
-
-.debt:last-child {
-    border-bottom: 0;
-}
-
-.debt-name {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
-}
-
-.remaining {
-    color: #dc2626;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-.complete {
-    color: green;
+    padding: 14px;
 }
 
 .pay {
@@ -127,19 +154,123 @@ button {
     margin-top: 10px;
 }
 
-.empty {
-    text-align: center;
-    color: #888;
-    padding: 30px;
+.debt {
+    padding: 18px 0;
+    border-bottom: 1px solid #e5e7eb;
 }
 
-@media(max-width:600px) {
+.debt:last-child {
+    border-bottom: 0;
+}
+
+.debt-name {
+    font-size: 19px;
+    font-weight: bold;
+    margin-bottom: 6px;
+}
+
+.remaining {
+    color: #dc2626;
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.complete {
+    color: #16a34a;
+}
+
+.empty {
+    text-align: center;
+    color: #9ca3af;
+    padding: 40px 20px;
+}
+
+/* LOGIN */
+
+#loginScreen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: linear-gradient(135deg, #f6f7fb, #e5e7eb);
+}
+
+#loginScreen > div {
+    width: 100%;
+    max-width: 420px !important;
+    margin: 0 !important;
+    padding: 32px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 35px rgba(0,0,0,0.10) !important;
+}
+
+#loginScreen h2 {
+    font-size: 27px;
+    margin-top: 0;
+}
+
+/* MOBILE */
+
+@media (max-width: 700px) {
+
+    .container {
+        padding: 0 12px;
+        margin-top: 15px;
+    }
+
+    header {
+        padding: 25px 15px;
+    }
+
+    header h1 {
+        font-size: 25px;
+    }
+
     .cards {
-        display: block;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
     }
 
     .card {
-        margin-bottom: 10px;
+        padding: 15px;
+    }
+
+    .card h2 {
+        font-size: 21px;
+    }
+
+    .form,
+    .debt-box {
+        padding: 17px;
+        border-radius: 14px;
+    }
+
+    .debt {
+        padding: 16px 0;
+    }
+
+    .debt-name {
+        font-size: 18px;
+    }
+
+    #loginScreen > div {
+        padding: 25px !important;
+    }
+}
+
+@media (max-width: 400px) {
+
+    .cards {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .card {
+        padding: 13px;
+    }
+
+    .card h2 {
+        font-size: 19px;
     }
 }
 </style>
