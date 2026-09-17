@@ -1,4 +1,4 @@
-const CACHE_NAME = "uriin-dewter-v3";
+const CACHE_NAME = "uriin-dewter-v4";
 
 const FILES_TO_CACHE = [
     "/",
