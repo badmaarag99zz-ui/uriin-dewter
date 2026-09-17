@@ -572,6 +572,76 @@
                 width: calc(100% - 24px);
             }
         }
+        /* =========================
+   CLICKABLE HISTORY
+========================= */
+
+.clickable-detail {
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.clickable-detail:hover {
+    background: #f1f5f9;
+}
+
+.clickable-detail-stat {
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.clickable-detail-stat:hover {
+    background: #eef2ff;
+}
+
+.click-arrow {
+    float: right;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.history-panel {
+    display: none;
+    background: #f8fafc;
+    border-radius: 14px;
+    padding: 12px 15px;
+    margin: 8px 0 15px;
+}
+
+.history-panel.show {
+    display: block;
+}
+
+.history-title {
+    font-weight: 800;
+    margin-bottom: 8px;
+    color: #334155;
+}
+
+.history-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.history-item:last-child {
+    border-bottom: 0;
+}
+
+.history-item small {
+    color: #64748b;
+    font-size: 11px;
+    text-align: right;
+}
+
+.history-empty {
+    color: #64748b;
+    padding: 8px 0;
+    font-size: 14px;
+}
     </style>
 </head>
 
