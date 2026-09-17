@@ -420,6 +420,7 @@ async function loadDebts() {
 
                 dueDate: row.due_date || "",
 createdAt: row.created_at || "",
+                additions: row.additions || [],
                 payments: row.payments || []
 
             };
@@ -897,12 +898,31 @@ async function addMoreDebt(id) {
         Number(debt.amount) + amount;
 
 
+    /* ӨР НЭМСЭН ТҮҮХ */
+
+    var additions =
+        Array.isArray(debt.additions)
+            ? debt.additions.slice()
+            : [];
+
+
+    additions.push({
+
+        amount: amount,
+
+        createdAt: new Date().toISOString()
+
+    });
+
+
     var result =
         await supabaseClient
             .from("debts")
             .update({
 
-                amount: newAmount
+                amount: newAmount,
+
+                additions: additions
 
             })
             .eq("id", id)
