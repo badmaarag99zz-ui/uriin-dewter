@@ -8,599 +8,622 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
+ <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f1f5f9;
+        color: #111827;
+    }
+
+    button,
+    input,
+    select {
+        font-family: inherit;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    #loginScreen {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: linear-gradient(135deg, #0f172a, #2563eb);
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+        background: white;
+        padding: 30px;
+        border-radius: 24px;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+    }
+
+    .login-card h1 {
+        margin: 0 0 8px;
+        text-align: center;
+        font-size: 28px;
+    }
+
+    .login-subtitle {
+        text-align: center;
+        color: #64748b;
+        margin-bottom: 25px;
+    }
+
+    .login-card input {
+        width: 100%;
+        height: 48px;
+        margin-bottom: 12px;
+        padding: 0 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        font-size: 16px;
+        outline: none;
+    }
+
+    .login-card input:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
+
+    .login-btn,
+    .register-btn {
+        width: 100%;
+        height: 48px;
+        border: 0;
+        border-radius: 12px;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .login-btn {
+        background: #2563eb;
+        color: white;
+        margin-top: 5px;
+    }
+
+    .register-btn {
+        margin-top: 10px;
+        background: #e2e8f0;
+        color: #334155;
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+        background: linear-gradient(135deg, #0f172a, #1e3a8a);
+        color: white;
+        padding: 18px 20px;
+    }
+
+    .header-inner {
+        max-width: 1000px;
+        margin: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 22px;
+    }
+
+    .logout-btn {
+        border: 0;
+        background: rgba(255,255,255,0.12);
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
+
+    /* =========================
+       CONTAINER
+    ========================= */
+
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 20px 15px 100px;
+    }
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    .cards {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 14px;
+        margin-bottom: 20px;
+    }
+
+    .card {
+        background: white;
+        padding: 18px;
+        border-radius: 18px;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .card-label {
+        font-size: 13px;
+        color: #64748b;
+        margin-bottom: 8px;
+    }
+
+    .card-value {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    /* =========================
+       DEBT LIST
+    ========================= */
+
+    .debt-box {
+        background: white;
+        border-radius: 20px;
+        padding: 18px;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+    }
+
+    .debt-box h2 {
+        margin: 0 0 12px;
+        font-size: 19px;
+    }
+
+    .tools {
+        display: grid;
+        grid-template-columns: 1fr 180px;
+        gap: 8px;
+        margin-bottom: 15px;
+    }
+
+    .tools input,
+    .tools select {
+        width: 100%;
+        height: 42px;
+        padding: 0 12px;
+        border: 1px solid #cbd5e1;
+        border-radius: 11px;
+        outline: none;
+        background: white;
+    }
+
+    .tools input:focus,
+    .tools select:focus {
+        border-color: #2563eb;
+    }
+
+    /* =========================
+       DEBT CARD
+    ========================= */
+
+    .debt-card {
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 14px;
+        margin-bottom: 10px;
+        background: #fff;
+    }
+
+    .debt-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .person-name {
+        font-size: 17px;
+        font-weight: 800;
+        color: #111827;
+    }
+
+    .person-phone {
+        margin-top: 3px;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    .remaining {
+        font-size: 20px;
+        font-weight: 900;
+        color: #2563eb;
+        text-align: right;
+    }
+
+    .remaining.done {
+        color: #16a34a;
+    }
+
+    .mini-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .mini-stat {
+        background: #f8fafc;
+        border-radius: 10px;
+        padding: 9px;
+    }
+
+    .mini-stat-label {
+        font-size: 11px;
+        color: #64748b;
+        margin-bottom: 3px;
+    }
+
+    .mini-stat-value {
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .debt-info {
+        margin-top: 10px;
+        font-size: 12px;
+        color: #64748b;
+        line-height: 1.6;
+    }
+
+    .status {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 4px 8px;
+        border-radius: 7px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status.normal {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .status.warning {
+        background: #fef3c7;
+        color: #b45309;
+    }
+
+    .status.overdue {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .status.done {
+        background: #dcfce7;
+        color: #15803d;
+    }
+
+    .addition-history {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #e2e8f0;
+    }
+
+    .addition-title {
+        font-size: 12px;
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .addition-item {
+        font-size: 12px;
+        color: #475569;
+        margin-top: 3px;
+    }
+
+    .debt-actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 7px;
+        margin-top: 10px;
+    }
+
+    .debt-actions button {
+        min-height: 38px;
+        border: 0;
+        border-radius: 9px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .pay {
+        background: #dbeafe;
+        color: #1d4ed8;
+    }
+
+    .more-debt {
+        background: #ede9fe;
+        color: #6d28d9;
+    }
+
+    .delete {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .empty {
+        text-align: center;
+        padding: 40px 20px;
+        color: #64748b;
+    }
+
+    /* =========================
+       FLOATING ADD BUTTON
+    ========================= */
+
+    .floating-add-btn {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        z-index: 900;
+        width: min(420px, calc(100% - 30px));
+        height: 54px;
+        border: 0;
+        border-radius: 16px;
+        background: #2563eb;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+    }
+
+    .floating-add-btn:hover {
+        background: #1d4ed8;
+    }
+
+    /* =========================
+       DEBT MODAL
+    ========================= */
+
+    .debt-modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.6);
+        backdrop-filter: blur(5px);
+    }
+
+    .debt-modal.show {
+        display: flex;
+    }
+
+    .debt-modal-box {
+        width: 100%;
+        max-width: 450px;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 22px;
+        padding: 24px;
+        box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+        animation: debtModalIn 0.2s ease;
+    }
+
+    @keyframes debtModalIn {
+        from {
+            opacity: 0;
+            transform: translateY(15px) scale(0.98);
         }
 
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f1f5f9;
-            color: #111827;
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
+    }
 
-        button,
-        input,
-        select {
-            font-family: inherit;
-        }
+    .debt-modal-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 24px;
+    }
 
-        /* =========================
-           LOGIN
-        ========================= */
+    .debt-modal-header h2 {
+        margin: 0;
+        font-size: 22px;
+    }
 
-        #loginScreen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: linear-gradient(135deg, #0f172a, #2563eb);
-        }
+    .debt-modal-header p {
+        margin: 5px 0 0;
+        font-size: 13px;
+        color: #64748b;
+    }
 
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            background: white;
-            padding: 30px;
-            border-radius: 24px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
-        }
+    .modal-close {
+        width: 38px;
+        height: 38px;
+        border: 0;
+        border-radius: 10px;
+        background: #f1f5f9;
+        color: #475569;
+        font-size: 18px;
+        cursor: pointer;
+    }
 
-        .login-card h1 {
-            margin: 0 0 8px;
-            text-align: center;
-            font-size: 28px;
-        }
+    .debt-form label {
+        display: block;
+        margin-bottom: 7px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+    }
 
-        .login-subtitle {
-            text-align: center;
-            color: #64748b;
-            margin-bottom: 25px;
-        }
+    .debt-form input {
+        width: 100%;
+        height: 48px;
+        margin-bottom: 16px;
+        padding: 0 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 12px;
+        background: #f8fafc;
+        font-size: 16px;
+        outline: none;
+    }
 
-        .login-card input {
-            width: 100%;
-            height: 48px;
-            margin-bottom: 12px;
-            padding: 0 14px;
-            border: 1px solid #cbd5e1;
-            border-radius: 12px;
-            font-size: 16px;
-            outline: none;
-        }
+    .debt-form input:focus {
+        border-color: #2563eb;
+        background: white;
+        box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+    }
 
-        .login-card input:focus {
-            border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
+    .modal-save-btn {
+        width: 100%;
+        height: 50px;
+        border: 0;
+        border-radius: 12px;
+        background: #2563eb;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        cursor: pointer;
+    }
 
-        .login-btn,
-        .register-btn {
-            width: 100%;
-            height: 48px;
-            border: 0;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-        }
+    /* =========================
+       DETAIL MODAL
+    ========================= */
 
-        .login-btn {
-            background: #2563eb;
-            color: white;
-            margin-top: 5px;
-        }
+    #detailModal {
+        position: fixed;
+        inset: 0;
+        z-index: 1100;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(15, 23, 42, 0.6);
+    }
 
-        .register-btn {
-            margin-top: 10px;
-            background: #e2e8f0;
-            color: #334155;
-        }
+    #detailModal.show {
+        display: flex;
+    }
 
-        /* =========================
-           HEADER
-        ========================= */
+    .detail-box {
+        width: 100%;
+        max-width: 500px;
+        max-height: 90vh;
+        overflow-y: auto;
+        background: white;
+        border-radius: 22px;
+        padding: 24px;
+    }
 
-        header {
-            background: linear-gradient(135deg, #0f172a, #1e3a8a);
-            color: white;
-            padding: 18px 20px;
-        }
+    .detail-close {
+        float: right;
+        border: 0;
+        background: #f1f5f9;
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        cursor: pointer;
+    }
 
-        .header-inner {
-            max-width: 1000px;
-            margin: auto;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
+    /* =========================
+       MOBILE
+    ========================= */
 
-        header h1 {
-            margin: 0;
-            font-size: 22px;
-        }
-
-        .logout-btn {
-            border: 0;
-            background: rgba(255,255,255,0.12);
-            color: white;
-            padding: 10px 14px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        /* =========================
-           CONTAINER
-        ========================= */
-
-        .container {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px 15px 100px;
-        }
-
-        /* =========================
-           DASHBOARD
-        ========================= */
-
+    @media (max-width: 700px) {
         .cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 18px;
-            border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
-        }
-
-        .card-label {
-            font-size: 13px;
-            color: #64748b;
-            margin-bottom: 8px;
-        }
-
-        .card-value {
-            font-size: 22px;
-            font-weight: 800;
-            color: #0f172a;
-        }
-
-        /* =========================
-           DEBT LIST
-        ========================= */
-
-        .debt-box {
-            background: white;
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
-        }
-
-        .debt-box h2 {
-            margin: 0 0 15px;
-            font-size: 20px;
+            grid-template-columns: repeat(2, 1fr);
         }
 
         .tools {
-            display: grid;
-            grid-template-columns: 1fr 180px;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .tools input,
-        .tools select {
-            width: 100%;
-            height: 45px;
-            padding: 0 12px;
-            border: 1px solid #cbd5e1;
-            border-radius: 11px;
-            outline: none;
-            background: white;
-        }
-
-        .tools input:focus,
-        .tools select:focus {
-            border-color: #2563eb;
-        }
-
-        /* =========================
-           DEBT CARD
-        ========================= */
-
-        .debt-card {
-            border: 1px solid #e2e8f0;
-            border-radius: 18px;
-            padding: 18px;
-            margin-bottom: 14px;
-            background: #fff;
-        }
-
-        .debt-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            gap: 15px;
-        }
-
-        .person-name {
-            font-size: 19px;
-            font-weight: 800;
-            color: #111827;
-        }
-
-        .person-phone {
-            margin-top: 4px;
-            color: #64748b;
-            font-size: 14px;
-        }
-
-        .remaining {
-            font-size: 23px;
-            font-weight: 900;
-            color: #2563eb;
-            text-align: right;
-        }
-
-        .remaining.done {
-            color: #16a34a;
-        }
-
-        .mini-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .mini-stat {
-            background: #f8fafc;
-            border-radius: 12px;
-            padding: 12px;
-        }
-
-        .mini-stat-label {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 4px;
-        }
-
-        .mini-stat-value {
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .debt-info {
-            margin-top: 15px;
-            font-size: 13px;
-            color: #64748b;
-            line-height: 1.7;
-        }
-
-        .status {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 5px 9px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .status.normal {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .status.warning {
-            background: #fef3c7;
-            color: #b45309;
-        }
-
-        .status.overdue {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .status.done {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .addition-history {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .addition-title {
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .addition-item {
-            font-size: 13px;
-            color: #475569;
-            margin-top: 4px;
+            grid-template-columns: 1fr;
         }
 
         .debt-actions {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 8px;
-            margin-top: 15px;
+            grid-template-columns: 1fr;
+        }
+
+        .debt-top {
+            flex-direction: column;
+        }
+
+        .remaining {
+            text-align: left;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 15px 12px 95px;
+        }
+
+        .card {
+            padding: 14px;
+        }
+
+        .card-value {
+            font-size: 18px;
+        }
+
+        .debt-card {
+            padding: 12px;
+            border-radius: 13px;
+        }
+
+        .person-name {
+            font-size: 16px;
+        }
+
+        .remaining {
+            font-size: 18px;
+        }
+
+        .mini-stat {
+            padding: 8px;
         }
 
         .debt-actions button {
-            min-height: 42px;
-            border: 0;
-            border-radius: 10px;
-            cursor: pointer;
-            font-weight: 700;
+            min-height: 36px;
+            font-size: 12px;
         }
-
-        .pay {
-            background: #dbeafe;
-            color: #1d4ed8;
-        }
-
-        .more-debt {
-            background: #ede9fe;
-            color: #6d28d9;
-        }
-
-        .delete {
-            background: #fee2e2;
-            color: #b91c1c;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 40px 20px;
-            color: #64748b;
-        }
-
-        /* =========================
-           FLOATING ADD BUTTON
-        ========================= */
-
-        .floating-add-btn {
-            position: fixed;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%);
-            z-index: 900;
-            width: min(420px, calc(100% - 30px));
-            height: 54px;
-            border: 0;
-            border-radius: 16px;
-            background: #2563eb;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
-        }
-
-        .floating-add-btn:hover {
-            background: #1d4ed8;
-        }
-
-        /* =========================
-           DEBT MODAL
-        ========================= */
 
         .debt-modal {
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(5px);
-        }
-
-        .debt-modal.show {
-            display: flex;
+            align-items: flex-end;
+            padding: 0;
         }
 
         .debt-modal-box {
-            width: 100%;
-            max-width: 450px;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 22px;
-            padding: 24px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
-            animation: debtModalIn 0.2s ease;
+            max-width: none;
+            max-height: 92vh;
+            border-radius: 22px 22px 0 0;
+            padding: 22px 18px;
         }
 
-        @keyframes debtModalIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px) scale(0.98);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        .floating-add-btn {
+            bottom: 15px;
+            width: calc(100% - 24px);
         }
-
-        .debt-modal-header {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 24px;
-        }
-
-        .debt-modal-header h2 {
-            margin: 0;
-            font-size: 22px;
-        }
-
-        .debt-modal-header p {
-            margin: 5px 0 0;
-            font-size: 13px;
-            color: #64748b;
-        }
-
-        .modal-close {
-            width: 38px;
-            height: 38px;
-            border: 0;
-            border-radius: 10px;
-            background: #f1f5f9;
-            color: #475569;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        .debt-form label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 14px;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .debt-form input {
-            width: 100%;
-            height: 48px;
-            margin-bottom: 16px;
-            padding: 0 14px;
-            border: 1px solid #d1d5db;
-            border-radius: 12px;
-            background: #f8fafc;
-            font-size: 16px;
-            outline: none;
-        }
-
-        .debt-form input:focus {
-            border-color: #2563eb;
-            background: white;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
-        }
-
-        .modal-save-btn {
-            width: 100%;
-            height: 50px;
-            border: 0;
-            border-radius: 12px;
-            background: #2563eb;
-            color: white;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-        }
-
-        /* =========================
-           DETAIL MODAL
-        ========================= */
-
-        #detailModal {
-            position: fixed;
-            inset: 0;
-            z-index: 1100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(15, 23, 42, 0.6);
-        }
-
-        #detailModal.show {
-            display: flex;
-        }
-
-        .detail-box {
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 22px;
-            padding: 24px;
-        }
-
-        .detail-close {
-            float: right;
-            border: 0;
-            background: #f1f5f9;
-            width: 36px;
-            height: 36px;
-            border-radius: 10px;
-            cursor: pointer;
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 700px) {
-            .cards {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .tools {
-                grid-template-columns: 1fr;
-            }
-
-            .debt-actions {
-                grid-template-columns: 1fr;
-            }
-
-            .debt-top {
-                flex-direction: column;
-            }
-
-            .remaining {
-                text-align: left;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 15px 12px 95px;
-            }
-
-            .card {
-                padding: 14px;
-            }
-
-            .card-value {
-                font-size: 18px;
-            }
-
-            .debt-modal {
-                align-items: flex-end;
-                padding: 0;
-            }
-
-            .debt-modal-box {
-                max-width: none;
-                max-height: 92vh;
-                border-radius: 22px 22px 0 0;
-                padding: 22px 18px;
-            }
-
-            .floating-add-btn {
-                bottom: 15px;
-                width: calc(100% - 24px);
-            }
-        }
-    </style>
+    }
+</style>
 </head>
 
 <body>
