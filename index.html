@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
         }
@@ -45,7 +46,7 @@
             background: white;
             padding: 30px;
             border-radius: 24px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.25);
         }
 
         .login-card h1 {
@@ -73,7 +74,7 @@
 
         .login-card input:focus {
             border-color: #2563eb;
-            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
         }
 
         .login-btn,
@@ -148,7 +149,7 @@
 
         .cards {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(4,1fr);
             gap: 14px;
             margin-bottom: 20px;
         }
@@ -157,7 +158,7 @@
             background: white;
             padding: 18px;
             border-radius: 18px;
-            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+            box-shadow: 0 5px 20px rgba(15,23,42,0.06);
         }
 
         .card-label {
@@ -180,7 +181,7 @@
             background: white;
             border-radius: 20px;
             padding: 20px;
-            box-shadow: 0 5px 20px rgba(15, 23, 42, 0.06);
+            box-shadow: 0 5px 20px rgba(15,23,42,0.06);
         }
 
         .debt-box h2 {
@@ -212,7 +213,7 @@
         }
 
         /* =========================
-           SIMPLE DEBT CARD
+           DEBT CARD
         ========================= */
 
         .debt-card {
@@ -227,7 +228,7 @@
 
         .debt-card:hover {
             border-color: #2563eb;
-            box-shadow: 0 5px 18px rgba(37, 99, 235, 0.08);
+            box-shadow: 0 5px 18px rgba(37,99,235,0.08);
         }
 
         .debt-main-row {
@@ -295,7 +296,7 @@
             bottom: 20px;
             transform: translateX(-50%);
             z-index: 900;
-            width: min(420px, calc(100% - 30px));
+            width: min(420px,calc(100% - 30px));
             height: 54px;
             border: 0;
             border-radius: 16px;
@@ -304,7 +305,7 @@
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
+            box-shadow: 0 10px 30px rgba(37,99,235,0.3);
         }
 
         /* =========================
@@ -320,7 +321,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
-            background: rgba(15, 23, 42, 0.6);
+            background: rgba(15,23,42,0.6);
             backdrop-filter: blur(5px);
         }
 
@@ -338,7 +339,7 @@
             background: white;
             border-radius: 22px;
             padding: 24px;
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.25);
         }
 
         .debt-modal-header {
@@ -459,7 +460,7 @@
 
         .detail-actions {
             display: grid;
-            grid-template-columns: repeat(5, 1fr);
+            grid-template-columns: repeat(5,1fr);
             gap: 7px;
             margin-top: 22px;
         }
@@ -498,23 +499,85 @@
             color: #b91c1c;
         }
 
-        .payment-item {
-            padding: 10px 0;
+        /* =========================
+           HISTORY
+        ========================= */
+
+        .clickable-detail {
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .clickable-detail:hover {
+            background: #f1f5f9;
+        }
+
+        .clickable-detail-stat {
+            cursor: pointer;
+            transition: 0.15s;
+        }
+
+        .clickable-detail-stat:hover {
+            background: #eef2ff;
+        }
+
+        .click-arrow {
+            float: right;
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .history-panel {
+            display: none;
+            background: #f8fafc;
+            border-radius: 14px;
+            padding: 12px 15px;
+            margin: 8px 0 15px;
+        }
+
+        .history-panel.show {
+            display: block;
+        }
+
+        .history-title {
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: #334155;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 0;
             border-bottom: 1px solid #e2e8f0;
         }
 
-        .payment-item small {
+        .history-item:last-child {
+            border-bottom: 0;
+        }
+
+        .history-item small {
             color: #64748b;
+            font-size: 11px;
+            text-align: right;
+        }
+
+        .history-empty {
+            color: #64748b;
+            padding: 8px 0;
+            font-size: 14px;
         }
 
         /* =========================
            MOBILE
         ========================= */
 
-        @media (max-width: 700px) {
+        @media (max-width:700px) {
 
             .cards {
-                grid-template-columns: repeat(2, 1fr);
+                grid-template-columns: repeat(2,1fr);
             }
 
             .tools {
@@ -523,7 +586,7 @@
 
         }
 
-        @media (max-width: 480px) {
+        @media (max-width:480px) {
 
             .container {
                 padding: 15px 12px 95px;
@@ -571,77 +634,9 @@
                 bottom: 15px;
                 width: calc(100% - 24px);
             }
+
         }
-        /* =========================
-   CLICKABLE HISTORY
-========================= */
 
-.clickable-detail {
-    cursor: pointer;
-    transition: 0.15s;
-}
-
-.clickable-detail:hover {
-    background: #f1f5f9;
-}
-
-.clickable-detail-stat {
-    cursor: pointer;
-    transition: 0.15s;
-}
-
-.clickable-detail-stat:hover {
-    background: #eef2ff;
-}
-
-.click-arrow {
-    float: right;
-    font-size: 12px;
-    color: #64748b;
-}
-
-.history-panel {
-    display: none;
-    background: #f8fafc;
-    border-radius: 14px;
-    padding: 12px 15px;
-    margin: 8px 0 15px;
-}
-
-.history-panel.show {
-    display: block;
-}
-
-.history-title {
-    font-weight: 800;
-    margin-bottom: 8px;
-    color: #334155;
-}
-
-.history-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    padding: 11px 0;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-.history-item:last-child {
-    border-bottom: 0;
-}
-
-.history-item small {
-    color: #64748b;
-    font-size: 11px;
-    text-align: right;
-}
-
-.history-empty {
-    color: #64748b;
-    padding: 8px 0;
-    font-size: 14px;
-}
     </style>
 </head>
 
@@ -727,6 +722,7 @@
         <div class="cards">
 
             <div class="card">
+
                 <div class="card-label">
                     Нийт хүмүүс
                 </div>
@@ -737,9 +733,12 @@
                 >
                     0
                 </div>
+
             </div>
 
+
             <div class="card">
+
                 <div class="card-label">
                     Нийт өр
                 </div>
@@ -750,9 +749,12 @@
                 >
                     0 ₮
                 </div>
+
             </div>
 
+
             <div class="card">
+
                 <div class="card-label">
                     Төлсөн
                 </div>
@@ -763,9 +765,12 @@
                 >
                     0 ₮
                 </div>
+
             </div>
 
+
             <div class="card">
+
                 <div class="card-label">
                     Үлдэгдэл
                 </div>
@@ -776,6 +781,7 @@
                 >
                     0 ₮
                 </div>
+
             </div>
 
         </div>
@@ -1009,7 +1015,7 @@
     function normalizePhone(phone) {
 
         return String(phone || "")
-            .replace(/\D/g, "");
+            .replace(/\D/g,"");
 
     }
 
@@ -1023,7 +1029,7 @@
     }
 
 
-    function showMessage(message, isError = false) {
+    function showMessage(message,isError=false) {
 
         const el =
             document.getElementById("authMessage");
@@ -1033,7 +1039,21 @@
         el.textContent = message;
 
         el.style.color =
-            isError ? "#dc2626" : "#16a34a";
+            isError
+                ? "#dc2626"
+                : "#16a34a";
+
+    }
+
+
+    function escapeHtml(value) {
+
+        return String(value || "")
+            .replace(/&/g,"&amp;")
+            .replace(/</g,"&lt;")
+            .replace(/>/g,"&gt;")
+            .replace(/"/g,"&quot;")
+            .replace(/'/g,"&#039;");
 
     }
 
@@ -1117,8 +1137,13 @@
             await supabaseClient
                 .from("profiles")
                 .insert({
-                    id: data.user.id,
-                    phone: normalizePhone(phone)
+
+                    id:
+                        data.user.id,
+
+                    phone:
+                        normalizePhone(phone)
+
                 });
 
 
@@ -1177,8 +1202,11 @@
         } =
             await supabaseClient.auth
                 .signInWithPassword({
+
                     email,
+
                     password
+
                 });
 
 
@@ -1257,7 +1285,7 @@
 
 
     /* ==========================================
-       LOAD
+       LOAD DEBTS
     ========================================== */
 
     async function loadDebts() {
@@ -1280,11 +1308,14 @@
             await supabaseClient
                 .from("debts")
                 .select("*")
-                .eq("user_id", user.id)
+                .eq(
+                    "user_id",
+                    user.id
+                )
                 .order(
                     "created_at",
                     {
-                        ascending: false
+                        ascending:false
                     }
                 );
 
@@ -1300,11 +1331,14 @@
         debts =
             (data || []).map(row => ({
 
-                id: row.id,
+                id:
+                    row.id,
 
-                name: row.name || "",
+                name:
+                    row.name || "",
 
-                phone: row.phone || "",
+                phone:
+                    row.phone || "",
 
                 amount:
                     Number(row.amount || 0),
@@ -1319,10 +1353,14 @@
                     row.created_at || "",
 
                 additions:
-                    row.additions || [],
+                    Array.isArray(row.additions)
+                        ? row.additions
+                        : [],
 
                 payments:
-                    row.payments || []
+                    Array.isArray(row.payments)
+                        ? row.payments
+                        : []
 
             }));
 
@@ -1356,36 +1394,47 @@
             debts.filter(debt => {
 
                 return (
+
                     debt.name
                         .toLowerCase()
-                        .includes(search) ||
+                        .includes(search)
+
+                    ||
 
                     debt.phone
                         .toLowerCase()
                         .includes(search)
+
                 );
 
             });
 
 
-        filtered.sort((a, b) => {
+        filtered.sort((a,b) => {
+
+            const remainingA =
+                Math.max(
+                    0,
+                    a.amount - a.paid
+                );
+
+            const remainingB =
+                Math.max(
+                    0,
+                    b.amount - b.paid
+                );
+
 
             if (sort === "highest") {
 
-                return (
-                    (b.amount - b.paid) -
-                    (a.amount - a.paid)
-                );
+                return remainingB - remainingA;
 
             }
 
 
             if (sort === "lowest") {
 
-                return (
-                    (a.amount - a.paid) -
-                    (b.amount - b.paid)
-                );
+                return remainingA - remainingB;
 
             }
 
@@ -1434,7 +1483,7 @@
 
         const totalDebt =
             debts.reduce(
-                (sum, d) =>
+                (sum,d) =>
                     sum + d.amount,
                 0
             );
@@ -1442,14 +1491,17 @@
 
         const totalPaid =
             debts.reduce(
-                (sum, d) =>
+                (sum,d) =>
                     sum + d.paid,
                 0
             );
 
 
         const totalRemaining =
-            totalDebt - totalPaid;
+            Math.max(
+                0,
+                totalDebt - totalPaid
+            );
 
 
         document.getElementById("totalPeople")
@@ -1477,6 +1529,7 @@
         if (filtered.length === 0) {
 
             list.innerHTML = `
+
                 <div class="empty">
 
                     <div style="font-size:40px;">
@@ -1488,6 +1541,7 @@
                     </div>
 
                 </div>
+
             `;
 
             return;
@@ -1515,7 +1569,7 @@
 
                 let dueText =
                     debt.dueDate
-                        ? `📅 ${debt.dueDate}`
+                        ? `📅 ${escapeHtml(debt.dueDate)}`
                         : "📅 Төлөх хугацаа: Тодорхойгүй";
 
 
@@ -1528,7 +1582,7 @@
                         new Date();
 
                     today.setHours(
-                        0, 0, 0, 0
+                        0,0,0,0
                     );
 
 
@@ -1545,7 +1599,7 @@
                             "overdue";
 
                         dueText =
-                            `⚠️ ${debt.dueDate} — Хугацаа хэтэрсэн`;
+                            `⚠️ ${escapeHtml(debt.dueDate)} — Хугацаа хэтэрсэн`;
 
                     }
 
@@ -1566,9 +1620,7 @@
                                 <div class="person-name">
 
                                     👤
-                                    ${escapeHtml(
-                                        debt.name
-                                    )}
+                                    ${escapeHtml(debt.name)}
 
                                 </div>
 
@@ -1577,15 +1629,8 @@
 
                                     ${
                                         debt.phone
-                                            ? `
-                                                📞
-                                                ${escapeHtml(
-                                                    debt.phone
-                                                )}
-                                              `
-                                            : `
-                                                📞 Утас байхгүй
-                                              `
+                                            ? `📞 ${escapeHtml(debt.phone)}`
+                                            : "📞 Утас байхгүй"
                                     }
 
                                 </div>
@@ -1606,9 +1651,7 @@
                                     ${
                                         isDone
                                             ? "ДУУССАН"
-                                            : formatMoney(
-                                                remaining
-                                              )
+                                            : formatMoney(remaining)
                                     }
 
                                 </div>
@@ -1631,22 +1674,6 @@
                 `;
 
             }).join("");
-
-    }
-
-
-    /* ==========================================
-       ESCAPE
-    ========================================== */
-
-    function escapeHtml(value) {
-
-        return String(value || "")
-            .replace(/&/g, "&amp;")
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")
-            .replace(/"/g, "&quot;")
-            .replace(/'/g, "&#039;");
 
     }
 
@@ -1697,7 +1724,7 @@
             document.getElementById("personName")
                 .focus();
 
-        }, 100);
+        },100);
 
     }
 
@@ -1749,9 +1776,7 @@
 
         if (!user) {
 
-            alert(
-                "Эхлээд нэвтэрнэ үү."
-            );
+            alert("Эхлээд нэвтэрнэ үү.");
 
             return;
         }
@@ -1783,9 +1808,7 @@
 
         if (!name) {
 
-            alert(
-                "Хүний нэр оруулна уу."
-            );
+            alert("Хүний нэр оруулна уу.");
 
             return;
         }
@@ -1793,9 +1816,7 @@
 
         if (!amount || amount <= 0) {
 
-            alert(
-                "Өрийн дүнгээ зөв оруулна уу."
-            );
+            alert("Өрийн дүнгээ зөв оруулна уу.");
 
             return;
         }
@@ -1821,12 +1842,8 @@
 
 
             const additions =
-                Array.isArray(
-                    existing.additions
-                )
-                    ? [
-                        ...existing.additions
-                      ]
+                Array.isArray(existing.additions)
+                    ? [...existing.additions]
                     : [];
 
 
@@ -1835,8 +1852,7 @@
                 amount,
 
                 createdAt:
-                    new Date()
-                        .toISOString()
+                    new Date().toISOString()
 
             });
 
@@ -1884,6 +1900,7 @@
                 return;
             }
 
+
         } else {
 
             const {
@@ -1910,7 +1927,17 @@
 
                         payments: [],
 
-                        additions: []
+                        additions: [
+
+                            {
+                                amount,
+
+                                createdAt:
+                                    new Date()
+                                        .toISOString()
+                            }
+
+                        ]
 
                     });
 
@@ -2010,9 +2037,7 @@
 
         if (!user) {
 
-            alert(
-                "Эхлээд нэвтэрнэ үү."
-            );
+            alert("Эхлээд нэвтэрнэ үү.");
 
             return;
         }
@@ -2053,9 +2078,7 @@
 
         if (!name) {
 
-            alert(
-                "Хүний нэр оруулна уу."
-            );
+            alert("Хүний нэр оруулна уу.");
 
             return;
         }
@@ -2063,9 +2086,7 @@
 
         if (!amount || amount <= 0) {
 
-            alert(
-                "Өрийн дүнгээ зөв оруулна уу."
-            );
+            alert("Өрийн дүнгээ зөв оруулна уу.");
 
             return;
         }
@@ -2133,6 +2154,24 @@
         if (!debt) return;
 
 
+        const remaining =
+            Math.max(
+                0,
+                debt.amount -
+                debt.paid
+            );
+
+
+        if (remaining <= 0) {
+
+            alert(
+                "Энэ өр бүрэн төлөгдсөн байна."
+            );
+
+            return;
+        }
+
+
         const amountText =
             prompt(
                 `${debt.name} хэдэн төгрөг төлсөн бэ?`
@@ -2159,18 +2198,13 @@
         }
 
 
-        const remaining =
-            debt.amount -
-            debt.paid;
-
-
         if (
             paymentAmount >
             remaining
         ) {
 
             alert(
-                "Үлдэгдлээс их дүн төлөх боломжгүй."
+                `Үлдэгдэл ${formatMoney(remaining)} байна.`
             );
 
             return;
@@ -2178,12 +2212,8 @@
 
 
         const payments =
-            Array.isArray(
-                debt.payments
-            )
-                ? [
-                    ...debt.payments
-                  ]
+            Array.isArray(debt.payments)
+                ? [...debt.payments]
                 : [];
 
 
@@ -2193,8 +2223,7 @@
                 paymentAmount,
 
             createdAt:
-                new Date()
-                    .toISOString()
+                new Date().toISOString()
 
         });
 
@@ -2220,18 +2249,50 @@
                 .eq(
                     "id",
                     id
+                )
+                .eq(
+                    "user_id",
+                    debt.userId || undefined
                 );
 
 
+        /*
+           Дээрх userId байхгүй байж болох тул
+           update-г id-аар дахин баталгаажуулна.
+        */
+
         if (error) {
 
-            console.log(error);
+            const {
+                error: retryError
+            } =
+                await supabaseClient
+                    .from("debts")
+                    .update({
 
-            alert(
-                "Төлөлт бүртгэхэд алдаа гарлаа."
-            );
+                        paid:
+                            newPaid,
 
-            return;
+                        payments
+
+                    })
+                    .eq(
+                        "id",
+                        id
+                    );
+
+
+            if (retryError) {
+
+                console.log(retryError);
+
+                alert(
+                    "Төлөлт бүртгэхэд алдаа гарлаа."
+                );
+
+                return;
+            }
+
         }
 
 
@@ -2284,12 +2345,8 @@
 
 
         const additions =
-            Array.isArray(
-                debt.additions
-            )
-                ? [
-                    ...debt.additions
-                  ]
+            Array.isArray(debt.additions)
+                ? [...debt.additions]
                 : [];
 
 
@@ -2298,8 +2355,7 @@
             amount,
 
             createdAt:
-                new Date()
-                    .toISOString()
+                new Date().toISOString()
 
         });
 
@@ -2399,246 +2455,208 @@
 
 
     /* ==========================================
-       DETAIL
+       DETAIL MODAL
     ========================================== */
 
-   function openDetailModal(id) {
+    function openDetailModal(id) {
 
-    const debt = debts.find(d => d.id === id);
-
-    if (!debt) return;
-
-    const remaining = Math.max(
-        0,
-        debt.amount - debt.paid
-    );
-
-    const isDone = remaining <= 0;
+        const debt =
+            debts.find(
+                d => d.id === id
+            );
 
 
-    /* =========================
-       НЭМЭГДСЭН ӨРҮҮД
-    ========================= */
-
-    let additionsHtml = "";
-
-    if (
-        debt.additions &&
-        debt.additions.length
-    ) {
-
-        additionsHtml = debt.additions
-            .slice()
-            .reverse()
-            .map(addition => {
-
-                const date = addition.createdAt
-                    ? new Date(
-                        addition.createdAt
-                    ).toLocaleString("mn-MN")
-                    : "";
-
-                return `
-                    <div class="history-item">
-
-                        <div>
-                            ➕
-                            <strong>
-                                ${formatMoney(
-                                    addition.amount
-                                )}
-                            </strong>
-                        </div>
-
-                        <small>
-                            ${date}
-                        </small>
-
-                    </div>
-                `;
-
-            })
-            .join("");
-
-    } else {
-
-        additionsHtml = `
-            <div class="history-empty">
-                Нэмсэн өр байхгүй.
-            </div>
-        `;
-
-    }
+        if (!debt) return;
 
 
-    /* =========================
-       ТӨЛӨЛТИЙН ТҮҮХ
-    ========================= */
+        /*
+           ЭНЭ БОЛ ХАМГИЙН ЧУХАЛ:
+           ҮЛДЭГДЭЛ = НИЙТ ӨР - ТӨЛСӨН
+        */
 
-    let paymentsHtml = "";
-
-    if (
-        debt.payments &&
-        debt.payments.length
-    ) {
-
-        paymentsHtml = debt.payments
-            .slice()
-            .reverse()
-            .map(payment => {
-
-                const date = payment.createdAt
-                    ? new Date(
-                        payment.createdAt
-                    ).toLocaleString("mn-MN")
-                    : "";
-
-                return `
-                    <div class="history-item">
-
-                        <div>
-                            💰
-                            <strong>
-                                ${formatMoney(
-                                    payment.amount
-                                )}
-                            </strong>
-                        </div>
-
-                        <small>
-                            ${date}
-                        </small>
-
-                    </div>
-                `;
-
-            })
-            .join("");
-
-    } else {
-
-        paymentsHtml = `
-            <div class="history-empty">
-                Төлөлт байхгүй.
-            </div>
-        `;
-
-    }
+        const remaining =
+            Math.max(
+                0,
+                debt.amount -
+                debt.paid
+            );
 
 
-    /* =========================
-       DETAIL
-    ========================= */
-
-    document.getElementById("detailContent")
-        .innerHTML = `
-
-            <h2 style="
-                margin:0 0 5px;
-                font-size:24px;
-            ">
-
-                👤
-                ${escapeHtml(debt.name)}
-
-            </h2>
+        const isDone =
+            remaining <= 0;
 
 
-            <div style="
-                color:#64748b;
-                margin-bottom:20px;
-            ">
+        /* =========================
+           ADDITIONS HISTORY
+        ========================= */
 
-                📞
-                ${
-                    debt.phone
-                        ? escapeHtml(debt.phone)
-                        : "Утас байхгүй"
-                }
-
-            </div>
+        let additionsHtml = "";
 
 
-            <!-- ҮЛДЭГДЭЛ ӨР -->
+        if (
+            Array.isArray(debt.additions) &&
+            debt.additions.length > 0
+        ) {
 
-            <div
-                class="detail-balance clickable-detail"
-                onclick="toggleHistory('additionHistory')"
-            >
+            additionsHtml =
+                debt.additions
+                    .slice()
+                    .reverse()
+                    .map(addition => {
 
-                <div class="detail-balance-label">
+                        const date =
+                            addition.createdAt
+                                ? new Date(
+                                    addition.createdAt
+                                ).toLocaleString("mn-MN")
+                                : "";
 
-                    Үлдэгдэл өр
+                        return `
 
-                    <span class="click-arrow">
-                        ▼
-                    </span>
+                            <div class="history-item">
 
+                                <div>
+
+                                    ➕
+                                    <strong>
+                                        ${formatMoney(
+                                            addition.amount
+                                        )}
+                                    </strong>
+
+                                </div>
+
+                                <small>
+                                    ${escapeHtml(date)}
+                                </small>
+
+                            </div>
+
+                        `;
+
+                    })
+                    .join("");
+
+        } else {
+
+            additionsHtml = `
+
+                <div class="history-empty">
+                    Нэмсэн өр байхгүй.
                 </div>
 
+            `;
 
-                <div class="
-                    detail-balance-value
-                    ${isDone ? "done" : ""}
+        }
+
+
+        /* =========================
+           PAYMENT HISTORY
+        ========================= */
+
+        let paymentsHtml = "";
+
+
+        if (
+            Array.isArray(debt.payments) &&
+            debt.payments.length > 0
+        ) {
+
+            paymentsHtml =
+                debt.payments
+                    .slice()
+                    .reverse()
+                    .map(payment => {
+
+                        const date =
+                            payment.createdAt
+                                ? new Date(
+                                    payment.createdAt
+                                ).toLocaleString("mn-MN")
+                                : "";
+
+                        return `
+
+                            <div class="history-item">
+
+                                <div>
+
+                                    💰
+                                    <strong>
+                                        ${formatMoney(
+                                            payment.amount
+                                        )}
+                                    </strong>
+
+                                </div>
+
+                                <small>
+                                    ${escapeHtml(date)}
+                                </small>
+
+                            </div>
+
+                        `;
+
+                    })
+                    .join("");
+
+        } else {
+
+            paymentsHtml = `
+
+                <div class="history-empty">
+                    Төлөлт байхгүй.
+                </div>
+
+            `;
+
+        }
+
+
+        /* =========================
+           DETAIL HTML
+        ========================= */
+
+        document.getElementById("detailContent")
+            .innerHTML = `
+
+                <h2 style="
+                    margin:0 0 5px;
+                    font-size:24px;
                 ">
 
-           ${formatMoney(remaining)}
+                    👤
+                    ${escapeHtml(debt.name)}
+
+                </h2>
+
+
+                <div style="
+                    color:#64748b;
+                    margin-bottom:20px;
+                ">
+
+                    📞
+                    ${
+                        debt.phone
+                            ? escapeHtml(debt.phone)
+                            : "Утас байхгүй"
+                    }
 
                 </div>
 
 
-               
-
-            </div>
-
-
-            <!-- НЭМЭГДСЭН ӨРИЙН ТҮҮХ -->
-
-            <div
-                id="additionHistory"
-                class="history-panel"
-            >
-
-                <div class="history-title">
-                    ➕ Нэмсэн өрийн жагсаалт
-                </div>
-
-                ${additionsHtml}
-
-            </div>
-
-
-            <!-- НИЙТ ӨР / ТӨЛСӨН -->
-
-            <div class="detail-stats">
-
+                <!-- ҮЛДЭГДЭЛ -->
 
                 <div
-                    class="detail-stat"
+                    class="detail-balance clickable-detail"
+                    onclick="toggleHistory('additionHistory')"
                 >
 
-                    <div class="detail-stat-label">
-                        Нийт өр
-                    </div>
+                    <div class="detail-balance-label">
 
-                    <div class="detail-stat-value">
-                        ${formatMoney(debt.amount)}
-                    </div>
-
-                </div>
-
-
-                <div
-                    class="
-                        detail-stat
-                        clickable-detail-stat
-                    "
-                    onclick="toggleHistory('paymentHistory')"
-                >
-
-                    <div class="detail-stat-label">
-
-                        Төлсөн
+                        Үлдэгдэл өр
 
                         <span class="click-arrow">
                             ▼
@@ -2646,149 +2664,214 @@
 
                     </div>
 
-                    <div class="detail-stat-value">
 
-                        ${formatMoney(debt.paid)}
+                    <div class="
+                        detail-balance-value
+                        ${isDone ? "done" : ""}
+                    ">
+
+                        ${formatMoney(remaining)}
 
                     </div>
 
                 </div>
 
 
-            </div>
+                <!-- НЭМЭЛТ ӨРИЙН ТҮҮХ -->
 
+                <div
+                    id="additionHistory"
+                    class="history-panel"
+                >
 
-            <!-- ТӨЛӨЛТИЙН ТҮҮХ -->
+                    <div class="history-title">
+                        ➕ Өрийн түүх
+                    </div>
 
-            <div
-                id="paymentHistory"
-                class="history-panel"
-            >
+                    ${additionsHtml}
 
-                <div class="history-title">
-                    💰 Төлөлтийн түүх
                 </div>
 
-                ${paymentsHtml}
 
-            </div>
+                <!-- НИЙТ ӨР / ТӨЛСӨН -->
 
+                <div class="detail-stats">
 
-            <!-- ТӨЛӨХ ХУГАЦАА -->
+                    <div class="detail-stat">
 
-            <div style="
-                padding:14px 0;
-                border-bottom:1px solid #e2e8f0;
-                margin-bottom:5px;
-            ">
+                        <div class="detail-stat-label">
+                            Нийт өр
+                        </div>
 
-                📅
-                <strong>
-                    Төлөх хугацаа:
-                </strong>
+                        <div class="detail-stat-value">
+                            ${formatMoney(debt.amount)}
+                        </div>
 
-                ${
-                    debt.dueDate ||
-                    "Тодорхойгүй"
-                }
-
-            </div>
+                    </div>
 
 
-            <!-- ACTIONS -->
+                    <div
+                        class="detail-stat clickable-detail-stat"
+                        onclick="toggleHistory('paymentHistory')"
+                    >
 
-            <div class="detail-actions">
+                        <div class="detail-stat-label">
 
+                            Төлсөн
 
-                ${
-                    debt.phone
-                        ? `
-                            <button
-                                type="button"
-                                class="detail-call"
-                                onclick="callPerson('${escapeHtml(
-                                    debt.phone
-                                )}')"
-                            >
-                                📞 Залгах
-                            </button>
-                          `
-                        : `
-                            <button
-                                type="button"
-                                class="detail-call"
-                                disabled
-                            >
-                                📞 Залгах
-                            </button>
-                          `
-                }
+                            <span class="click-arrow">
+                                ▼
+                            </span>
+
+                        </div>
+
+                        <div class="detail-stat-value">
+
+                            ${formatMoney(debt.paid)}
+
+                        </div>
+
+                    </div>
+
+                </div>
 
 
-                <button
-                    type="button"
-                    class="detail-edit"
-                    onclick="editDebt('${debt.id}')"
+                <!-- ТӨЛӨЛТИЙН ТҮҮХ -->
+
+                <div
+                    id="paymentHistory"
+                    class="history-panel"
                 >
-                    ✏️ Засах
-                </button>
+
+                    <div class="history-title">
+                        💰 Төлөлтийн түүх
+                    </div>
+
+                    ${paymentsHtml}
+
+                </div>
 
 
-                <button
-                    type="button"
-                    class="detail-pay"
-                    onclick="payDebt('${debt.id}')"
-                >
-                    💰 Төлөлт
-                </button>
+                <!-- ТӨЛӨХ ХУГАЦАА -->
+
+                <div style="
+                    padding:14px 0;
+                    border-bottom:1px solid #e2e8f0;
+                    margin-bottom:5px;
+                ">
+
+                    📅
+                    <strong>
+                        Төлөх хугацаа:
+                    </strong>
+
+                    ${
+                        debt.dueDate
+                            ? escapeHtml(debt.dueDate)
+                            : "Тодорхойгүй"
+                    }
+
+                </div>
 
 
-                <button
-                    type="button"
-                    class="detail-more"
-                    onclick="addMoreDebt('${debt.id}')"
-                >
-                    ➕ Өр нэмэх
-                </button>
+                <!-- ACTIONS -->
+
+                <div class="detail-actions">
+
+                    ${
+                        debt.phone
+
+                            ? `
+
+                                <button
+                                    type="button"
+                                    class="detail-call"
+                                    onclick="callPerson('${escapeHtml(debt.phone)}')"
+                                >
+                                    📞 Залгах
+                                </button>
+
+                              `
+
+                            : `
+
+                                <button
+                                    type="button"
+                                    class="detail-call"
+                                    disabled
+                                >
+                                    📞 Залгах
+                                </button>
+
+                              `
+                    }
 
 
-                <button
-                    type="button"
-                    class="detail-delete"
-                    onclick="deleteDebt('${debt.id}')"
-                >
-                    🗑 Устгах
-                </button>
-
-            </div>
-
-        `;
+                    <button
+                        type="button"
+                        class="detail-edit"
+                        onclick="editDebt('${debt.id}')"
+                    >
+                        ✏️ Засах
+                    </button>
 
 
-    document.getElementById("detailModal")
-        .classList.add("show");
-
-}
-
-
- 
-
-function toggleHistory(id) {
-
-    const panel =
-        document.getElementById(id);
-
-    if (!panel) return;
-
-    panel.classList.toggle("show");
-
-}
+                    <button
+                        type="button"
+                        class="detail-pay"
+                        onclick="payDebt('${debt.id}')"
+                    >
+                        💰 Төлөлт
+                    </button>
 
 
-/* ==========================================
-   CALL
-========================================== */
+                    <button
+                        type="button"
+                        class="detail-more"
+                        onclick="addMoreDebt('${debt.id}')"
+                    >
+                        ➕ Өр нэмэх
+                    </button>
 
+
+                    <button
+                        type="button"
+                        class="detail-delete"
+                        onclick="deleteDebt('${debt.id}')"
+                    >
+                        🗑 Устгах
+                    </button>
+
+                </div>
+
+            `;
+
+
+        document.getElementById("detailModal")
+            .classList.add("show");
+
+    }
+
+
+    /* ==========================================
+       TOGGLE HISTORY
+    ========================================== */
+
+    function toggleHistory(id) {
+
+        const panel =
+            document.getElementById(id);
+
+        if (!panel) return;
+
+        panel.classList.toggle("show");
+
+    }
+
+
+    /* ==========================================
+       CALL
+    ========================================== */
 
     function callPerson(phone) {
 
@@ -2827,8 +2910,7 @@ function toggleHistory(id) {
     function closeDetailModalOutside(event) {
 
         if (
-            event.target.id ===
-            "detailModal"
+            event.target.id === "detailModal"
         ) {
 
             closeDetailModal();
@@ -2871,8 +2953,7 @@ function toggleHistory(id) {
         function(event) {
 
             if (
-                event.key ===
-                "Escape"
+                event.key === "Escape"
             ) {
 
                 closeDebtModal();
