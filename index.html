@@ -419,14 +419,26 @@ async function loadDebts() {
                 paid: Number(row.paid || 0),
 
                 dueDate: row.due_date || "",
-
+createdAt: row.created_at || "",
                 payments: row.payments || []
 
             };
 
         });
 
+function formatDateTime(value) {
+    if (!value) return "";
 
+    var d = new Date(value);
+
+    return d.toLocaleString("mn-MN", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: "2-digit",
+        minute: "2-digit"
+    });
+}
     showDebts();
 }
 
