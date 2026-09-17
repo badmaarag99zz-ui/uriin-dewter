@@ -193,6 +193,133 @@ button:hover {
     color: #9ca3af;
     padding: 40px 20px;
 }
+/* ===== LOGIN SCREEN ===== */
+
+#loginScreen {
+min-height: 100vh;
+display: flex;
+align-items: center;
+justify-content: center;
+padding: 20px;
+box-sizing: border-box;
+background: linear-gradient(135deg, #0f172a, #1e3a8a);
+}
+
+.login-card {
+width: 100%;
+max-width: 410px;
+background: rgba(255, 255, 255, 0.98);
+padding: 34px 30px 26px;
+border-radius: 24px;
+box-shadow: 0 20px 60px rgba(0, 0, 0, 0.25);
+box-sizing: border-box;
+}
+
+.login-logo {
+width: 68px;
+height: 68px;
+margin: 0 auto 16px;
+display: flex;
+align-items: center;
+justify-content: center;
+background: #eff6ff;
+border-radius: 20px;
+font-size: 34px;
+}
+
+.login-card h2 {
+margin: 0;
+text-align: center;
+font-size: 28px;
+color: #111827;
+}
+
+.login-subtitle {
+text-align: center;
+color: #64748b;
+font-size: 14px;
+margin: 8px 0 28px;
+}
+
+.login-input-group {
+margin-bottom: 16px;
+}
+
+.login-input-group label {
+display: block;
+margin-bottom: 7px;
+font-size: 14px;
+font-weight: 600;
+color: #374151;
+}
+
+.login-input-group input {
+width: 100%;
+padding: 14px 15px;
+border: 1px solid #d1d5db;
+border-radius: 12px;
+font-size: 16px;
+outline: none;
+box-sizing: border-box;
+background: #f8fafc;
+transition: 0.2s;
+}
+
+.login-input-group input:focus {
+border-color: #2563eb;
+background: white;
+box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.10);
+}
+
+.login-btn,
+.register-btn {
+width: 100%;
+min-height: 48px;
+border: 0;
+border-radius: 12px;
+font-size: 16px;
+font-weight: 700;
+cursor: pointer;
+transition: 0.2s;
+}
+
+.login-btn {
+background: #2563eb;
+color: white;
+margin-top: 6px;
+}
+
+.login-btn:hover {
+background: #1d4ed8;
+transform: translateY(-1px);
+}
+
+.register-btn {
+background: #f1f5f9;
+color: #334155;
+margin-top: 10px;
+}
+
+.register-btn:hover {
+background: #e2e8f0;
+}
+
+#authMessage {
+min-height: 20px;
+margin: 16px 0 4px;
+text-align: center;
+font-size: 14px;
+font-weight: 600;
+}
+
+.login-footer {
+margin-top: 20px;
+padding-top: 16px;
+border-top: 1px solid #e5e7eb;
+text-align: center;
+color: #94a3b8;
+font-size: 12px;
+}
 
 /* LOGIN */
 
@@ -290,49 +417,62 @@ button:hover {
 
 <div id="loginScreen">
 
-    <div style="max-width:420px;margin:80px auto;padding:30px;background:white;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,0.1);">
+```
+<div class="login-card">
 
-        <h2 style="text-align:center;">🔐 Өрийн дэвтэр</h2>
+    <div class="login-logo">📒</div>
 
-        <p style="text-align:center;color:#666;">
-            Нэвтэрч орж үргэлжлүүлнэ үү
-        </p>
+    <h2>Өрийн дэвтэр</h2>
 
-      <input
-    id="authPhone"
-    type="tel"
-    placeholder="Утасны дугаар"
-    style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;"
+    <p class="login-subtitle">
+        Өр зээлээ хялбархан удирдаарай
+    </p>
+
+    <div class="login-input-group">
+        <label>Утасны дугаар</label>
+        <input
+            id="authPhone"
+            type="tel"
+            placeholder="Жишээ: 99112233"
         >
+    </div>
 
+    <div class="login-input-group">
+        <label>Нууц үг</label>
         <input
             id="authPassword"
             type="password"
-            placeholder="Нууц үг"
-            style="width:100%;padding:12px;margin:8px 0;box-sizing:border-box;"
+            placeholder="Нууц үгээ оруулна уу"
         >
+    </div>
 
-        <button
-            type="button"
-            onclick="registerUser()"
-            style="width:100%;padding:12px;background:#111827;color:white;border:0;border-radius:8px;margin-top:8px;"
-        >
-            📝 Бүртгүүлэх
-        </button>
+    <button
+        type="button"
+        class="login-btn"
+        onclick="loginUser()"
+    >
+        🔐 Нэвтрэх
+    </button>
 
-        <button
-            type="button"
-            onclick="loginUser()"
-            style="width:100%;padding:12px;background:#2563eb;color:white;border:0;border-radius:8px;margin-top:8px;"
-        >
-            🔐 Нэвтрэх
-        </button>
+    <button
+        type="button"
+        class="register-btn"
+        onclick="registerUser()"
+    >
+        📝 Шинээр бүртгүүлэх
+    </button>
 
-        <p id="authMessage" style="text-align:center;"></p>
+    <p id="authMessage"></p>
 
+    <div class="login-footer">
+        🔒 Таны мэдээлэл хамгаалагдсан
     </div>
 
 </div>
+```
+
+</div>
+
 
 
 <div id="appContent" style="display:none;">
