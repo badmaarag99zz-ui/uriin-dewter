@@ -1264,22 +1264,45 @@ function loadDebtsOffline(userId) {
        LOAD DEBTS
     ========================================== */
 
-    async function loadDebts() {
+   async function loadDebts() {
 
-        const {
-            data: {
-                user
-            }
-        } = await supabaseClient.auth.getUser();
+    // Supabase session-оос user ID авах
+    const { data: { session } } =
+        await supabaseClient.auth.getSession();
 
+    const user = session?.user;
 
-        if (!user) return;
+    if (!user) {
+        console.log("User session байхгүй");
+        debts = [];
+        showDebts();
+        return;
+    }
 
+    // ==========================================
+    // OFFLINE MODE
+    // ==========================================
 
-        const {
-            data,
-            error
-        } = await supabaseClient
+    if (!navigator.onLine) {
+
+        console.log("OFFLINE MODE");
+
+        debts = loadDebtsOffline(user.id);
+
+        showDebts();
+
+        return;
+    }
+
+    // ==========================================
+    // ONLINE MODE
+    // ==========================================
+
+    try {
+
+        console.log("ONLINE MODE");
+
+        const { data, error } = await supabaseClient
             .from("debts")
             .select("*")
             .eq("user_id", user.id)
@@ -1287,41 +1310,41 @@ function loadDebtsOffline(userId) {
                 ascending: false
             });
 
-
         if (error) {
-
-            console.log(error);
-
-            return;
+            throw error;
         }
 
-
-        debts = (data || []).map(row => ({
-
+        debts = data.map(row => ({
             id: row.id,
-
             name: row.name || "",
-
             phone: row.phone || "",
-
             amount: Number(row.amount || 0),
-
             paid: Number(row.paid || 0),
-
             dueDate: row.due_date || "",
-
             createdAt: row.created_at || "",
-
             additions: row.additions || [],
-
             payments: row.payments || []
-
         }));
 
+        // Интернеттэй үед локал хуулбар хадгална
+        saveDebtsOffline(user.id);
 
         showDebts();
 
+    } catch (error) {
+
+        console.error(
+            "Online load failed:",
+            error
+        );
+
+        // Интернет тасарсан эсвэл Supabase ажиллахгүй
+        // бол локал мэдээллийг ашиглана
+        debts = loadDebtsOffline(user.id);
+
+        showDebts();
     }
+}
 
 
     /* ==========================================
