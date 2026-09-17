@@ -600,6 +600,117 @@
                 width: calc(100% - 24px);
             }
         }
+        /* =========================
+   SIMPLE DEBT LIST
+========================= */
+
+.debt-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 16px;
+    margin-bottom: 10px;
+    background: white;
+    cursor: pointer;
+    transition: 0.15s;
+}
+
+.debt-card:hover {
+    border-color: #2563eb;
+    box-shadow: 0 5px 18px rgba(37, 99, 235, 0.08);
+}
+
+.debt-main-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.debt-person {
+    min-width: 0;
+}
+
+.person-name {
+    font-size: 18px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.person-phone {
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.debt-summary {
+    text-align: right;
+    flex-shrink: 0;
+}
+
+.debt-total {
+    font-size: 18px;
+    font-weight: 900;
+    color: #2563eb;
+}
+
+.debt-due {
+    margin-top: 5px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.debt-due.overdue {
+    color: #dc2626;
+    font-weight: 700;
+}
+
+.detail-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-top: 22px;
+}
+
+.detail-actions button {
+    min-height: 48px;
+    border: 0;
+    border-radius: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.detail-pay {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.detail-more {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.detail-delete {
+    background: #fee2e2;
+    color: #b91c1c;
+}
+
+@media (max-width: 480px) {
+    .debt-main-row {
+        align-items: flex-start;
+    }
+
+    .debt-summary {
+        text-align: right;
+    }
+
+    .debt-total {
+        font-size: 16px;
+    }
+
+    .detail-actions {
+        grid-template-columns: 1fr;
+    }
+}
     </style>
 </head>
 
@@ -1271,404 +1382,220 @@
        SHOW DEBTS
     ========================================== */
 
-    function showDebts() {
+  function showDebts() {
 
-        const list =
-            document.getElementById("list");
+    const list =
+        document.getElementById("list");
 
-        const search =
-            document.getElementById("search")
-                .value
-                .trim()
-                .toLowerCase();
+    const search =
+        document.getElementById("search")
+            .value
+            .trim()
+            .toLowerCase();
 
-        const sort =
-            document.getElementById("sort").value;
+    const sort =
+        document.getElementById("sort").value;
 
 
-        let filtered = debts.filter(debt => {
+    let filtered = debts.filter(debt => {
 
+        return (
+            debt.name.toLowerCase().includes(search) ||
+            debt.phone.toLowerCase().includes(search)
+        );
+
+    });
+
+
+    filtered.sort((a, b) => {
+
+        if (sort === "highest") {
             return (
-                debt.name.toLowerCase().includes(search) ||
-                debt.phone.toLowerCase().includes(search)
+                (b.amount - b.paid) -
+                (a.amount - a.paid)
             );
+        }
 
-        });
-
-
-        filtered.sort((a, b) => {
-
-            if (sort === "highest") {
-
-                return (
-                    (b.amount - b.paid) -
-                    (a.amount - a.paid)
-                );
-
-            }
-
-
-            if (sort === "lowest") {
-
-                return (
-                    (a.amount - a.paid) -
-                    (b.amount - b.paid)
-                );
-
-            }
-
-
-            if (sort === "oldest") {
-
-                return new Date(a.createdAt || 0) -
-                    new Date(b.createdAt || 0);
-
-            }
-
-
-            if (sort === "due") {
-
-                return (
-                    new Date(a.dueDate || "9999-12-31") -
-                    new Date(b.dueDate || "9999-12-31")
-                );
-
-            }
-
-
-            return new Date(b.createdAt || 0) -
-                new Date(a.createdAt || 0);
-
-        });
-
-
-        /* DASHBOARD */
-
-        const totalPeople =
-            debts.length;
-
-        const totalDebt =
-            debts.reduce(
-                (sum, d) => sum + d.amount,
-                0
+        if (sort === "lowest") {
+            return (
+                (a.amount - a.paid) -
+                (b.amount - b.paid)
             );
+        }
 
-        const totalPaid =
-            debts.reduce(
-                (sum, d) => sum + d.paid,
-                0
-            );
+        if (sort === "oldest") {
+            return new Date(a.createdAt || 0) -
+                new Date(b.createdAt || 0);
+        }
 
-        const totalRemaining =
-            totalDebt - totalPaid;
+        if (sort === "due") {
+            return new Date(a.dueDate || "9999-12-31") -
+                new Date(b.dueDate || "9999-12-31");
+        }
 
+        return new Date(b.createdAt || 0) -
+            new Date(a.createdAt || 0);
 
-        document.getElementById("totalPeople")
-            .textContent = totalPeople;
-
-
-        document.getElementById("totalDebt")
-            .textContent = formatMoney(totalDebt);
-
-
-        document.getElementById("totalPaid")
-            .textContent = formatMoney(totalPaid);
+    });
 
 
-        document.getElementById("totalRemaining")
-            .textContent = formatMoney(totalRemaining);
+    /* DASHBOARD */
+
+    const totalPeople = debts.length;
+
+    const totalDebt =
+        debts.reduce(
+            (sum, d) => sum + d.amount,
+            0
+        );
+
+    const totalPaid =
+        debts.reduce(
+            (sum, d) => sum + d.paid,
+            0
+        );
+
+    const totalRemaining =
+        totalDebt - totalPaid;
 
 
-        /* EMPTY */
+    document.getElementById("totalPeople")
+        .textContent = totalPeople;
 
-        if (filtered.length === 0) {
+    document.getElementById("totalDebt")
+        .textContent = formatMoney(totalDebt);
 
-            list.innerHTML = `
-                <div class="empty">
-                    <div style="font-size:40px;">📭</div>
-                    <div style="margin-top:10px;">
-                        Өрийн бүртгэл алга байна.
-                    </div>
+    document.getElementById("totalPaid")
+        .textContent = formatMoney(totalPaid);
+
+    document.getElementById("totalRemaining")
+        .textContent = formatMoney(totalRemaining);
+
+
+    /* EMPTY */
+
+    if (filtered.length === 0) {
+
+        list.innerHTML = `
+            <div class="empty">
+                <div style="font-size:40px;">📭</div>
+
+                <div style="margin-top:10px;">
+                    Өрийн бүртгэл алга байна.
                 </div>
-            `;
+            </div>
+        `;
 
-            return;
+        return;
+    }
+
+
+    /* LIST */
+
+    list.innerHTML = filtered.map(debt => {
+
+        const remaining =
+            Math.max(
+                0,
+                debt.amount - debt.paid
+            );
+
+
+        const isDone =
+            remaining <= 0;
+
+
+        let dueClass = "";
+        let dueText =
+            debt.dueDate
+                ? `📅 ${debt.dueDate}`
+                : "📅 Төлөх хугацаа: Тодорхойгүй";
+
+
+        if (debt.dueDate && !isDone) {
+
+            const today = new Date();
+
+            today.setHours(0, 0, 0, 0);
+
+            const due =
+                new Date(
+                    debt.dueDate + "T00:00:00"
+                );
+
+
+            if (due < today) {
+
+                dueClass = "overdue";
+                dueText =
+                    `⚠️ ${debt.dueDate} — Хугацаа хэтэрсэн`;
+
+            }
+
         }
 
 
-        list.innerHTML = filtered.map(debt => {
+        return `
 
-            const remaining =
-                Math.max(
-                    0,
-                    debt.amount - debt.paid
-                );
+            <div
+                class="debt-card"
+                onclick="openDetailModal('${debt.id}')"
+            >
 
+                <div class="debt-main-row">
 
-            const isDone =
-                remaining <= 0;
+                    <div class="debt-person">
 
-
-            let statusClass = "normal";
-            let statusText = "Хэвийн";
-
-
-            if (isDone) {
-
-                statusClass = "done";
-                statusText = "Төлөгдөж дууссан";
-
-            } else if (debt.dueDate) {
-
-                const today =
-                    new Date();
-
-                today.setHours(0, 0, 0, 0);
-
-
-                const due =
-                    new Date(
-                        debt.dueDate + "T00:00:00"
-                    );
-
-
-                if (due < today) {
-
-                    statusClass = "overdue";
-                    statusText = "Хугацаа хэтэрсэн";
-
-                } else {
-
-                    const diff =
-                        Math.ceil(
-                            (
-                                due - today
-                            ) /
-                            (1000 * 60 * 60 * 24)
-                        );
-
-
-                    if (diff <= 3) {
-
-                        statusClass = "warning";
-                        statusText =
-                            `${diff} хоног үлдсэн`;
-
-                    }
-
-                }
-
-            }
-
-
-            let createdText = "";
-
-            if (debt.createdAt) {
-
-                createdText =
-                    new Date(
-                        debt.createdAt
-                    ).toLocaleString(
-                        "mn-MN",
-                        {
-                            year: "numeric",
-                            month: "2-digit",
-                            day: "2-digit",
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
-
-            }
-
-
-            let additionsHtml = "";
-
-
-            if (
-                debt.additions &&
-                debt.additions.length
-            ) {
-
-                additionsHtml = `
-                    <div class="addition-history">
-
-                        <div class="addition-title">
-                            ➕ Нэмсэн өрүүд
+                        <div class="person-name">
+                            👤 ${escapeHtml(debt.name)}
                         </div>
 
-                        ${debt.additions.map(addition => {
+                        <div class="person-phone">
 
-                            const date =
-                                addition.createdAt
-                                    ? new Date(
-                                        addition.createdAt
-                                      ).toLocaleString(
-                                        "mn-MN",
-                                        {
-                                            year: "numeric",
-                                            month: "2-digit",
-                                            day: "2-digit",
-                                            hour: "2-digit",
-                                            minute: "2-digit"
-                                        }
-                                      )
-                                    : "";
+                            ${
+                                debt.phone
+                                    ? `
+                                        📞 ${escapeHtml(debt.phone)}
+                                      `
+                                    : `
+                                        📞 Утас байхгүй
+                                      `
+                            }
 
-                            return `
-                                <div class="addition-item">
-                                    +${formatMoney(addition.amount)}
-                                    ${date ? " — " + date : ""}
-                                </div>
-                            `;
-
-                        }).join("")}
+                        </div>
 
                     </div>
-                `;
-
-            }
 
 
-            return `
+                    <div class="debt-summary">
 
-                <div class="debt-card">
+                        <div class="debt-total">
 
-                    <div class="debt-top">
-
-                        <div>
-
-                           <div
-    class="person-name"
-    style="cursor:pointer;"
-    onclick="openDetailModal('${debt.id}')"
->
-    👤 ${escapeHtml(debt.name)}
-</div>
-
-                           <div class="person-phone">
-    ${
-        debt.phone
-            ? `<a
-                href="tel:${escapeHtml(debt.phone)}"
-                style="
-                    color:#2563eb;
-                    text-decoration:none;
-                    font-weight:600;
-                "
-              >
-                📞 ${escapeHtml(debt.phone)}
-              </a>`
-            : "📞 Утас байхгүй"
-    }
-</div>
-
-                        </div>
-
-
-                        <div>
-
-                            <div
-                                class="remaining ${isDone ? "done" : ""}"
-                            >
-                                ${isDone
+                            ${
+                                isDone
                                     ? "ДУУССАН"
                                     : formatMoney(remaining)
-                                }
-                            </div>
+                            }
 
                         </div>
 
-                    </div>
+                        <div class="debt-due ${dueClass}">
 
-
-                    <div class="mini-stats">
-
-                        <div class="mini-stat">
-
-                            <div class="mini-stat-label">
-                                Нийт өр
-                            </div>
-
-                            <div class="mini-stat-value">
-                                ${formatMoney(debt.amount)}
-                            </div>
+                            ${dueText}
 
                         </div>
-
-
-                        <div class="mini-stat">
-
-                            <div class="mini-stat-label">
-                                Төлсөн
-                            </div>
-
-                            <div class="mini-stat-value">
-                                ${formatMoney(debt.paid)}
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="debt-info">
-
-                        📅 Төлөх хугацаа:
-                        ${debt.dueDate || "Тодорхойгүй"}
-
-                        <br>
-
-                        🕒 Бүртгэсэн:
-                        ${createdText || "Тодорхойгүй"}
-
-                        <br>
-
-                        <span
-                            class="status ${statusClass}"
-                        >
-                            ${statusText}
-                        </span>
-
-                    </div>
-
-
-                    ${additionsHtml}
-
-
-                    <div class="debt-actions">
-
-                        <button
-                            class="pay"
-                            onclick="payDebt('${debt.id}')"
-                        >
-                            💰 Төлөлт
-                        </button>
-
-                        <button
-                            class="more-debt"
-                            onclick="addMoreDebt('${debt.id}')"
-                        >
-                            ➕ Нэмэх
-                        </button>
-
-                        <button
-                            class="delete"
-                            onclick="deleteDebt('${debt.id}')"
-                        >
-                            🗑 Устгах
-                        </button>
 
                     </div>
 
                 </div>
 
-            `;
+            </div>
 
-        }).join("");
+        `;
 
-    }
+    }).join("");
 
+}
 
     /* ==========================================
        ESCAPE HTML
@@ -2189,112 +2116,239 @@
 
     function openDetailModal(id) {
 
-        const debt =
-            debts.find(d => d.id === id);
+    const debt =
+        debts.find(d => d.id === id);
+
+    if (!debt) return;
 
 
-        if (!debt) return;
+    const remaining =
+        Math.max(
+            0,
+            debt.amount - debt.paid
+        );
 
 
-        const remaining =
-            Math.max(
-                0,
-                debt.amount - debt.paid
-            );
+    let paymentsHtml = "";
 
 
-        let paymentsHtml = "";
+    if (
+        debt.payments &&
+        debt.payments.length
+    ) {
+
+        paymentsHtml =
+            debt.payments.map(payment => {
+
+                const date =
+                    payment.createdAt
+                        ? new Date(
+                            payment.createdAt
+                          ).toLocaleString(
+                            "mn-MN"
+                          )
+                        : "";
 
 
-        if (
-            debt.payments &&
-            debt.payments.length
-        ) {
+                return `
+                    <div style="
+                        padding:10px 0;
+                        border-bottom:1px solid #e2e8f0;
+                    ">
 
-            paymentsHtml = debt.payments.map(
-                payment => {
+                        💰 ${formatMoney(payment.amount)}
 
-                    const date =
-                        payment.createdAt
-                            ? new Date(
-                                payment.createdAt
-                              ).toLocaleString(
-                                "mn-MN"
-                              )
-                            : "";
+                        <br>
 
-                    return `
-                        <div style="
-                            padding:10px 0;
-                            border-bottom:1px solid #e2e8f0;
-                        ">
-                            💰 ${formatMoney(payment.amount)}
-                            <br>
-                            <small>${date}</small>
-                        </div>
-                    `;
+                        <small>
+                            ${date}
+                        </small>
 
-                }
-            ).join("");
+                    </div>
+                `;
 
-        } else {
+            }).join("");
 
-            paymentsHtml =
-                "<div>Төлөлт байхгүй.</div>";
+    } else {
 
-        }
-
-
-        document.getElementById("detailContent")
-            .innerHTML = `
-
-                <h2>
-                    ${escapeHtml(debt.name)}
-                </h2>
-
-                <p>
-                    📞 ${escapeHtml(debt.phone)}
-                </p>
-
-                <hr>
-
-                <p>
-                    Нийт өр:
-                    <strong>
-                        ${formatMoney(debt.amount)}
-                    </strong>
-                </p>
-
-                <p>
-                    Төлсөн:
-                    <strong>
-                        ${formatMoney(debt.paid)}
-                    </strong>
-                </p>
-
-                <p>
-                    Үлдэгдэл:
-                    <strong>
-                        ${formatMoney(remaining)}
-                    </strong>
-                </p>
-
-                <hr>
-
-                <h3>
-                    💰 Төлөлтийн түүх
-                </h3>
-
-                ${paymentsHtml}
-
+        paymentsHtml =
+            `
+                <div style="
+                    color:#64748b;
+                    padding:10px 0;
+                ">
+                    Төлөлт байхгүй.
+                </div>
             `;
-
-
-        document.getElementById("detailModal")
-            .classList.add("show");
 
     }
 
+
+    document.getElementById("detailContent")
+        .innerHTML = `
+
+            <h2 style="
+                margin:0 0 5px;
+                font-size:24px;
+            ">
+                👤 ${escapeHtml(debt.name)}
+            </h2>
+
+
+            <div style="
+                color:#64748b;
+                margin-bottom:20px;
+            ">
+                📞 ${escapeHtml(debt.phone || "Утас байхгүй")}
+            </div>
+
+
+            <div style="
+                background:#f8fafc;
+                border-radius:15px;
+                padding:16px;
+                margin-bottom:20px;
+            ">
+
+                <div style="
+                    font-size:13px;
+                    color:#64748b;
+                    margin-bottom:5px;
+                ">
+                    Үлдэгдэл өр
+                </div>
+
+                <div style="
+                    font-size:28px;
+                    font-weight:900;
+                    color:${remaining > 0 ? "#2563eb" : "#16a34a"};
+                ">
+                    ${remaining > 0
+                        ? formatMoney(remaining)
+                        : "ДУУССАН"
+                    }
+                </div>
+
+            </div>
+
+
+            <div style="
+                display:grid;
+                grid-template-columns:1fr 1fr;
+                gap:10px;
+                margin-bottom:20px;
+            ">
+
+                <div style="
+                    background:#f8fafc;
+                    padding:12px;
+                    border-radius:12px;
+                ">
+
+                    <div style="
+                        font-size:12px;
+                        color:#64748b;
+                    ">
+                        Нийт өр
+                    </div>
+
+                    <strong>
+                        ${formatMoney(debt.amount)}
+                    </strong>
+
+                </div>
+
+
+                <div style="
+                    background:#f8fafc;
+                    padding:12px;
+                    border-radius:12px;
+                ">
+
+                    <div style="
+                        font-size:12px;
+                        color:#64748b;
+                    ">
+                        Төлсөн
+                    </div>
+
+                    <strong>
+                        ${formatMoney(debt.paid)}
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div style="
+                padding:12px 0;
+                border-top:1px solid #e2e8f0;
+                border-bottom:1px solid #e2e8f0;
+                margin-bottom:5px;
+            ">
+
+                📅 <strong>Төлөх хугацаа:</strong>
+
+                ${debt.dueDate || "Тодорхойгүй"}
+
+            </div>
+
+
+            <!-- ACTION BUTTONS -->
+
+            <div class="detail-actions">
+
+                <button
+                    type="button"
+                    class="detail-pay"
+                    onclick="payDebt('${debt.id}')"
+                >
+                    💰 Төлөлт
+                </button>
+
+
+                <button
+                    type="button"
+                    class="detail-more"
+                    onclick="addMoreDebt('${debt.id}')"
+                >
+                    ➕ Өр нэмэх
+                </button>
+
+
+                <button
+                    type="button"
+                    class="detail-delete"
+                    onclick="deleteDebt('${debt.id}')"
+                >
+                    🗑 Устгах
+                </button>
+
+            </div>
+
+
+            <hr style="
+                margin:25px 0 20px;
+                border:0;
+                border-top:1px solid #e2e8f0;
+            ">
+
+
+            <h3>
+                💰 Төлөлтийн түүх
+            </h3>
+
+
+            ${paymentsHtml}
+
+        `;
+
+
+    document.getElementById("detailModal")
+        .classList.add("show");
+
+}
 
     function closeDetailModal() {
 
