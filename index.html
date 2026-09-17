@@ -1980,28 +1980,65 @@ box-shadow:0 20px 50px rgba(0,0,0,0.2);
 <script>
 async function registerUser() {
 
-    const email =
-        document.getElementById("authEmail").value;
+    const phone =
+        document.getElementById("authPhone").value.trim();
 
     const password =
         document.getElementById("authPassword").value;
 
-    if (!email || !password) {
-        alert("Email болон нууц үгээ оруулна уу.");
+    if (!phone || !password) {
+        alert("Утасны дугаар болон нууц үгээ оруулна уу.");
         return;
     }
 
+    if (password.length < 6) {
+        alert("Нууц үг хамгийн багадаа 6 тэмдэгт байна.");
+        return;
+    }
+
+    const cleanPhone = phone.replace(/\D/g, "");
+
+    if (cleanPhone.length < 8) {
+        alert("Утасны дугаараа зөв оруулна уу.");
+        return;
+    }
+
+    // Supabase Auth-д дотооддоо ашиглах email
+    const internalEmail =
+        "phone_" + cleanPhone + "@uriindewter.local";
+
     const { data, error } =
         await supabaseClient.auth.signUp({
-            email: email,
+            email: internalEmail,
             password: password
         });
 
     if (error) {
-
         document.getElementById("authMessage").innerText =
             "❌ " + error.message;
+        return;
+    }
 
+    const user = data.user;
+
+    if (!user) {
+        document.getElementById("authMessage").innerText =
+            "❌ Бүртгэл үүсгэхэд алдаа гарлаа.";
+        return;
+    }
+
+    const { error: profileError } =
+        await supabaseClient
+            .from("profiles")
+            .insert({
+                id: user.id,
+                phone: cleanPhone
+            });
+
+    if (profileError) {
+        document.getElementById("authMessage").innerText =
+            "❌ Утасны дугаар хадгалахад алдаа гарлаа: " +
+            profileError.message;
         return;
     }
 
