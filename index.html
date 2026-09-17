@@ -1743,7 +1743,31 @@ function showDebts() {
 
             "</div>" +
 "<div style='color:#666;font-size:13px;margin-top:4px;'>" +
+(
+    debt.additions &&
+    debt.additions.length > 0
+        ? "<div style='margin-top:8px;'>" +
+          "<b>➕ Нэмсэн өрүүд:</b>" +
+          debt.additions.map(function(addition) {
 
+              return (
+                  "<div style='font-size:13px;color:#666;margin-top:3px;'>" +
+                  money(addition.amount) +
+                  " — " +
+                  new Date(addition.createdAt).toLocaleString("mn-MN", {
+                      year: "numeric",
+                      month: "2-digit",
+                      day: "2-digit",
+                      hour: "2-digit",
+                      minute: "2-digit"
+                  }) +
+                  "</div>"
+              );
+
+          }).join("") +
+          "</div>"
+        : ""
+) +
 (
     debt.createdAt
         ? "🕒 Үүсгэсэн: " +
