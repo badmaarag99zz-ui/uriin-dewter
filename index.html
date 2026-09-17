@@ -2716,5 +2716,34 @@ async function loginUser() {
 }
 
 checkLoginOnLoad();
+    function openDebtModal() {
+var modal = document.getElementById("debtModal");
+
+```
+if (modal) {
+    modal.classList.add("show");
+
+    setTimeout(function() {
+        var nameInput = document.getElementById("personName");
+        if (nameInput) {
+            nameInput.focus();
+        }
+    }, 100);
+}
+```
+
+}
+
+function closeDebtModal() {
+var modal = document.getElementById("debtModal");
+
+```
+if (modal) {
+    modal.classList.remove("show");
+}
+```
+
+}
+
 </script>
 </html>
