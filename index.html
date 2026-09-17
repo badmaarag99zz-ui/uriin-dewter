@@ -333,19 +333,26 @@ header h1 {
 
 .floating-add-btn {
     position: fixed;
-    right: 28px;
-    bottom: 28px;
-    width: 58px;
-    height: 58px;
+    left: 20px;
+    right: 20px;
+    bottom: 18px;
+    width: auto;
+    height: 54px;
     border: 0;
-    border-radius: 50%;
+    border-radius: 16px;
     background: var(--primary);
     color: white;
-    font-size: 27px;
+    font-size: 16px;
+    font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 12px 28px rgba(91,92,240,0.3);
+    box-shadow: 0 10px 25px rgba(91,92,240,0.25);
     z-index: 60;
     transition: 0.2s;
+}
+
+.floating-add-btn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
 }
 
 .floating-add-btn:hover {
