@@ -1722,7 +1722,22 @@ function showDebts() {
             ) +
 
             "</div>" +
+"<div style='color:#666;font-size:13px;margin-top:4px;'>" +
 
+(
+    debt.createdAt
+        ? "🕒 Үүсгэсэн: " +
+          new Date(debt.createdAt).toLocaleString("mn-MN", {
+              year: "numeric",
+              month: "2-digit",
+              day: "2-digit",
+              hour: "2-digit",
+              minute: "2-digit"
+          })
+        : ""
+) +
+
+"</div>" +
 
             (
                 dueText
