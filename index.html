@@ -981,8 +981,6 @@ header h1 {
 
     </div>
 
-
-    <!-- ADD BUTTON -->
 <!-- FORGOT PASSWORD MODAL -->
 
 <div id="forgotPasswordModal" class="debt-modal">
@@ -1036,6 +1034,8 @@ header h1 {
     </div>
 
 </div>
+    <!-- ADD BUTTON -->
+
     <button
         type="button"
         class="floating-add-btn"
@@ -1881,7 +1881,29 @@ header h1 {
     /* ==========================================
        ADD MODAL
     ========================================== */
+function showForgotPassword() {
+    document.getElementById("forgotPasswordModal").classList.add("show");
 
+    document.getElementById("forgotPhone").value = "";
+    document.getElementById("forgotMessage").innerText = "";
+}
+
+function closeForgotPassword() {
+    document.getElementById("forgotPasswordModal").classList.remove("show");
+}
+
+function sendPasswordReset() {
+    const phone = document.getElementById("forgotPhone").value.trim();
+
+    if (!phone) {
+        document.getElementById("forgotMessage").innerText =
+            "Утасны дугаараа оруулна уу.";
+        return;
+    }
+
+    document.getElementById("forgotMessage").innerText =
+        "Нууц үг сэргээх үйлдлийг удахгүй холбоно.";
+}
     function openDebtModal() {
 
         editingDebtId = null;
