@@ -983,7 +983,59 @@ header h1 {
 
 
     <!-- ADD BUTTON -->
+<!-- FORGOT PASSWORD MODAL -->
 
+<div id="forgotPasswordModal" class="debt-modal">
+
+    <div class="debt-modal-box">
+
+        <div class="debt-modal-header">
+            <div>
+                <h2>Нууц үг сэргээх</h2>
+                <p>Бүртгэлтэй утасны дугаараа оруулна уу</p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeForgotPassword()"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div class="debt-form">
+
+            <label>Утасны дугаар</label>
+
+            <input
+                type="tel"
+                id="forgotPhone"
+                placeholder="99112233"
+            >
+
+            <button
+                type="button"
+                class="modal-save-btn"
+                onclick="sendPasswordReset()"
+            >
+                Үргэлжлүүлэх
+            </button>
+
+            <div
+                id="forgotMessage"
+                style="
+                    margin-top:14px;
+                    text-align:center;
+                    font-size:14px;
+                "
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
     <button
         type="button"
         class="floating-add-btn"
