@@ -1,10 +1,14 @@
+```json
 {
   "name": "Өрийн дэвтэр",
   "short_name": "Өрийн дэвтэр",
   "description": "Өр төлбөрөө хялбар бүртгэх апп",
+  "id": "/",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
   "background_color": "#f1f5f9",
   "theme_color": "#0f172a",
   "orientation": "portrait"
 }
+```
