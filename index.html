@@ -2535,22 +2535,17 @@ async function loginUser() {
     return;
 }
 
-        } catch (error) {
+      if (error) {
 
-            console.error(
-                "Offline login error:",
-                error
-            );
+    console.error("Login error:", error);
 
-        }
+    showMessage(
+        "❌ Нэвтрэхэд алдаа гарлаа: " + error.message,
+        true
+    );
 
-        showMessage(
-            "Утасны дугаар эсвэл нууц үг буруу байна.",
-            true
-        );
-
-        return;
-    }
+    return;
+}
 
 
     /* ==========================================
