@@ -102,7 +102,30 @@ select {
 button {
     -webkit-tap-highlight-color: transparent;
 }
+#helpTopBtn {
+    position: fixed;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 50%;
+    background: #16a34a;
+    color: white;
+    font-size: 22px;
+    font-weight: 800;
+    cursor: pointer;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
 
+#helpTopBtn:hover {
+    background: #15803d;
+}
+
+#helpTopBtn:active {
+    transform: scale(0.95);
+}
 /* =========================
    LOGIN
 ========================= */
@@ -1321,7 +1344,14 @@ header h1 {
 </head>
 
 <body>
-
+<button
+    id="helpTopBtn"
+    type="button"
+    onclick="showHelp()"
+    aria-label="Тусламж"
+>
+    ?
+</button>
 <!-- =========================
      LOGIN
 ========================= -->
@@ -1441,35 +1471,7 @@ header h1 {
 
         </div>
 
-        <div class="login-links">
-
-            <button
-                type="button"
-                onclick="showHelp()"
-            >
-                ❓ Тусламж
-            </button>
-
-            <span>•</span>
-
-            <button
-                type="button"
-                onclick="showFeedback()"
-            >
-                💬 Санал хүсэлт
-            </button>
-
-            <span>•</span>
-
-            <button
-                type="button"
-                onclick="showContact()"
-            >
-                📞 Холбоо барих
-            </button>
-
-        </div>
-
+        
         <button
             id="installAppBtn"
             type="button"
