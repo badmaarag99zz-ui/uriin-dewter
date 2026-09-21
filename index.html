@@ -6040,32 +6040,48 @@ function closeHelp() {
 
 function showFeedback() {
 
-    const feedback = prompt(
-        "💬 Өрийн дэвтэрт ямар зүйл нэммээр байна?\n\n" +
-        "Санал, хүсэлтээ энд бичнэ үү:"
-    );
+    const modal = document.getElementById("feedbackModal");
 
-    if (!feedback) return;
-
-    alert(
-        "✅ Санал хүсэлтийг хүлээн авлаа.\n\n" +
-        "Баярлалаа!"
-    );
+    if (modal) {
+        modal.style.display = "flex";
+    }
 
 }
 
 
-function showContact() {
+function closeFeedback() {
+
+    const modal = document.getElementById("feedbackModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+
+
+function submitFeedback() {
+
+    const feedbackInput =
+        document.getElementById("feedbackText");
+
+    const feedback =
+        feedbackInput.value.trim();
+
+    if (!feedback) {
+
+        alert("Санал хүсэлтээ бичнэ үү.");
+
+        return;
+    }
+
+    feedbackInput.value = "";
+
+    closeFeedback();
 
     alert(
-        "📞 ХОЛБОО БАРИХ\n\n" +
-
-        "Өрийн дэвтэртэй холбоотой\n" +
-        "асуулт, санал, алдаа гарвал\n" +
-        "бидэнтэй холбогдоорой.\n\n" +
-
-        "📱 Утас: Тун удахгүй\n" +
-        "💬 Facebook: Тун удахгүй"
+        "✅ Санал хүсэлтийг хүлээн авлаа.\n\n" +
+        "Баярлалаа!"
     );
 
 }
@@ -6423,6 +6439,106 @@ window.addEventListener(
             "
         >
             📞 Холбоо барих
+        </button>
+
+    </div>
+</div>
+    <div
+    id="feedbackModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.45);
+        z-index:10001;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+    <div
+        style="
+            width:100%;
+            max-width:420px;
+            background:white;
+            border-radius:20px;
+            padding:24px;
+            box-shadow:0 20px 50px rgba(0,0,0,0.2);
+        "
+    >
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin-bottom:18px;
+            "
+        >
+            <h2 style="margin:0; font-size:20px;">
+                💬 Санал хүсэлт
+            </h2>
+
+            <button
+                type="button"
+                onclick="closeFeedback()"
+                style="
+                    width:34px;
+                    height:34px;
+                    border:0;
+                    border-radius:50%;
+                    background:#f1f5f9;
+                    font-size:20px;
+                    cursor:pointer;
+                "
+            >
+                ×
+            </button>
+        </div>
+
+        <p
+            style="
+                margin:0 0 12px;
+                color:#64748b;
+                font-size:14px;
+            "
+        >
+            Өрийн дэвтэрт ямар зүйл нэммээр байна?
+        </p>
+
+        <textarea
+            id="feedbackText"
+            placeholder="Санал, хүсэлтээ энд бичнэ үү..."
+            style="
+                width:100%;
+                min-height:120px;
+                box-sizing:border-box;
+                padding:13px;
+                border:1px solid #d1d5db;
+                border-radius:12px;
+                resize:vertical;
+                font-size:14px;
+                outline:none;
+            "
+        ></textarea>
+
+        <button
+            type="button"
+            onclick="submitFeedback()"
+            style="
+                width:100%;
+                margin-top:12px;
+                padding:13px;
+                border:0;
+                border-radius:12px;
+                background:#16a34a;
+                color:white;
+                font-size:14px;
+                font-weight:700;
+                cursor:pointer;
+            "
+        >
+            Илгээх
         </button>
 
     </div>
