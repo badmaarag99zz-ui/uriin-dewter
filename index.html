@@ -2461,9 +2461,80 @@ async function loginUser() {
     }
 
 
+    /* ==========================================
+       OFFLINE LOGIN
+    ========================================== */
+
+    if (!navigator.onLine) {
+
+        const savedAuth =
+            localStorage.getItem(
+                "uriin_dewter_offline_auth"
+            );
+
+        if (!savedAuth) {
+
+            showMessage(
+                "Энэ төхөөрөмж дээр офлайн нэвтрэх мэдээлэл алга. Эхлээд интернеттэй үед нэвтэрнэ үү.",
+                true
+            );
+
+            return;
+        }
+
+        try {
+
+            const offlineAuth =
+                JSON.parse(savedAuth);
+
+            const enteredHash =
+                await hashOfflinePassword(password);
+
+            if (
+                offlineAuth.phone === phone &&
+                offlineAuth.passwordHash === enteredHash
+            ) {
+
+                localStorage.setItem(
+                    "uriin_dewter_offline_current",
+                    JSON.stringify({
+                        userId: offlineAuth.userId,
+                        phone: offlineAuth.phone
+                    })
+                );
+
+                showMessage("");
+
+                await checkLoginOnLoad();
+
+                return;
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Offline login error:",
+                error
+            );
+
+        }
+
+        showMessage(
+            "Утасны дугаар эсвэл нууц үг буруу байна.",
+            true
+        );
+
+        return;
+    }
+
+
+    /* ==========================================
+       ONLINE LOGIN
+    ========================================== */
+
     const email =
         phoneEmail(phone);
-
 
     const {
         data,
@@ -2477,7 +2548,6 @@ async function loginUser() {
                 password: password
 
             });
-
 
     if (error) {
 
@@ -2495,14 +2565,48 @@ async function loginUser() {
     }
 
 
+    /* ==========================================
+       SAVE OFFLINE LOGIN INFORMATION
+    ========================================== */
+
+    if (data && data.user) {
+
+        const passwordHash =
+            await hashOfflinePassword(password);
+
+        localStorage.setItem(
+            "uriin_dewter_offline_auth",
+            JSON.stringify({
+
+                userId: data.user.id,
+
+                phone: phone,
+
+                passwordHash: passwordHash
+
+            })
+        );
+
+        localStorage.setItem(
+            "uriin_dewter_offline_current",
+            JSON.stringify({
+
+                userId: data.user.id,
+
+                phone: phone
+
+            })
+        );
+
+    }
+
+
     console.log(
         "Login success:",
         data
     );
 
-
     showMessage("");
-
 
     await checkLoginOnLoad();
 
@@ -2541,35 +2645,101 @@ async function logoutUser() {
 
 async function checkLoginOnLoad() {
 
-    const {
-        data: {
-            session
+    /* ==========================================
+       ONLINE SESSION
+    ========================================== */
+
+    if (navigator.onLine) {
+
+        try {
+
+            const {
+                data: {
+                    session
+                }
+            } =
+                await supabaseClient.auth.getSession();
+
+            if (session) {
+
+                document
+                    .getElementById("loginScreen")
+                    .style.display = "none";
+
+                document
+                    .getElementById("appContent")
+                    .style.display = "block";
+
+                await loadDebts();
+
+                return;
+
+            }
+
+        } catch (error) {
+
+            console.log(
+                "Online session шалгах боломжгүй:",
+                error
+            );
+
         }
-    } =
-        await supabaseClient.auth.getSession();
-
-    if (session) {
-
-        document.getElementById("loginScreen")
-            .style.display = "none";
-
-        document.getElementById("appContent")
-            .style.display = "block";
-
-        await loadDebts();
-
-    } else {
-
-        document.getElementById("loginScreen")
-            .style.display = "flex";
-
-        document.getElementById("appContent")
-            .style.display = "none";
 
     }
 
-}
 
+    /* ==========================================
+       OFFLINE SESSION
+    ========================================== */
+
+    const offlineCurrent =
+        localStorage.getItem(
+            "uriin_dewter_offline_current"
+        );
+
+    if (offlineCurrent) {
+
+        try {
+
+            JSON.parse(offlineCurrent);
+
+            document
+                .getElementById("loginScreen")
+                .style.display = "none";
+
+            document
+                .getElementById("appContent")
+                .style.display = "block";
+
+            await loadDebts();
+
+            return;
+
+        } catch (error) {
+
+            console.error(
+                "Offline session error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* ==========================================
+       SHOW LOGIN
+    ========================================== */
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "flex";
+
+    document
+        .getElementById("appContent")
+        .style.display = "none";
+
+}
 
 /* ==========================================
    GET CURRENT USER
@@ -2577,58 +2747,74 @@ async function checkLoginOnLoad() {
 
 async function getCurrentUser() {
 
-    const {
-        data: {
-            session
-        }
-    } =
-        await supabaseClient.auth.getSession();
+    /* ==========================================
+       ONLINE
+    ========================================== */
 
+    if (navigator.onLine) {
 
-    if (session) {
+        try {
 
-        return session.user;
+            const {
+                data: {
+                    session
+                }
+            } =
+                await supabaseClient.auth.getSession();
 
-    }
+            if (session) {
 
-
-    /*
-     * ==========================================
-     * OFFLINE CURRENT USER
-     * ==========================================
-     */
-
-    if (!navigator.onLine) {
-
-        const saved =
-            localStorage.getItem(
-                "uriin_dewter_offline_current_user"
-            );
-
-
-        if (saved) {
-
-            try {
-
-                return JSON.parse(
-                    saved
-                );
-
-            } catch (error) {
-
-                console.error(
-                    "Offline current user error:",
-                    error
-                );
+                return session.user;
 
             }
 
+        } catch (error) {
+
+            console.log(
+                "Online user авах боломжгүй:",
+                error
+            );
+
         }
 
     }
 
 
-    return null;
+    /* ==========================================
+       OFFLINE
+    ========================================== */
+
+    const offlineCurrent =
+        localStorage.getItem(
+            "uriin_dewter_offline_current"
+        );
+
+    if (!offlineCurrent) {
+
+        return null;
+
+    }
+
+    try {
+
+        const data =
+            JSON.parse(offlineCurrent);
+
+        return {
+            id: data.userId,
+            phone: data.phone
+        };
+
+    } catch (error) {
+
+        console.error(
+            "Offline user error:",
+            error
+        );
+
+        return null;
+
+    }
 
 }
 
