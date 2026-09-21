@@ -822,13 +822,13 @@ header h1 {
             </button>
         </div>
 
-        <button
-            type="button"
-            class="register-btn"
-            onclick="registerUser()"
-        >
-            Бүртгэл үүсгэх
-        </button>
+       <button
+    type="button"
+    class="register-btn"
+    onclick="showRegisterModal()"
+>
+    Бүртгэл үүсгэх
+</button>
 
         <div
             id="authMessage"
@@ -3505,6 +3505,98 @@ async function resetPassword() {
             ></div>
 
         </div>
+    </div>
+</div>
+    <!-- REGISTER MODAL -->
+
+<div
+    id="registerModal"
+    class="debt-modal"
+    onclick="closeRegisterModalOutside(event)"
+>
+    <div
+        class="debt-modal-box"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="debt-modal-header">
+
+            <div>
+                <h2>Бүртгэл үүсгэх</h2>
+
+                <p>
+                    Өрийн дэвтэрт шинэ бүртгэл үүсгэнэ үү
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeRegisterModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="debt-form">
+
+            <label>
+                Утасны дугаар
+            </label>
+
+            <input
+                id="registerPhone"
+                type="tel"
+                placeholder="99112233"
+                maxlength="8"
+                inputmode="numeric"
+            >
+
+
+            <label>
+                Нууц үг
+            </label>
+
+            <input
+                id="registerPassword"
+                type="password"
+                placeholder="Хамгийн багадаа 6 тэмдэгт"
+            >
+
+
+            <label>
+                Нууц үг давтах
+            </label>
+
+            <input
+                id="registerConfirmPassword"
+                type="password"
+                placeholder="Нууц үгээ дахин оруулна уу"
+            >
+
+
+            <button
+                type="button"
+                class="modal-save-btn"
+                onclick="registerUser()"
+            >
+                Бүртгэл үүсгэх
+            </button>
+
+
+            <div
+                id="registerMessage"
+                style="
+                    margin-top:14px;
+                    text-align:center;
+                    font-size:14px;
+                "
+            ></div>
+
+        </div>
+
     </div>
 </div>
 </body>
