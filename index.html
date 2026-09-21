@@ -6037,7 +6037,29 @@ function closeHelp() {
 
 }
 
+function toggleTopMenu() {
 
+    const menu = document.getElementById("topMenu");
+
+    if (!menu) return;
+
+    if (menu.style.display === "none" || menu.style.display === "") {
+        menu.style.display = "block";
+    } else {
+        menu.style.display = "none";
+    }
+
+}
+
+function closeTopMenu() {
+
+    const menu = document.getElementById("topMenu");
+
+    if (menu) {
+        menu.style.display = "none";
+    }
+
+}
 function showFeedback() {
 
     const modal = document.getElementById("feedbackModal");
@@ -6683,6 +6705,72 @@ window.addEventListener(
         </div>
 
     </div>
+</div>
+    <div
+    id="topMenu"
+    style="
+        display:none;
+        position:fixed;
+        top:68px;
+        right:18px;
+        width:220px;
+        background:white;
+        border-radius:14px;
+        box-shadow:0 10px 30px rgba(0,0,0,0.15);
+        padding:8px;
+        z-index:9998;
+    "
+>
+    <button
+        type="button"
+        onclick="showHelp(); closeTopMenu();"
+        style="
+            width:100%;
+            padding:13px 12px;
+            border:0;
+            background:white;
+            text-align:left;
+            border-radius:10px;
+            font-size:14px;
+            cursor:pointer;
+        "
+    >
+        ❓ Тусламж
+    </button>
+
+    <button
+        type="button"
+        onclick="showFeedback(); closeTopMenu();"
+        style="
+            width:100%;
+            padding:13px 12px;
+            border:0;
+            background:white;
+            text-align:left;
+            border-radius:10px;
+            font-size:14px;
+            cursor:pointer;
+        "
+    >
+        💬 Санал хүсэлт
+    </button>
+
+    <button
+        type="button"
+        onclick="showContact(); closeTopMenu();"
+        style="
+            width:100%;
+            padding:13px 12px;
+            border:0;
+            background:white;
+            text-align:left;
+            border-radius:10px;
+            font-size:14px;
+            cursor:pointer;
+        "
+    >
+        📞 Холбоо барих
+    </button>
 </div>
 </body>
 
