@@ -2499,54 +2499,50 @@ async function loginUser() {
             return;
         }
 
-        try {
+       try {
 
-            const offlineAuth =
-                JSON.parse(savedAuth);
+    const offlineAuth =
+        JSON.parse(savedAuth);
 
-            const enteredHash =
-                await hashOfflinePassword(password);
+    const enteredHash =
+        await hashOfflinePassword(password);
 
-            if (
-    offlineAuth.phone === phone &&
-    offlineAuth.passwordHash === enteredHash
-) {
+    if (
+        offlineAuth.phone === phone &&
+        offlineAuth.passwordHash === enteredHash
+    ) {
 
-    localStorage.setItem(
-        "uriin_dewter_offline_current",
-        JSON.stringify({
-            userId: offlineAuth.userId,
-            phone: offlineAuth.phone
-        })
+        localStorage.setItem(
+            "uriin_dewter_offline_current",
+            JSON.stringify({
+                userId: offlineAuth.userId,
+                phone: offlineAuth.phone
+            })
+        );
+
+        document
+            .getElementById("loginScreen")
+            .style.display = "none";
+
+        document
+            .getElementById("appContent")
+            .style.display = "block";
+
+        showMessage("");
+
+        await loadDebts();
+
+        return;
+    }
+
+} catch (error) {
+
+    console.error(
+        "Offline login error:",
+        error
     );
 
-    document
-        .getElementById("loginScreen")
-        .style.display = "none";
-
-    document
-        .getElementById("appContent")
-        .style.display = "block";
-
-    showMessage("");
-
-    await loadDebts();
-
-    return;
 }
-
-      if (error) {
-
-    console.error("Login error:", error);
-
-    showMessage(
-        "❌ Нэвтрэхэд алдаа гарлаа: " + error.message,
-        true
-    );
-
-    return;
-}
-
 
     /* ==========================================
        ONLINE LOGIN
