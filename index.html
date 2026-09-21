@@ -6018,28 +6018,32 @@ async function resetPassword() {
 
 function showHelp() {
 
-    alert(
-        "📒 ӨРИЙН ДЭВТЭР\n\n" +
+    const modal = document.getElementById("helpModal");
 
-        "1. Бүртгэл үүсгэнэ.\n" +
-        "2. Утасны дугаар, нууц үгээр нэвтэрнэ.\n" +
-        "3. “Өр бүртгэх” товчоор хүн нэмнэ.\n" +
-        "4. Тухайн хүний мэдээлэл дээр дарж төлөлт бүртгэнэ.\n" +
-        "5. Өр нэмэх, засах, устгах боломжтой.\n\n" +
+    if (modal) {
+        modal.style.display = "flex";
+    }
 
-        "Асуудал гарвал “Санал хүсэлт” хэсгээр бидэнд мэдэгдээрэй."
-    );
+}
+
+
+function closeHelp() {
+
+    const modal = document.getElementById("helpModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
 
 }
 
 
 function showFeedback() {
 
-    const feedback =
-        prompt(
-            "💬 Өрийн дэвтэрт ямар зүйл нэммээр байна?\n\n" +
-            "Санал, хүсэлтээ энд бичнэ үү:"
-        );
+    const feedback = prompt(
+        "💬 Өрийн дэвтэрт ямар зүйл нэммээр байна?\n\n" +
+        "Санал, хүсэлтээ энд бичнэ үү:"
+    );
 
     if (!feedback) return;
 
@@ -6065,7 +6069,6 @@ function showContact() {
     );
 
 }
-
 
 /* ==========================================
    EVENTS
@@ -6300,6 +6303,130 @@ window.addEventListener(
 
 })();
 </script>
+    <div
+    id="helpModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,0.45);
+        z-index:10000;
+        align-items:center;
+        justify-content:center;
+        padding:20px;
+    "
+>
+    <div
+        style="
+            width:100%;
+            max-width:420px;
+            background:white;
+            border-radius:20px;
+            padding:24px;
+            box-shadow:0 20px 50px rgba(0,0,0,0.2);
+        "
+    >
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                margin-bottom:20px;
+            "
+        >
+            <h2 style="margin:0; font-size:20px;">
+                ❓ Тусламж
+            </h2>
+
+            <button
+                type="button"
+                onclick="closeHelp()"
+                style="
+                    width:34px;
+                    height:34px;
+                    border:0;
+                    border-radius:50%;
+                    background:#f1f5f9;
+                    font-size:20px;
+                    cursor:pointer;
+                "
+            >
+                ×
+            </button>
+        </div>
+
+
+        <div style="margin-bottom:20px;">
+
+            <div style="margin-bottom:16px;">
+                <strong>📒 Өрийн дэвтэр ашиглах</strong>
+            </div>
+
+            <div style="margin-bottom:12px;">
+                👥 <strong>Харилцагч нэмэх</strong>
+                <div style="font-size:13px; color:#64748b; margin-left:26px;">
+                    Шинэ харилцагчийн мэдээллийг бүртгэнэ.
+                </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+                💰 <strong>Өр, төлөлт бүртгэх</strong>
+                <div style="font-size:13px; color:#64748b; margin-left:26px;">
+                    Өр нэмэх болон төлөлт бүртгэх боломжтой.
+                </div>
+            </div>
+
+            <div style="margin-bottom:12px;">
+                📊 <strong>Үлдэгдэл харах</strong>
+                <div style="font-size:13px; color:#64748b; margin-left:26px;">
+                    Нийт өр, төлсөн дүн болон үлдэгдлээ шууд харна.
+                </div>
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            onclick="showFeedback()"
+            style="
+                width:100%;
+                padding:13px;
+                border:0;
+                border-radius:12px;
+                background:#f1f5f9;
+                color:#111827;
+                font-size:14px;
+                font-weight:700;
+                cursor:pointer;
+                margin-bottom:10px;
+            "
+        >
+            💬 Санал хүсэлт
+        </button>
+
+
+        <button
+            type="button"
+            onclick="showContact()"
+            style="
+                width:100%;
+                padding:13px;
+                border:0;
+                border-radius:12px;
+                background:#f1f5f9;
+                color:#111827;
+                font-size:14px;
+                font-weight:700;
+                cursor:pointer;
+            "
+        >
+            📞 Холбоо барих
+        </button>
+
+    </div>
+</div>
 </body>
 
 </html>
