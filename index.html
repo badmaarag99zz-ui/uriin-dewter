@@ -2464,78 +2464,178 @@ async function checkLoginOnLoad() {
    LOAD DEBTS
 ========================================== */
 
+```javascript
 async function loadDebts() {
 
     const {
         data: {
             user
         }
-    } =
-        await supabaseClient.auth.getUser();
+    } = await supabaseClient.auth.getUser();
 
     if (!user) return;
 
-    const {
-        data,
-        error
-    } =
-        await supabaseClient
-            .from("debts")
-            .select("*")
-            .eq("user_id", user.id)
-            .order(
-                "created_at",
-                {
-                    ascending: false
-                }
+    /*
+    ==========================================
+       OFFLINE CACHE KEY
+    ==========================================
+    */
+
+    const cacheKey =
+        "uriin_dewter_debts_" + user.id;
+
+
+    /*
+    ==========================================
+       INTERNET БАЙГАА ҮЕД SUPABASE-ААС ТАТНА
+    ==========================================
+    */
+
+    if (navigator.onLine) {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("debts")
+                .select("*")
+                .eq("user_id", user.id)
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        /*
+        ==========================================
+           SUPABASE АМЖИЛТТАЙ
+        ==========================================
+        */
+
+        if (!error) {
+
+            debts =
+                (data || []).map(row => ({
+
+                    id:
+                        row.id,
+
+                    name:
+                        row.name || "",
+
+                    phone:
+                        row.phone || "",
+
+                    amount:
+                        Number(row.amount || 0),
+
+                    paid:
+                        Number(row.paid || 0),
+
+                    dueDate:
+                        row.due_date || "",
+
+                    createdAt:
+                        row.created_at || "",
+
+                    additions:
+                        Array.isArray(row.additions)
+                            ? row.additions
+                            : [],
+
+                    payments:
+                        Array.isArray(row.payments)
+                            ? row.payments
+                            : []
+
+                }));
+
+
+            /*
+            ==========================================
+               OFFLINE CACHE-Д ХАДГАЛНА
+            ==========================================
+            */
+
+            localStorage.setItem(
+                cacheKey,
+                JSON.stringify(debts)
             );
 
-    if (error) {
 
-        console.log(error);
+            showDebts();
 
-        return;
+            return;
+
+        }
+
+
+        /*
+        ==========================================
+           SUPABASE АЛДААТАЙ БОЛ CACHE-ААС
+        ==========================================
+        */
+
+        console.log(
+            "Supabase unavailable. Loading offline cache."
+        );
+
     }
 
-    debts =
-        (data || []).map(row => ({
 
-            id:
-                row.id,
+    /*
+    ==========================================
+       OFFLINE ҮЕД CACHE-ААС УНШИНА
+    ==========================================
+    */
 
-            name:
-                row.name || "",
+    const cached =
+        localStorage.getItem(cacheKey);
 
-            phone:
-                row.phone || "",
 
-            amount:
-                Number(row.amount || 0),
+    if (cached) {
 
-            paid:
-                Number(row.paid || 0),
+        try {
 
-            dueDate:
-                row.due_date || "",
+            debts =
+                JSON.parse(cached);
 
-            createdAt:
-                row.created_at || "",
+            showDebts();
 
-            additions:
-                Array.isArray(row.additions)
-                    ? row.additions
-                    : [],
+            console.log(
+                "Offline data loaded."
+            );
 
-            payments:
-                Array.isArray(row.payments)
-                    ? row.payments
-                    : []
+        } catch (error) {
 
-        }));
+            console.error(
+                "Offline cache error:",
+                error
+            );
 
-    showDebts();
+            debts = [];
+
+            showDebts();
+
+        }
+
+    } else {
+
+        debts = [];
+
+        showDebts();
+
+        console.log(
+            "Offline cache is empty."
+        );
+
+    }
 
 }
+```
 
 /* ==========================================
    SHOW DEBTS
