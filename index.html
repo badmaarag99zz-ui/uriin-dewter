@@ -2664,7 +2664,6 @@ async function logoutUser() {
 ========================================== */
 
 async function checkLoginOnLoad() {
-   
 
     /* ==========================================
        ONLINE
@@ -2709,55 +2708,20 @@ async function checkLoginOnLoad() {
 
     /* ==========================================
        OFFLINE
+       Refresh хийх үед автоматаар нэвтрүүлэхгүй
     ========================================== */
 
-    const savedAuth =
-        localStorage.getItem(
-            "uriin_dewter_offline_auth"
-        );
+    if (!navigator.onLine) {
 
-    if (savedAuth) {
+        document
+            .getElementById("loginScreen")
+            .style.display = "flex";
 
-        try {
+        document
+            .getElementById("appContent")
+            .style.display = "none";
 
-            const offlineAuth =
-                JSON.parse(savedAuth);
-
-            if (offlineAuth.userId) {
-
-                localStorage.setItem(
-                    "uriin_dewter_offline_current",
-                    JSON.stringify({
-                        userId:
-                            offlineAuth.userId,
-
-                        phone:
-                            offlineAuth.phone
-                    })
-                );
-
-                document
-                    .getElementById("loginScreen")
-                    .style.display = "none";
-
-                document
-                    .getElementById("appContent")
-                    .style.display = "block";
-
-                await loadDebts();
-
-                return;
-            }
-
-        } catch (error) {
-
-            console.error(
-                "Offline session шалгахад алдаа:",
-                error
-            );
-
-        }
-
+        return;
     }
 
 
