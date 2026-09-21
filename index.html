@@ -1489,7 +1489,11 @@ header h1 {
         >
             📱 Өрийн дэвтэр апп суулгах
         </button>
-
+<button id="iphoneInstallBtn"
+    type="button"
+    style="display:none; width:100%; margin-top:10px; padding:12px 16px; border:0; border-radius:12px; background:#111827; color:white; font-size:14px; font-weight:700; cursor:pointer;">
+    🍎 iPhone дээр апп суулгах
+</button>
     </div>
 
 </div>
@@ -6287,7 +6291,40 @@ window.addEventListener(
 );
 
 </script>
+<script>
+(function () {
 
+    const iphoneInstallBtn =
+        document.getElementById("iphoneInstallBtn");
+
+    if (!iphoneInstallBtn) return;
+
+    const isIOS =
+        /iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    const isStandalone =
+        window.navigator.standalone === true ||
+        window.matchMedia("(display-mode: standalone)").matches;
+
+    if (isIOS && !isStandalone) {
+
+        iphoneInstallBtn.style.display = "block";
+
+        iphoneInstallBtn.addEventListener("click", function () {
+
+            alert(
+                "📱 iPhone дээр суулгахын тулд:\n\n" +
+                "1. Safari-ийн доорх Share товчийг дарна уу.\n\n" +
+                "2. “Add to Home Screen” сонгоно уу.\n\n" +
+                "3. “Add” дарна уу."
+            );
+
+        });
+
+    }
+
+})();
+</script>
 </body>
 
 </html>
