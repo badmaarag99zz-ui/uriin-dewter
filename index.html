@@ -6091,9 +6091,9 @@ async function submitFeedback() {
     const user = await getCurrentUser();
 
     if (!user) {
-        alert("Санал хүсэлт илгээхийн тулд эхлээд нэвтэрнэ үү.");
-        return;
-    }
+    alert("🔐 Санал хүсэлт илгээхийн тулд эхлээд нэвтэрнэ үү.\n\nНэвтэрсний дараа санал хүсэлтээ илгээх боломжтой.");
+    return;
+}
 
     try {
 
