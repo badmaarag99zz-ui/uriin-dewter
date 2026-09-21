@@ -2645,10 +2645,6 @@ async function logoutUser() {
 
 async function checkLoginOnLoad() {
 
-    /* ==========================================
-       ONLINE SESSION
-    ========================================== */
-
     if (navigator.onLine) {
 
         try {
@@ -2657,8 +2653,7 @@ async function checkLoginOnLoad() {
                 data: {
                     session
                 }
-            } =
-                await supabaseClient.auth.getSession();
+            } = await supabaseClient.auth.getSession();
 
             if (session) {
 
@@ -2673,7 +2668,6 @@ async function checkLoginOnLoad() {
                 await loadDebts();
 
                 return;
-
             }
 
         } catch (error) {
@@ -2684,52 +2678,10 @@ async function checkLoginOnLoad() {
             );
 
         }
-
     }
 
 
-    /* ==========================================
-       OFFLINE SESSION
-    ========================================== */
-
-    const offlineCurrent =
-        localStorage.getItem(
-            "uriin_dewter_offline_current"
-        );
-
-    if (offlineCurrent) {
-
-        try {
-
-            JSON.parse(offlineCurrent);
-
-            document
-                .getElementById("loginScreen")
-                .style.display = "none";
-
-            document
-                .getElementById("appContent")
-                .style.display = "block";
-
-            await loadDebts();
-
-            return;
-
-        } catch (error) {
-
-            console.error(
-                "Offline session error:",
-                error
-            );
-
-        }
-
-    }
-
-
-    /* ==========================================
-       SHOW LOGIN
-    ========================================== */
+    /* OFFLINE */
 
     document
         .getElementById("loginScreen")
@@ -2740,7 +2692,6 @@ async function checkLoginOnLoad() {
         .style.display = "none";
 
 }
-
 /* ==========================================
    GET CURRENT USER
 ========================================== */
