@@ -1206,63 +1206,208 @@ header h1 {
     }
 
 
-    /* ==========================================
-       REGISTER
-    ========================================== */
+  ```js
+/* ==========================================
+   REGISTER MODAL
+========================================== */
 
-    async function registerUser() {
+function showRegisterModal() {
 
-        const phone =
-            document.getElementById("authPhone")
-                .value.trim();
-
-        const password =
-            document.getElementById("authPassword")
-                .value;
+    document
+        .getElementById("registerModal")
+        .classList.add("show");
 
 
-        if (!phone || !password) {
+    document.getElementById("registerPhone")
+        .value = "";
 
-            showMessage(
-                "Утасны дугаар болон нууц үгээ оруулна уу.",
-                true
-            );
+    document.getElementById("registerPassword")
+        .value = "";
 
-            return;
-        }
+    document.getElementById("registerConfirmPassword")
+        .value = "";
+
+    document.getElementById("registerMessage")
+        .textContent = "";
 
 
-        if (password.length < 6) {
+    setTimeout(() => {
 
-            showMessage(
-                "Нууц үг хамгийн багадаа 6 тэмдэгт байна.",
-                true
-            );
+        document
+            .getElementById("registerPhone")
+            .focus();
 
-            return;
-        }
+    }, 100);
+}
 
+
+function closeRegisterModal() {
+
+    document
+        .getElementById("registerModal")
+        .classList.remove("show");
+
+}
+
+
+function closeRegisterModalOutside(event) {
+
+    if (
+        event.target.id ===
+        "registerModal"
+    ) {
+
+        closeRegisterModal();
+
+    }
+
+}
+
+
+/* ==========================================
+   REGISTER USER
+========================================== */
+
+async function registerUser() {
+
+    const phone =
+        document
+            .getElementById("registerPhone")
+            .value
+            .trim();
+
+
+    const password =
+        document
+            .getElementById("registerPassword")
+            .value;
+
+
+    const confirmPassword =
+        document
+            .getElementById("registerConfirmPassword")
+            .value;
+
+
+    const message =
+        document
+            .getElementById("registerMessage");
+
+
+    message.textContent = "";
+
+
+    // Утас шалгах
+    if (!phone) {
+
+        message.textContent =
+            "Утасны дугаараа оруулна уу.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    const normalizedPhone =
+        normalizePhone(phone);
+
+
+    if (
+        normalizedPhone.length !== 8
+    ) {
+
+        message.textContent =
+            "8 оронтой утасны дугаар оруулна уу.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    // Нууц үг шалгах
+    if (!password) {
+
+        message.textContent =
+            "Нууц үгээ оруулна уу.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    if (password.length < 6) {
+
+        message.textContent =
+            "Нууц үг хамгийн багадаа 6 тэмдэгт байна.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    // Нууц үг давталт
+    if (
+        password !== confirmPassword
+    ) {
+
+        message.textContent =
+            "Нууц үгнүүд таарахгүй байна.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    message.textContent =
+        "Бүртгэл үүсгэж байна...";
+
+    message.style.color =
+        "#6366f1";
+
+
+    try {
 
         const email =
-            phoneEmail(phone);
+            phoneEmail(
+                normalizedPhone
+            );
 
 
         const {
             data,
             error
         } =
-            await supabaseClient.auth.signUp({
-                email,
-                password
-            });
+            await supabaseClient.auth
+                .signUp({
+
+                    email,
+
+                    password
+
+                });
 
 
         if (error) {
 
-            showMessage(
-                error.message,
-                true
-            );
+            console.log(error);
+
+
+            message.textContent =
+                error.message ||
+                "Бүртгэл үүсгэхэд алдаа гарлаа.";
+
+            message.style.color =
+                "#dc2626";
 
             return;
         }
@@ -1270,15 +1415,17 @@ header h1 {
 
         if (!data.user) {
 
-            showMessage(
-                "Бүртгэл үүсгэхэд алдаа гарлаа.",
-                true
-            );
+            message.textContent =
+                "Бүртгэл үүсгэхэд алдаа гарлаа.";
+
+            message.style.color =
+                "#dc2626";
 
             return;
         }
 
 
+        // PROFILE ҮҮСГЭХ
         const {
             error: profileError
         } =
@@ -1290,545 +1437,72 @@ header h1 {
                         data.user.id,
 
                     phone:
-                        normalizePhone(phone)
+                        normalizedPhone
 
                 });
 
 
         if (profileError) {
 
-            console.log(profileError);
+            console.log(
+                profileError
+            );
+
+
+            message.textContent =
+                "Бүртгэл үүссэн боловч профайл хадгалахад алдаа гарлаа.";
+
+            message.style.color =
+                "#dc2626";
+
+            return;
+        }
+
+
+        // Амжилттай
+        message.textContent =
+            "✅ Бүртгэл амжилттай үүслээ.";
+
+        message.style.color =
+            "#16a34a";
+
+
+        // Login талбарт утасны дугаарыг үлдээнэ
+        document.getElementById("authPhone")
+            .value = normalizedPhone;
+
+        document.getElementById("authPassword")
+            .value = "";
+
+
+        // 1.5 секундийн дараа modal хаана
+        setTimeout(() => {
+
+            closeRegisterModal();
 
             showMessage(
-                "Бүртгэл үүссэн боловч профайл хадгалахад алдаа гарлаа.",
-                true
+                "Бүртгэл амжилттай үүслээ. Нэвтэрнэ үү."
             );
 
-            return;
-        }
+        }, 1500);
 
 
-        showMessage(
-            "Бүртгэл амжилттай үүслээ. Нэвтэрнэ үү."
-        );
+    } catch (error) {
+
+        console.error(error);
+
+
+        message.textContent =
+            "Сервертэй холбогдоход алдаа гарлаа.";
+
+        message.style.color =
+            "#dc2626";
 
     }
 
+}
+```
 
-    /* ==========================================
-       LOGIN
-    ========================================== */
-
-    async function loginUser() {
-
-        const phone =
-            document.getElementById("authPhone")
-                .value.trim();
-
-        const password =
-            document.getElementById("authPassword")
-                .value;
-
-
-        if (!phone || !password) {
-
-            showMessage(
-                "Утасны дугаар болон нууц үгээ оруулна уу.",
-                true
-            );
-
-            return;
-        }
-
-
-        const email =
-            phoneEmail(phone);
-
-
-        const {
-            error
-        } =
-            await supabaseClient.auth
-                .signInWithPassword({
-
-                    email,
-
-                    password
-
-                });
-
-
-        if (error) {
-
-            showMessage(
-                "Утасны дугаар эсвэл нууц үг буруу байна.",
-                true
-            );
-
-            return;
-        }
-
-
-        showMessage("");
-
-        await checkLoginOnLoad();
-
-    }
-
-
-    /* ==========================================
-       LOGOUT
-    ========================================== */
-
-    async function logoutUser() {
-
-        await supabaseClient.auth.signOut();
-
-        debts = [];
-
-        document.getElementById("appContent")
-            .style.display = "none";
-
-        document.getElementById("loginScreen")
-            .style.display = "flex";
-
-    }
-
-
-    /* ==========================================
-       LOGIN CHECK
-    ========================================== */
-
-    async function checkLoginOnLoad() {
-
-        const {
-            data: {
-                session
-            }
-        } =
-            await supabaseClient.auth.getSession();
-
-
-        if (session) {
-
-            document.getElementById("loginScreen")
-                .style.display = "none";
-
-            document.getElementById("appContent")
-                .style.display = "block";
-
-            await loadDebts();
-
-        } else {
-
-            document.getElementById("loginScreen")
-                .style.display = "flex";
-
-            document.getElementById("appContent")
-                .style.display = "none";
-
-        }
-
-    }
-
-
-    /* ==========================================
-       LOAD DEBTS
-    ========================================== */
-
-    async function loadDebts() {
-
-        const {
-            data: {
-                user
-            }
-        } =
-            await supabaseClient.auth.getUser();
-
-
-        if (!user) return;
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("debts")
-                .select("*")
-                .eq(
-                    "user_id",
-                    user.id
-                )
-                .order(
-                    "created_at",
-                    {
-                        ascending:false
-                    }
-                );
-
-
-        if (error) {
-
-            console.log(error);
-
-            return;
-        }
-
-
-        debts =
-            (data || []).map(row => ({
-
-                id:
-                    row.id,
-
-                name:
-                    row.name || "",
-
-                phone:
-                    row.phone || "",
-
-                amount:
-                    Number(row.amount || 0),
-
-                paid:
-                    Number(row.paid || 0),
-
-                dueDate:
-                    row.due_date || "",
-
-                createdAt:
-                    row.created_at || "",
-
-                additions:
-                    Array.isArray(row.additions)
-                        ? row.additions
-                        : [],
-
-                payments:
-                    Array.isArray(row.payments)
-                        ? row.payments
-                        : []
-
-            }));
-
-
-        showDebts();
-
-    }
-
-
-    /* ==========================================
-       SHOW DEBTS
-    ========================================== */
-
-    function showDebts() {
-
-        const list =
-            document.getElementById("list");
-
-        const search =
-            document.getElementById("search")
-                .value
-                .trim()
-                .toLowerCase();
-
-        const sort =
-            document.getElementById("sort")
-                .value;
-
-
-        let filtered =
-            debts.filter(debt => {
-
-                return (
-
-                    debt.name
-                        .toLowerCase()
-                        .includes(search)
-
-                    ||
-
-                    debt.phone
-                        .toLowerCase()
-                        .includes(search)
-
-                );
-
-            });
-
-
-        filtered.sort((a,b) => {
-
-            const remainingA =
-                Math.max(
-                    0,
-                    a.amount - a.paid
-                );
-
-            const remainingB =
-                Math.max(
-                    0,
-                    b.amount - b.paid
-                );
-
-
-            if (sort === "highest") {
-
-                return remainingB - remainingA;
-
-            }
-
-
-            if (sort === "lowest") {
-
-                return remainingA - remainingB;
-
-            }
-
-
-            if (sort === "oldest") {
-
-                return new Date(
-                    a.createdAt || 0
-                ) -
-                new Date(
-                    b.createdAt || 0
-                );
-
-            }
-
-
-            if (sort === "due") {
-
-                return new Date(
-                    a.dueDate ||
-                    "9999-12-31"
-                ) -
-                new Date(
-                    b.dueDate ||
-                    "9999-12-31"
-                );
-
-            }
-
-
-            return new Date(
-                b.createdAt || 0
-            ) -
-            new Date(
-                a.createdAt || 0
-            );
-
-        });
-
-
-        /* DASHBOARD */
-
-        const totalPeople =
-            debts.length;
-
-
-        const totalDebt =
-            debts.reduce(
-                (sum,d) =>
-                    sum + d.amount,
-                0
-            );
-
-
-        const totalPaid =
-            debts.reduce(
-                (sum,d) =>
-                    sum + d.paid,
-                0
-            );
-
-
-        const totalRemaining =
-            Math.max(
-                0,
-                totalDebt - totalPaid
-            );
-
-
-        document.getElementById("totalPeople")
-            .textContent =
-                totalPeople;
-
-
-        document.getElementById("totalDebt")
-            .textContent =
-                formatMoney(totalDebt);
-
-
-        document.getElementById("totalPaid")
-            .textContent =
-                formatMoney(totalPaid);
-
-
-        document.getElementById("totalRemaining")
-            .textContent =
-                formatMoney(totalRemaining);
-
-
-        /* EMPTY */
-
-        if (filtered.length === 0) {
-
-            list.innerHTML = `
-
-                <div class="empty">
-
-                    <div style="font-size:40px;">
-                        📭
-                    </div>
-
-                    <div style="margin-top:10px;">
-                        Өрийн бүртгэл алга байна.
-                    </div>
-
-                </div>
-
-            `;
-
-            return;
-        }
-
-
-        /* LIST */
-
-        list.innerHTML =
-            filtered.map(debt => {
-
-                const remaining =
-                    Math.max(
-                        0,
-                        debt.amount -
-                        debt.paid
-                    );
-
-
-                const isDone =
-                    remaining <= 0;
-
-
-                let dueClass = "";
-
-                let dueText =
-                    debt.dueDate
-                        ? `📅 ${escapeHtml(debt.dueDate)}`
-                        : "📅 Төлөх хугацаа: Тодорхойгүй";
-
-
-                if (
-                    debt.dueDate &&
-                    !isDone
-                ) {
-
-                    const today =
-                        new Date();
-
-                    today.setHours(
-                        0,0,0,0
-                    );
-
-
-                    const due =
-                        new Date(
-                            debt.dueDate +
-                            "T00:00:00"
-                        );
-
-
-                    if (due < today) {
-
-                        dueClass =
-                            "overdue";
-
-                        dueText =
-                            `⚠️ ${escapeHtml(debt.dueDate)} — Хугацаа хэтэрсэн`;
-
-                    }
-
-                }
-
-
-                return `
-
-                    <div
-                        class="debt-card"
-                        onclick="openDetailModal('${debt.id}')"
-                    >
-
-                        <div class="debt-main-row">
-
-                            <div class="debt-person">
-
-                                <div class="person-name">
-
-                                    👤
-                                    ${escapeHtml(debt.name)}
-
-                                </div>
-
-
-                                <div class="person-phone">
-
-                                    ${
-                                        debt.phone
-                                            ? `📞 ${escapeHtml(debt.phone)}`
-                                            : "📞 Утас байхгүй"
-                                    }
-
-                                </div>
-
-                            </div>
-
-
-                            <div class="debt-summary">
-
-                                <div
-                                    class="debt-total ${
-                                        isDone
-                                            ? "done"
-                                            : ""
-                                    }"
-                                >
-
-                                    ${
-                                        isDone
-                                            ? "ДУУССАН"
-                                            : formatMoney(remaining)
-                                    }
-
-                                </div>
-
-
-                                <div
-                                    class="debt-due ${dueClass}"
-                                >
-
-                                    ${dueText}
-
-                                </div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-                `;
-
-            }).join("");
-
-    }
-
-
-    /* ==========================================
-       ADD MODAL
-    ========================================== */
 let passwordResetPhone = "";
 let passwordResetToken = "";
 
