@@ -2637,9 +2637,30 @@ async function logoutUser() {
 
     if (navigator.onLine) {
 
-        await supabaseClient.auth.signOut();
+        try {
+
+            await supabaseClient.auth.signOut();
+
+        } catch (error) {
+
+            console.log(
+                "Online logout error:",
+                error
+            );
+
+        }
 
     }
+
+
+    /* ==========================================
+       OFFLINE SESSION CLEAR
+    ========================================== */
+
+    localStorage.removeItem(
+        "uriin_dewter_offline_current"
+    );
+
 
     debts = [];
 
