@@ -1405,16 +1405,24 @@
      LOGIN
 ========================= -->
 
+```html
 <div id="loginScreen">
 
     <div class="login-card">
 
-        <h1>📒 Өрийн дэвтэр</h1>
-
-        <div class="login-subtitle">
-            Өрөө хялбархан бүртгэж, хянаарай
+        <!-- LOGO / TITLE -->
+        <div class="login-logo">
+            📒
         </div>
 
+        <h1>Өрийн дэвтэр</h1>
+
+        <div class="login-subtitle">
+            Өр төлбөрөө энгийнээр бүртгэж,<br>
+            хялбархан хянаарай.
+        </div>
+
+        <!-- LOGIN FORM -->
         <input
             id="authPhone"
             type="tel"
@@ -1471,9 +1479,62 @@
             "
         ></div>
 
+
+        <!-- FEATURES -->
+        <div class="login-features">
+
+            <div class="feature-item">
+                <div class="feature-icon">👥</div>
+                <div>
+                    <strong>Харилцагчаа бүртгэ</strong>
+                    <span>Мэдээллээ нэг дор хадгал</span>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">💰</div>
+                <div>
+                    <strong>Өр, төлөлтөө хяна</strong>
+                    <span>Үлдэгдлээ шууд хараарай</span>
+                </div>
+            </div>
+
+            <div class="feature-item">
+                <div class="feature-icon">📊</div>
+                <div>
+                    <strong>Бүх мэдээллээ нэг дор</strong>
+                    <span>Хялбар, ойлгомжтой удирд</span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- BOTTOM LINKS -->
+        <div class="login-links">
+
+            <button type="button" onclick="showHelp()">
+                ❓ Тусламж
+            </button>
+
+            <span>•</span>
+
+            <button type="button" onclick="showFeedback()">
+                💬 Санал хүсэлт
+            </button>
+
+            <span>•</span>
+
+            <button type="button" onclick="showContact()">
+                📞 Холбоо барих
+            </button>
+
+        </div>
+
     </div>
 
 </div>
+```
 
 
 <!-- =========================
