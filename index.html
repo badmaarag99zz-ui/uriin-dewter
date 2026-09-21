@@ -2664,7 +2664,7 @@ async function logoutUser() {
 async function checkLoginOnLoad() {
 
     /* ==========================================
-       ONLINE
+       ONLINE SESSION
     ========================================== */
 
     if (navigator.onLine) {
@@ -2675,7 +2675,8 @@ async function checkLoginOnLoad() {
                 data: {
                     session
                 }
-            } = await supabaseClient.auth.getSession();
+            } =
+                await supabaseClient.auth.getSession();
 
             if (session) {
 
@@ -2705,21 +2706,58 @@ async function checkLoginOnLoad() {
 
 
     /* ==========================================
-       OFFLINE
-       Refresh хийх үед автоматаар нэвтрүүлэхгүй
+       OFFLINE SESSION
     ========================================== */
 
-    if (!navigator.onLine) {
+    const offlineCurrent =
+        localStorage.getItem(
+            "uriin_dewter_offline_current"
+        );
 
-        document
-            .getElementById("loginScreen")
-            .style.display = "flex";
+    const offlineAuth =
+        localStorage.getItem(
+            "uriin_dewter_offline_auth"
+        );
 
-        document
-            .getElementById("appContent")
-            .style.display = "none";
+    if (
+        !navigator.onLine &&
+        offlineCurrent &&
+        offlineAuth
+    ) {
 
-        return;
+        try {
+
+            const offlineUser =
+                JSON.parse(
+                    offlineCurrent
+                );
+
+            console.log(
+                "🔴 OFFLINE SESSION RESTORED:",
+                offlineUser
+            );
+
+            document
+                .getElementById("loginScreen")
+                .style.display = "none";
+
+            document
+                .getElementById("appContent")
+                .style.display = "block";
+
+            await loadDebts();
+
+            return;
+
+        } catch (error) {
+
+            console.error(
+                "Offline session restore error:",
+                error
+            );
+
+        }
+
     }
 
 
@@ -2734,7 +2772,6 @@ async function checkLoginOnLoad() {
     document
         .getElementById("appContent")
         .style.display = "none";
-
 }
 /* ==========================================
    GET CURRENT USER
