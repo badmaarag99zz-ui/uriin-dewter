@@ -2325,7 +2325,16 @@ async function registerUser() {
         return;
 
     }
+if (!navigator.onLine) {
 
+    message.textContent =
+        "📡 Бүртгэл шинээр үүсгэхийн тулд интернетэд холбогдоно уу.";
+
+    message.style.color =
+        "#dc2626";
+
+    return;
+}
     message.textContent =
         "Бүртгэл үүсгэж байна...";
 
