@@ -2491,25 +2491,32 @@ async function loginUser() {
                 await hashOfflinePassword(password);
 
             if (
-                offlineAuth.phone === phone &&
-                offlineAuth.passwordHash === enteredHash
-            ) {
+    offlineAuth.phone === phone &&
+    offlineAuth.passwordHash === enteredHash
+) {
 
-                localStorage.setItem(
-                    "uriin_dewter_offline_current",
-                    JSON.stringify({
-                        userId: offlineAuth.userId,
-                        phone: offlineAuth.phone
-                    })
-                );
+    localStorage.setItem(
+        "uriin_dewter_offline_current",
+        JSON.stringify({
+            userId: offlineAuth.userId,
+            phone: offlineAuth.phone
+        })
+    );
 
-                showMessage("");
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
 
-                await checkLoginOnLoad();
+    document
+        .getElementById("appContent")
+        .style.display = "block";
 
-                return;
+    showMessage("");
 
-            }
+    await loadDebts();
+
+    return;
+}
 
         } catch (error) {
 
