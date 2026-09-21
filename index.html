@@ -2074,7 +2074,34 @@ function phoneEmail(phone) {
         "@uriindewter.local";
 
 }
+async function hashOfflinePassword(password) {
 
+    const encoder =
+        new TextEncoder();
+
+    const data =
+        encoder.encode(password);
+
+    const hashBuffer =
+        await crypto.subtle.digest(
+            "SHA-256",
+            data
+        );
+
+    const hashArray =
+        Array.from(
+            new Uint8Array(hashBuffer)
+        );
+
+    return hashArray
+        .map(
+            byte =>
+                byte
+                    .toString(16)
+                    .padStart(2, "0")
+        )
+        .join("");
+}
 function showMessage(message, isError = false) {
 
     const el =
@@ -2432,7 +2459,6 @@ async function loginUser() {
         );
 
         return;
-
     }
 
 
@@ -2440,31 +2466,91 @@ async function loginUser() {
      * ==========================================
      * OFFLINE LOGIN
      * ==========================================
-     *
-     * Хэрэв энэ төхөөрөмж дээр өмнө нь
-     * амжилттай нэвтэрсэн session байгаа бол
-     * интернетгүй үед шууд апп руу оруулна.
      */
 
     if (!navigator.onLine) {
 
-        const {
-            data: {
-                session
+        const normalizedPhone =
+            normalizePhone(phone);
+
+
+        const offlineKey =
+            "uriin_dewter_offline_auth_" +
+            normalizedPhone;
+
+
+        const saved =
+            localStorage.getItem(
+                offlineKey
+            );
+
+
+        if (!saved) {
+
+            showMessage(
+                "📴 Интернетгүй байна.\n\n" +
+                "Энэ төхөөрөмж дээр энэ бүртгэлээр " +
+                "өмнө нь амжилттай нэвтэрч байгаагүй байна.",
+                true
+            );
+
+            return;
+        }
+
+
+        try {
+
+            const account =
+                JSON.parse(saved);
+
+
+            const enteredHash =
+                await hashOfflinePassword(
+                    password
+                );
+
+
+            if (
+                enteredHash !==
+                account.passwordHash
+            ) {
+
+                showMessage(
+                    "Утасны дугаар эсвэл нууц үг буруу байна.",
+                    true
+                );
+
+                return;
             }
-        } =
-            await supabaseClient.auth.getSession();
 
 
-        if (session) {
+            /*
+             * Offline user ID-г session байхгүй үед
+             * ашиглахын тулд local current user хадгална.
+             */
+
+            localStorage.setItem(
+                "uriin_dewter_offline_current_user",
+                JSON.stringify({
+                    id:
+                        account.userId,
+
+                    phone:
+                        account.phone
+                })
+            );
+
 
             document
                 .getElementById("loginScreen")
-                .style.display = "none";
+                .style.display =
+                    "none";
+
 
             document
                 .getElementById("appContent")
-                .style.display = "block";
+                .style.display =
+                    "block";
 
 
             await loadDebts();
@@ -2474,26 +2560,138 @@ async function loginUser() {
 
 
             console.log(
-                "📴 Offline session ашиглан нэвтэрлээ."
+                "📴 Offline login амжилттай."
             );
 
 
             return;
 
+        } catch (error) {
+
+            console.error(
+                "Offline login error:",
+                error
+            );
+
+
+            showMessage(
+                "Offline нэвтрэлт хийхэд алдаа гарлаа.",
+                true
+            );
+
+
+            return;
         }
+    }
+
+
+    /*
+     * ==========================================
+     * ONLINE LOGIN
+     * ==========================================
+     */
+
+    const email =
+        phoneEmail(phone);
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth
+            .signInWithPassword({
+
+                email,
+
+                password
+
+            });
+
+
+    if (error) {
+
+        console.error(
+            "Login error:",
+            error
+        );
 
 
         showMessage(
-            "📴 Интернетгүй байна.\n\n" +
-            "Энэ төхөөрөмж дээр өмнө нь нэвтэрсэн бүртгэл олдсонгүй.",
+            "Утасны дугаар эсвэл нууц үг буруу байна.",
             true
         );
 
 
         return;
+    }
+
+
+    /*
+     * ==========================================
+     * OFFLINE LOGIN INFO ХАДГАЛАХ
+     * ==========================================
+     */
+
+    try {
+
+        const normalizedPhone =
+            normalizePhone(phone);
+
+
+        const passwordHash =
+            await hashOfflinePassword(
+                password
+            );
+
+
+        const offlineAccount = {
+
+            userId:
+                data.user.id,
+
+            phone:
+                normalizedPhone,
+
+            passwordHash:
+                passwordHash
+
+        };
+
+
+        localStorage.setItem(
+
+            "uriin_dewter_offline_auth_" +
+            normalizedPhone,
+
+            JSON.stringify(
+                offlineAccount
+            )
+
+        );
+
+
+        console.log(
+            "✅ Offline login мэдээлэл хадгалагдлаа."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Offline auth save error:",
+            error
+        );
 
     }
 
+
+    showMessage("");
+
+
+    await checkLoginOnLoad();
+
+}
 
     /*
      * ==========================================
@@ -2550,18 +2748,27 @@ async function loginUser() {
 
 async function logoutUser() {
 
-    await supabaseClient.auth.signOut();
+    if (navigator.onLine) {
+
+        await supabaseClient.auth.signOut();
+
+    }
 
     debts = [];
 
-    document.getElementById("appContent")
-        .style.display = "none";
 
-    document.getElementById("loginScreen")
-        .style.display = "flex";
+    document
+        .getElementById("appContent")
+        .style.display =
+            "none";
+
+
+    document
+        .getElementById("loginScreen")
+        .style.display =
+            "flex";
 
 }
-
 
 /* ==========================================
    LOGIN CHECK
@@ -2612,9 +2819,51 @@ async function getCurrentUser() {
     } =
         await supabaseClient.auth.getSession();
 
-    return session
-        ? session.user
-        : null;
+
+    if (session) {
+
+        return session.user;
+
+    }
+
+
+    /*
+     * ==========================================
+     * OFFLINE CURRENT USER
+     * ==========================================
+     */
+
+    if (!navigator.onLine) {
+
+        const saved =
+            localStorage.getItem(
+                "uriin_dewter_offline_current_user"
+            );
+
+
+        if (saved) {
+
+            try {
+
+                return JSON.parse(
+                    saved
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "Offline current user error:",
+                    error
+                );
+
+            }
+
+        }
+
+    }
+
+
+    return null;
 
 }
 
