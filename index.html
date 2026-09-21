@@ -4357,264 +4357,61 @@ async function deleteDebt(id) {
    OFFLINE SYNC
 ========================================== */
 
+let isSyncingOffline = false;
+
+
 async function syncOfflineDebts() {
 
     if (!navigator.onLine) {
-
         return;
-
     }
 
-
-    const user =
-        await getCurrentUser();
-
-    if (!user) {
-
+    if (isSyncingOffline) {
         return;
-
     }
 
+    isSyncingOffline = true;
 
-    const cachedDebts =
-        loadOfflineDebts(
-            user.id
-        );
-
-
-    if (
-        !cachedDebts ||
-        cachedDebts.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    const offlineDebts =
-        cachedDebts.filter(
-            debt =>
-                debt.offline === true
-        );
-
-
-    const pendingDebts =
-        cachedDebts.filter(
-            debt =>
-                debt.pendingSync === true
-        );
-
-
-    if (
-        offlineDebts.length === 0 &&
-        pendingDebts.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    console.log(
-        "📡 Offline мэдээллийг sync хийж байна..."
-    );
-
-
-    /* NEW OFFLINE DEBTS */
-
-    const failedOffline = [];
-
-
-    for (
-        const debt of offlineDebts
-    ) {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("debts")
-                .insert({
-
-                    user_id:
-                        user.id,
-
-                    name:
-                        debt.name,
-
-                    phone:
-                        debt.phone || "",
-
-                    amount:
-                        Number(debt.amount || 0),
-
-                    paid:
-                        Number(debt.paid || 0),
-
-                    due_date:
-                        debt.dueDate ||
-                        null,
-
-                    additions:
-                        Array.isArray(
-                            debt.additions
-                        )
-                            ? debt.additions
-                            : [],
-
-                    payments:
-                        Array.isArray(
-                            debt.payments
-                        )
-                            ? debt.payments
-                            : []
-
-                });
-
-
-        if (error) {
-
-            console.error(
-                "Offline insert error:",
-                error
-            );
-
-            failedOffline.push(
-                debt
-            );
-
-        } else {
-
-            console.log(
-                "✅ Sync:",
-                debt.name
-            );
-
-        }
-
-    }
-
-
-    /*
-     * Existing server debts that were changed
-     * while offline.
-     */
-
-    const failedPending = [];
-
-
-    for (
-        const debt of pendingDebts
-    ) {
-
-        /*
-         * Offline-created debts are already
-         * handled above.
-         */
-
-        if (debt.offline) {
-
-            continue;
-
-        }
-
-
-        if (
-            String(debt.id)
-                .startsWith("offline_")
-        ) {
-
-            continue;
-
-        }
-
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("debts")
-                .update({
-
-                    name:
-                        debt.name,
-
-                    phone:
-                        debt.phone || "",
-
-                    amount:
-                        Number(debt.amount || 0),
-
-                    paid:
-                        Number(debt.paid || 0),
-
-                    due_date:
-                        debt.dueDate ||
-                        null,
-
-                    additions:
-                        Array.isArray(
-                            debt.additions
-                        )
-                            ? debt.additions
-                            : [],
-
-                    payments:
-                        Array.isArray(
-                            debt.payments
-                        )
-                            ? debt.payments
-                            : []
-
-                })
-                .eq(
-                    "id",
-                    debt.id
-                )
-                .eq(
-                    "user_id",
-                    user.id
-                );
-
-
-        if (error) {
-
-            console.error(
-                "Pending sync error:",
-                error
-            );
-
-            failedPending.push(
-                debt
-            );
-
-        } else {
-
-            console.log(
-                "✅ Pending sync:",
-                debt.name
-            );
-
-        }
-
-    }
-
-
-    /*
-     * Server-ээс шинээр татна.
-     */
 
     try {
 
+        const user =
+            await getCurrentUser();
+
+        if (!user) {
+            return;
+        }
+
+
+        const cachedDebts =
+            loadOfflineDebts(user.id);
+
+
+        if (
+            !Array.isArray(cachedDebts) ||
+            cachedDebts.length === 0
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+         * Серверээс одоо байгаа мэдээллийг авна
+         */
+
         const {
-            data,
-            error
+            data: serverDebts,
+            error: serverError
         } =
             await supabaseClient
                 .from("debts")
                 .select("*")
-                .eq("user_id", user.id)
+                .eq(
+                    "user_id",
+                    user.id
+                )
                 .order(
                     "created_at",
                     {
@@ -4623,10 +4420,378 @@ async function syncOfflineDebts() {
                 );
 
 
-        if (!error) {
+        if (serverError) {
+
+            console.error(
+                "Server data авахад алдаа:",
+                serverError
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * Offline дээр үүссэн шинэ өрүүд
+         */
+
+        const offlineNewDebts =
+            cachedDebts.filter(
+                debt =>
+                    debt.offline === true
+            );
+
+
+        /*
+         * Offline дээр өөрчлөгдсөн
+         * хуучин өрүүд
+         */
+
+        const pendingDebts =
+            cachedDebts.filter(
+                debt =>
+                    debt.pendingSync === true &&
+                    debt.offline !== true
+            );
+
+
+        /*
+         * Юу ч sync хийхгүй бол
+         * серверийн мэдээллийг local cache болгоно
+         */
+
+        if (
+            offlineNewDebts.length === 0 &&
+            pendingDebts.length === 0
+        ) {
 
             debts =
-                (data || []).map(row => ({
+                (serverDebts || [])
+                    .map(row => ({
+
+                        id:
+                            row.id,
+
+                        name:
+                            row.name || "",
+
+                        phone:
+                            row.phone || "",
+
+                        amount:
+                            Number(
+                                row.amount || 0
+                            ),
+
+                        paid:
+                            Number(
+                                row.paid || 0
+                            ),
+
+                        dueDate:
+                            row.due_date || "",
+
+                        createdAt:
+                            row.created_at || "",
+
+                        additions:
+                            Array.isArray(
+                                row.additions
+                            )
+                                ? row.additions
+                                : [],
+
+                        payments:
+                            Array.isArray(
+                                row.payments
+                            )
+                                ? row.payments
+                                : []
+
+                    }));
+
+
+            saveOfflineDebts(
+                user.id
+            );
+
+            showDebts();
+
+            return;
+
+        }
+
+
+        /*
+         * =====================================
+         * 1. ШИНЭ OFFLINE ӨРҮҮД
+         * =====================================
+         */
+
+        for (
+            const debt
+            of offlineNewDebts
+        ) {
+
+            const payload = {
+
+                user_id:
+                    user.id,
+
+                name:
+                    debt.name || "",
+
+                phone:
+                    debt.phone || "",
+
+                amount:
+                    Number(
+                        debt.amount || 0
+                    ),
+
+                paid:
+                    Number(
+                        debt.paid || 0
+                    ),
+
+                due_date:
+                    debt.dueDate ||
+                    null,
+
+                additions:
+                    Array.isArray(
+                        debt.additions
+                    )
+                        ? debt.additions
+                        : [],
+
+                payments:
+                    Array.isArray(
+                        debt.payments
+                    )
+                        ? debt.payments
+                        : []
+
+            };
+
+
+            /*
+             * UUID байгаа бол тэрийг нь ашиглана.
+             * Ингэснээр sync дахин ажилласан ч
+             * давхар өр үүсэхээс хамгаална.
+             */
+
+            if (
+                debt.id &&
+                !String(
+                    debt.id
+                ).startsWith(
+                    "offline_"
+                )
+            ) {
+
+                payload.id =
+                    debt.id;
+
+            }
+
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("debts")
+                    .upsert(
+                        payload,
+                        {
+                            onConflict:
+                                "id"
+                        }
+                    )
+                    .select()
+                    .single();
+
+
+            if (error) {
+
+                console.error(
+                    "❌ Offline шинэ өр sync алдаа:",
+                    error
+                );
+
+                /*
+                 * Энэ өрийг local дээр нь
+                 * хэвээр үлдээнэ.
+                 */
+
+                continue;
+
+            }
+
+
+            /*
+             * Серверийн ID-г local дээр шинэчилнэ.
+             */
+
+            debt.id =
+                data.id;
+
+            debt.offline =
+                false;
+
+            debt.pendingSync =
+                false;
+
+
+            console.log(
+                "✅ Offline шинэ өр sync:",
+                debt.name
+            );
+
+        }
+
+
+        /*
+         * =====================================
+         * 2. ХУУЧИН ӨРҮҮДИЙН ӨӨРЧЛӨЛТ
+         * =====================================
+         */
+
+        for (
+            const debt
+            of pendingDebts
+        ) {
+
+            if (!debt.id) {
+                continue;
+            }
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("debts")
+                    .update({
+
+                        name:
+                            debt.name || "",
+
+                        phone:
+                            debt.phone || "",
+
+                        amount:
+                            Number(
+                                debt.amount || 0
+                            ),
+
+                        paid:
+                            Number(
+                                debt.paid || 0
+                            ),
+
+                        due_date:
+                            debt.dueDate ||
+                            null,
+
+                        additions:
+                            Array.isArray(
+                                debt.additions
+                            )
+                                ? debt.additions
+                                : [],
+
+                        payments:
+                            Array.isArray(
+                                debt.payments
+                            )
+                                ? debt.payments
+                                : []
+
+                    })
+                    .eq(
+                        "id",
+                        debt.id
+                    )
+                    .eq(
+                        "user_id",
+                        user.id
+                    );
+
+
+            if (error) {
+
+                console.error(
+                    "❌ Offline өөрчлөлт sync алдаа:",
+                    error
+                );
+
+                continue;
+
+            }
+
+
+            debt.pendingSync =
+                false;
+
+
+            console.log(
+                "✅ Offline өөрчлөлт sync:",
+                debt.name
+            );
+
+        }
+
+
+        /*
+         * =====================================
+         * 3. БҮХ ӨӨРЧЛӨЛТ АМЖИЛТТАЙ БОЛСНЫ
+         * ДАРАА СЕРВЕРИЙН ЭЦСИЙН МЭДЭЭЛЛИЙГ АВНА
+         * =====================================
+         */
+
+        const {
+            data: finalData,
+            error: finalError
+        } =
+            await supabaseClient
+                .from("debts")
+                .select("*")
+                .eq(
+                    "user_id",
+                    user.id
+                )
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (finalError) {
+
+            console.error(
+                "Final sync refresh error:",
+                finalError
+            );
+
+            return;
+
+        }
+
+
+        /*
+         * =====================================
+         * 4. SERVER → LOCAL CACHE
+         * =====================================
+         */
+
+        debts =
+            (finalData || [])
+                .map(row => ({
 
                     id:
                         row.id,
@@ -4670,58 +4835,34 @@ async function syncOfflineDebts() {
                 }));
 
 
-            /*
-             * Failed offline items are preserved.
-             */
-
-            const preserved = [
-                ...failedOffline,
-                ...failedPending
-            ];
+        saveOfflineDebts(
+            user.id
+        );
 
 
-            if (preserved.length > 0) {
-
-                debts = [
-                    ...preserved,
-                    ...debts
-                ];
-
-            }
+        showDebts();
 
 
-            localStorage.setItem(
+        console.log(
+            "🎉 Offline → Online sync амжилттай."
+        );
 
-                getOfflineCacheKey(
-                    user.id
-                ),
-
-                JSON.stringify(
-                    debts
-                )
-
-            );
-
-
-            showDebts();
-
-            console.log(
-                "✅ Offline sync дууслаа."
-            );
-
-        }
 
     } catch (error) {
 
         console.error(
-            "Sync refresh error:",
+            "❌ Offline sync exception:",
             error
         );
+
+    } finally {
+
+        isSyncingOffline =
+            false;
 
     }
 
 }
-
 
 /* ==========================================
    DETAIL MODAL
