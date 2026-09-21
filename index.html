@@ -1,9 +1,7 @@
 <!DOCTYPE html>
-
 <html lang="mn">
 
 <head>
-
 
 <meta charset="UTF-8">
 
@@ -16,6 +14,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+<link rel="manifest" href="/manifest.json">
 
 <style>
 
@@ -25,13 +24,8 @@
 
 :root {
     --bg: #eef3f9;
-    --bg-dark: #e7edf6;
-
-    --card: rgba(255, 255, 255, 0.92);
-    --card-solid: #ffffff;
-
+    --card: rgba(255,255,255,0.92);
     --text: #172033;
-    --text-dark: #111827;
     --muted: #7a8497;
 
     --primary: #5b5cf0;
@@ -50,13 +44,11 @@
     --blue: #0284c7;
     --blue-light: #eaf7ff;
 
-    --border: rgba(148, 163, 184, 0.20);
-
     --shadow:
-        0 10px 30px rgba(30, 41, 59, 0.07);
+        0 10px 30px rgba(30,41,59,0.07);
 
     --shadow-hover:
-        0 16px 38px rgba(30, 41, 59, 0.11);
+        0 16px 38px rgba(30,41,59,0.11);
 }
 
 html {
@@ -78,17 +70,17 @@ body {
     background:
         radial-gradient(
             circle at 0% 0%,
-            rgba(99, 102, 241, 0.10),
+            rgba(99,102,241,0.10),
             transparent 30%
         ),
         radial-gradient(
             circle at 100% 20%,
-            rgba(14, 165, 233, 0.08),
+            rgba(14,165,233,0.08),
             transparent 28%
         ),
         radial-gradient(
             circle at 50% 100%,
-            rgba(16, 185, 129, 0.06),
+            rgba(16,185,129,0.06),
             transparent 30%
         ),
         linear-gradient(
@@ -127,12 +119,12 @@ button {
     background:
         radial-gradient(
             circle at 15% 15%,
-            rgba(99, 102, 241, 0.18),
+            rgba(99,102,241,0.18),
             transparent 32%
         ),
         radial-gradient(
             circle at 85% 85%,
-            rgba(16, 185, 129, 0.12),
+            rgba(16,185,129,0.12),
             transparent 32%
         ),
         linear-gradient(
@@ -148,15 +140,15 @@ button {
 
     padding: 40px 32px;
 
-    background: rgba(255, 255, 255, 0.86);
+    background: rgba(255,255,255,0.86);
 
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255,255,255,0.8);
 
     border-radius: 30px;
 
     box-shadow:
-        0 30px 80px rgba(30, 41, 59, 0.13),
-        0 4px 15px rgba(30, 41, 59, 0.04);
+        0 30px 80px rgba(30,41,59,0.13),
+        0 4px 15px rgba(30,41,59,0.04);
 
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
@@ -192,7 +184,8 @@ button {
 
     margin-bottom: 12px;
 
-    border: 1px solid rgba(148, 163, 184, 0.25);
+    border:
+        1px solid rgba(148,163,184,0.25);
 
     border-radius: 15px;
 
@@ -202,7 +195,7 @@ button {
 
     color: var(--text);
 
-    background: rgba(248, 250, 252, 0.9);
+    background: rgba(248,250,252,0.9);
 
     transition:
         border-color 0.2s,
@@ -220,7 +213,7 @@ button {
     background: #ffffff;
 
     box-shadow:
-        0 0 0 4px rgba(91, 92, 240, 0.10);
+        0 0 0 4px rgba(91,92,240,0.10);
 }
 
 .login-btn,
@@ -255,21 +248,14 @@ button {
         );
 
     box-shadow:
-        0 8px 20px rgba(91, 92, 240, 0.22);
+        0 8px 20px rgba(91,92,240,0.22);
 }
 
 .login-btn:hover {
-    background:
-        linear-gradient(
-            135deg,
-            #5d5eea,
-            #4647cc
-        );
-
     transform: translateY(-2px);
 
     box-shadow:
-        0 12px 25px rgba(91, 92, 240, 0.28);
+        0 12px 25px rgba(91,92,240,0.28);
 }
 
 .register-btn {
@@ -312,7 +298,7 @@ button {
     font-size: 32px;
 
     box-shadow:
-        0 10px 25px rgba(91, 92, 240, 0.10);
+        0 10px 25px rgba(91,92,240,0.10);
 }
 
 .login-features {
@@ -320,7 +306,7 @@ button {
     padding-top: 20px;
 
     border-top:
-        1px solid rgba(148, 163, 184, 0.16);
+        1px solid rgba(148,163,184,0.16);
 }
 
 .feature-item {
@@ -382,7 +368,7 @@ button {
     padding-top: 16px;
 
     border-top:
-        1px solid rgba(148, 163, 184, 0.13);
+        1px solid rgba(148,163,184,0.13);
 
     color: #c0c6d1;
 
@@ -403,9 +389,6 @@ button {
     font-weight: 600;
 
     cursor: pointer;
-
-    transition:
-        color 0.2s;
 }
 
 .login-links button:hover {
@@ -424,16 +407,16 @@ header {
     z-index: 50;
 
     background:
-        rgba(255, 255, 255, 0.76);
+        rgba(255,255,255,0.76);
 
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
 
     border-bottom:
-        1px solid rgba(148, 163, 184, 0.15);
+        1px solid rgba(148,163,184,0.15);
 
     box-shadow:
-        0 4px 18px rgba(30, 41, 59, 0.035);
+        0 4px 18px rgba(30,41,59,0.035);
 }
 
 .header-inner {
@@ -463,9 +446,11 @@ header h1 {
 }
 
 .logout-btn {
-    border: 1px solid rgba(148, 163, 184, 0.16);
+    border:
+        1px solid rgba(148,163,184,0.16);
 
-    background: rgba(241, 243, 248, 0.9);
+    background:
+        rgba(241,243,248,0.9);
 
     color: #596275;
 
@@ -476,16 +461,6 @@ header h1 {
     cursor: pointer;
 
     font-weight: 700;
-
-    transition:
-        background 0.2s,
-        transform 0.2s;
-}
-
-.logout-btn:hover {
-    background: #e7eaf1;
-
-    transform: translateY(-1px);
 }
 
 /* =========================
@@ -508,7 +483,7 @@ header h1 {
     display: grid;
 
     grid-template-columns:
-        repeat(4, 1fr);
+        repeat(4,1fr);
 
     gap: 16px;
 
@@ -523,7 +498,7 @@ header h1 {
     background: var(--card);
 
     border:
-        1px solid rgba(255, 255, 255, 0.75);
+        1px solid rgba(255,255,255,0.75);
 
     border-radius: 21px;
 
@@ -537,25 +512,6 @@ header h1 {
     transition:
         transform 0.22s,
         box-shadow 0.22s;
-}
-
-.card::after {
-    content: "";
-
-    position: absolute;
-
-    width: 90px;
-    height: 90px;
-
-    right: -38px;
-    top: -38px;
-
-    border-radius: 50%;
-
-    background:
-        rgba(99, 102, 241, 0.055);
-
-    pointer-events: none;
 }
 
 .card:hover {
@@ -586,10 +542,6 @@ header h1 {
     border-radius: 15px;
 
     font-size: 22px;
-}
-
-.dashboard-card .card-content {
-    min-width: 0;
 }
 
 .people-card .dashboard-icon {
@@ -633,10 +585,10 @@ header h1 {
 ========================= */
 
 .debt-box {
-    background: rgba(255, 255, 255, 0.91);
+    background: rgba(255,255,255,0.91);
 
     border:
-        1px solid rgba(255, 255, 255, 0.75);
+        1px solid rgba(255,255,255,0.75);
 
     border-radius: 25px;
 
@@ -654,8 +606,6 @@ header h1 {
     font-size: 20px;
 
     font-weight: 800;
-
-    letter-spacing: -0.3px;
 }
 
 .tools {
@@ -669,7 +619,7 @@ header h1 {
 .tools input,
 .tools select {
     border:
-        1px solid rgba(148, 163, 184, 0.22);
+        1px solid rgba(148,163,184,0.22);
 
     background: #f8fafc;
 
@@ -682,29 +632,10 @@ header h1 {
     font-size: 14px;
 
     color: var(--text);
-
-    transition:
-        border-color 0.2s,
-        box-shadow 0.2s,
-        background 0.2s;
 }
 
 .tools input {
     flex: 1;
-}
-
-.tools input::placeholder {
-    color: #9aa3b3;
-}
-
-.tools input:focus,
-.tools select:focus {
-    border-color: var(--primary);
-
-    background: white;
-
-    box-shadow:
-        0 0 0 4px rgba(91, 92, 240, 0.07);
 }
 
 /* =========================
@@ -713,7 +644,7 @@ header h1 {
 
 .debt-card {
     border:
-        1px solid rgba(148, 163, 184, 0.18);
+        1px solid rgba(148,163,184,0.18);
 
     border-radius: 18px;
 
@@ -722,20 +653,17 @@ header h1 {
     margin-bottom: 11px;
 
     background:
-        rgba(255, 255, 255, 0.82);
+        rgba(255,255,255,0.82);
 
-    transition:
-        border-color 0.2s,
-        box-shadow 0.2s,
-        transform 0.2s;
+    cursor: pointer;
 }
 
 .debt-card:hover {
     border-color:
-        rgba(99, 102, 241, 0.28);
+        rgba(99,102,241,0.28);
 
     box-shadow:
-        0 9px 25px rgba(30, 41, 59, 0.07);
+        0 9px 25px rgba(30,41,59,0.07);
 
     transform: translateY(-2px);
 }
@@ -824,8 +752,6 @@ header h1 {
 
     bottom: 18px;
 
-    width: auto;
-
     height: 56px;
 
     border: 0;
@@ -848,20 +774,9 @@ header h1 {
     cursor: pointer;
 
     box-shadow:
-        0 12px 30px rgba(91, 92, 240, 0.25);
+        0 12px 30px rgba(91,92,240,0.25);
 
     z-index: 60;
-
-    transition:
-        transform 0.2s,
-        box-shadow 0.2s;
-}
-
-.floating-add-btn:hover {
-    transform: translateY(-3px);
-
-    box-shadow:
-        0 16px 35px rgba(91, 92, 240, 0.32);
 }
 
 /* =========================
@@ -885,7 +800,7 @@ header h1 {
     padding: 20px;
 
     background:
-        rgba(15, 23, 42, 0.48);
+        rgba(15,23,42,0.48);
 
     backdrop-filter: blur(7px);
     -webkit-backdrop-filter: blur(7px);
@@ -907,34 +822,14 @@ header h1 {
     overflow-y: auto;
 
     background:
-        rgba(255, 255, 255, 0.97);
-
-    border:
-        1px solid rgba(255, 255, 255, 0.8);
+        rgba(255,255,255,0.97);
 
     border-radius: 26px;
 
     padding: 25px;
 
     box-shadow:
-        0 30px 80px rgba(15, 23, 42, 0.22);
-
-    animation:
-        modalIn 0.2s ease-out;
-}
-
-@keyframes modalIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(10px) scale(0.98);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-
+        0 30px 80px rgba(15,23,42,0.22);
 }
 
 .debt-modal-header {
@@ -981,17 +876,6 @@ header h1 {
     font-size: 18px;
 
     color: #64748b;
-
-    transition:
-        background 0.2s,
-        transform 0.2s;
-}
-
-.modal-close:hover,
-.detail-close:hover {
-    background: #e8ebf0;
-
-    transform: rotate(4deg);
 }
 
 /* =========================
@@ -1016,7 +900,7 @@ header h1 {
     padding: 14px;
 
     border:
-        1px solid rgba(148, 163, 184, 0.23);
+        1px solid rgba(148,163,184,0.23);
 
     border-radius: 14px;
 
@@ -1027,11 +911,6 @@ header h1 {
     color: var(--text);
 
     background: #f8fafc;
-
-    transition:
-        border-color 0.2s,
-        box-shadow 0.2s,
-        background 0.2s;
 }
 
 .debt-form input:focus {
@@ -1040,7 +919,7 @@ header h1 {
     background: white;
 
     box-shadow:
-        0 0 0 4px rgba(91, 92, 240, 0.08);
+        0 0 0 4px rgba(91,92,240,0.08);
 }
 
 .modal-save-btn {
@@ -1068,20 +947,6 @@ header h1 {
     font-weight: 800;
 
     cursor: pointer;
-
-    box-shadow:
-        0 8px 20px rgba(91, 92, 240, 0.18);
-
-    transition:
-        transform 0.2s,
-        box-shadow 0.2s;
-}
-
-.modal-save-btn:hover {
-    transform: translateY(-2px);
-
-    box-shadow:
-        0 12px 25px rgba(91, 92, 240, 0.25);
 }
 
 /* =========================
@@ -1107,9 +972,6 @@ header h1 {
     padding: 23px;
 
     margin-bottom: 16px;
-
-    box-shadow:
-        0 12px 28px rgba(91, 92, 240, 0.20);
 }
 
 .detail-balance-label {
@@ -1124,8 +986,6 @@ header h1 {
     font-size: 31px;
 
     font-weight: 900;
-
-    letter-spacing: -0.8px;
 }
 
 .detail-balance-value.done {
@@ -1146,7 +1006,7 @@ header h1 {
     background: #f8fafc;
 
     border:
-        1px solid rgba(148, 163, 184, 0.18);
+        1px solid rgba(148,163,184,0.18);
 
     border-radius: 16px;
 
@@ -1171,7 +1031,7 @@ header h1 {
     display: grid;
 
     grid-template-columns:
-        repeat(2, 1fr);
+        repeat(2,1fr);
 
     gap: 10px;
 
@@ -1188,24 +1048,12 @@ header h1 {
     font-weight: 700;
 
     cursor: pointer;
-
-    transition:
-        transform 0.18s,
-        filter 0.18s;
-}
-
-.detail-actions button:hover {
-    transform: translateY(-2px);
-
-    filter: brightness(0.98);
 }
 
 .detail-actions button:disabled {
     opacity: 0.5;
 
     cursor: not-allowed;
-
-    transform: none;
 }
 
 .detail-call {
@@ -1245,20 +1093,14 @@ header h1 {
 .clickable-detail,
 .clickable-detail-stat {
     cursor: pointer;
-
-    transition:
-        background 0.18s,
-        transform 0.18s;
 }
 
 .clickable-detail:hover {
-    background: #f1f5f9;
+    filter: brightness(0.98);
 }
 
 .clickable-detail-stat:hover {
     background: #eef2ff;
-
-    transform: translateY(-1px);
 }
 
 .click-arrow {
@@ -1275,7 +1117,7 @@ header h1 {
     background: #f8fafc;
 
     border:
-        1px solid rgba(148, 163, 184, 0.18);
+        1px solid rgba(148,163,184,0.18);
 
     border-radius: 15px;
 
@@ -1332,33 +1174,10 @@ header h1 {
 }
 
 /* =========================
-   SCROLLBAR
-========================= */
-
-::-webkit-scrollbar {
-    width: 7px;
-    height: 7px;
-}
-
-::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-
-    border-radius: 20px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* =========================
    MOBILE
 ========================= */
 
-@media (max-width: 700px) {
+@media (max-width:700px) {
 
     .header-inner {
         padding: 14px 16px;
@@ -1377,7 +1196,7 @@ header h1 {
 
     .cards {
         grid-template-columns:
-            repeat(2, 1fr);
+            repeat(2,1fr);
 
         gap: 10px;
     }
@@ -1413,10 +1232,6 @@ header h1 {
         border-radius: 21px;
     }
 
-    .debt-box h2 {
-        font-size: 18px;
-    }
-
     .tools {
         flex-direction: column;
     }
@@ -1444,18 +1259,11 @@ header h1 {
 
         bottom: 15px;
 
-        width: auto;
-
         height: 55px;
-
-        border-radius: 16px;
-
-        font-size: 16px;
     }
-
 }
 
-@media (max-width: 480px) {
+@media (max-width:480px) {
 
     .login-card {
         padding: 28px 20px;
@@ -1465,17 +1273,6 @@ header h1 {
 
     .login-card h1 {
         font-size: 27px;
-    }
-
-    .login-logo {
-        width: 60px;
-        height: 60px;
-
-        font-size: 28px;
-    }
-
-    .feature-item {
-        padding: 8px 0;
     }
 
     .cards {
@@ -1517,15 +1314,10 @@ header h1 {
         font-size: 27px;
     }
 
-    .detail-actions {
-        grid-template-columns:
-            1fr 1fr;
-    }
-
 }
 
 </style>
-<link rel="manifest" href="/manifest.json">
+
 </head>
 
 <body>
@@ -1536,190 +1328,169 @@ header h1 {
 
 <div id="loginScreen">
 
+    <div class="login-card">
 
-<div class="login-card">
+        <div class="login-logo">
+            📒
+        </div>
 
-    <div class="login-logo">
-        📒
-    </div>
+        <h1>Өрийн дэвтэр</h1>
 
-    <h1>Өрийн дэвтэр</h1>
+        <div class="login-subtitle">
+            Өр төлбөрөө энгийнээр бүртгэж,<br>
+            хялбархан хянаарай.
+        </div>
 
-    <div class="login-subtitle">
-        Өр төлбөрөө энгийнээр бүртгэж,<br>
-        хялбархан хянаарай.
-    </div>
+        <input
+            id="authPhone"
+            type="tel"
+            placeholder="Утасны дугаар"
+            inputmode="numeric"
+        >
 
-    <input
-        id="authPhone"
-        type="tel"
-        placeholder="Утасны дугаар"
-        inputmode="numeric"
-    >
-
-    <input
-        id="authPassword"
-        type="password"
-        placeholder="Нууц үг"
-    >
-
-    <button
-        type="button"
-        class="login-btn"
-        onclick="loginUser()"
-    >
-        Нэвтрэх
-    </button>
-
-    <div style="text-align:center; margin-top:12px;">
+        <input
+            id="authPassword"
+            type="password"
+            placeholder="Нууц үг"
+        >
 
         <button
             type="button"
-            onclick="showForgotPassword()"
+            class="login-btn"
+            onclick="loginUser()"
+        >
+            Нэвтрэх
+        </button>
+
+        <div style="text-align:center;margin-top:12px;">
+
+            <button
+                type="button"
+                onclick="showForgotPassword()"
+                style="
+                    border:none;
+                    background:none;
+                    color:#6366f1;
+                    font-size:14px;
+                    font-weight:600;
+                    cursor:pointer;
+                "
+            >
+                Нууц үг мартсан?
+            </button>
+
+        </div>
+
+        <button
+            type="button"
+            class="register-btn"
+            onclick="showRegisterModal()"
+        >
+            Бүртгэл үүсгэх
+        </button>
+
+        <div
+            id="authMessage"
             style="
-                border:none;
-                background:none;
-                color:#6366f1;
+                margin-top:15px;
+                text-align:center;
                 font-size:14px;
-                font-weight:600;
+            "
+        ></div>
+
+        <div class="login-features">
+
+            <div class="feature-item">
+
+                <div class="feature-icon">
+                    👥
+                </div>
+
+                <div>
+                    <strong>Харилцагчаа бүртгэ</strong>
+                    <span>Мэдээллээ нэг дор хадгал</span>
+                </div>
+
+            </div>
+
+            <div class="feature-item">
+
+                <div class="feature-icon">
+                    💰
+                </div>
+
+                <div>
+                    <strong>Өр, төлөлтөө хяна</strong>
+                    <span>Үлдэгдлээ шууд хараарай</span>
+                </div>
+
+            </div>
+
+            <div class="feature-item">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <div>
+                    <strong>Бүх мэдээллээ нэг дор</strong>
+                    <span>Хялбар, ойлгомжтой удирд</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="login-links">
+
+            <button
+                type="button"
+                onclick="showHelp()"
+            >
+                ❓ Тусламж
+            </button>
+
+            <span>•</span>
+
+            <button
+                type="button"
+                onclick="showFeedback()"
+            >
+                💬 Санал хүсэлт
+            </button>
+
+            <span>•</span>
+
+            <button
+                type="button"
+                onclick="showContact()"
+            >
+                📞 Холбоо барих
+            </button>
+
+        </div>
+
+        <button
+            id="installAppBtn"
+            type="button"
+            style="
+                display:none;
+                width:100%;
+                margin-top:14px;
+                padding:12px 16px;
+                border:0;
+                border-radius:12px;
+                background:#111827;
+                color:white;
+                font-size:14px;
+                font-weight:700;
                 cursor:pointer;
             "
         >
-            Нууц үг мартсан?
+            📱 Өрийн дэвтэр апп суулгах
         </button>
 
     </div>
-
-    <button
-        type="button"
-        class="register-btn"
-        onclick="showRegisterModal()"
-    >
-        Бүртгэл үүсгэх
-    </button>
-
-    <div
-        id="authMessage"
-        style="
-            margin-top:15px;
-            text-align:center;
-            font-size:14px;
-        "
-    ></div>
-
-    <div class="login-features">
-
-        <div class="feature-item">
-
-            <div class="feature-icon">
-                👥
-            </div>
-
-            <div>
-                <strong>
-                    Харилцагчаа бүртгэ
-                </strong>
-
-                <span>
-                    Мэдээллээ нэг дор хадгал
-                </span>
-            </div>
-
-        </div>
-
-        <div class="feature-item">
-
-            <div class="feature-icon">
-                💰
-            </div>
-
-            <div>
-                <strong>
-                    Өр, төлөлтөө хяна
-                </strong>
-
-                <span>
-                    Үлдэгдлээ шууд хараарай
-                </span>
-            </div>
-
-        </div>
-
-        <div class="feature-item">
-
-            <div class="feature-icon">
-                📊
-            </div>
-
-            <div>
-                <strong>
-                    Бүх мэдээллээ нэг дор
-                </strong>
-
-                <span>
-                    Хялбар, ойлгомжтой удирд
-                </span>
-            </div>
-
-        </div>
-
-    </div>
-
- 
-<div class="login-links">
-
-    <button
-        type="button"
-        onclick="showHelp()"
-    >
-        ❓ Тусламж
-    </button>
-
-    <span>•</span>
-
-    <button
-        type="button"
-        onclick="showFeedback()"
-    >
-        💬 Санал хүсэлт
-    </button>
-
-    <span>•</span>
-
-    <button
-        type="button"
-        onclick="showContact()"
-    >
-        📞 Холбоо барих
-    </button>
-
-</div>
-
-
-<button
-    id="installAppBtn"
-    type="button"
-    style="
-        display:none;
-        width:100%;
-        margin-top:14px;
-        padding:12px 16px;
-        border:0;
-        border-radius:12px;
-        background:#111827;
-        color:white;
-        font-size:14px;
-        font-weight:700;
-        cursor:pointer;
-    "
->
-    📱 Өрийн дэвтэр апп суулгах
-</button>
-
-
-
-</div>
-
 
 </div>
 
@@ -1729,7 +1500,6 @@ header h1 {
 ========================= -->
 
 <div id="appContent" style="display:none;">
-
 
 <header>
 
@@ -1750,8 +1520,6 @@ header h1 {
 </header>
 
 <div class="container">
-
-    <!-- DASHBOARD -->
 
     <div class="cards">
 
@@ -1849,7 +1617,6 @@ header h1 {
 
     </div>
 
-    <!-- LIST -->
 
     <div class="debt-box">
 
@@ -1895,7 +1662,6 @@ header h1 {
 
 </div>
 
-<!-- ADD BUTTON -->
 
 <button
     type="button"
@@ -1904,6 +1670,7 @@ header h1 {
 >
     ➕ Өр бүртгэх
 </button>
+
 
 <!-- ADD MODAL -->
 
@@ -1944,9 +1711,7 @@ header h1 {
 
         <div class="debt-form">
 
-            <label>
-                Хүний нэр
-            </label>
+            <label>Хүний нэр</label>
 
             <input
                 id="personName"
@@ -1954,9 +1719,7 @@ header h1 {
                 placeholder="Жишээ: Бат"
             >
 
-            <label>
-                Утасны дугаар
-            </label>
+            <label>Утасны дугаар</label>
 
             <input
                 id="personPhone"
@@ -1964,9 +1727,7 @@ header h1 {
                 placeholder="Жишээ: 99112233"
             >
 
-            <label>
-                Өрийн дүн
-            </label>
+            <label>Өрийн дүн</label>
 
             <input
                 id="debtAmount"
@@ -1974,9 +1735,7 @@ header h1 {
                 placeholder="Жишээ: 150000"
             >
 
-            <label>
-                Төлөх хугацаа
-            </label>
+            <label>Төлөх хугацаа</label>
 
             <input
                 id="dueDate"
@@ -1996,6 +1755,7 @@ header h1 {
     </div>
 
 </div>
+
 
 <!-- DETAIL MODAL -->
 
@@ -2023,8 +1783,239 @@ header h1 {
 
 </div>
 
+</div>
+
+
+<!-- FORGOT PASSWORD MODAL -->
+
+<div
+    id="forgotPasswordModal"
+    class="debt-modal"
+>
+
+    <div class="debt-modal-box">
+
+        <div class="debt-modal-header">
+
+            <div>
+
+                <h2>
+                    Нууц үг сэргээх
+                </h2>
+
+                <p id="forgotSubtitle">
+                    Бүртгэлтэй утасны дугаараа оруулна уу
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeForgotPassword()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="debt-form">
+
+            <div id="forgotStepPhone">
+
+                <label>
+                    Утасны дугаар
+                </label>
+
+                <input
+                    type="tel"
+                    id="forgotPhone"
+                    placeholder="99112233"
+                    maxlength="8"
+                >
+
+                <button
+                    type="button"
+                    class="modal-save-btn"
+                    onclick="sendPasswordReset()"
+                >
+                    Код авах
+                </button>
+
+            </div>
+
+            <div
+                id="forgotStepOtp"
+                style="display:none;"
+            >
+
+                <label>
+                    SMS код
+                </label>
+
+                <input
+                    type="text"
+                    id="forgotOtp"
+                    placeholder="6 оронтой код"
+                    maxlength="6"
+                    inputmode="numeric"
+                >
+
+                <button
+                    type="button"
+                    class="modal-save-btn"
+                    onclick="verifyPasswordReset()"
+                >
+                    Код баталгаажуулах
+                </button>
+
+            </div>
+
+            <div
+                id="forgotStepPassword"
+                style="display:none;"
+            >
+
+                <label>
+                    Шинэ нууц үг
+                </label>
+
+                <input
+                    type="password"
+                    id="forgotNewPassword"
+                    placeholder="Шинэ нууц үг"
+                >
+
+                <label style="margin-top:12px;">
+                    Нууц үг давтах
+                </label>
+
+                <input
+                    type="password"
+                    id="forgotConfirmPassword"
+                    placeholder="Шинэ нууц үгээ дахин оруулна уу"
+                >
+
+                <button
+                    type="button"
+                    class="modal-save-btn"
+                    onclick="resetPassword()"
+                >
+                    Нууц үг солих
+                </button>
+
+            </div>
+
+            <div
+                id="forgotMessage"
+                style="
+                    margin-top:14px;
+                    text-align:center;
+                    font-size:14px;
+                "
+            ></div>
+
+        </div>
+
+    </div>
 
 </div>
+
+
+<!-- REGISTER MODAL -->
+
+<div
+    id="registerModal"
+    class="debt-modal"
+    onclick="closeRegisterModalOutside(event)"
+>
+
+    <div
+        class="debt-modal-box"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="debt-modal-header">
+
+            <div>
+
+                <h2>
+                    Бүртгэл үүсгэх
+                </h2>
+
+                <p>
+                    Өрийн дэвтэрт шинэ бүртгэл үүсгэнэ үү
+                </p>
+
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeRegisterModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="debt-form">
+
+            <label>
+                Утасны дугаар
+            </label>
+
+            <input
+                id="registerPhone"
+                type="tel"
+                placeholder="99112233"
+                maxlength="8"
+                inputmode="numeric"
+            >
+
+            <label>
+                Нууц үг
+            </label>
+
+            <input
+                id="registerPassword"
+                type="password"
+                placeholder="Хамгийн багадаа 6 тэмдэгт"
+            >
+
+            <label>
+                Нууц үг давтах
+            </label>
+
+            <input
+                id="registerConfirmPassword"
+                type="password"
+                placeholder="Нууц үгээ дахин оруулна уу"
+            >
+
+            <button
+                type="button"
+                class="modal-save-btn"
+                onclick="registerUser()"
+            >
+                Бүртгэл үүсгэх
+            </button>
+
+            <div
+                id="registerMessage"
+                style="
+                    margin-top:14px;
+                    text-align:center;
+                    font-size:14px;
+                "
+            ></div>
+
+        </div>
+
+    </div>
+
+</div>
+
 
 <script>
 
@@ -2044,6 +2035,7 @@ const supabaseClient =
         SUPABASE_KEY
     );
 
+
 /* ==========================================
    GLOBAL
 ========================================== */
@@ -2055,6 +2047,7 @@ let editingDebtId = null;
 let passwordResetPhone = "";
 
 let passwordResetToken = "";
+
 
 /* ==========================================
    HELPERS
@@ -2108,7 +2101,8 @@ function escapeHtml(value) {
         .replace(/'/g, "&#039;");
 
 }
-```javascript
+
+
 /* ==========================================
    OFFLINE STORAGE
 ========================================== */
@@ -2118,7 +2112,6 @@ function getOfflineCacheKey(userId) {
     return "uriin_dewter_debts_" + userId;
 
 }
-
 
 function saveOfflineDebts(userId) {
 
@@ -2130,7 +2123,6 @@ function saveOfflineDebts(userId) {
     );
 
 }
-
 
 function loadOfflineDebts(userId) {
 
@@ -2159,7 +2151,7 @@ function loadOfflineDebts(userId) {
     }
 
 }
-```
+
 
 /* ==========================================
    REGISTER MODAL
@@ -2211,6 +2203,7 @@ function closeRegisterModalOutside(event) {
 
 }
 
+
 /* ==========================================
    REGISTER USER
 ========================================== */
@@ -2248,6 +2241,7 @@ async function registerUser() {
             "#dc2626";
 
         return;
+
     }
 
     const normalizedPhone =
@@ -2262,6 +2256,7 @@ async function registerUser() {
             "#dc2626";
 
         return;
+
     }
 
     if (!password) {
@@ -2273,6 +2268,7 @@ async function registerUser() {
             "#dc2626";
 
         return;
+
     }
 
     if (password.length < 6) {
@@ -2284,6 +2280,7 @@ async function registerUser() {
             "#dc2626";
 
         return;
+
     }
 
     if (password !== confirmPassword) {
@@ -2295,6 +2292,7 @@ async function registerUser() {
             "#dc2626";
 
         return;
+
     }
 
     message.textContent =
@@ -2329,6 +2327,7 @@ async function registerUser() {
                 "#dc2626";
 
             return;
+
         }
 
         if (!data.user) {
@@ -2340,6 +2339,7 @@ async function registerUser() {
                 "#dc2626";
 
             return;
+
         }
 
         const {
@@ -2363,6 +2363,7 @@ async function registerUser() {
                 "#dc2626";
 
             return;
+
         }
 
         message.textContent =
@@ -2404,6 +2405,7 @@ async function registerUser() {
 
 }
 
+
 /* ==========================================
    LOGIN
 ========================================== */
@@ -2429,6 +2431,18 @@ async function loginUser() {
         );
 
         return;
+
+    }
+
+    if (!navigator.onLine) {
+
+        showMessage(
+            "📴 Интернет байхгүй байна. Одоогоор шинэ нэвтрэлт хийх боломжгүй.",
+            true
+        );
+
+        return;
+
     }
 
     const email =
@@ -2451,6 +2465,7 @@ async function loginUser() {
         );
 
         return;
+
     }
 
     showMessage("");
@@ -2458,6 +2473,7 @@ async function loginUser() {
     await checkLoginOnLoad();
 
 }
+
 
 /* ==========================================
    LOGOUT
@@ -2476,6 +2492,7 @@ async function logoutUser() {
         .style.display = "flex";
 
 }
+
 
 /* ==========================================
    LOGIN CHECK
@@ -2512,141 +2529,140 @@ async function checkLoginOnLoad() {
 
 }
 
+
+/* ==========================================
+   GET CURRENT USER
+========================================== */
+
+async function getCurrentUser() {
+
+    const {
+        data: {
+            session
+        }
+    } =
+        await supabaseClient.auth.getSession();
+
+    return session
+        ? session.user
+        : null;
+
+}
+
+
 /* ==========================================
    LOAD DEBTS
 ========================================== */
 
-```javascript
 async function loadDebts() {
 
-    const {
-        data: {
-            user
-        }
-    } = await supabaseClient.auth.getUser();
+    const user =
+        await getCurrentUser();
 
     if (!user) return;
 
-    /*
-    ==========================================
-       OFFLINE CACHE KEY
-    ==========================================
-    */
-
     const cacheKey =
-        "uriin_dewter_debts_" + user.id;
+        getOfflineCacheKey(user.id);
 
 
-    /*
-    ==========================================
-       INTERNET БАЙГАА ҮЕД SUPABASE-ААС ТАТНА
-    ==========================================
-    */
+    /* ONLINE */
 
     if (navigator.onLine) {
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("debts")
-                .select("*")
-                .eq("user_id", user.id)
-                .order(
-                    "created_at",
-                    {
-                        ascending: false
-                    }
+        try {
+
+            const {
+                data,
+                error
+            } =
+                await supabaseClient
+                    .from("debts")
+                    .select("*")
+                    .eq("user_id", user.id)
+                    .order(
+                        "created_at",
+                        {
+                            ascending: false
+                        }
+                    );
+
+            if (!error) {
+
+                debts =
+                    (data || []).map(row => ({
+
+                        id:
+                            row.id,
+
+                        name:
+                            row.name || "",
+
+                        phone:
+                            row.phone || "",
+
+                        amount:
+                            Number(
+                                row.amount || 0
+                            ),
+
+                        paid:
+                            Number(
+                                row.paid || 0
+                            ),
+
+                        dueDate:
+                            row.due_date || "",
+
+                        createdAt:
+                            row.created_at || "",
+
+                        additions:
+                            Array.isArray(
+                                row.additions
+                            )
+                                ? row.additions
+                                : [],
+
+                        payments:
+                            Array.isArray(
+                                row.payments
+                            )
+                                ? row.payments
+                                : []
+
+                    }));
+
+                localStorage.setItem(
+                    cacheKey,
+                    JSON.stringify(debts)
                 );
 
+                showDebts();
 
-        /*
-        ==========================================
-           SUPABASE АМЖИЛТТАЙ
-        ==========================================
-        */
+                return;
 
-        if (!error) {
+            }
 
-            debts =
-                (data || []).map(row => ({
-
-                    id:
-                        row.id,
-
-                    name:
-                        row.name || "",
-
-                    phone:
-                        row.phone || "",
-
-                    amount:
-                        Number(row.amount || 0),
-
-                    paid:
-                        Number(row.paid || 0),
-
-                    dueDate:
-                        row.due_date || "",
-
-                    createdAt:
-                        row.created_at || "",
-
-                    additions:
-                        Array.isArray(row.additions)
-                            ? row.additions
-                            : [],
-
-                    payments:
-                        Array.isArray(row.payments)
-                            ? row.payments
-                            : []
-
-                }));
-
-
-            /*
-            ==========================================
-               OFFLINE CACHE-Д ХАДГАЛНА
-            ==========================================
-            */
-
-            localStorage.setItem(
-                cacheKey,
-                JSON.stringify(debts)
+            console.log(
+                "Supabase unavailable. Loading offline cache."
             );
 
+        } catch (error) {
 
-            showDebts();
-
-            return;
+            console.error(
+                "Online load error:",
+                error
+            );
 
         }
-
-
-        /*
-        ==========================================
-           SUPABASE АЛДААТАЙ БОЛ CACHE-ААС
-        ==========================================
-        */
-
-        console.log(
-            "Supabase unavailable. Loading offline cache."
-        );
 
     }
 
 
-    /*
-    ==========================================
-       OFFLINE ҮЕД CACHE-ААС УНШИНА
-    ==========================================
-    */
+    /* OFFLINE */
 
     const cached =
         localStorage.getItem(cacheKey);
-
 
     if (cached) {
 
@@ -2687,7 +2703,7 @@ async function loadDebts() {
     }
 
 }
-```
+
 
 /* ==========================================
    SHOW DEBTS
@@ -2712,29 +2728,32 @@ function showDebts() {
         debts.filter(debt => {
 
             return (
-                debt.name
+                String(debt.name || "")
                     .toLowerCase()
                     .includes(search)
                 ||
-                debt.phone
+                String(debt.phone || "")
                     .toLowerCase()
                     .includes(search)
             );
 
         });
 
-    filtered.sort((a, b) => {
+
+    filtered.sort((a,b) => {
 
         const remainingA =
             Math.max(
                 0,
-                a.amount - a.paid
+                Number(a.amount || 0) -
+                Number(a.paid || 0)
             );
 
         const remainingB =
             Math.max(
                 0,
-                b.amount - b.paid
+                Number(b.amount || 0) -
+                Number(b.paid || 0)
             );
 
         if (sort === "highest") {
@@ -2780,22 +2799,21 @@ function showDebts() {
 
     });
 
-    /* DASHBOARD */
 
     const totalPeople =
         debts.length;
 
     const totalDebt =
         debts.reduce(
-            (sum, d) =>
-                sum + d.amount,
+            (sum,d) =>
+                sum + Number(d.amount || 0),
             0
         );
 
     const totalPaid =
         debts.reduce(
-            (sum, d) =>
-                sum + d.paid,
+            (sum,d) =>
+                sum + Number(d.paid || 0),
             0
         );
 
@@ -2804,6 +2822,7 @@ function showDebts() {
             0,
             totalDebt - totalPaid
         );
+
 
     document.getElementById("totalPeople")
         .textContent =
@@ -2821,7 +2840,6 @@ function showDebts() {
         .textContent =
             formatMoney(totalRemaining);
 
-    /* EMPTY */
 
     if (filtered.length === 0) {
 
@@ -2842,9 +2860,9 @@ function showDebts() {
         `;
 
         return;
+
     }
 
-    /* LIST */
 
     list.innerHTML =
         filtered.map(debt => {
@@ -2852,7 +2870,8 @@ function showDebts() {
             const remaining =
                 Math.max(
                     0,
-                    debt.amount - debt.paid
+                    Number(debt.amount || 0) -
+                    Number(debt.paid || 0)
                 );
 
             const isDone =
@@ -2864,6 +2883,7 @@ function showDebts() {
                 debt.dueDate
                     ? `📅 ${escapeHtml(debt.dueDate)}`
                     : "📅 Төлөх хугацаа: Тодорхойгүй";
+
 
             if (
                 debt.dueDate &&
@@ -2898,11 +2918,12 @@ function showDebts() {
 
             }
 
+
             return `
 
                 <div
                     class="debt-card"
-                    onclick="openDetailModal('${debt.id}')"
+                    onclick="openDetailModal('${escapeHtml(debt.id)}')"
                 >
 
                     <div class="debt-main-row">
@@ -2932,9 +2953,7 @@ function showDebts() {
 
                             <div
                                 class="debt-total ${
-                                    isDone
-                                        ? "done"
-                                        : ""
+                                    isDone ? "done" : ""
                                 }"
                             >
 
@@ -2965,6 +2984,7 @@ function showDebts() {
         }).join("");
 
 }
+
 
 /* ==========================================
    ADD MODAL
@@ -3006,7 +3026,7 @@ function openDebtModal() {
         document.getElementById("personName")
             .focus();
 
-    }, 100);
+    },100);
 
 }
 
@@ -3029,18 +3049,12 @@ function closeDebtModalOutside(event) {
 
 }
 
+
 /* ==========================================
-   ADD / EDIT
+   ADD DEBT
 ========================================== */
 
-```javascript
 async function addDebt() {
-
-    /*
-    ==========================================
-       EDIT MODE
-    ==========================================
-    */
 
     if (editingDebtId) {
 
@@ -3051,18 +3065,8 @@ async function addDebt() {
     }
 
 
-    /*
-    ==========================================
-       USER
-    ==========================================
-    */
-
-    const {
-        data: {
-            user
-        }
-    } =
-        await supabaseClient.auth.getUser();
+    const user =
+        await getCurrentUser();
 
     if (!user) {
 
@@ -3074,12 +3078,6 @@ async function addDebt() {
 
     }
 
-
-    /*
-    ==========================================
-       FORM DATA
-    ==========================================
-    */
 
     const name =
         document
@@ -3106,12 +3104,6 @@ async function addDebt() {
             .value;
 
 
-    /*
-    ==========================================
-       VALIDATION
-    ==========================================
-    */
-
     if (!name) {
 
         alert(
@@ -3133,18 +3125,14 @@ async function addDebt() {
     }
 
 
-    /*
-    ==========================================
-       OFFLINE MODE
-    ==========================================
-    */
+    /* OFFLINE */
 
     if (!navigator.onLine) {
 
         const existing =
             debts.find(
                 d =>
-                    d.name
+                    String(d.name)
                         .trim()
                         .toLowerCase() ===
                     name
@@ -3153,19 +3141,16 @@ async function addDebt() {
             );
 
 
-        /*
-        ==========================================
-           EXISTING PERSON
-        ==========================================
-        */
-
         if (existing) {
 
-            existing.amount += amount;
+            existing.amount =
+                Number(existing.amount || 0) +
+                amount;
 
             if (phone) {
 
-                existing.phone = phone;
+                existing.phone =
+                    phone;
 
             }
 
@@ -3196,16 +3181,15 @@ async function addDebt() {
 
             });
 
-        }
+            /*
+             * Existing server debt changed
+             * while offline.
+             * Mark it as pending.
+             */
 
+            existing.pendingSync = true;
 
-        /*
-        ==========================================
-           NEW PERSON
-        ==========================================
-        */
-
-        else {
+        } else {
 
             debts.unshift({
 
@@ -3235,32 +3219,23 @@ async function addDebt() {
                 additions: [
 
                     {
-
                         amount,
 
                         createdAt:
                             new Date()
                                 .toISOString()
-
                     }
 
                 ],
 
                 payments: [],
 
-                offline:
-                    true
+                offline: true
 
             });
 
         }
 
-
-        /*
-        ==========================================
-           SAVE OFFLINE
-        ==========================================
-        */
 
         saveOfflineDebts(
             user.id
@@ -3273,7 +3248,7 @@ async function addDebt() {
         alert(
             "📴 Интернетгүй байна.\n\n" +
             "Өр төхөөрөмж дээр хадгалагдлаа.\n" +
-            "Интернет холбогдсоны дараа сервертэй синк хийнэ."
+            "Интернет холбогдсоны дараа синк хийнэ."
         );
 
         return;
@@ -3281,16 +3256,12 @@ async function addDebt() {
     }
 
 
-    /*
-    ==========================================
-       ONLINE MODE
-    ==========================================
-    */
+    /* ONLINE */
 
     const existing =
         debts.find(
             d =>
-                d.name
+                String(d.name)
                     .trim()
                     .toLowerCase() ===
                 name
@@ -3302,7 +3273,7 @@ async function addDebt() {
     if (existing) {
 
         const newAmount =
-            existing.amount +
+            Number(existing.amount || 0) +
             amount;
 
         const additions =
@@ -3357,7 +3328,7 @@ async function addDebt() {
 
         if (error) {
 
-            console.log(error);
+            console.error(error);
 
             alert(
                 "Өр нэмэхэд алдаа гарлаа."
@@ -3367,10 +3338,7 @@ async function addDebt() {
 
         }
 
-    }
-
-
-    else {
+    } else {
 
         const {
             error
@@ -3415,7 +3383,7 @@ async function addDebt() {
 
         if (error) {
 
-            console.log(error);
+            console.error(error);
 
             alert(
                 "Өр бүртгэхэд алдаа гарлаа."
@@ -3428,219 +3396,16 @@ async function addDebt() {
     }
 
 
-    /*
-    ==========================================
-       REFRESH
-    ==========================================
-    */
-
     closeDebtModal();
 
     await loadDebts();
 
 }
-```
 
 
 /* ==========================================
    EDIT DEBT
 ========================================== */
-```javascript
-/* ==========================================
-   SYNC OFFLINE DEBTS
-========================================== */
-
-async function syncOfflineDebts() {
-
-    if (!navigator.onLine) {
-
-        return;
-
-    }
-
-    const {
-        data: {
-            user
-        }
-    } =
-        await supabaseClient.auth.getUser();
-
-    if (!user) {
-
-        return;
-
-    }
-
-
-    /*
-    ==========================================
-       OFFLINE DATA
-    ==========================================
-    */
-
-    const cachedDebts =
-        loadOfflineDebts(
-            user.id
-        );
-
-
-    if (
-        !cachedDebts ||
-        cachedDebts.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    /*
-    ==========================================
-       ONLY OFFLINE ITEMS
-    ==========================================
-    */
-
-    const offlineDebts =
-        cachedDebts.filter(
-            debt =>
-                debt.offline === true
-        );
-
-
-    if (
-        offlineDebts.length === 0
-    ) {
-
-        return;
-
-    }
-
-
-    console.log(
-        "Offline өрүүдийг sync хийж байна..."
-    );
-
-
-    /*
-    ==========================================
-       UPLOAD EACH DEBT
-    ==========================================
-    */
-
-    for (
-        const debt of offlineDebts
-    ) {
-
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("debts")
-                .insert({
-
-                    user_id:
-                        user.id,
-
-                    name:
-                        debt.name,
-
-                    phone:
-                        debt.phone || "",
-
-                    amount:
-                        debt.amount,
-
-                    paid:
-                        debt.paid || 0,
-
-                    due_date:
-                        debt.dueDate ||
-                        null,
-
-                    additions:
-                        Array.isArray(
-                            debt.additions
-                        )
-                            ? debt.additions
-                            : [],
-
-                    payments:
-                        Array.isArray(
-                            debt.payments
-                        )
-                            ? debt.payments
-                            : []
-
-                });
-
-
-        if (error) {
-
-            console.error(
-                "Offline sync error:",
-                error
-            );
-
-            continue;
-
-        }
-
-
-        /*
-        ==========================================
-           SYNC SUCCESS
-        ==========================================
-        */
-
-        console.log(
-            "Sync амжилттай:",
-            debt.name
-        );
-
-    }
-
-
-    /*
-    ==========================================
-       SERVER DATA-Г ДАХИН ТАТНА
-    ==========================================
-    */
-
-    await loadDebts();
-
-
-    /*
-    ==========================================
-       CACHE ЦЭВЭРЛЭХ
-    ==========================================
-    */
-
-    const freshDebts =
-        debts.filter(
-            debt =>
-                !debt.offline
-        );
-
-
-    localStorage.setItem(
-
-        getOfflineCacheKey(
-            user.id
-        ),
-
-        JSON.stringify(
-            freshDebts
-        )
-
-    );
-
-
-    console.log(
-        "Offline sync дууслаа."
-    );
-
-}
-```
 
 function editDebt(id) {
 
@@ -3688,14 +3453,11 @@ function editDebt(id) {
 
 }
 
+
 async function updateDebt() {
 
-    const {
-        data: {
-            user
-        }
-    } =
-        await supabaseClient.auth.getUser();
+    const user =
+        await getCurrentUser();
 
     if (!user) {
 
@@ -3704,7 +3466,9 @@ async function updateDebt() {
         );
 
         return;
+
     }
+
 
     const debt =
         debts.find(
@@ -3712,6 +3476,7 @@ async function updateDebt() {
         );
 
     if (!debt) return;
+
 
     const name =
         document.getElementById("personName")
@@ -3733,6 +3498,7 @@ async function updateDebt() {
         document.getElementById("dueDate")
             .value;
 
+
     if (!name) {
 
         alert(
@@ -3740,6 +3506,7 @@ async function updateDebt() {
         );
 
         return;
+
     }
 
     if (!amount || amount <= 0) {
@@ -3749,7 +3516,49 @@ async function updateDebt() {
         );
 
         return;
+
     }
+
+
+    /* OFFLINE EDIT */
+
+    if (!navigator.onLine) {
+
+        debt.name =
+            name;
+
+        debt.phone =
+            phone;
+
+        debt.amount =
+            amount;
+
+        debt.dueDate =
+            dueDate || "";
+
+        debt.pendingSync =
+            true;
+
+        saveOfflineDebts(
+            user.id
+        );
+
+        closeDebtModal();
+
+        showDebts();
+
+        alert(
+            "📴 Интернетгүй байна.\n\n" +
+            "Өөрчлөлт төхөөрөмж дээр хадгалагдлаа.\n" +
+            "Интернет холбогдсоны дараа синк хийнэ."
+        );
+
+        return;
+
+    }
+
+
+    /* ONLINE EDIT */
 
     const {
         error
@@ -3778,22 +3587,26 @@ async function updateDebt() {
                 user.id
             );
 
+
     if (error) {
 
-        console.log(error);
+        console.error(error);
 
         alert(
             "Засах үед алдаа гарлаа."
         );
 
         return;
+
     }
+
 
     closeDebtModal();
 
     await loadDebts();
 
 }
+
 
 /* ==========================================
    PAY DEBT
@@ -3808,11 +3621,14 @@ async function payDebt(id) {
 
     if (!debt) return;
 
+
     const remaining =
         Math.max(
             0,
-            debt.amount - debt.paid
+            Number(debt.amount || 0) -
+            Number(debt.paid || 0)
         );
+
 
     if (remaining <= 0) {
 
@@ -3821,7 +3637,9 @@ async function payDebt(id) {
         );
 
         return;
+
     }
+
 
     const amountText =
         prompt(
@@ -3830,8 +3648,10 @@ async function payDebt(id) {
 
     if (amountText === null) return;
 
+
     const paymentAmount =
         Number(amountText);
+
 
     if (
         !paymentAmount ||
@@ -3843,7 +3663,9 @@ async function payDebt(id) {
         );
 
         return;
+
     }
+
 
     if (
         paymentAmount >
@@ -3855,12 +3677,15 @@ async function payDebt(id) {
         );
 
         return;
+
     }
+
 
     const payments =
         Array.isArray(debt.payments)
             ? [...debt.payments]
             : [];
+
 
     payments.push({
 
@@ -3868,20 +3693,19 @@ async function payDebt(id) {
             paymentAmount,
 
         createdAt:
-            new Date().toISOString()
+            new Date()
+                .toISOString()
 
     });
 
+
     const newPaid =
-        debt.paid +
+        Number(debt.paid || 0) +
         paymentAmount;
 
-    const {
-        data: {
-            user
-        }
-    } =
-        await supabaseClient.auth.getUser();
+
+    const user =
+        await getCurrentUser();
 
     if (!user) {
 
@@ -3890,7 +3714,43 @@ async function payDebt(id) {
         );
 
         return;
+
     }
+
+
+    /* OFFLINE */
+
+    if (!navigator.onLine) {
+
+        debt.paid =
+            newPaid;
+
+        debt.payments =
+            payments;
+
+        debt.pendingSync =
+            true;
+
+        saveOfflineDebts(
+            user.id
+        );
+
+        showDebts();
+
+        openDetailModal(id);
+
+        alert(
+            "📴 Интернетгүй байна.\n\n" +
+            "Төлөлт төхөөрөмж дээр хадгалагдлаа.\n" +
+            "Интернет холбогдсоны дараа синк хийнэ."
+        );
+
+        return;
+
+    }
+
+
+    /* ONLINE */
 
     const {
         error
@@ -3914,22 +3774,26 @@ async function payDebt(id) {
                 user.id
             );
 
+
     if (error) {
 
-        console.log(error);
+        console.error(error);
 
         alert(
             "Төлөлт бүртгэхэд алдаа гарлаа."
         );
 
         return;
+
     }
+
 
     await loadDebts();
 
     openDetailModal(id);
 
 }
+
 
 /* ==========================================
    ADD MORE DEBT
@@ -3944,6 +3808,7 @@ async function addMoreDebt(id) {
 
     if (!debt) return;
 
+
     const amountText =
         prompt(
             `${debt.name}-д хэдэн төгрөгийн өр нэмэх вэ?`
@@ -3951,8 +3816,10 @@ async function addMoreDebt(id) {
 
     if (amountText === null) return;
 
+
     const amount =
         Number(amountText);
+
 
     if (
         !amount ||
@@ -3964,28 +3831,29 @@ async function addMoreDebt(id) {
         );
 
         return;
+
     }
+
 
     const additions =
         Array.isArray(debt.additions)
             ? [...debt.additions]
             : [];
 
+
     additions.push({
 
         amount,
 
         createdAt:
-            new Date().toISOString()
+            new Date()
+                .toISOString()
 
     });
 
-    const {
-        data: {
-            user
-        }
-    } =
-        await supabaseClient.auth.getUser();
+
+    const user =
+        await getCurrentUser();
 
     if (!user) {
 
@@ -3994,7 +3862,44 @@ async function addMoreDebt(id) {
         );
 
         return;
+
     }
+
+
+    /* OFFLINE */
+
+    if (!navigator.onLine) {
+
+        debt.amount =
+            Number(debt.amount || 0) +
+            amount;
+
+        debt.additions =
+            additions;
+
+        debt.pendingSync =
+            true;
+
+        saveOfflineDebts(
+            user.id
+        );
+
+        showDebts();
+
+        openDetailModal(id);
+
+        alert(
+            "📴 Интернетгүй байна.\n\n" +
+            "Өр нэмэгдлээ.\n" +
+            "Интернет холбогдсоны дараа синк хийнэ."
+        );
+
+        return;
+
+    }
+
+
+    /* ONLINE */
 
     const {
         error
@@ -4004,7 +3909,7 @@ async function addMoreDebt(id) {
             .update({
 
                 amount:
-                    debt.amount +
+                    Number(debt.amount || 0) +
                     amount,
 
                 additions
@@ -4019,22 +3924,26 @@ async function addMoreDebt(id) {
                 user.id
             );
 
+
     if (error) {
 
-        console.log(error);
+        console.error(error);
 
         alert(
             "Өр нэмэхэд алдаа гарлаа."
         );
 
         return;
+
     }
+
 
     await loadDebts();
 
     openDetailModal(id);
 
 }
+
 
 /* ==========================================
    DELETE
@@ -4049,6 +3958,7 @@ async function deleteDebt(id) {
 
     if (!debt) return;
 
+
     const confirmed =
         confirm(
             `${debt.name}-ийн өрийг устгах уу?`
@@ -4056,12 +3966,9 @@ async function deleteDebt(id) {
 
     if (!confirmed) return;
 
-    const {
-        data: {
-            user
-        }
-    } =
-        await supabaseClient.auth.getUser();
+
+    const user =
+        await getCurrentUser();
 
     if (!user) {
 
@@ -4070,7 +3977,48 @@ async function deleteDebt(id) {
         );
 
         return;
+
     }
+
+
+    /* OFFLINE */
+
+    if (!navigator.onLine) {
+
+        const index =
+            debts.findIndex(
+                d => d.id === id
+            );
+
+        if (index !== -1) {
+
+            debts.splice(
+                index,
+                1
+            );
+
+        }
+
+        saveOfflineDebts(
+            user.id
+        );
+
+        closeDetailModal();
+
+        showDebts();
+
+        alert(
+            "📴 Интернетгүй байна.\n\n" +
+            "Өр төхөөрөмжөөс устгагдлаа.\n" +
+            "Синк хийхэд серверээс мөн устгана."
+        );
+
+        return;
+
+    }
+
+
+    /* ONLINE */
 
     const {
         error
@@ -4087,22 +4035,396 @@ async function deleteDebt(id) {
                 user.id
             );
 
+
     if (error) {
 
-        console.log(error);
+        console.error(error);
 
         alert(
             "Устгахад алдаа гарлаа."
         );
 
         return;
+
     }
+
 
     closeDetailModal();
 
     await loadDebts();
 
 }
+
+
+/* ==========================================
+   OFFLINE SYNC
+========================================== */
+
+async function syncOfflineDebts() {
+
+    if (!navigator.onLine) {
+
+        return;
+
+    }
+
+
+    const user =
+        await getCurrentUser();
+
+    if (!user) {
+
+        return;
+
+    }
+
+
+    const cachedDebts =
+        loadOfflineDebts(
+            user.id
+        );
+
+
+    if (
+        !cachedDebts ||
+        cachedDebts.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    const offlineDebts =
+        cachedDebts.filter(
+            debt =>
+                debt.offline === true
+        );
+
+
+    const pendingDebts =
+        cachedDebts.filter(
+            debt =>
+                debt.pendingSync === true
+        );
+
+
+    if (
+        offlineDebts.length === 0 &&
+        pendingDebts.length === 0
+    ) {
+
+        return;
+
+    }
+
+
+    console.log(
+        "📡 Offline мэдээллийг sync хийж байна..."
+    );
+
+
+    /* NEW OFFLINE DEBTS */
+
+    const failedOffline = [];
+
+
+    for (
+        const debt of offlineDebts
+    ) {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("debts")
+                .insert({
+
+                    user_id:
+                        user.id,
+
+                    name:
+                        debt.name,
+
+                    phone:
+                        debt.phone || "",
+
+                    amount:
+                        Number(debt.amount || 0),
+
+                    paid:
+                        Number(debt.paid || 0),
+
+                    due_date:
+                        debt.dueDate ||
+                        null,
+
+                    additions:
+                        Array.isArray(
+                            debt.additions
+                        )
+                            ? debt.additions
+                            : [],
+
+                    payments:
+                        Array.isArray(
+                            debt.payments
+                        )
+                            ? debt.payments
+                            : []
+
+                });
+
+
+        if (error) {
+
+            console.error(
+                "Offline insert error:",
+                error
+            );
+
+            failedOffline.push(
+                debt
+            );
+
+        } else {
+
+            console.log(
+                "✅ Sync:",
+                debt.name
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Existing server debts that were changed
+     * while offline.
+     */
+
+    const failedPending = [];
+
+
+    for (
+        const debt of pendingDebts
+    ) {
+
+        /*
+         * Offline-created debts are already
+         * handled above.
+         */
+
+        if (debt.offline) {
+
+            continue;
+
+        }
+
+
+        if (
+            String(debt.id)
+                .startsWith("offline_")
+        ) {
+
+            continue;
+
+        }
+
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("debts")
+                .update({
+
+                    name:
+                        debt.name,
+
+                    phone:
+                        debt.phone || "",
+
+                    amount:
+                        Number(debt.amount || 0),
+
+                    paid:
+                        Number(debt.paid || 0),
+
+                    due_date:
+                        debt.dueDate ||
+                        null,
+
+                    additions:
+                        Array.isArray(
+                            debt.additions
+                        )
+                            ? debt.additions
+                            : [],
+
+                    payments:
+                        Array.isArray(
+                            debt.payments
+                        )
+                            ? debt.payments
+                            : []
+
+                })
+                .eq(
+                    "id",
+                    debt.id
+                )
+                .eq(
+                    "user_id",
+                    user.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Pending sync error:",
+                error
+            );
+
+            failedPending.push(
+                debt
+            );
+
+        } else {
+
+            console.log(
+                "✅ Pending sync:",
+                debt.name
+            );
+
+        }
+
+    }
+
+
+    /*
+     * Server-ээс шинээр татна.
+     */
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("debts")
+                .select("*")
+                .eq("user_id", user.id)
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (!error) {
+
+            debts =
+                (data || []).map(row => ({
+
+                    id:
+                        row.id,
+
+                    name:
+                        row.name || "",
+
+                    phone:
+                        row.phone || "",
+
+                    amount:
+                        Number(
+                            row.amount || 0
+                        ),
+
+                    paid:
+                        Number(
+                            row.paid || 0
+                        ),
+
+                    dueDate:
+                        row.due_date || "",
+
+                    createdAt:
+                        row.created_at || "",
+
+                    additions:
+                        Array.isArray(
+                            row.additions
+                        )
+                            ? row.additions
+                            : [],
+
+                    payments:
+                        Array.isArray(
+                            row.payments
+                        )
+                            ? row.payments
+                            : []
+
+                }));
+
+
+            /*
+             * Failed offline items are preserved.
+             */
+
+            const preserved = [
+                ...failedOffline,
+                ...failedPending
+            ];
+
+
+            if (preserved.length > 0) {
+
+                debts = [
+                    ...preserved,
+                    ...debts
+                ];
+
+            }
+
+
+            localStorage.setItem(
+
+                getOfflineCacheKey(
+                    user.id
+                ),
+
+                JSON.stringify(
+                    debts
+                )
+
+            );
+
+
+            showDebts();
+
+            console.log(
+                "✅ Offline sync дууслаа."
+            );
+
+        }
+
+    } catch (error) {
+
+        console.error(
+            "Sync refresh error:",
+            error
+        );
+
+    }
+
+}
+
 
 /* ==========================================
    DETAIL MODAL
@@ -4117,18 +4439,21 @@ function openDetailModal(id) {
 
     if (!debt) return;
 
+
     const remaining =
         Math.max(
             0,
-            debt.amount - debt.paid
+            Number(debt.amount || 0) -
+            Number(debt.paid || 0)
         );
+
 
     const isDone =
         remaining <= 0;
 
-    /* ADDITIONS HISTORY */
 
     let additionsHtml = "";
+
 
     if (
         Array.isArray(debt.additions) &&
@@ -4186,9 +4511,9 @@ function openDetailModal(id) {
 
     }
 
-    /* PAYMENT HISTORY */
 
     let paymentsHtml = "";
+
 
     if (
         Array.isArray(debt.payments) &&
@@ -4246,7 +4571,6 @@ function openDetailModal(id) {
 
     }
 
-    /* DETAIL HTML */
 
     document.getElementById("detailContent")
         .innerHTML = `
@@ -4275,6 +4599,7 @@ function openDetailModal(id) {
 
             </div>
 
+
             <div
                 class="detail-balance clickable-detail"
                 onclick="toggleHistory('additionHistory')"
@@ -4301,6 +4626,7 @@ function openDetailModal(id) {
 
             </div>
 
+
             <div
                 id="additionHistory"
                 class="history-panel"
@@ -4313,6 +4639,7 @@ function openDetailModal(id) {
                 ${additionsHtml}
 
             </div>
+
 
             <div class="detail-stats">
 
@@ -4327,6 +4654,7 @@ function openDetailModal(id) {
                     </div>
 
                 </div>
+
 
                 <div
                     class="detail-stat clickable-detail-stat"
@@ -4353,6 +4681,7 @@ function openDetailModal(id) {
 
             </div>
 
+
             <div
                 id="paymentHistory"
                 class="history-panel"
@@ -4365,6 +4694,7 @@ function openDetailModal(id) {
                 ${paymentsHtml}
 
             </div>
+
 
             <div style="
                 padding:14px 0;
@@ -4384,6 +4714,7 @@ function openDetailModal(id) {
                 }
 
             </div>
+
 
             <div class="detail-actions">
 
@@ -4415,34 +4746,38 @@ function openDetailModal(id) {
                           `
                 }
 
+
                 <button
                     type="button"
                     class="detail-edit"
-                    onclick="editDebt('${debt.id}')"
+                    onclick="editDebt('${escapeHtml(debt.id)}')"
                 >
                     ✏️ Засах
                 </button>
 
+
                 <button
                     type="button"
                     class="detail-pay"
-                    onclick="payDebt('${debt.id}')"
+                    onclick="payDebt('${escapeHtml(debt.id)}')"
                 >
                     💰 Төлөлт
                 </button>
 
+
                 <button
                     type="button"
                     class="detail-more"
-                    onclick="addMoreDebt('${debt.id}')"
+                    onclick="addMoreDebt('${escapeHtml(debt.id)}')"
                 >
                     ➕ Өр нэмэх
                 </button>
 
+
                 <button
                     type="button"
                     class="detail-delete"
-                    onclick="deleteDebt('${debt.id}')"
+                    onclick="deleteDebt('${escapeHtml(debt.id)}')"
                 >
                     🗑 Устгах
                 </button>
@@ -4451,14 +4786,12 @@ function openDetailModal(id) {
 
         `;
 
+
     document.getElementById("detailModal")
         .classList.add("show");
 
 }
 
-/* ==========================================
-   TOGGLE HISTORY
-========================================== */
 
 function toggleHistory(id) {
 
@@ -4470,6 +4803,7 @@ function toggleHistory(id) {
     panel.classList.toggle("show");
 
 }
+
 
 /* ==========================================
    CALL
@@ -4487,12 +4821,14 @@ function callPerson(phone) {
         );
 
         return;
+
     }
 
     window.location.href =
         "tel:" + cleanPhone;
 
 }
+
 
 /* ==========================================
    CLOSE DETAIL
@@ -4514,6 +4850,7 @@ function closeDetailModalOutside(event) {
     }
 
 }
+
 
 /* ==========================================
    FORGOT PASSWORD
@@ -4570,7 +4907,7 @@ function closeForgotPassword() {
 function normalizeResetPhone(phone) {
 
     let digits =
-        phone.replace(/\D/g, "");
+        phone.replace(/\D/g,"");
 
     if (digits.startsWith("976")) {
 
@@ -4582,6 +4919,7 @@ function normalizeResetPhone(phone) {
 
 }
 
+
 async function sendPasswordReset() {
 
     const inputPhone =
@@ -4592,16 +4930,22 @@ async function sendPasswordReset() {
     const message =
         document.getElementById("forgotMessage");
 
+
     if (!inputPhone) {
 
         message.innerText =
             "Утасны дугаараа оруулна уу.";
 
         return;
+
     }
 
+
     const phone =
-        normalizeResetPhone(inputPhone);
+        normalizeResetPhone(
+            inputPhone
+        );
+
 
     if (phone.length !== 11) {
 
@@ -4609,25 +4953,31 @@ async function sendPasswordReset() {
             "Утасны дугаар буруу байна.";
 
         return;
+
     }
+
 
     message.innerText =
         "Код илгээж байна...";
+
 
     try {
 
         const response =
             await fetch(
-                "https://eyijwypbpxrdtmwwmoef.supabase.co/functions/v1/hyper-api",
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
                 {
                     method: "POST",
 
                     headers: {
+
                         "apikey":
                             SUPABASE_KEY,
 
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
@@ -4640,11 +4990,14 @@ async function sendPasswordReset() {
                                 phone
 
                         })
+
                 }
             );
 
+
         const result =
             await response.json();
+
 
         if (!result.success) {
 
@@ -4653,10 +5006,13 @@ async function sendPasswordReset() {
                 "Код илгээхэд алдаа гарлаа.";
 
             return;
+
         }
+
 
         passwordResetPhone =
             phone;
+
 
         document
             .getElementById("forgotStepPhone")
@@ -4687,6 +5043,7 @@ async function sendPasswordReset() {
 
 }
 
+
 async function verifyPasswordReset() {
 
     const otp =
@@ -4697,13 +5054,16 @@ async function verifyPasswordReset() {
     const message =
         document.getElementById("forgotMessage");
 
+
     if (!otp) {
 
         message.innerText =
             "SMS кодоо оруулна уу.";
 
         return;
+
     }
+
 
     if (!/^\d{6}$/.test(otp)) {
 
@@ -4711,25 +5071,31 @@ async function verifyPasswordReset() {
             "6 оронтой код оруулна уу.";
 
         return;
+
     }
+
 
     message.innerText =
         "Код шалгаж байна...";
+
 
     try {
 
         const response =
             await fetch(
-                "https://eyijwypbpxrdtmwwmoef.supabase.co/functions/v1/hyper-api",
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
                 {
                     method: "POST",
 
                     headers: {
+
                         "apikey":
                             SUPABASE_KEY,
 
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
@@ -4745,11 +5111,14 @@ async function verifyPasswordReset() {
                                 otp
 
                         })
+
                 }
             );
 
+
         const result =
             await response.json();
+
 
         if (!result.success) {
 
@@ -4758,10 +5127,13 @@ async function verifyPasswordReset() {
                 "Код буруу байна.";
 
             return;
+
         }
+
 
         passwordResetToken =
             result.resetToken;
+
 
         document
             .getElementById("forgotStepOtp")
@@ -4792,6 +5164,7 @@ async function verifyPasswordReset() {
 
 }
 
+
 async function resetPassword() {
 
     const newPassword =
@@ -4805,6 +5178,7 @@ async function resetPassword() {
     const message =
         document.getElementById("forgotMessage");
 
+
     if (
         !newPassword ||
         !confirmPassword
@@ -4814,7 +5188,9 @@ async function resetPassword() {
             "Нууц үгээ хоёр удаа оруулна уу.";
 
         return;
+
     }
+
 
     if (newPassword.length < 6) {
 
@@ -4822,7 +5198,9 @@ async function resetPassword() {
             "Нууц үг хамгийн багадаа 6 тэмдэгт байна.";
 
         return;
+
     }
+
 
     if (
         newPassword !==
@@ -4833,7 +5211,9 @@ async function resetPassword() {
             "Нууц үгнүүд таарахгүй байна.";
 
         return;
+
     }
+
 
     if (!passwordResetToken) {
 
@@ -4841,25 +5221,31 @@ async function resetPassword() {
             "Нууц үг сэргээх хугацаа дууссан байна.";
 
         return;
+
     }
+
 
     message.innerText =
         "Нууц үг шинэчилж байна...";
+
 
     try {
 
         const response =
             await fetch(
-                "https://eyijwypbpxrdtmwwmoef.supabase.co/functions/v1/hyper-api",
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
                 {
                     method: "POST",
 
                     headers: {
+
                         "apikey":
                             SUPABASE_KEY,
 
                         "Content-Type":
                             "application/json"
+
                     },
 
                     body:
@@ -4878,11 +5264,14 @@ async function resetPassword() {
                                 newPassword
 
                         })
+
                 }
             );
 
+
         const result =
             await response.json();
+
 
         if (!result.success) {
 
@@ -4891,16 +5280,19 @@ async function resetPassword() {
                 "Нууц үг шинэчлэхэд алдаа гарлаа.";
 
             return;
+
         }
+
 
         message.innerText =
             "Нууц үг амжилттай шинэчлэгдлээ.";
+
 
         setTimeout(() => {
 
             closeForgotPassword();
 
-        }, 2000);
+        },2000);
 
     } catch (error) {
 
@@ -4912,6 +5304,7 @@ async function resetPassword() {
     }
 
 }
+
 
 /* ==========================================
    LOGIN INFORMATION
@@ -4933,6 +5326,7 @@ function showHelp() {
 
 }
 
+
 function showFeedback() {
 
     const feedback =
@@ -4950,6 +5344,7 @@ function showFeedback() {
 
 }
 
+
 function showContact() {
 
     alert(
@@ -4965,6 +5360,7 @@ function showContact() {
 
 }
 
+
 /* ==========================================
    EVENTS
 ========================================== */
@@ -4976,6 +5372,7 @@ document
         addDebt
     );
 
+
 document
     .getElementById("search")
     .addEventListener(
@@ -4983,12 +5380,14 @@ document
         showDebts
     );
 
+
 document
     .getElementById("sort")
     .addEventListener(
         "change",
         showDebts
     );
+
 
 document.addEventListener(
     "keydown",
@@ -5009,309 +5408,158 @@ document.addEventListener(
     }
 );
 
+
+/* ==========================================
+   INTERNET BACK
+========================================== */
+
+window.addEventListener(
+    "online",
+    function() {
+
+        console.log(
+            "🌐 Интернет буцаж ирлээ."
+        );
+
+        syncOfflineDebts();
+
+    }
+);
+
+
 /* ==========================================
    START
 ========================================== */
 
 checkLoginOnLoad();
 
-</script>
 
-<!-- =========================
-     FORGOT PASSWORD MODAL
-========================= -->
+/* ==========================================
+   SERVICE WORKER
+========================================== */
 
-<div
-    id="forgotPasswordModal"
-    class="debt-modal"
->
-
-
-<div class="debt-modal-box">
-
-    <div class="debt-modal-header">
-
-        <div>
-
-            <h2>
-                Нууц үг сэргээх
-            </h2>
-
-            <p id="forgotSubtitle">
-                Бүртгэлтэй утасны дугаараа оруулна уу
-            </p>
-
-        </div>
-
-        <button
-            type="button"
-            class="modal-close"
-            onclick="closeForgotPassword()"
-        >
-            ✕
-        </button>
-
-    </div>
-
-    <div class="debt-form">
-
-        <div id="forgotStepPhone">
-
-            <label>
-                Утасны дугаар
-            </label>
-
-            <input
-                type="tel"
-                id="forgotPhone"
-                placeholder="99112233"
-                maxlength="8"
-            >
-
-            <button
-                type="button"
-                class="modal-save-btn"
-                onclick="sendPasswordReset()"
-            >
-                Код авах
-            </button>
-
-        </div>
-
-        <div
-            id="forgotStepOtp"
-            style="display:none;"
-        >
-
-            <label>
-                SMS код
-            </label>
-
-            <input
-                type="text"
-                id="forgotOtp"
-                placeholder="6 оронтой код"
-                maxlength="6"
-                inputmode="numeric"
-            >
-
-            <button
-                type="button"
-                class="modal-save-btn"
-                onclick="verifyPasswordReset()"
-            >
-                Код баталгаажуулах
-            </button>
-
-        </div>
-
-        <div
-            id="forgotStepPassword"
-            style="display:none;"
-        >
-
-            <label>
-                Шинэ нууц үг
-            </label>
-
-            <input
-                type="password"
-                id="forgotNewPassword"
-                placeholder="Шинэ нууц үг"
-            >
-
-            <label style="margin-top:12px;">
-                Нууц үг давтах
-            </label>
-
-            <input
-                type="password"
-                id="forgotConfirmPassword"
-                placeholder="Шинэ нууц үгээ дахин оруулна уу"
-            >
-
-            <button
-                type="button"
-                class="modal-save-btn"
-                onclick="resetPassword()"
-            >
-                Нууц үг солих
-            </button>
-
-        </div>
-
-        <div
-            id="forgotMessage"
-            style="
-                margin-top:14px;
-                text-align:center;
-                font-size:14px;
-            "
-        ></div>
-
-    </div>
-
-</div>
-
-
-</div>
-
-<!-- =========================
-     REGISTER MODAL
-========================= -->
-
-<div
-    id="registerModal"
-    class="debt-modal"
-    onclick="closeRegisterModalOutside(event)"
->
-
-
-<div
-    class="debt-modal-box"
-    onclick="event.stopPropagation()"
->
-
-    <div class="debt-modal-header">
-
-        <div>
-
-            <h2>
-                Бүртгэл үүсгэх
-            </h2>
-
-            <p>
-                Өрийн дэвтэрт шинэ бүртгэл үүсгэнэ үү
-            </p>
-
-        </div>
-
-        <button
-            type="button"
-            class="modal-close"
-            onclick="closeRegisterModal()"
-        >
-            ✕
-        </button>
-
-    </div>
-
-    <div class="debt-form">
-
-        <label>
-            Утасны дугаар
-        </label>
-
-        <input
-            id="registerPhone"
-            type="tel"
-            placeholder="99112233"
-            maxlength="8"
-            inputmode="numeric"
-        >
-
-        <label>
-            Нууц үг
-        </label>
-
-        <input
-            id="registerPassword"
-            type="password"
-            placeholder="Хамгийн багадаа 6 тэмдэгт"
-        >
-
-        <label>
-            Нууц үг давтах
-        </label>
-
-        <input
-            id="registerConfirmPassword"
-            type="password"
-            placeholder="Нууц үгээ дахин оруулна уу"
-        >
-
-        <button
-            type="button"
-            class="modal-save-btn"
-            onclick="registerUser()"
-        >
-            Бүртгэл үүсгэх
-        </button>
-
-        <div
-            id="registerMessage"
-            style="
-                margin-top:14px;
-                text-align:center;
-                font-size:14px;
-            "
-        ></div>
-
-    </div>
-
-</div>
-
-
-</div>
-
-<script>
 if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-        navigator.serviceWorker.register("/sw.js")
-            .then(function (registration) {
-                console.log("Service Worker registered:", registration.scope);
-            })
-            .catch(function (error) {
-                console.error("Service Worker registration failed:", error);
-            });
-    });
+
+    window.addEventListener(
+        "load",
+        function() {
+
+            navigator.serviceWorker
+                .register("/sw.js")
+                .then(
+                    function(registration) {
+
+                        console.log(
+                            "Service Worker registered:",
+                            registration.scope
+                        );
+
+                    }
+                )
+                .catch(
+                    function(error) {
+
+                        console.error(
+                            "Service Worker registration failed:",
+                            error
+                        );
+
+                    }
+                );
+
+        }
+    );
+
 }
-</script>
 
 
-<script>
-let deferredInstallPrompt = null;
+/* ==========================================
+   PWA INSTALL
+========================================== */
 
-const installAppBtn = document.getElementById("installAppBtn");
+let deferredInstallPrompt =
+    null;
 
-window.addEventListener("beforeinstallprompt", function (event) {
-    event.preventDefault();
 
-    deferredInstallPrompt = event;
+const installAppBtn =
+    document.getElementById(
+        "installAppBtn"
+    );
 
-    if (installAppBtn) {
-        installAppBtn.style.display = "block";
-    }
-});
 
-if (installAppBtn) {
-    installAppBtn.addEventListener("click", async function () {
+window.addEventListener(
+    "beforeinstallprompt",
+    function(event) {
 
-        if (!deferredInstallPrompt) {
-            return;
+        event.preventDefault();
+
+        deferredInstallPrompt =
+            event;
+
+        if (installAppBtn) {
+
+            installAppBtn.style.display =
+                "block";
+
         }
 
-        deferredInstallPrompt.prompt();
+    }
+);
 
-        const result = await deferredInstallPrompt.userChoice;
 
-        console.log("Install result:", result.outcome);
+if (installAppBtn) {
 
-        deferredInstallPrompt = null;
+    installAppBtn.addEventListener(
+        "click",
+        async function() {
 
-        installAppBtn.style.display = "none";
-    });
+            if (!deferredInstallPrompt) {
+
+                return;
+
+            }
+
+            deferredInstallPrompt.prompt();
+
+            const result =
+                await deferredInstallPrompt
+                    .userChoice;
+
+            console.log(
+                "Install result:",
+                result.outcome
+            );
+
+            deferredInstallPrompt =
+                null;
+
+            installAppBtn.style.display =
+                "none";
+
+        }
+    );
+
 }
 
-window.addEventListener("appinstalled", function () {
-    deferredInstallPrompt = null;
 
-    if (installAppBtn) {
-        installAppBtn.style.display = "none";
+window.addEventListener(
+    "appinstalled",
+    function() {
+
+        deferredInstallPrompt =
+            null;
+
+        if (installAppBtn) {
+
+            installAppBtn.style.display =
+                "none";
+
+        }
+
     }
-});
-</script>
+);
 
+</script>
 
 </body>
 
