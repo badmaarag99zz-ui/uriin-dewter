@@ -3146,13 +3146,14 @@ function sendPasswordReset() {
 <!-- FORGOT PASSWORD MODAL -->
 
 <div id="forgotPasswordModal" class="debt-modal">
-
     <div class="debt-modal-box">
 
         <div class="debt-modal-header">
             <div>
                 <h2>Нууц үг сэргээх</h2>
-                <p>Бүртгэлтэй утасны дугаараа оруулна уу</p>
+                <p id="forgotSubtitle">
+                    Бүртгэлтэй утасны дугаараа оруулна уу
+                </p>
             </div>
 
             <button
@@ -3166,21 +3167,84 @@ function sendPasswordReset() {
 
         <div class="debt-form">
 
-            <label>Утасны дугаар</label>
+            <!-- 1. УТАС -->
+            <div id="forgotStepPhone">
 
-            <input
-                type="tel"
-                id="forgotPhone"
-                placeholder="99112233"
-            >
+                <label>Утасны дугаар</label>
 
-            <button
-                type="button"
-                class="modal-save-btn"
-                onclick="sendPasswordReset()"
-            >
-                Үргэлжлүүлэх
-            </button>
+                <input
+                    type="tel"
+                    id="forgotPhone"
+                    placeholder="99112233"
+                    maxlength="8"
+                >
+
+                <button
+                    type="button"
+                    class="modal-save-btn"
+                    onclick="sendPasswordReset()"
+                >
+                    Код авах
+                </button>
+
+            </div>
+
+
+            <!-- 2. OTP -->
+            <div id="forgotStepOtp" style="display:none;">
+
+                <label>SMS код</label>
+
+                <input
+                    type="text"
+                    id="forgotOtp"
+                    placeholder="6 оронтой код"
+                    maxlength="6"
+                    inputmode="numeric"
+                >
+
+                <button
+                    type="button"
+                    class="modal-save-btn"
+                    onclick="verifyPasswordReset()"
+                >
+                    Код баталгаажуулах
+                </button>
+
+            </div>
+
+
+            <!-- 3. ШИНЭ PASSWORD -->
+            <div id="forgotStepPassword" style="display:none;">
+
+                <label>Шинэ нууц үг</label>
+
+                <input
+                    type="password"
+                    id="forgotNewPassword"
+                    placeholder="Шинэ нууц үг"
+                >
+
+                <label style="margin-top:12px;">
+                    Нууц үг давтах
+                </label>
+
+                <input
+                    type="password"
+                    id="forgotConfirmPassword"
+                    placeholder="Шинэ нууц үгээ дахин оруулна уу"
+                >
+
+                <button
+                    type="button"
+                    class="modal-save-btn"
+                    onclick="resetPassword()"
+                >
+                    Нууц үг солих
+                </button>
+
+            </div>
+
 
             <div
                 id="forgotMessage"
@@ -3192,9 +3256,7 @@ function sendPasswordReset() {
             ></div>
 
         </div>
-
     </div>
-
 </div>
 </body>
 </html>
