@@ -2423,6 +2423,7 @@ async function loginUser() {
             .getElementById("authPassword")
             .value;
 
+
     if (!phone || !password) {
 
         showMessage(
@@ -2434,46 +2435,114 @@ async function loginUser() {
 
     }
 
+
+    /*
+     * ==========================================
+     * OFFLINE LOGIN
+     * ==========================================
+     *
+     * Хэрэв энэ төхөөрөмж дээр өмнө нь
+     * амжилттай нэвтэрсэн session байгаа бол
+     * интернетгүй үед шууд апп руу оруулна.
+     */
+
     if (!navigator.onLine) {
 
+        const {
+            data: {
+                session
+            }
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (session) {
+
+            document
+                .getElementById("loginScreen")
+                .style.display = "none";
+
+            document
+                .getElementById("appContent")
+                .style.display = "block";
+
+
+            await loadDebts();
+
+
+            showMessage("");
+
+
+            console.log(
+                "📴 Offline session ашиглан нэвтэрлээ."
+            );
+
+
+            return;
+
+        }
+
+
         showMessage(
-            "📴 Интернет байхгүй байна. Одоогоор шинэ нэвтрэлт хийх боломжгүй.",
+            "📴 Интернетгүй байна.\n\n" +
+            "Энэ төхөөрөмж дээр өмнө нь нэвтэрсэн бүртгэл олдсонгүй.",
             true
         );
+
 
         return;
 
     }
 
+
+    /*
+     * ==========================================
+     * ONLINE LOGIN
+     * ==========================================
+     */
+
     const email =
         phoneEmail(phone);
+
 
     const {
         error
     } =
         await supabaseClient.auth
             .signInWithPassword({
+
                 email,
+
                 password
+
             });
 
+
     if (error) {
+
+        console.error(
+            "Login error:",
+            error
+        );
+
 
         showMessage(
             "Утасны дугаар эсвэл нууц үг буруу байна.",
             true
         );
 
+
         return;
 
     }
 
+
     showMessage("");
+
 
     await checkLoginOnLoad();
 
 }
-
 
 /* ==========================================
    LOGOUT
