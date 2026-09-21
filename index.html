@@ -2450,7 +2450,6 @@ async function loginUser() {
             .getElementById("authPassword")
             .value;
 
-
     if (!phone || !password) {
 
         showMessage(
@@ -2461,135 +2460,6 @@ async function loginUser() {
         return;
     }
 
-
-    /*
-     * ==========================================
-     * OFFLINE LOGIN
-     * ==========================================
-     */
-
-    if (!navigator.onLine) {
-
-        const normalizedPhone =
-            normalizePhone(phone);
-
-
-        const offlineKey =
-            "uriin_dewter_offline_auth_" +
-            normalizedPhone;
-
-
-        const saved =
-            localStorage.getItem(
-                offlineKey
-            );
-
-
-        if (!saved) {
-
-            showMessage(
-                "📴 Интернетгүй байна.\n\n" +
-                "Энэ төхөөрөмж дээр энэ бүртгэлээр " +
-                "өмнө нь амжилттай нэвтэрч байгаагүй байна.",
-                true
-            );
-
-            return;
-        }
-
-
-        try {
-
-            const account =
-                JSON.parse(saved);
-
-
-            const enteredHash =
-                await hashOfflinePassword(
-                    password
-                );
-
-
-            if (
-                enteredHash !==
-                account.passwordHash
-            ) {
-
-                showMessage(
-                    "Утасны дугаар эсвэл нууц үг буруу байна.",
-                    true
-                );
-
-                return;
-            }
-
-
-            /*
-             * Offline user ID-г session байхгүй үед
-             * ашиглахын тулд local current user хадгална.
-             */
-
-            localStorage.setItem(
-                "uriin_dewter_offline_current_user",
-                JSON.stringify({
-                    id:
-                        account.userId,
-
-                    phone:
-                        account.phone
-                })
-            );
-
-
-            document
-                .getElementById("loginScreen")
-                .style.display =
-                    "none";
-
-
-            document
-                .getElementById("appContent")
-                .style.display =
-                    "block";
-
-
-            await loadDebts();
-
-
-            showMessage("");
-
-
-            console.log(
-                "📴 Offline login амжилттай."
-            );
-
-
-            return;
-
-        } catch (error) {
-
-            console.error(
-                "Offline login error:",
-                error
-            );
-
-
-            showMessage(
-                "Offline нэвтрэлт хийхэд алдаа гарлаа.",
-                true
-            );
-
-
-            return;
-        }
-    }
-
-
-    /*
-     * ==========================================
-     * ONLINE LOGIN
-     * ==========================================
-     */
 
     const email =
         phoneEmail(phone);
@@ -2602,116 +2472,9 @@ async function loginUser() {
         await supabaseClient.auth
             .signInWithPassword({
 
-                email,
+                email: email,
 
-                password
-
-            });
-
-
-    if (error) {
-
-        console.error(
-            "Login error:",
-            error
-        );
-
-
-        showMessage(
-            "Утасны дугаар эсвэл нууц үг буруу байна.",
-            true
-        );
-
-
-        return;
-    }
-
-
-    /*
-     * ==========================================
-     * OFFLINE LOGIN INFO ХАДГАЛАХ
-     * ==========================================
-     */
-
-    try {
-
-        const normalizedPhone =
-            normalizePhone(phone);
-
-
-        const passwordHash =
-            await hashOfflinePassword(
-                password
-            );
-
-
-        const offlineAccount = {
-
-            userId:
-                data.user.id,
-
-            phone:
-                normalizedPhone,
-
-            passwordHash:
-                passwordHash
-
-        };
-
-
-        localStorage.setItem(
-
-            "uriin_dewter_offline_auth_" +
-            normalizedPhone,
-
-            JSON.stringify(
-                offlineAccount
-            )
-
-        );
-
-
-        console.log(
-            "✅ Offline login мэдээлэл хадгалагдлаа."
-        );
-
-
-    } catch (error) {
-
-        console.error(
-            "Offline auth save error:",
-            error
-        );
-
-    }
-
-
-    showMessage("");
-
-
-    await checkLoginOnLoad();
-
-}
-
-    /*
-     * ==========================================
-     * ONLINE LOGIN
-     * ==========================================
-     */
-
-    const email =
-        phoneEmail(phone);
-
-
-    const {
-        error
-    } =
-        await supabaseClient.auth
-            .signInWithPassword({
-
-                email,
-
-                password
+                password: password
 
             });
 
@@ -2723,16 +2486,19 @@ async function loginUser() {
             error
         );
 
-
         showMessage(
             "Утасны дугаар эсвэл нууц үг буруу байна.",
             true
         );
 
-
         return;
-
     }
+
+
+    console.log(
+        "Login success:",
+        data
+    );
 
 
     showMessage("");
@@ -2741,7 +2507,6 @@ async function loginUser() {
     await checkLoginOnLoad();
 
 }
-
 /* ==========================================
    LOGOUT
 ========================================== */
