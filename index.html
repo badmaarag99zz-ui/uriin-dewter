@@ -2651,6 +2651,116 @@ async function logoutUser() {
 ========================================== */
 
 async function checkLoginOnLoad() {
+    async function checkLoginOnLoad() {
+
+    /* ==========================================
+       ONLINE
+    ========================================== */
+
+    if (navigator.onLine) {
+
+        try {
+
+            const {
+                data: {
+                    session
+                }
+            } = await supabaseClient.auth.getSession();
+
+            if (session) {
+
+                document
+                    .getElementById("loginScreen")
+                    .style.display = "none";
+
+                document
+                    .getElementById("appContent")
+                    .style.display = "block";
+
+                await loadDebts();
+
+                return;
+            }
+
+        } catch (error) {
+
+            console.log(
+                "Online session шалгах боломжгүй:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* ==========================================
+       OFFLINE
+    ========================================== */
+
+    const savedAuth =
+        localStorage.getItem(
+            "uriin_dewter_offline_auth"
+        );
+
+    if (savedAuth) {
+
+        try {
+
+            const offlineAuth =
+                JSON.parse(savedAuth);
+
+            if (offlineAuth.userId) {
+
+                localStorage.setItem(
+                    "uriin_dewter_offline_current",
+                    JSON.stringify({
+                        userId:
+                            offlineAuth.userId,
+
+                        phone:
+                            offlineAuth.phone
+                    })
+                );
+
+                document
+                    .getElementById("loginScreen")
+                    .style.display = "none";
+
+                document
+                    .getElementById("appContent")
+                    .style.display = "block";
+
+                await loadDebts();
+
+                return;
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Offline session шалгахад алдаа:",
+                error
+            );
+
+        }
+
+    }
+
+
+    /* ==========================================
+       NO SESSION
+    ========================================== */
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "flex";
+
+    document
+        .getElementById("appContent")
+        .style.display = "none";
+
+}
 /* ==========================================
    GET CURRENT USER
 ========================================== */
