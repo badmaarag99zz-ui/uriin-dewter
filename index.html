@@ -4590,6 +4590,7 @@ async function addMoreDebt(id) {
 }
 
 
+```js
 /* ==========================================
    DELETE
 ========================================== */
@@ -4626,14 +4627,60 @@ async function deleteDebt(id) {
     }
 
 
-    /* OFFLINE */
+    /* ==========================================
+       OFFLINE
+    ========================================== */
 
     if (!navigator.onLine) {
+
+        /*
+         * Сервер дээр аль хэдийн байгаа өр бол
+         * дараа нь серверээс бас устгах хэрэгтэй.
+         */
+
+        if (
+            debt.id &&
+            !String(debt.id).startsWith("offline_")
+        ) {
+
+            let pendingDeletes =
+                JSON.parse(
+                    localStorage.getItem(
+                        `pendingDeletes_${user.id}`
+                    ) || "[]"
+                );
+
+
+            if (
+                !pendingDeletes.includes(debt.id)
+            ) {
+
+                pendingDeletes.push(
+                    debt.id
+                );
+
+            }
+
+
+            localStorage.setItem(
+                `pendingDeletes_${user.id}`,
+                JSON.stringify(
+                    pendingDeletes
+                )
+            );
+
+        }
+
+
+        /*
+         * Төхөөрөмж дээрээс шууд устгана.
+         */
 
         const index =
             debts.findIndex(
                 d => d.id === id
             );
+
 
         if (index !== -1) {
 
@@ -4644,26 +4691,32 @@ async function deleteDebt(id) {
 
         }
 
+
         saveOfflineDebts(
             user.id
         );
+
 
         closeDetailModal();
 
         showDebts();
 
+
         alert(
             "📴 Интернетгүй байна.\n\n" +
             "Өр төхөөрөмжөөс устгагдлаа.\n" +
-            "Синк хийхэд серверээс мөн устгана."
+            "Интернет ормогц серверээс мөн устгана."
         );
+
 
         return;
 
     }
 
 
-    /* ONLINE */
+    /* ==========================================
+       ONLINE
+    ========================================== */
 
     const {
         error
@@ -4699,6 +4752,8 @@ async function deleteDebt(id) {
     await loadDebts();
 
 }
+```
+
 
 
 /* ==========================================
@@ -4730,19 +4785,98 @@ async function syncOfflineDebts() {
             return;
         }
 
+```js
+/*
+ * =====================================
+ * OFFLINE УСТГАСАН ӨРҮҮД
+ * =====================================
+ */
+
+let pendingDeletes =
+    JSON.parse(
+        localStorage.getItem(
+            `pendingDeletes_${user.id}`
+        ) || "[]"
+    );
+
+
+if (
+    Array.isArray(pendingDeletes) &&
+    pendingDeletes.length > 0
+) {
+
+    for (
+        const deletedId
+        of pendingDeletes
+    ) {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from("debts")
+                .delete()
+                .eq(
+                    "id",
+                    deletedId
+                )
+                .eq(
+                    "user_id",
+                    user.id
+                );
+
+
+        if (error) {
+
+            console.error(
+                "❌ Offline устгалт sync алдаа:",
+                error
+            );
+
+            /*
+             * Алдаа гарвал ID-г queue-д
+             * хэвээр үлдээнэ.
+             */
+
+            continue;
+
+        }
+
+
+        console.log(
+            "🗑 Offline устгасан өр серверээс устлаа:",
+            deletedId
+        );
+
+
+        /*
+         * Амжилттай устсан ID-г queue-ээс авна.
+         */
+
+        pendingDeletes =
+            pendingDeletes.filter(
+                id =>
+                    id !== deletedId
+            );
+
+    }
+
+
+    localStorage.setItem(
+        `pendingDeletes_${user.id}`,
+        JSON.stringify(
+            pendingDeletes
+        )
+    );
+
+}
+```
 
         const cachedDebts =
             loadOfflineDebts(user.id);
 
 
-        if (
-            !Array.isArray(cachedDebts) ||
-            cachedDebts.length === 0
-        ) {
-
-            return;
-
-        }
+       
 
 
         /*
