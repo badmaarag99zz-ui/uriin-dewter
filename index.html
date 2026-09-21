@@ -1695,26 +1695,33 @@
                 type="button"
                 onclick="showHelp()"
             >
-                ❓ Тусламж
-            </button>
+              ```html
+<button
+    type="button"
+    onclick="showHelp()"
+>
+    ❓ Тусламж
+</button>
 
-            <span>•</span>
+<span>•</span>
 
-            <button
-                type="button"
-                onclick="showFeedback()"
-            >
-                💬 Санал хүсэлт
-            </button>
+<button
+    type="button"
+    onclick="showFeedback()"
+>
+    💬 Санал хүсэлт
+</button>
 
-            <span>•</span>
+<span>•</span>
 
-            <button
-                type="button"
-                onclick="showContact()"
-            >
-                📞 Холбоо барих
-            </button>
+<button
+    type="button"
+    onclick="showContact()"
+>
+    📞 Холбоо барих
+</button>
+```
+
 
         </div>
 
@@ -4810,6 +4817,35 @@ function showContact() {
     ========================================== */
 
     checkLoginOnLoad();
+```javascript
+function showHelp() {
+    alert(
+        "❓ Тусламж\n\n" +
+        "• Шинэ хүн нэмэх: “Өр бүртгэх” товчийг дарна.\n" +
+        "• Төлбөр бүртгэх: тухайн хүний дэлгэрэнгүй хэсгээс төлбөр нэмнэ.\n" +
+        "• Өр нэмэх: тухайн хүний өрийн дүнг нэмэгдүүлж болно.\n" +
+        "• Хайлт: нэр эсвэл утасны дугаараар хайна.\n\n" +
+        "Асуудал гарвал “Санал хүсэлт” хэсгээр бидэнд мэдэгдээрэй."
+    );
+}
+
+function showFeedback() {
+    alert(
+        "💬 Санал хүсэлт\n\n" +
+        "Апп дээр ямар нэгэн алдаа гарсан эсвэл санал байвал бидэнд мэдэгдээрэй.\n\n" +
+        "Тун удахгүй санал хүсэлт илгээх тусгай хэсэг нэмэгдэнэ."
+    );
+}
+
+function showContact() {
+    alert(
+        "📞 Холбоо барих\n\n" +
+        "Өрийн дэвтэр апптай холбоотой асуудлаар бидэнтэй холбогдоорой.\n\n" +
+        "📱 Утас: Тун удахгүй\n" +
+        "📧 Имэйл: Тун удахгүй"
+    );
+}
+```
 
 </script>
 
