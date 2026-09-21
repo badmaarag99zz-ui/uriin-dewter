@@ -430,8 +430,13 @@
         pointer-events: none;
     }
 
-    .card:hover {
-        ```css
+   ```css
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-hover);
+}
+
+
 /* =========================
    DASHBOARD CARD STYLE
 ========================= */
@@ -440,14 +445,12 @@
     display: flex;
     align-items: center;
     gap: 14px;
-
     min-height: 112px;
 }
 
 .dashboard-icon {
     width: 48px;
     height: 48px;
-
     flex-shrink: 0;
 
     display: flex;
@@ -455,7 +458,6 @@
     justify-content: center;
 
     border-radius: 15px;
-
     font-size: 22px;
 }
 
@@ -463,51 +465,37 @@
     min-width: 0;
 }
 
-/* Нийт хүмүүс */
-
 .people-card .dashboard-icon {
     background: #eef2ff;
 }
-
-/* Нийт өр */
 
 .debt-card-summary .dashboard-icon {
     background: #fff4df;
 }
 
-/* Төлсөн */
-
 .paid-card .dashboard-icon {
     background: #eaf8ef;
 }
-
-/* Үлдэгдэл */
 
 .remaining-card .dashboard-icon {
     background: #fff0f0;
 }
 
-
-/* Mobile */
-
 @media (max-width: 700px) {
 
     .dashboard-card {
         min-height: 100px;
-
         gap: 10px;
     }
 
     .dashboard-icon {
         width: 42px;
         height: 42px;
-
         border-radius: 13px;
-
         font-size: 19px;
     }
-
 }
+```
 
 
         transform: translateY(-3px);
@@ -1392,6 +1380,161 @@
                 1fr 1fr;
         }
     }
+```css
+/* =========================
+   LOGIN EXTRA
+========================= */
+
+.login-logo {
+    width: 68px;
+    height: 68px;
+
+    margin: 0 auto 15px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 21px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #eef0ff,
+            #e7f0ff
+        );
+
+    font-size: 32px;
+
+    box-shadow:
+        0 10px 25px rgba(91, 92, 240, 0.10);
+}
+
+
+.login-features {
+    margin-top: 26px;
+    padding-top: 20px;
+
+    border-top:
+        1px solid rgba(148, 163, 184, 0.16);
+}
+
+
+.feature-item {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 10px 0;
+}
+
+
+.feature-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 12px;
+
+    background: #f1f4ff;
+
+    font-size: 18px;
+}
+
+
+.feature-item strong {
+    display: block;
+
+    color: #273044;
+
+    font-size: 13px;
+
+    font-weight: 750;
+
+    margin-bottom: 2px;
+}
+
+
+.feature-item span {
+    display: block;
+
+    color: var(--muted);
+
+    font-size: 12px;
+}
+
+
+.login-links {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    margin-top: 22px;
+
+    padding-top: 16px;
+
+    border-top:
+        1px solid rgba(148, 163, 184, 0.13);
+
+    color: #c0c6d1;
+
+    flex-wrap: wrap;
+}
+
+
+.login-links button {
+    border: 0;
+
+    background: none;
+
+    padding: 2px;
+
+    color: #697386;
+
+    font-size: 11px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        color 0.2s;
+}
+
+
+.login-links button:hover {
+    color: var(--primary);
+}
+
+
+@media (max-width: 480px) {
+
+    .login-card {
+        padding: 28px 20px;
+    }
+
+    .login-logo {
+        width: 60px;
+        height: 60px;
+
+        font-size: 28px;
+    }
+
+    .feature-item {
+        padding: 8px 0;
+    }
+
+}
+```
 
 </style>
 
@@ -1405,12 +1548,12 @@
      LOGIN
 ========================= -->
 
+
 ```html
 <div id="loginScreen">
 
     <div class="login-card">
 
-        <!-- LOGO / TITLE -->
         <div class="login-logo">
             📒
         </div>
@@ -1422,11 +1565,12 @@
             хялбархан хянаарай.
         </div>
 
-        <!-- LOGIN FORM -->
+
         <input
             id="authPhone"
             type="tel"
             placeholder="Утасны дугаар"
+            inputmode="numeric"
         >
 
         <input
@@ -1435,6 +1579,7 @@
             placeholder="Нууц үг"
         >
 
+
         <button
             type="button"
             class="login-btn"
@@ -1442,6 +1587,7 @@
         >
             Нэвтрэх
         </button>
+
 
         <div style="text-align:center; margin-top:12px;">
 
@@ -1462,6 +1608,7 @@
 
         </div>
 
+
         <button
             type="button"
             class="register-btn"
@@ -1469,6 +1616,7 @@
         >
             Бүртгэл үүсгэх
         </button>
+
 
         <div
             id="authMessage"
@@ -1480,52 +1628,91 @@
         ></div>
 
 
-        <!-- FEATURES -->
         <div class="login-features">
 
             <div class="feature-item">
-                <div class="feature-icon">👥</div>
-                <div>
-                    <strong>Харилцагчаа бүртгэ</strong>
-                    <span>Мэдээллээ нэг дор хадгал</span>
+
+                <div class="feature-icon">
+                    👥
                 </div>
+
+                <div>
+                    <strong>
+                        Харилцагчаа бүртгэ
+                    </strong>
+
+                    <span>
+                        Мэдээллээ нэг дор хадгал
+                    </span>
+                </div>
+
             </div>
 
-            <div class="feature-item">
-                <div class="feature-icon">💰</div>
-                <div>
-                    <strong>Өр, төлөлтөө хяна</strong>
-                    <span>Үлдэгдлээ шууд хараарай</span>
-                </div>
-            </div>
 
             <div class="feature-item">
-                <div class="feature-icon">📊</div>
-                <div>
-                    <strong>Бүх мэдээллээ нэг дор</strong>
-                    <span>Хялбар, ойлгомжтой удирд</span>
+
+                <div class="feature-icon">
+                    💰
                 </div>
+
+                <div>
+                    <strong>
+                        Өр, төлөлтөө хяна
+                    </strong>
+
+                    <span>
+                        Үлдэгдлээ шууд хараарай
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="feature-item">
+
+                <div class="feature-icon">
+                    📊
+                </div>
+
+                <div>
+                    <strong>
+                        Бүх мэдээллээ нэг дор
+                    </strong>
+
+                    <span>
+                        Хялбар, ойлгомжтой удирд
+                    </span>
+                </div>
+
             </div>
 
         </div>
 
 
-        <!-- BOTTOM LINKS -->
         <div class="login-links">
 
-            <button type="button" onclick="showHelp()">
+            <button
+                type="button"
+                onclick="showHelp()"
+            >
                 ❓ Тусламж
             </button>
 
             <span>•</span>
 
-            <button type="button" onclick="showFeedback()">
+            <button
+                type="button"
+                onclick="showFeedback()"
+            >
                 💬 Санал хүсэлт
             </button>
 
             <span>•</span>
 
-            <button type="button" onclick="showContact()">
+            <button
+                type="button"
+                onclick="showContact()"
+            >
                 📞 Холбоо барих
             </button>
 
@@ -1535,6 +1722,7 @@
 
 </div>
 ```
+
 
 
 <!-- =========================
@@ -4509,6 +4697,63 @@
 
     }
 
+```javascript
+/* ==========================================
+   LOGIN INFORMATION
+========================================== */
+
+function showHelp() {
+
+    alert(
+        "📒 ӨРИЙН ДЭВТЭР\n\n" +
+
+        "1. Бүртгэл үүсгэнэ.\n" +
+        "2. Утасны дугаар, нууц үгээр нэвтэрнэ.\n" +
+        "3. “Өр бүртгэх” товчоор хүн нэмнэ.\n" +
+        "4. Тухайн хүний мэдээлэл дээр дарж төлөлт бүртгэнэ.\n" +
+        "5. Өр нэмэх, засах, устгах боломжтой.\n\n" +
+
+        "Асуудал гарвал “Холбоо барих” хэсгээр бидэнд мэдэгдээрэй."
+    );
+
+}
+
+
+function showFeedback() {
+
+    const feedback =
+        prompt(
+            "💬 Өрийн дэвтэрт ямар зүйл нэммээр байна?\n\n" +
+            "Санал, хүсэлтээ энд бичнэ үү:"
+        );
+
+
+    if (!feedback) return;
+
+
+    alert(
+        "✅ Санал хүсэлтийг хүлээн авлаа.\n\n" +
+        "Баярлалаа!"
+    );
+
+}
+
+
+function showContact() {
+
+    alert(
+        "📞 ХОЛБОО БАРИХ\n\n" +
+
+        "Өрийн дэвтэртэй холбоотой\n" +
+        "асуулт, санал, алдаа гарвал\n" +
+        "бидэнтэй холбогдоорой.\n\n" +
+
+        "📱 Утас: Тун удахгүй\n" +
+        "💬 Facebook: Тун удахгүй"
+    );
+
+}
+```
 
     /* ==========================================
        EVENTS
