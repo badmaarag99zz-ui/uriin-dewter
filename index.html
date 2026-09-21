@@ -6078,29 +6078,50 @@ function closeFeedback() {
 }
 
 
-function submitFeedback() {
+async function submitFeedback() {
 
-    const feedbackInput =
-        document.getElementById("feedbackText");
-
-    const feedback =
-        feedbackInput.value.trim();
+    const feedbackInput = document.getElementById("feedbackText");
+    const feedback = feedbackInput.value.trim();
 
     if (!feedback) {
-
         alert("Санал хүсэлтээ бичнэ үү.");
-
         return;
     }
 
-    feedbackInput.value = "";
+    const user = await getCurrentUser();
 
-    closeFeedback();
+    if (!user) {
+        alert("Санал хүсэлт илгээхийн тулд эхлээд нэвтэрнэ үү.");
+        return;
+    }
 
-    alert(
-        "✅ Санал хүсэлтийг хүлээн авлаа.\n\n" +
-        "Баярлалаа!"
-    );
+    try {
+
+        const { error } = await supabaseClient
+            .from("feedback")
+            .insert({
+                user_id: user.id,
+                message: feedback
+            });
+
+        if (error) {
+            console.error("Feedback error:", error);
+            alert("❌ Санал хүсэлт илгээхэд алдаа гарлаа.");
+            return;
+        }
+
+        feedbackInput.value = "";
+        closeFeedback();
+
+        alert("✅ Санал хүсэлтийг амжилттай илгээлээ.\n\nБаярлалаа!");
+
+    } catch (error) {
+
+        console.error("Feedback error:", error);
+
+        alert("❌ Санал хүсэлт илгээхэд алдаа гарлаа.");
+
+    }
 
 }
 
