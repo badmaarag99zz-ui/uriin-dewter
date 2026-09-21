@@ -15,765 +15,1308 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <style>
+  ```html
+<style>
 
-        * {
-            box-sizing: border-box;
+    * {
+        box-sizing: border-box;
+    }
+
+    :root {
+        --bg: #eef3f9;
+        --bg-dark: #e7edf6;
+
+        --card: rgba(255, 255, 255, 0.92);
+        --card-solid: #ffffff;
+
+        --text: #172033;
+        --text-dark: #111827;
+        --muted: #7a8497;
+
+        --primary: #5b5cf0;
+        --primary-dark: #4849d8;
+        --primary-light: #eef0ff;
+
+        --green: #16a34a;
+        --green-light: #eaf8ef;
+
+        --red: #ef4444;
+        --red-light: #fff0f0;
+
+        --orange: #f59e0b;
+        --orange-light: #fff7df;
+
+        --blue: #0284c7;
+        --blue-light: #eaf7ff;
+
+        --border: rgba(148, 163, 184, 0.20);
+
+        --shadow:
+            0 10px 30px rgba(30, 41, 59, 0.07);
+
+        --shadow-hover:
+            0 16px 38px rgba(30, 41, 59, 0.11);
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        margin: 0;
+        font-family:
+            Inter,
+            -apple-system,
+            BlinkMacSystemFont,
+            "Segoe UI",
+            sans-serif;
+
+        color: var(--text);
+
+        background:
+            radial-gradient(
+                circle at 0% 0%,
+                rgba(99, 102, 241, 0.10),
+                transparent 30%
+            ),
+            radial-gradient(
+                circle at 100% 20%,
+                rgba(14, 165, 233, 0.08),
+                transparent 28%
+            ),
+            radial-gradient(
+                circle at 50% 100%,
+                rgba(16, 185, 129, 0.06),
+                transparent 30%
+            ),
+            linear-gradient(
+                135deg,
+                #f3f6fb 0%,
+                #edf2f8 50%,
+                #eaf0f7 100%
+            );
+
+        min-height: 100vh;
+    }
+
+    button,
+    input,
+    select {
+        font-family: inherit;
+    }
+
+    button {
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    #loginScreen {
+        min-height: 100vh;
+
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        padding: 20px;
+
+        background:
+            radial-gradient(
+                circle at 15% 15%,
+                rgba(99, 102, 241, 0.18),
+                transparent 32%
+            ),
+            radial-gradient(
+                circle at 85% 85%,
+                rgba(16, 185, 129, 0.12),
+                transparent 32%
+            ),
+            linear-gradient(
+                135deg,
+                #f4f7fc 0%,
+                #eaf0f8 100%
+            );
+    }
+
+    .login-card {
+        width: 100%;
+        max-width: 420px;
+
+        padding: 40px 32px;
+
+        background: rgba(255, 255, 255, 0.86);
+
+        border: 1px solid rgba(255, 255, 255, 0.8);
+
+        border-radius: 30px;
+
+        box-shadow:
+            0 30px 80px rgba(30, 41, 59, 0.13),
+            0 4px 15px rgba(30, 41, 59, 0.04);
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+
+    .login-card h1 {
+        margin: 0 0 8px;
+
+        font-size: 30px;
+        font-weight: 850;
+
+        text-align: center;
+
+        letter-spacing: -0.8px;
+
+        color: #151a2b;
+    }
+
+    .login-subtitle {
+        text-align: center;
+
+        color: var(--muted);
+
+        margin-bottom: 28px;
+
+        font-size: 14px;
+    }
+
+    .login-card input {
+        width: 100%;
+
+        padding: 15px 16px;
+
+        margin-bottom: 12px;
+
+        border: 1px solid rgba(148, 163, 184, 0.25);
+
+        border-radius: 15px;
+
+        outline: none;
+
+        font-size: 15px;
+
+        color: var(--text);
+
+        background: rgba(248, 250, 252, 0.9);
+
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s,
+            background 0.2s;
+    }
+
+    .login-card input::placeholder {
+        color: #9aa3b3;
+    }
+
+    .login-card input:focus {
+        border-color: var(--primary);
+
+        background: #ffffff;
+
+        box-shadow:
+            0 0 0 4px rgba(91, 92, 240, 0.10);
+    }
+
+    .login-btn,
+    .register-btn {
+        width: 100%;
+
+        border: 0;
+
+        padding: 15px;
+
+        border-radius: 15px;
+
+        font-size: 15px;
+        font-weight: 750;
+
+        cursor: pointer;
+
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s,
+            background 0.2s;
+    }
+
+    .login-btn {
+        color: white;
+
+        background:
+            linear-gradient(
+                135deg,
+                #6869f4,
+                #5051dc
+            );
+
+        box-shadow:
+            0 8px 20px rgba(91, 92, 240, 0.22);
+    }
+
+    .login-btn:hover {
+        background:
+            linear-gradient(
+                135deg,
+                #5d5eea,
+                #4647cc
+            );
+
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 12px 25px rgba(91, 92, 240, 0.28);
+    }
+
+    .register-btn {
+        margin-top: 10px;
+
+        background: #eef0ff;
+
+        color: var(--primary);
+    }
+
+    .register-btn:hover {
+        background: #e4e7ff;
+
+        transform: translateY(-1px);
+    }
+
+    /* =========================
+       HEADER
+    ========================= */
+
+    header {
+        position: sticky;
+
+        top: 0;
+
+        z-index: 50;
+
+        background:
+            rgba(255, 255, 255, 0.76);
+
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        border-bottom:
+            1px solid rgba(148, 163, 184, 0.15);
+
+        box-shadow:
+            0 4px 18px rgba(30, 41, 59, 0.035);
+    }
+
+    .header-inner {
+        max-width: 1180px;
+
+        margin: auto;
+
+        padding: 16px 22px;
+
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+    }
+
+    header h1 {
+        margin: 0;
+
+        font-size: 22px;
+
+        font-weight: 850;
+
+        letter-spacing: -0.6px;
+
+        color: #171b2d;
+    }
+
+    .logout-btn {
+        border: 1px solid rgba(148, 163, 184, 0.16);
+
+        background: rgba(241, 243, 248, 0.9);
+
+        color: #596275;
+
+        padding: 9px 14px;
+
+        border-radius: 12px;
+
+        cursor: pointer;
+
+        font-weight: 700;
+
+        transition:
+            background 0.2s,
+            transform 0.2s;
+    }
+
+    .logout-btn:hover {
+        background: #e7eaf1;
+
+        transform: translateY(-1px);
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    .container {
+        max-width: 1180px;
+
+        margin: auto;
+
+        padding: 30px 22px 110px;
+    }
+
+    /* =========================
+       DASHBOARD CARDS
+    ========================= */
+
+    .cards {
+        display: grid;
+
+        grid-template-columns:
+            repeat(4, 1fr);
+
+        gap: 16px;
+
+        margin-bottom: 25px;
+    }
+
+    .card {
+        position: relative;
+
+        overflow: hidden;
+
+        background: var(--card);
+
+        border:
+            1px solid rgba(255, 255, 255, 0.75);
+
+        border-radius: 21px;
+
+        padding: 21px;
+
+        box-shadow: var(--shadow);
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+
+        transition:
+            transform 0.22s,
+            box-shadow 0.22s;
+    }
+
+    .card::after {
+        content: "";
+
+        position: absolute;
+
+        width: 90px;
+        height: 90px;
+
+        right: -38px;
+        top: -38px;
+
+        border-radius: 50%;
+
+        background:
+            rgba(99, 102, 241, 0.055);
+
+        pointer-events: none;
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+
+        box-shadow: var(--shadow-hover);
+    }
+
+    .card-label {
+        color: var(--muted);
+
+        font-size: 13px;
+
+        font-weight: 650;
+
+        margin-bottom: 9px;
+    }
+
+    .card-value {
+        font-size: 25px;
+
+        font-weight: 850;
+
+        letter-spacing: -0.7px;
+
+        color: #172033;
+    }
+
+    /* =========================
+       DEBT SECTION
+    ========================= */
+
+    .debt-box {
+        background: rgba(255, 255, 255, 0.91);
+
+        border:
+            1px solid rgba(255, 255, 255, 0.75);
+
+        border-radius: 25px;
+
+        padding: 23px;
+
+        box-shadow: var(--shadow);
+
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    .debt-box h2 {
+        margin: 0 0 18px;
+
+        font-size: 20px;
+
+        font-weight: 800;
+
+        letter-spacing: -0.3px;
+    }
+
+    .tools {
+        display: flex;
+
+        gap: 10px;
+
+        margin-bottom: 18px;
+    }
+
+    .tools input,
+    .tools select {
+        border:
+            1px solid rgba(148, 163, 184, 0.22);
+
+        background: #f8fafc;
+
+        border-radius: 14px;
+
+        padding: 12px 14px;
+
+        outline: none;
+
+        font-size: 14px;
+
+        color: var(--text);
+
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s,
+            background 0.2s;
+    }
+
+    .tools input {
+        flex: 1;
+    }
+
+    .tools input::placeholder {
+        color: #9aa3b3;
+    }
+
+    .tools input:focus,
+    .tools select:focus {
+        border-color: var(--primary);
+
+        background: white;
+
+        box-shadow:
+            0 0 0 4px rgba(91, 92, 240, 0.07);
+    }
+
+    /* =========================
+       DEBT CARD
+    ========================= */
+
+    .debt-card {
+        border:
+            1px solid rgba(148, 163, 184, 0.18);
+
+        border-radius: 18px;
+
+        padding: 17px 18px;
+
+        margin-bottom: 11px;
+
+        background:
+            rgba(255, 255, 255, 0.82);
+
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s,
+            transform 0.2s;
+    }
+
+    .debt-card:hover {
+        border-color:
+            rgba(99, 102, 241, 0.28);
+
+        box-shadow:
+            0 9px 25px rgba(30, 41, 59, 0.07);
+
+        transform: translateY(-2px);
+    }
+
+    .debt-main-row {
+        display: flex;
+
+        align-items: center;
+
+        justify-content: space-between;
+
+        gap: 15px;
+    }
+
+    .debt-person {
+        min-width: 0;
+    }
+
+    .person-name {
+        font-size: 16px;
+
+        font-weight: 800;
+
+        margin-bottom: 4px;
+
+        color: #202638;
+    }
+
+    .person-phone {
+        font-size: 13px;
+
+        color: var(--muted);
+    }
+
+    .debt-summary {
+        text-align: right;
+
+        flex-shrink: 0;
+    }
+
+    .debt-total {
+        font-size: 17px;
+
+        font-weight: 850;
+
+        color: var(--red);
+    }
+
+    .debt-total.done {
+        color: var(--green);
+    }
+
+    .debt-due {
+        margin-top: 4px;
+
+        font-size: 12px;
+
+        color: var(--muted);
+    }
+
+    .debt-due.overdue {
+        color: var(--red);
+
+        font-weight: 750;
+    }
+
+    .empty {
+        text-align: center;
+
+        padding: 50px 20px;
+
+        color: var(--muted);
+
+        font-size: 14px;
+    }
+
+    /* =========================
+       FLOATING BUTTON
+    ========================= */
+
+    .floating-add-btn {
+        position: fixed;
+
+        left: 20px;
+        right: 20px;
+
+        bottom: 18px;
+
+        width: auto;
+
+        height: 56px;
+
+        border: 0;
+
+        border-radius: 17px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #6869f4,
+                #5051dc
+            );
+
+        color: white;
+
+        font-size: 16px;
+
+        font-weight: 800;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 12px 30px rgba(91, 92, 240, 0.25);
+
+        z-index: 60;
+
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
+    }
+
+    .floating-add-btn:hover {
+        transform: translateY(-3px);
+
+        box-shadow:
+            0 16px 35px rgba(91, 92, 240, 0.32);
+    }
+
+    /* =========================
+       MODALS
+    ========================= */
+
+    .debt-modal,
+    #detailModal {
+        position: fixed;
+
+        inset: 0;
+
+        z-index: 100;
+
+        display: none;
+
+        align-items: center;
+
+        justify-content: center;
+
+        padding: 20px;
+
+        background:
+            rgba(15, 23, 42, 0.48);
+
+        backdrop-filter: blur(7px);
+        -webkit-backdrop-filter: blur(7px);
+    }
+
+    .debt-modal.show,
+    #detailModal.show {
+        display: flex;
+    }
+
+    .debt-modal-box,
+    .detail-box {
+        width: 100%;
+
+        max-width: 500px;
+
+        max-height: 90vh;
+
+        overflow-y: auto;
+
+        background:
+            rgba(255, 255, 255, 0.97);
+
+        border:
+            1px solid rgba(255, 255, 255, 0.8);
+
+        border-radius: 26px;
+
+        padding: 25px;
+
+        box-shadow:
+            0 30px 80px rgba(15, 23, 42, 0.22);
+
+        animation:
+            modalIn 0.2s ease-out;
+    }
+
+    @keyframes modalIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px) scale(0.98);
         }
 
-        :root {
-            --bg: #f3f6fb;
-            --card: #ffffff;
-            --text: #172033;
-            --muted: #7b8496;
-
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-
-            --green: #16a34a;
-            --red: #ef4444;
-            --orange: #f59e0b;
-
-            --border: #e7eaf1;
-
-            --shadow: 0 8px 28px rgba(30, 41, 59, 0.06);
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
+    }
 
-        body {
-            margin: 0;
-            font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: var(--bg);
-            color: var(--text);
-        }
+    .debt-modal-header {
+        display: flex;
 
-        /* =========================
-           LOGIN
-        ========================= */
+        align-items: center;
 
-        #loginScreen {
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+        justify-content: space-between;
 
-            background:
-                radial-gradient(circle at top left, #e9e9ff 0, transparent 35%),
-                radial-gradient(circle at bottom right, #e4f7ee 0, transparent 35%),
-                var(--bg);
-        }
+        gap: 15px;
 
-        .login-card {
-            width: 100%;
-            max-width: 420px;
-            background: rgba(255,255,255,0.95);
-            padding: 38px 32px;
-            border-radius: 28px;
-            box-shadow: 0 25px 70px rgba(30,41,59,0.12);
-        }
+        margin-bottom: 22px;
+    }
 
-        .login-card h1 {
-            margin: 0 0 8px;
-            font-size: 30px;
-            text-align: center;
-        }
+    .debt-modal-header h2 {
+        margin: 0;
 
-        .login-subtitle {
-            text-align: center;
-            color: var(--muted);
-            margin-bottom: 28px;
-        }
+        font-size: 21px;
 
-        .login-card input {
-            width: 100%;
-            padding: 15px 16px;
-            margin-bottom: 12px;
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            outline: none;
-            font-size: 15px;
-            background: #fafbfe;
-            transition: 0.2s;
-        }
+        font-weight: 800;
+    }
 
-        .login-card input:focus {
-            border-color: var(--primary);
-            background: white;
-            box-shadow: 0 0 0 4px rgba(91,92,240,0.1);
-        }
+    .debt-modal-header p {
+        margin: 5px 0 0;
 
-        .login-btn,
-        .register-btn {
-            width: 100%;
-            border: 0;
-            padding: 15px;
-            border-radius: 14px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+        color: var(--muted);
 
-        .login-btn {
-            background: var(--primary);
-            color: white;
-        }
+        font-size: 13px;
+    }
 
-        .login-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-1px);
-        }
+    .modal-close,
+    .detail-close {
+        width: 38px;
+        height: 38px;
 
-        .register-btn {
-            margin-top: 10px;
-            background: #eef0ff;
-            color: var(--primary);
-        }
+        border: 0;
 
-        .register-btn:hover {
-            background: #e2e4ff;
-        }
+        border-radius: 50%;
 
-        /* =========================
-           HEADER
-        ========================= */
+        background: #f1f3f7;
 
-        header {
-            position: sticky;
-            top: 0;
-            z-index: 50;
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(18px);
-            -webkit-backdrop-filter: blur(18px);
-            border-bottom: 1px solid rgba(231, 234, 241, 0.8);
-        }
+        cursor: pointer;
+
+        font-size: 18px;
+
+        color: #64748b;
+
+        transition:
+            background 0.2s,
+            transform 0.2s;
+    }
+
+    .modal-close:hover,
+    .detail-close:hover {
+        background: #e8ebf0;
+
+        transform: rotate(4deg);
+    }
+
+    /* =========================
+       FORM
+    ========================= */
+
+    .debt-form label {
+        display: block;
+
+        margin: 15px 0 7px;
+
+        font-size: 13px;
+
+        font-weight: 700;
+
+        color: #475569;
+    }
+
+    .debt-form input {
+        width: 100%;
+
+        padding: 14px;
+
+        border:
+            1px solid rgba(148, 163, 184, 0.23);
+
+        border-radius: 14px;
+
+        outline: none;
+
+        font-size: 15px;
+
+        color: var(--text);
+
+        background: #f8fafc;
+
+        transition:
+            border-color 0.2s,
+            box-shadow 0.2s,
+            background 0.2s;
+    }
+
+    .debt-form input:focus {
+        border-color: var(--primary);
+
+        background: white;
+
+        box-shadow:
+            0 0 0 4px rgba(91, 92, 240, 0.08);
+    }
+
+    .modal-save-btn {
+        width: 100%;
+
+        margin-top: 20px;
+
+        padding: 14px;
+
+        border: 0;
+
+        border-radius: 15px;
+
+        background:
+            linear-gradient(
+                135deg,
+                #6869f4,
+                #5051dc
+            );
+
+        color: white;
+
+        font-size: 15px;
+
+        font-weight: 800;
+
+        cursor: pointer;
+
+        box-shadow:
+            0 8px 20px rgba(91, 92, 240, 0.18);
+
+        transition:
+            transform 0.2s,
+            box-shadow 0.2s;
+    }
+
+    .modal-save-btn:hover {
+        transform: translateY(-2px);
+
+        box-shadow:
+            0 12px 25px rgba(91, 92, 240, 0.25);
+    }
+
+    /* =========================
+       DETAIL
+    ========================= */
+
+    .detail-box {
+        max-width: 560px;
+    }
+
+    .detail-balance {
+        background:
+            linear-gradient(
+                135deg,
+                #5b5cf0,
+                #7475ff
+            );
+
+        color: white;
+
+        border-radius: 21px;
+
+        padding: 23px;
+
+        margin-bottom: 16px;
+
+        box-shadow:
+            0 12px 28px rgba(91, 92, 240, 0.20);
+    }
+
+    .detail-balance-label {
+        font-size: 13px;
+
+        opacity: 0.85;
+
+        margin-bottom: 6px;
+    }
+
+    .detail-balance-value {
+        font-size: 31px;
+
+        font-weight: 900;
+
+        letter-spacing: -0.8px;
+    }
+
+    .detail-balance-value.done {
+        color: #bbf7d0;
+    }
+
+    .detail-stats {
+        display: grid;
+
+        grid-template-columns: 1fr 1fr;
+
+        gap: 12px;
+
+        margin-bottom: 18px;
+    }
+
+    .detail-stat {
+        background: #f8fafc;
+
+        border:
+            1px solid rgba(148, 163, 184, 0.18);
+
+        border-radius: 16px;
+
+        padding: 16px;
+    }
+
+    .detail-stat-label {
+        color: var(--muted);
+
+        font-size: 12px;
+
+        margin-bottom: 5px;
+    }
+
+    .detail-stat-value {
+        font-size: 18px;
+
+        font-weight: 800;
+    }
+
+    .detail-actions {
+        display: grid;
+
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 10px;
+
+        margin-top: 18px;
+    }
+
+    .detail-actions button {
+        border: 0;
+
+        border-radius: 14px;
+
+        padding: 13px 10px;
+
+        font-weight: 700;
+
+        cursor: pointer;
+
+        transition:
+            transform 0.18s,
+            filter 0.18s;
+    }
+
+    .detail-actions button:hover {
+        transform: translateY(-2px);
+
+        filter: brightness(0.98);
+    }
+
+    .detail-call {
+        background: var(--green-light);
+
+        color: #15803d;
+    }
+
+    .detail-edit {
+        background: var(--primary-light);
+
+        color: #4f46e5;
+    }
+
+    .detail-pay {
+        background: var(--orange-light);
+
+        color: #b45309;
+    }
+
+    .detail-more {
+        background: var(--blue-light);
+
+        color: #0369a1;
+    }
+
+    .detail-delete {
+        background: var(--red-light);
+
+        color: #dc2626;
+    }
+
+    /* =========================
+       HISTORY
+    ========================= */
+
+    .clickable-detail,
+    .clickable-detail-stat {
+        cursor: pointer;
+
+        transition:
+            background 0.18s,
+            transform 0.18s;
+    }
+
+    .clickable-detail:hover {
+        background: #f1f5f9;
+    }
+
+    .clickable-detail-stat:hover {
+        background: #eef2ff;
+
+        transform: translateY(-1px);
+    }
+
+    .click-arrow {
+        float: right;
+
+        font-size: 12px;
+
+        color: #64748b;
+    }
+
+    .history-panel {
+        display: none;
+
+        background: #f8fafc;
+
+        border:
+            1px solid rgba(148, 163, 184, 0.18);
+
+        border-radius: 15px;
+
+        padding: 12px 15px;
+
+        margin: 8px 0 15px;
+    }
+
+    .history-panel.show {
+        display: block;
+    }
+
+    .history-title {
+        font-weight: 800;
+
+        margin-bottom: 8px;
+
+        color: #334155;
+    }
+
+    .history-item {
+        display: flex;
+
+        justify-content: space-between;
+
+        align-items: center;
+
+        gap: 10px;
+
+        padding: 11px 0;
+
+        border-bottom:
+            1px solid #e2e8f0;
+    }
+
+    .history-item:last-child {
+        border-bottom: 0;
+    }
+
+    .history-item small {
+        color: #64748b;
+
+        font-size: 11px;
+
+        text-align: right;
+    }
+
+    .history-empty {
+        color: #64748b;
+
+        padding: 8px 0;
+
+        font-size: 14px;
+    }
+
+    /* =========================
+       SCROLLBAR
+    ========================= */
+
+    ::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+
+        border-radius: 20px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 700px) {
 
         .header-inner {
-            max-width: 1180px;
-            margin: auto;
-            padding: 17px 22px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            padding: 14px 16px;
         }
 
         header h1 {
-            margin: 0;
-            font-size: 22px;
-            font-weight: 850;
-            letter-spacing: -0.5px;
-            color: #171b2d;
+            font-size: 19px;
         }
-
-        .logout-btn {
-            border: 0;
-            background: #f1f3f8;
-            color: #596275;
-            padding: 9px 14px;
-            border-radius: 11px;
-            cursor: pointer;
-            font-weight: 700;
-            transition: 0.2s;
-        }
-
-        .logout-btn:hover {
-            background: #e7eaf1;
-            color: #30384a;
-        }
-
-        /* =========================
-           MAIN
-        ========================= */
 
         .container {
-            max-width: 1180px;
-            margin: auto;
-            padding: 28px 22px 100px;
+            padding:
+                18px
+                14px
+                92px;
         }
 
-        /* =========================
-           DASHBOARD CARDS
-        ========================= */
-
         .cards {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            margin-bottom: 25px;
+            grid-template-columns:
+                repeat(2, 1fr);
+
+            gap: 10px;
         }
 
         .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 20px;
-            box-shadow: var(--shadow);
-            transition: 0.2s;
-        }
+            padding: 17px 15px;
 
-        .card:hover {
-            transform: translateY(-2px);
-        }
-
-        .card-label {
-            color: var(--muted);
-            font-size: 13px;
-            font-weight: 600;
-            margin-bottom: 9px;
+            border-radius: 18px;
         }
 
         .card-value {
-            font-size: 25px;
-            font-weight: 800;
-            letter-spacing: -0.5px;
-        }
-
-        /* =========================
-           DEBT SECTION
-        ========================= */
-
-        .debt-box {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 22px;
-            box-shadow: var(--shadow);
-        }
-
-        .debt-box h2 {
-            margin: 0 0 18px;
             font-size: 20px;
         }
 
+        .debt-box {
+            padding: 15px;
+
+            border-radius: 21px;
+        }
+
+        .debt-box h2 {
+            font-size: 18px;
+        }
+
         .tools {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 18px;
+            flex-direction: column;
         }
 
         .tools input,
         .tools select {
-            border: 1px solid var(--border);
-            background: #f9fafc;
-            border-radius: 13px;
-            padding: 12px 14px;
-            outline: none;
-            font-size: 14px;
+            width: 100%;
         }
-
-        .tools input {
-            flex: 1;
-        }
-
-        .tools input:focus,
-        .tools select:focus {
-            border-color: var(--primary);
-            background: white;
-        }
-
-        /* =========================
-           DEBT CARD
-        ========================= */
 
         .debt-card {
-            border: 1px solid var(--border);
-            border-radius: 18px;
-            padding: 16px 18px;
-            margin-bottom: 11px;
-            background: white;
-            transition: 0.2s;
-        }
-
-        .debt-card:hover {
-            border-color: #d7d9ff;
-            box-shadow: 0 7px 22px rgba(30,41,59,0.06);
-            transform: translateY(-1px);
-        }
-
-        .debt-main-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-        }
-
-        .debt-person {
-            min-width: 0;
+            padding: 14px;
         }
 
         .person-name {
-            font-size: 16px;
-            font-weight: 800;
-            margin-bottom: 4px;
-        }
-
-        .person-phone {
-            font-size: 13px;
-            color: var(--muted);
-        }
-
-        .debt-summary {
-            text-align: right;
-            flex-shrink: 0;
+            font-size: 15px;
         }
 
         .debt-total {
-            font-size: 17px;
-            font-weight: 800;
-            color: var(--red);
+            font-size: 15px;
         }
-
-        .debt-total.done {
-            color: var(--green);
-        }
-
-        .debt-due {
-            margin-top: 4px;
-            font-size: 12px;
-            color: var(--muted);
-        }
-
-        .debt-due.overdue {
-            color: var(--red);
-            font-weight: 700;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 45px 20px;
-            color: var(--muted);
-        }
-
-        /* =========================
-           FLOATING BUTTON
-        ========================= */
 
         .floating-add-btn {
-            position: fixed;
-            left: 20px;
-            right: 20px;
-            bottom: 18px;
+            left: 15px;
+            right: 15px;
+
+            bottom: 15px;
+
             width: auto;
-            height: 54px;
-            border: 0;
+
+            height: 55px;
+
             border-radius: 16px;
-            background: var(--primary);
-            color: white;
+
             font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 10px 25px rgba(91,92,240,0.25);
-            z-index: 60;
-            transition: 0.2s;
+        }
+    }
+
+    @media (max-width: 480px) {
+
+        .login-card {
+            padding: 30px 22px;
+
+            border-radius: 24px;
         }
 
-        .floating-add-btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
+        .login-card h1 {
+            font-size: 27px;
         }
 
-        /* =========================
-           MODALS
-        ========================= */
-
-        .debt-modal,
-        #detailModal {
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            background: rgba(15,23,42,0.45);
-            backdrop-filter: blur(5px);
+        .cards {
+            gap: 8px;
         }
 
-        .debt-modal.show,
-        #detailModal.show {
-            display: flex;
+        .card {
+            padding: 14px 12px;
         }
 
-        .debt-modal-box,
-        .detail-box {
-            width: 100%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-            background: white;
-            border-radius: 25px;
-            padding: 24px;
-            box-shadow: 0 25px 70px rgba(15,23,42,0.2);
+        .card-label {
+            font-size: 11px;
         }
 
-        .debt-modal-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 15px;
-            margin-bottom: 22px;
+        .card-value {
+            font-size: 17px;
         }
 
-        .debt-modal-header h2 {
-            margin: 0;
-            font-size: 21px;
+        .debt-main-row {
+            align-items: flex-start;
         }
 
-        .debt-modal-header p {
-            margin: 5px 0 0;
-            color: var(--muted);
-            font-size: 13px;
+        .debt-summary {
+            max-width: 130px;
         }
 
-        .modal-close,
-        .detail-close {
-            width: 38px;
-            height: 38px;
-            border: 0;
-            border-radius: 50%;
-            background: #f1f3f7;
-            cursor: pointer;
-            font-size: 18px;
-            color: #64748b;
-        }
+        .detail-box,
+        .debt-modal-box {
+            padding: 18px;
 
-        .modal-close:hover,
-        .detail-close:hover {
-            background: #e8ebf0;
-        }
-
-        /* =========================
-           FORM
-        ========================= */
-
-        .debt-form label {
-            display: block;
-            margin: 15px 0 7px;
-            font-size: 13px;
-            font-weight: 700;
-            color: #475569;
-        }
-
-        .debt-form input {
-            width: 100%;
-            padding: 14px;
-            border: 1px solid var(--border);
-            border-radius: 13px;
-            outline: none;
-            font-size: 15px;
-        }
-
-        .debt-form input:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 4px rgba(91,92,240,0.08);
-        }
-
-        .modal-save-btn {
-            width: 100%;
-            margin-top: 20px;
-            padding: 14px;
-            border: 0;
-            border-radius: 14px;
-            background: var(--primary);
-            color: white;
-            font-size: 15px;
-            font-weight: 800;
-            cursor: pointer;
-        }
-
-        /* =========================
-           DETAIL
-        ========================= */
-
-        .detail-box {
-            max-width: 560px;
+            border-radius: 22px;
         }
 
         .detail-balance {
-            background: linear-gradient(135deg, #5b5cf0, #7475ff);
-            color: white;
-            border-radius: 20px;
-            padding: 22px;
-            margin-bottom: 16px;
-        }
-
-        .detail-balance-label {
-            font-size: 13px;
-            opacity: 0.85;
-            margin-bottom: 6px;
+            padding: 18px;
         }
 
         .detail-balance-value {
-            font-size: 31px;
-            font-weight: 900;
-        }
-
-        .detail-balance-value.done {
-            color: #bbf7d0;
-        }
-
-        .detail-stats {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 18px;
-        }
-
-        .detail-stat {
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 16px;
-        }
-
-        .detail-stat-label {
-            color: var(--muted);
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        .detail-stat-value {
-            font-size: 18px;
-            font-weight: 800;
+            font-size: 27px;
         }
 
         .detail-actions {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 18px;
+            grid-template-columns:
+                1fr 1fr;
         }
+    }
 
-        .detail-actions button {
-            border: 0;
-            border-radius: 14px;
-            padding: 13px 10px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.2s;
-        }
+</style>
+```
 
-        .detail-actions button:hover {
-            transform: translateY(-1px);
-        }
-
-        .detail-call {
-            background: #dcfce7;
-            color: #15803d;
-        }
-
-        .detail-edit {
-            background: #eef2ff;
-            color: #4f46e5;
-        }
-
-        .detail-pay {
-            background: #fef3c7;
-            color: #b45309;
-        }
-
-        .detail-more {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-
-        .detail-delete {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-
-        /* =========================
-           HISTORY
-        ========================= */
-
-        .clickable-detail,
-        .clickable-detail-stat {
-            cursor: pointer;
-            transition: 0.18s;
-        }
-
-        .clickable-detail:hover {
-            background: #f1f5f9;
-        }
-
-        .clickable-detail-stat:hover {
-            background: #eef2ff;
-        }
-
-        .click-arrow {
-            float: right;
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .history-panel {
-            display: none;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 12px 15px;
-            margin: 8px 0 15px;
-        }
-
-        .history-panel.show {
-            display: block;
-        }
-
-        .history-title {
-            font-weight: 800;
-            margin-bottom: 8px;
-            color: #334155;
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            padding: 11px 0;
-            border-bottom: 1px solid #e2e8f0;
-        }
-
-        .history-item:last-child {
-            border-bottom: 0;
-        }
-
-        .history-item small {
-            color: #64748b;
-            font-size: 11px;
-            text-align: right;
-        }
-
-        .history-empty {
-            color: #64748b;
-            padding: 8px 0;
-            font-size: 14px;
-        }
-
-        /* =========================
-           MOBILE
-        ========================= */
-
-        @media (max-width: 700px) {
-
-            .header-inner {
-                padding: 14px 16px;
-            }
-
-            header h1 {
-                font-size: 19px;
-            }
-
-            .container {
-                padding: 18px 14px 90px;
-            }
-
-            .cards {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
-            }
-
-            .card {
-                padding: 17px 15px;
-                border-radius: 17px;
-            }
-
-            .card-value {
-                font-size: 20px;
-            }
-
-            .debt-box {
-                padding: 15px;
-                border-radius: 20px;
-            }
-
-            .debt-box h2 {
-                font-size: 18px;
-            }
-
-            .tools {
-                flex-direction: column;
-            }
-
-            .tools input,
-            .tools select {
-                width: 100%;
-            }
-
-            .debt-card {
-                padding: 14px;
-            }
-
-            .person-name {
-                font-size: 15px;
-            }
-
-            .debt-total {
-                font-size: 15px;
-            }
-
-            .floating-add-btn {
-                left: 15px;
-                right: 15px;
-                bottom: 15px;
-                width: auto;
-                height: 55px;
-                border-radius: 16px;
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-
-            .login-card {
-                padding: 30px 22px;
-                border-radius: 23px;
-            }
-
-            .cards {
-                gap: 8px;
-            }
-
-            .card {
-                padding: 14px 12px;
-            }
-
-            .card-label {
-                font-size: 11px;
-            }
-
-            .card-value {
-                font-size: 17px;
-            }
-
-            .debt-main-row {
-                align-items: flex-start;
-            }
-
-            .debt-summary {
-                max-width: 130px;
-            }
-
-            .detail-box,
-            .debt-modal-box {
-                padding: 18px;
-                border-radius: 21px;
-            }
-
-            .detail-balance {
-                padding: 18px;
-            }
-
-            .detail-balance-value {
-                font-size: 27px;
-            }
-
-            .detail-actions {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-    </style>
 
 </head>
 
