@@ -6105,7 +6105,12 @@ async function submitFeedback() {
             });
 
         if (error) {
-            console.error("Feedback error:", error);
+           console.error("Feedback error:", {
+    message: error.message,
+    details: error.details,
+    hint: error.hint,
+    code: error.code
+});
             alert("❌ Санал хүсэлт илгээхэд алдаа гарлаа.");
             return;
         }
