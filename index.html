@@ -3934,26 +3934,67 @@ async function addDebt() {
             .single();
 
 
-    if (error) {
+  if (error) {
 
-        console.error(
-            "Өр бүртгэх Supabase error:",
-            error
-        );
-
-        alert(
-            "Өр бүртгэхэд алдаа гарлаа.\n\n" +
-            error.message
-        );
-
-        return;
-    }
-
-
-    console.log(
-        "Өр амжилттай хадгалагдлаа:",
-        data
+    console.error(
+        "Өр бүртгэх Supabase error:",
+        error
     );
+
+    /*
+     * Интернет бодитоор тасарсан бол
+     * OFFLINE болгон хадгална.
+     */
+
+    const offlineDebt = {
+
+        id:
+            newId ||
+            (
+                crypto &&
+                crypto.randomUUID
+                    ? crypto.randomUUID()
+                    : "offline_" + Date.now()
+            ),
+
+        name: name,
+
+        phone: phone,
+
+        amount: amount,
+
+        paid: 0,
+
+        dueDate:
+            dueDate || "",
+
+        createdAt: now,
+
+        additions: [
+            {
+                amount: amount,
+                createdAt: now
+            }
+        ],
+
+        payments: [],
+
+        offline: true
+
+    };
+
+    debts.unshift(offlineDebt);
+
+    saveOfflineDebts(user.id);
+
+    closeDebtModal();
+
+    showDebts();
+
+    alert("✅ Өр амжилттай нэмэгдлээ.");
+
+    return;
+}
 
 
     /* ==========================================
