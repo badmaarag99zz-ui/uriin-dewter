@@ -3057,27 +3057,16 @@ function closeDebtModalOutside(event) {
 async function addDebt() {
 
     if (editingDebtId) {
-
         await updateDebt();
-
         return;
-
     }
 
-
-    const user =
-        await getCurrentUser();
+    const user = await getCurrentUser();
 
     if (!user) {
-
-        alert(
-            "Эхлээд нэвтэрнэ үү."
-        );
-
+        alert("Эхлээд нэвтэрнэ үү.");
         return;
-
     }
-
 
     const name =
         document
@@ -3103,36 +3092,30 @@ async function addDebt() {
             .getElementById("dueDate")
             .value;
 
-
     if (!name) {
-
-        alert(
-            "Хүний нэр оруулна уу."
-        );
-
+        alert("Хүний нэр оруулна уу.");
         return;
-
     }
 
     if (!amount || amount <= 0) {
-
-        alert(
-            "Өрийн дүнгээ зөв оруулна уу."
-        );
-
+        alert("Өрийн дүнгээ зөв оруулна уу.");
         return;
-
     }
 
 
-    /* OFFLINE */
+    /* ==========================================
+       OFFLINE
+    ========================================== */
 
     if (!navigator.onLine) {
 
+        const now =
+            new Date().toISOString();
+
         const existing =
             debts.find(
-                d =>
-                    String(d.name)
+                debt =>
+                    String(debt.name)
                         .trim()
                         .toLowerCase() ===
                     name
@@ -3141,6 +3124,8 @@ async function addDebt() {
             );
 
 
+        /* EXISTING PERSON */
+
         if (existing) {
 
             existing.amount =
@@ -3148,98 +3133,82 @@ async function addDebt() {
                 amount;
 
             if (phone) {
-
-                existing.phone =
-                    phone;
-
+                existing.phone = phone;
             }
 
             if (dueDate) {
-
-                existing.dueDate =
-                    dueDate;
-
+                existing.dueDate = dueDate;
             }
 
-            if (
-                !Array.isArray(
-                    existing.additions
-                )
-            ) {
-
+            if (!Array.isArray(existing.additions)) {
                 existing.additions = [];
-
             }
 
             existing.additions.push({
-
-                amount,
-
-                createdAt:
-                    new Date()
-                        .toISOString()
-
+                amount: amount,
+                createdAt: now
             });
-
-            /*
-             * Existing server debt changed
-             * while offline.
-             * Mark it as pending.
-             */
 
             existing.pendingSync = true;
 
-        } else {
+        }
 
-            debts.unshift({
 
-                id:
-                    "offline_" +
-                    Date.now() +
-                    "_" +
-                    Math.random()
-                        .toString(36)
-                        .slice(2),
+        /* NEW PERSON */
 
-                name,
+        else {
 
-                phone,
+            let offlineId;
 
-                amount,
+            if (
+                crypto &&
+                crypto.randomUUID
+            ) {
+                offlineId =
+                    crypto.randomUUID();
+            } else {
+                offlineId =
+                    "00000000-0000-4000-8000-" +
+                    String(Date.now())
+                        .padStart(12, "0");
+            }
+
+            const newDebt = {
+
+                id: offlineId,
+
+                name: name,
+
+                phone: phone,
+
+                amount: amount,
 
                 paid: 0,
 
                 dueDate:
                     dueDate || "",
 
-                createdAt:
-                    new Date()
-                        .toISOString(),
+                createdAt: now,
 
                 additions: [
-
                     {
-                        amount,
-
-                        createdAt:
-                            new Date()
-                                .toISOString()
+                        amount: amount,
+                        createdAt: now
                     }
-
                 ],
 
                 payments: [],
 
                 offline: true
 
-            });
+            };
+
+            debts.unshift(newDebt);
 
         }
 
 
-        saveOfflineDebts(
-            user.id
-        );
+        saveOfflineDebts(user.id);
 
         closeDebtModal();
 
@@ -3247,21 +3216,21 @@ async function addDebt() {
 
         alert(
             "📴 Интернетгүй байна.\n\n" +
-            "Өр төхөөрөмж дээр хадгалагдлаа.\n" +
-            "Интернет холбогдсоны дараа синк хийнэ."
+            "Өр төхөөрөмж дээр хадгалагдлаа."
         );
 
         return;
-
     }
 
 
-    /* ONLINE */
+    /* ==========================================
+       ONLINE
+    ========================================== */
 
     const existing =
         debts.find(
-            d =>
-                String(d.name)
+            debt =>
+                String(debt.name)
                     .trim()
                     .toLowerCase() ===
                 name
@@ -3270,6 +3239,10 @@ async function addDebt() {
         );
 
 
+    /* ==========================================
+       EXISTING PERSON
+    ========================================== */
+
     if (existing) {
 
         const newAmount =
@@ -3277,128 +3250,237 @@ async function addDebt() {
             amount;
 
         const additions =
-            Array.isArray(
-                existing.additions
-            )
+            Array.isArray(existing.additions)
                 ? [...existing.additions]
                 : [];
 
         additions.push({
-
-            amount,
-
+            amount: amount,
             createdAt:
-                new Date()
-                    .toISOString()
-
+                new Date().toISOString()
         });
 
 
         const {
+            data,
             error
         } =
             await supabaseClient
                 .from("debts")
                 .update({
 
-                    amount:
-                        newAmount,
+                    amount: newAmount,
 
                     phone:
                         phone ||
-                        existing.phone,
+                        existing.phone ||
+                        "",
 
                     due_date:
                         dueDate ||
                         existing.dueDate ||
                         null,
 
-                    additions
+                    additions: additions
 
                 })
-                .eq(
-                    "id",
-                    existing.id
-                )
-                .eq(
-                    "user_id",
-                    user.id
-                );
+                .eq("id", existing.id)
+                .eq("user_id", user.id)
+                .select()
+                .single();
 
 
         if (error) {
 
-            console.error(error);
+            console.error(
+                "Өр нэмэх Supabase error:",
+                error
+            );
 
             alert(
-                "Өр нэмэхэд алдаа гарлаа."
+                "Өр нэмэхэд алдаа гарлаа.\n\n" +
+                error.message
             );
 
             return;
-
         }
 
-    } else {
 
-        const {
-            error
-        } =
-            await supabaseClient
-                .from("debts")
-                .insert({
+        /* LOCAL UPDATE */
 
-                    user_id:
-                        user.id,
+        existing.amount =
+            Number(data.amount || newAmount);
 
-                    name,
+        existing.phone =
+            data.phone || existing.phone;
 
-                    phone,
+        existing.dueDate =
+            data.due_date || existing.dueDate;
 
-                    amount,
-
-                    paid: 0,
-
-                    due_date:
-                        dueDate ||
-                        null,
-
-                    payments: [],
-
-                    additions: [
-
-                        {
-
-                            amount,
-
-                            createdAt:
-                                new Date()
-                                    .toISOString()
-
-                        }
-
-                    ]
-
-                });
+        existing.additions =
+            Array.isArray(data.additions)
+                ? data.additions
+                : additions;
 
 
-        if (error) {
+        saveOfflineDebts(user.id);
 
-            console.error(error);
+        closeDebtModal();
 
-            alert(
-                "Өр бүртгэхэд алдаа гарлаа."
-            );
+        showDebts();
 
-            return;
-
-        }
-
+        return;
     }
+
+
+    /* ==========================================
+       NEW PERSON
+    ========================================== */
+
+    const now =
+        new Date().toISOString();
+
+
+    let newId = null;
+
+    if (
+        crypto &&
+        crypto.randomUUID
+    ) {
+        newId =
+            crypto.randomUUID();
+    }
+
+
+    const newDebtData = {
+
+        ...(newId
+            ? { id: newId }
+            : {}),
+
+        user_id: user.id,
+
+        name: name,
+
+        phone: phone,
+
+        amount: amount,
+
+        paid: 0,
+
+        due_date:
+            dueDate || null,
+
+        payments: [],
+
+        additions: [
+            {
+                amount: amount,
+                createdAt: now
+            }
+        ]
+
+    };
+
+
+    console.log(
+        "Өр хадгалж байна:",
+        newDebtData
+    );
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from("debts")
+            .insert(newDebtData)
+            .select()
+            .single();
+
+
+    if (error) {
+
+        console.error(
+            "Өр бүртгэх Supabase error:",
+            error
+        );
+
+        alert(
+            "Өр бүртгэхэд алдаа гарлаа.\n\n" +
+            error.message
+        );
+
+        return;
+    }
+
+
+    console.log(
+        "Өр амжилттай хадгалагдлаа:",
+        data
+    );
+
+
+    /* ==========================================
+       LOCAL LIST-Д ШУУД НЭМНЭ
+    ========================================== */
+
+    const localDebt = {
+
+        id: data.id,
+
+        name:
+            data.name || name,
+
+        phone:
+            data.phone || phone,
+
+        amount:
+            Number(data.amount || amount),
+
+        paid:
+            Number(data.paid || 0),
+
+        dueDate:
+            data.due_date || "",
+
+        createdAt:
+            data.created_at || now,
+
+        additions:
+            Array.isArray(data.additions)
+                ? data.additions
+                : [
+                    {
+                        amount: amount,
+                        createdAt: now
+                    }
+                ],
+
+        payments:
+            Array.isArray(data.payments)
+                ? data.payments
+                : []
+
+    };
+
+
+    debts.unshift(localDebt);
+
+
+    saveOfflineDebts(user.id);
 
 
     closeDebtModal();
 
-    await loadDebts();
+    showDebts();
+
+
+    console.log(
+        "✅ Өр жагсаалтанд нэмэгдлээ:",
+        localDebt
+    );
 
 }
 
