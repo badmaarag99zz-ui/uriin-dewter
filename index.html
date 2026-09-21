@@ -2466,7 +2466,7 @@ async function loginUser() {
     ========================================== */
 
     if (!navigator.onLine) {
-
+ console.log("🔴 OFFLINE LOGIN MODE");
         const savedAuth =
             localStorage.getItem(
                 "uriin_dewter_offline_auth"
