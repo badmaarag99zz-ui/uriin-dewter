@@ -2651,54 +2651,6 @@ async function logoutUser() {
 ========================================== */
 
 async function checkLoginOnLoad() {
-
-    if (navigator.onLine) {
-
-        try {
-
-            const {
-                data: {
-                    session
-                }
-            } = await supabaseClient.auth.getSession();
-
-            if (session) {
-
-                document
-                    .getElementById("loginScreen")
-                    .style.display = "none";
-
-                document
-                    .getElementById("appContent")
-                    .style.display = "block";
-
-                await loadDebts();
-
-                return;
-            }
-
-        } catch (error) {
-
-            console.log(
-                "Online session шалгах боломжгүй:",
-                error
-            );
-
-        }
-    }
-
-
-    /* OFFLINE */
-
-    document
-        .getElementById("loginScreen")
-        .style.display = "flex";
-
-    document
-        .getElementById("appContent")
-        .style.display = "none";
-
-}
 /* ==========================================
    GET CURRENT USER
 ========================================== */
