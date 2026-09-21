@@ -431,6 +431,85 @@
     }
 
     .card:hover {
+        ```css
+/* =========================
+   DASHBOARD CARD STYLE
+========================= */
+
+.dashboard-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+
+    min-height: 112px;
+}
+
+.dashboard-icon {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 15px;
+
+    font-size: 22px;
+}
+
+.dashboard-card .card-content {
+    min-width: 0;
+}
+
+/* Нийт хүмүүс */
+
+.people-card .dashboard-icon {
+    background: #eef2ff;
+}
+
+/* Нийт өр */
+
+.debt-card-summary .dashboard-icon {
+    background: #fff4df;
+}
+
+/* Төлсөн */
+
+.paid-card .dashboard-icon {
+    background: #eaf8ef;
+}
+
+/* Үлдэгдэл */
+
+.remaining-card .dashboard-icon {
+    background: #fff0f0;
+}
+
+
+/* Mobile */
+
+@media (max-width: 700px) {
+
+    .dashboard-card {
+        min-height: 100px;
+
+        gap: 10px;
+    }
+
+    .dashboard-icon {
+        width: 42px;
+        height: 42px;
+
+        border-radius: 13px;
+
+        font-size: 19px;
+    }
+
+}
+```
+
         transform: translateY(-3px);
 
         box-shadow: var(--shadow-hover);
@@ -1426,72 +1505,114 @@
 
         <!-- DASHBOARD -->
 
-        <div class="cards">
+       ```html
+<div class="cards">
 
-            <div class="card">
+    <!-- НИЙТ ХҮН -->
 
-                <div class="card-label">
-                    Нийт хүмүүс
-                </div>
+    <div class="card dashboard-card people-card">
 
-                <div
-                    class="card-value"
-                    id="totalPeople"
-                >
-                    0
-                </div>
+        <div class="dashboard-icon">
+            👥
+        </div>
 
+        <div class="card-content">
+
+            <div class="card-label">
+                Нийт хүмүүс
             </div>
 
-
-            <div class="card">
-
-                <div class="card-label">
-                    Нийт өр
-                </div>
-
-                <div
-                    class="card-value"
-                    id="totalDebt"
-                >
-                    0 ₮
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="card-label">
-                    Төлсөн
-                </div>
-
-                <div
-                    class="card-value"
-                    id="totalPaid"
-                >
-                    0 ₮
-                </div>
-
-            </div>
-
-
-            <div class="card">
-
-                <div class="card-label">
-                    Үлдэгдэл
-                </div>
-
-                <div
-                    class="card-value"
-                    id="totalRemaining"
-                >
-                    0 ₮
-                </div>
-
+            <div
+                class="card-value"
+                id="totalPeople"
+            >
+                0
             </div>
 
         </div>
+
+    </div>
+
+
+    <!-- НИЙТ ӨР -->
+
+    <div class="card dashboard-card debt-card-summary">
+
+        <div class="dashboard-icon">
+            💰
+        </div>
+
+        <div class="card-content">
+
+            <div class="card-label">
+                Нийт өр
+            </div>
+
+            <div
+                class="card-value"
+                id="totalDebt"
+            >
+                0 ₮
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ТӨЛСӨН -->
+
+    <div class="card dashboard-card paid-card">
+
+        <div class="dashboard-icon">
+            ✅
+        </div>
+
+        <div class="card-content">
+
+            <div class="card-label">
+                Төлсөн
+            </div>
+
+            <div
+                class="card-value"
+                id="totalPaid"
+            >
+                0 ₮
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- ҮЛДЭГДЭЛ -->
+
+    <div class="card dashboard-card remaining-card">
+
+        <div class="dashboard-icon">
+            ⚠️
+        </div>
+
+        <div class="card-content">
+
+            <div class="card-label">
+                Үлдэгдэл
+            </div>
+
+            <div
+                class="card-value"
+                id="totalRemaining"
+            >
+                0 ₮
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+```
 
 
         <!-- LIST -->
