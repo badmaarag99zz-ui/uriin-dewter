@@ -103,20 +103,29 @@ button {
     -webkit-tap-highlight-color: transparent;
 }
 #helpTopBtn {
-    position: fixed;
-    top: 18px;
-    right: 18px;
     width: 42px;
     height: 42px;
     border: none;
     border-radius: 50%;
     background: #16a34a;
     color: white;
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 800;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    z-index: 9999;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+}
+
+#helpTopBtn:hover {
+    background: #15803d;
+}
+
+#helpTopBtn:active {
+    transform: scale(0.95);
 }
 
 #helpTopBtn:hover {
