@@ -2714,33 +2714,71 @@ function showDebts() {
     const list =
         document.getElementById("list");
 
+    if (!list) {
+        console.error("list element олдсонгүй.");
+        return;
+    }
+
+    const searchInput =
+        document.getElementById("search");
+
+    const sortInput =
+        document.getElementById("sort");
+
+
     const search =
-        document.getElementById("search")
-            .value
-            .trim()
-            .toLowerCase();
+        searchInput
+            ? searchInput.value.trim().toLowerCase()
+            : "";
+
 
     const sort =
-        document.getElementById("sort")
-            .value;
+        sortInput
+            ? sortInput.value
+            : "newest";
+
+
+    /*
+     * Бүх өрийг цэвэрлэж,
+     * буруу/null өгөгдлийг хамгаална.
+     */
+
+    const allDebts =
+        Array.isArray(debts)
+            ? debts.filter(Boolean)
+            : [];
+
+
+    /*
+     * ХАЙЛТ
+     */
 
     let filtered =
-        debts.filter(debt => {
+        allDebts.filter(debt => {
+
+            const name =
+                String(
+                    debt.name || ""
+                ).toLowerCase();
+
+            const phone =
+                String(
+                    debt.phone || ""
+                ).toLowerCase();
 
             return (
-                String(debt.name || "")
-                    .toLowerCase()
-                    .includes(search)
-                ||
-                String(debt.phone || "")
-                    .toLowerCase()
-                    .includes(search)
+                name.includes(search) ||
+                phone.includes(search)
             );
 
         });
 
 
-    filtered.sort((a,b) => {
+    /*
+     * ЭРЭМБЭ
+     */
+
+    filtered.sort((a, b) => {
 
         const remainingA =
             Math.max(
@@ -2749,6 +2787,7 @@ function showDebts() {
                 Number(a.paid || 0)
             );
 
+
         const remainingB =
             Math.max(
                 0,
@@ -2756,103 +2795,196 @@ function showDebts() {
                 Number(b.paid || 0)
             );
 
+
         if (sort === "highest") {
 
-            return remainingB - remainingA;
+            return (
+                remainingB -
+                remainingA
+            );
 
         }
+
 
         if (sort === "lowest") {
 
-            return remainingA - remainingB;
+            return (
+                remainingA -
+                remainingB
+            );
 
         }
+
 
         if (sort === "oldest") {
 
-            return new Date(
-                a.createdAt || 0
-            ) -
-            new Date(
-                b.createdAt || 0
+            return (
+                new Date(
+                    a.createdAt || 0
+                ) -
+                new Date(
+                    b.createdAt || 0
+                )
             );
 
         }
+
 
         if (sort === "due") {
 
-            return new Date(
-                a.dueDate || "9999-12-31"
-            ) -
-            new Date(
-                b.dueDate || "9999-12-31"
+            return (
+                new Date(
+                    a.dueDate ||
+                    "9999-12-31"
+                ) -
+                new Date(
+                    b.dueDate ||
+                    "9999-12-31"
+                )
             );
 
         }
 
-        return new Date(
-            b.createdAt || 0
-        ) -
-        new Date(
-            a.createdAt || 0
+
+        return (
+            new Date(
+                b.createdAt || 0
+            ) -
+            new Date(
+                a.createdAt || 0
+            )
         );
 
     });
 
 
+    /*
+     * DASHBOARD
+     */
+
     const totalPeople =
-        debts.length;
+        allDebts.length;
+
 
     const totalDebt =
-        debts.reduce(
-            (sum,d) =>
-                sum + Number(d.amount || 0),
+        allDebts.reduce(
+            (sum, debt) =>
+                sum +
+                Number(
+                    debt.amount || 0
+                ),
             0
         );
 
+
     const totalPaid =
-        debts.reduce(
-            (sum,d) =>
-                sum + Number(d.paid || 0),
+        allDebts.reduce(
+            (sum, debt) =>
+                sum +
+                Number(
+                    debt.paid || 0
+                ),
             0
         );
+
 
     const totalRemaining =
         Math.max(
             0,
-            totalDebt - totalPaid
+            totalDebt -
+            totalPaid
         );
 
 
-    document.getElementById("totalPeople")
-        .textContent =
+    const totalPeopleEl =
+        document.getElementById(
+            "totalPeople"
+        );
+
+    const totalDebtEl =
+        document.getElementById(
+            "totalDebt"
+        );
+
+    const totalPaidEl =
+        document.getElementById(
+            "totalPaid"
+        );
+
+    const totalRemainingEl =
+        document.getElementById(
+            "totalRemaining"
+        );
+
+
+    if (totalPeopleEl) {
+
+        totalPeopleEl.textContent =
             totalPeople;
 
-    document.getElementById("totalDebt")
-        .textContent =
-            formatMoney(totalDebt);
-
-    document.getElementById("totalPaid")
-        .textContent =
-            formatMoney(totalPaid);
-
-    document.getElementById("totalRemaining")
-        .textContent =
-            formatMoney(totalRemaining);
+    }
 
 
-    if (filtered.length === 0) {
+    if (totalDebtEl) {
+
+        totalDebtEl.textContent =
+            formatMoney(
+                totalDebt
+            );
+
+    }
+
+
+    if (totalPaidEl) {
+
+        totalPaidEl.textContent =
+            formatMoney(
+                totalPaid
+            );
+
+    }
+
+
+    if (totalRemainingEl) {
+
+        totalRemainingEl.textContent =
+            formatMoney(
+                totalRemaining
+            );
+
+    }
+
+
+    /*
+     * ЖАГСААЛТ ХООСОН
+     */
+
+    if (
+        filtered.length === 0
+    ) {
 
         list.innerHTML = `
 
             <div class="empty">
 
-                <div style="font-size:40px;">
+                <div
+                    style="
+                        font-size:40px;
+                    "
+                >
                     📭
                 </div>
 
-                <div style="margin-top:10px;">
-                    Өрийн бүртгэл алга байна.
+                <div
+                    style="
+                        margin-top:10px;
+                    "
+                >
+                    ${
+                        search
+                            ? "Хайлтанд тохирох хүн олдсонгүй."
+                            : "Өрийн бүртгэл алга байна."
+                    }
                 </div>
 
             </div>
@@ -2864,112 +2996,197 @@ function showDebts() {
     }
 
 
+    /*
+     * ЖАГСААЛТ
+     */
+
     list.innerHTML =
-        filtered.map(debt => {
+        filtered
+            .map(debt => {
 
-            const remaining =
-                Math.max(
-                    0,
-                    Number(debt.amount || 0) -
-                    Number(debt.paid || 0)
-                );
-
-            const isDone =
-                remaining <= 0;
-
-            let dueClass = "";
-
-            let dueText =
-                debt.dueDate
-                    ? `📅 ${escapeHtml(debt.dueDate)}`
-                    : "📅 Төлөх хугацаа: Тодорхойгүй";
-
-
-            if (
-                debt.dueDate &&
-                !isDone
-            ) {
-
-                const today =
-                    new Date();
-
-                today.setHours(
-                    0,
-                    0,
-                    0,
-                    0
-                );
-
-                const due =
-                    new Date(
-                        debt.dueDate +
-                        "T00:00:00"
+                const amount =
+                    Number(
+                        debt.amount || 0
                     );
 
-                if (due < today) {
 
-                    dueClass =
-                        "overdue";
+                const paid =
+                    Number(
+                        debt.paid || 0
+                    );
 
-                    dueText =
-                        `⚠️ ${escapeHtml(debt.dueDate)} — Хугацаа хэтэрсэн`;
+
+                const remaining =
+                    Math.max(
+                        0,
+                        amount - paid
+                    );
+
+
+                const isDone =
+                    remaining <= 0;
+
+
+                let dueClass = "";
+
+                let dueText =
+                    debt.dueDate
+                        ? `📅 ${escapeHtml(
+                            debt.dueDate
+                          )}`
+                        : "📅 Төлөх хугацаа: Тодорхойгүй";
+
+
+                /*
+                 * ХУГАЦАА ХЭТЭРСЭН
+                 */
+
+                if (
+                    debt.dueDate &&
+                    !isDone
+                ) {
+
+                    const today =
+                        new Date();
+
+                    today.setHours(
+                        0,
+                        0,
+                        0,
+                        0
+                    );
+
+
+                    const due =
+                        new Date(
+                            debt.dueDate +
+                            "T00:00:00"
+                        );
+
+
+                    if (
+                        due < today
+                    ) {
+
+                        dueClass =
+                            "overdue";
+
+
+                        dueText =
+                            `⚠️ ${
+                                escapeHtml(
+                                    debt.dueDate
+                                )
+                            } — Хугацаа хэтэрсэн`;
+
+                    }
 
                 }
 
-            }
+
+                /*
+                 * ID-Г АЮУЛГҮЙ БОЛГОНО
+                 */
+
+                const safeId =
+                    String(
+                        debt.id || ""
+                    )
+                    .replace(
+                        /\\/g,
+                        "\\\\"
+                    )
+                    .replace(
+                        /'/g,
+                        "\\'"
+                    );
 
 
-            return `
+                return `
 
-                <div
-                    class="debt-card"
-                    onclick="openDetailModal('${escapeHtml(debt.id)}')"
-                >
+                    <div
+                        class="debt-card"
+                        onclick="openDetailModal('${safeId}')"
+                    >
 
-                    <div class="debt-main-row">
-
-                        <div class="debt-person">
-
-                            <div class="person-name">
-
-                                👤
-                                ${escapeHtml(debt.name)}
-
-                            </div>
-
-                            <div class="person-phone">
-
-                                ${
-                                    debt.phone
-                                        ? `📞 ${escapeHtml(debt.phone)}`
-                                        : "📞 Утас байхгүй"
-                                }
-
-                            </div>
-
-                        </div>
-
-                        <div class="debt-summary">
+                        <div
+                            class="debt-main-row"
+                        >
 
                             <div
-                                class="debt-total ${
-                                    isDone ? "done" : ""
-                                }"
+                                class="debt-person"
                             >
 
-                                ${
-                                    isDone
-                                        ? "ДУУССАН"
-                                        : formatMoney(remaining)
-                                }
+                                <div
+                                    class="person-name"
+                                >
+
+                                    👤
+                                    ${
+                                        escapeHtml(
+                                            debt.name ||
+                                            "Нэргүй"
+                                        )
+                                    }
+
+                                </div>
+
+
+                                <div
+                                    class="person-phone"
+                                >
+
+                                    ${
+                                        debt.phone
+                                            ? `📞 ${
+                                                escapeHtml(
+                                                    debt.phone
+                                                )
+                                              }`
+                                            : "📞 Утас байхгүй"
+                                    }
+
+                                </div>
 
                             </div>
 
+
                             <div
-                                class="debt-due ${dueClass}"
+                                class="debt-summary"
                             >
 
-                                ${dueText}
+                                <div
+                                    class="
+                                        debt-total
+                                        ${
+                                            isDone
+                                                ? "done"
+                                                : ""
+                                        }
+                                    "
+                                >
+
+                                    ${
+                                        isDone
+                                            ? "ДУУССАН"
+                                            : formatMoney(
+                                                remaining
+                                              )
+                                    }
+
+                                </div>
+
+
+                                <div
+                                    class="
+                                        debt-due
+                                        ${dueClass}
+                                    "
+                                >
+
+                                    ${dueText}
+
+                                </div>
 
                             </div>
 
@@ -2977,14 +3194,12 @@ function showDebts() {
 
                     </div>
 
-                </div>
+                `;
 
-            `;
-
-        }).join("");
+            })
+            .join("");
 
 }
-
 
 /* ==========================================
    ADD MODAL
