@@ -4704,7 +4704,51 @@ if ("serviceWorker" in navigator) {
     });
 }
 </script>
-```
+
+```html
+<script>
+let deferredInstallPrompt = null;
+
+const installAppBtn = document.getElementById("installAppBtn");
+
+window.addEventListener("beforeinstallprompt", function (event) {
+    event.preventDefault();
+
+    deferredInstallPrompt = event;
+
+    if (installAppBtn) {
+        installAppBtn.style.display = "block";
+    }
+});
+
+if (installAppBtn) {
+    installAppBtn.addEventListener("click", async function () {
+
+        if (!deferredInstallPrompt) {
+            return;
+        }
+
+        deferredInstallPrompt.prompt();
+
+        const result = await deferredInstallPrompt.userChoice;
+
+        console.log("Install result:", result.outcome);
+
+        deferredInstallPrompt = null;
+
+        installAppBtn.style.display = "none";
+    });
+}
+
+window.addEventListener("appinstalled", function () {
+    deferredInstallPrompt = null;
+
+    if (installAppBtn) {
+        installAppBtn.style.display = "none";
+    }
+});
+</script>
+
 
 </body>
 
