@@ -7055,46 +7055,108 @@ function openDetailModal(id) {
 
             </div>
 
+<!-- НИЙТ ӨР / ТӨЛСӨН -->
 
-            <div
-                class="detail-balance clickable-detail"
-                onclick="toggleHistory('additionHistory')"
-            >
+<div class="detail-stats">
 
-                <div class="detail-balance-label">
+    <div class="detail-stat">
 
-                    Үлдэгдэл өр
+        <div class="detail-stat-label">
+            Нийт өр
+        </div>
 
-                    <span class="click-arrow">
-                        ▼
-                    </span>
+        <div class="detail-stat-value">
+            ${formatMoney(debt.amount)}
+        </div>
 
-                </div>
-
-                <div class="
-                    detail-balance-value
-                    ${isDone ? "done" : ""}
-                ">
-
-                    ${formatMoney(remaining)}
-
-                </div>
-
-            </div>
+    </div>
 
 
-            <div
-                id="additionHistory"
-                class="history-panel"
-            >
+    <div
+        class="detail-stat clickable-detail-stat"
+        onclick="toggleHistory('paymentHistory')"
+    >
 
-                <div class="history-title">
-                    ➕ Өрийн түүх
-                </div>
+        <div class="detail-stat-label">
 
-                ${additionsHtml}
+            Төлсөн
 
-            </div>
+            <span class="click-arrow">
+                ▼
+            </span>
+
+        </div>
+
+        <div class="detail-stat-value">
+
+            ${formatMoney(debt.paid)}
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ТӨЛӨЛТИЙН ТҮҮХ -->
+
+<div
+    id="paymentHistory"
+    class="history-panel"
+>
+
+    <div class="history-title">
+        💰 Төлөлтийн түүх
+    </div>
+
+    ${paymentsHtml}
+
+</div>
+
+
+<!-- ҮЛДЭГДЭЛ ӨР -->
+
+<div
+    class="detail-balance clickable-detail"
+    onclick="toggleHistory('additionHistory')"
+>
+
+    <div class="detail-balance-label">
+
+        Үлдэгдэл өр
+
+        <span class="click-arrow">
+            ▼
+        </span>
+
+    </div>
+
+    <div class="
+        detail-balance-value
+        ${isDone ? "done" : ""}
+    ">
+
+        ${formatMoney(remaining)}
+
+    </div>
+
+</div>
+
+
+<!-- ӨРИЙН ТҮҮХ -->
+
+<div
+    id="additionHistory"
+    class="history-panel"
+>
+
+    <div class="history-title">
+        ➕ Өрийн түүх
+    </div>
+
+    ${additionsHtml}
+
+</div>
 
 
             <div class="detail-stats">
