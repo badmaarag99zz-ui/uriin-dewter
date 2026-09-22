@@ -179,6 +179,48 @@ button {
             #ecfdf5 100%
         );
 }
+    /* LOGIN BACKGROUND DECORATION */
+
+#loginScreen::before {
+    content: "₮";
+    position: absolute;
+
+    top: 8%;
+    left: 8%;
+
+    font-size: 150px;
+    font-weight: 900;
+
+    color: rgba(79, 70, 229, 0.055);
+
+    transform: rotate(-12deg);
+
+    pointer-events: none;
+}
+
+#loginScreen::after {
+    content: "📒";
+    position: absolute;
+
+    right: 7%;
+    bottom: 7%;
+
+    font-size: 120px;
+
+    opacity: 0.055;
+
+    transform: rotate(10deg);
+
+    pointer-events: none;
+}
+
+
+/* LOGIN CARD-ЫГ DECORATION-ООС ДЭЭГҮҮР ХАРУУЛНА */
+
+.login-card {
+    position: relative;
+    z-index: 2;
+}
 .login-card {
     width: 100%;
     max-width: 420px;
