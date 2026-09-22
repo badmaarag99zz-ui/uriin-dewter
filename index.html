@@ -1347,7 +1347,129 @@ header h1 {
     }
 
 }
+/* ==========================================
+   DASHBOARD CARDS
+========================================== */
 
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.dashboard-card {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 110px;
+    padding: 20px;
+    border-radius: 20px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 6px 20px rgba(15, 23, 42, 0.06);
+    transition:
+        transform .2s ease,
+        box-shadow .2s ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.10);
+}
+
+.dashboard-icon {
+    width: 52px;
+    height: 52px;
+    min-width: 52px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 25px;
+}
+
+.card-content {
+    min-width: 0;
+}
+
+.card-label {
+    font-size: 14px;
+    color: #64748b;
+    margin-bottom: 6px;
+}
+
+.card-value {
+    font-size: 23px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1.2;
+}
+
+/* ICON BACKGROUNDS */
+
+.people-card .dashboard-icon {
+    background: #eff6ff;
+}
+
+.debt-card-summary .dashboard-icon {
+    background: #fef3c7;
+}
+
+.paid-card .dashboard-icon {
+    background: #dcfce7;
+}
+
+.remaining-card .dashboard-icon {
+    background: #fee2e2;
+}
+
+
+/* 📱 MOBILE */
+
+@media (max-width: 900px) {
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .dashboard-card {
+        min-height: 92px;
+        padding: 14px;
+        gap: 10px;
+        border-radius: 17px;
+    }
+
+    .dashboard-icon {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+        border-radius: 13px;
+        font-size: 20px;
+    }
+
+    .card-label {
+        font-size: 12px;
+        margin-bottom: 5px;
+    }
+
+    .card-value {
+        font-size: 17px;
+    }
+
+}
 </style>
 
 </head>
