@@ -1882,6 +1882,43 @@ header h1 {
     }
 
 }
+    /* ==========================================
+   STAT TEXT — HORIZONTAL
+========================================== */
+
+.dashboard-stat-card > div:last-child {
+    flex: 1;
+
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 12px;
+}
+
+
+.dashboard-stat-card > div:last-child .dashboard-stat-label {
+    flex: 1;
+
+    margin: 0;
+
+    white-space: nowrap;
+}
+
+
+.dashboard-stat-card > div:last-child .dashboard-stat-value {
+    margin-left: auto;
+
+    flex-shrink: 0;
+
+    white-space: nowrap;
+}
 </style>
 
 </head>
