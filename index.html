@@ -1651,45 +1651,70 @@ header h1 {
 
 <div class="container">
 
-    <div class="cards">
+  <div class="dashboard-overview">
 
-        <div class="card dashboard-card people-card">
+    <!-- MAIN BALANCE CARD -->
 
-            <div class="dashboard-icon">
-                👥
+    <div class="dashboard-main-card">
+
+        <div class="dashboard-main-top">
+
+            <div>
+                <div class="dashboard-welcome">
+                    Таны өрийн тойм
+                </div>
+
+                <div class="dashboard-main-label">
+                    Нийт үлдэгдэл
+                </div>
             </div>
 
-            <div class="card-content">
-
-                <div class="card-label">
-                    Нийт хүмүүс
-                </div>
-
-                <div
-                    class="card-value"
-                    id="totalPeople"
-                >
-                    0
-                </div>
-
+            <div class="dashboard-main-icon">
+                💰
             </div>
 
         </div>
 
-        <div class="card dashboard-card debt-card-summary">
+        <div
+            class="dashboard-main-value"
+            id="totalRemaining"
+        >
+            0 ₮
+        </div>
 
-            <div class="dashboard-icon">
-                💰
+        <div class="dashboard-main-bottom">
+
+            <span>
+                Нийт бүртгэлтэй хүмүүс
+            </span>
+
+            <strong id="totalPeople">
+                0
+            </strong>
+
+        </div>
+
+    </div>
+
+
+    <!-- SMALL STATS -->
+
+    <div class="dashboard-small-stats">
+
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon people">
+                👥
             </div>
 
-            <div class="card-content">
+            <div>
 
-                <div class="card-label">
+                <div class="dashboard-stat-label">
                     Нийт өр
                 </div>
 
                 <div
-                    class="card-value"
+                    class="dashboard-stat-value"
                     id="totalDebt"
                 >
                     0 ₮
@@ -1699,20 +1724,21 @@ header h1 {
 
         </div>
 
-        <div class="card dashboard-card paid-card">
 
-            <div class="dashboard-icon">
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon paid">
                 ✅
             </div>
 
-            <div class="card-content">
+            <div>
 
-                <div class="card-label">
+                <div class="dashboard-stat-label">
                     Төлсөн
                 </div>
 
                 <div
-                    class="card-value"
+                    class="dashboard-stat-value"
                     id="totalPaid"
                 >
                     0 ₮
@@ -1722,21 +1748,22 @@ header h1 {
 
         </div>
 
-        <div class="card dashboard-card remaining-card">
 
-            <div class="dashboard-icon">
+        <div class="dashboard-stat-card">
+
+            <div class="dashboard-stat-icon remaining">
                 ⚠️
             </div>
 
-            <div class="card-content">
+            <div>
 
-                <div class="card-label">
+                <div class="dashboard-stat-label">
                     Үлдэгдэл
                 </div>
 
                 <div
-                    class="card-value"
-                    id="totalRemaining"
+                    class="dashboard-stat-value"
+                    id="totalRemainingSmall"
                 >
                     0 ₮
                 </div>
@@ -1746,6 +1773,8 @@ header h1 {
         </div>
 
     </div>
+
+</div>
 
 
     <div class="debt-box">
