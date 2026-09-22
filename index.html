@@ -3661,6 +3661,51 @@ function closeDebtModalOutside(event) {
     }
 
 }
+.app-popup-overlay.closing {
+    animation: appPopupOverlayOut .18s ease forwards;
+}
+
+.app-popup-overlay.closing .app-popup {
+    animation: appPopupOut .18s ease forwards;
+}
+
+@keyframes appPopupOverlayOut {
+    from {
+        opacity: 1;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
+@keyframes appPopupOut {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+    to {
+        opacity: 0;
+        transform: translateY(30px) scale(.97);
+    }
+}
+
+@media (max-width: 600px) {
+
+    @keyframes appPopupOut {
+        from {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        to {
+            opacity: 0;
+            transform: translateY(100%);
+        }
+    }
+
+}
         .app-popup-icon {
             width: 52px;
             height: 52px;
@@ -3741,13 +3786,21 @@ function closeDebtModalOutside(event) {
     document.head.appendChild(style);
 
 
-    function removePopup(overlay) {
+   function removePopup(overlay) {
 
-        if (overlay && overlay.parentNode) {
+    if (!overlay || !overlay.parentNode) {
+        return;
+    }
+
+    overlay.classList.add("closing");
+
+    setTimeout(function () {
+        if (overlay.parentNode) {
             overlay.remove();
         }
+    }, 180);
 
-    }
+}
 
 
     window.appAlert = function (
