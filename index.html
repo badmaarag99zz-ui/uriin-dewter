@@ -148,24 +148,37 @@ button {
 
     padding: 20px;
 
+    position: relative;
+    overflow: hidden;
+
     background:
         radial-gradient(
-            circle at 15% 15%,
-            rgba(99,102,241,0.18),
-            transparent 32%
+            circle at 10% 15%,
+            rgba(79, 70, 229, 0.28) 0%,
+            rgba(79, 70, 229, 0.10) 22%,
+            transparent 43%
         ),
+
         radial-gradient(
-            circle at 85% 85%,
-            rgba(16,185,129,0.12),
+            circle at 88% 82%,
+            rgba(16, 185, 129, 0.24) 0%,
+            rgba(16, 185, 129, 0.08) 24%,
+            transparent 45%
+        ),
+
+        radial-gradient(
+            circle at 80% 10%,
+            rgba(59, 130, 246, 0.14) 0%,
             transparent 32%
         ),
+
         linear-gradient(
-            135deg,
-            #f4f7fc 0%,
-            #eaf0f8 100%
+            145deg,
+            #eef2ff 0%,
+            #f8fafc 48%,
+            #ecfdf5 100%
         );
 }
-
 .login-card {
     width: 100%;
     max-width: 420px;
