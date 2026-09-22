@@ -4132,20 +4132,50 @@ async function checkLoginOnLoad() {
             } =
                 await supabaseClient.auth.getSession();
 
-            if (session) {
+          if (session) {
 
-                document
-                    .getElementById("loginScreen")
-                    .style.display = "none";
+    const subscription =
+        await checkSubscription(
+            session.user.id
+        );
 
-                document
-                    .getElementById("appContent")
-                    .style.display = "block";
+    console.log(
+        "Subscription:",
+        subscription
+    );
 
-                await loadDebts();
+    if (!subscription.valid) {
 
-                return;
-            }
+        document
+            .getElementById("loginScreen")
+            .style.display = "flex";
+
+        document
+            .getElementById("appContent")
+            .style.display = "none";
+
+        showMessage(
+            subscription.reason === "error"
+                ? "Эрхийн мэдээлэл шалгахад алдаа гарлаа."
+                : "Таны ашиглах эрхийн хугацаа дууссан байна.",
+            true
+        );
+
+        return;
+    }
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("appContent")
+        .style.display = "block";
+
+    await loadDebts();
+
+    return;
+}
 
         } catch (error) {
 
