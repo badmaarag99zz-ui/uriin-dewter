@@ -3619,18 +3619,48 @@ function closeDebtModalOutside(event) {
             box-sizing: border-box;
         }
 
-        @keyframes appPopupIn {
-            from {
-                opacity: 0;
-                transform: scale(.94) translateY(10px);
-            }
+      @keyframes appPopupIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(.96);
+    }
 
-            to {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+/* 📱 MOBILE POPUP ANIMATION */
+@media (max-width: 600px) {
+
+    .app-popup-overlay {
+        align-items: flex-end;
+        padding: 0;
+    }
+
+    .app-popup {
+        max-width: none;
+        width: 100%;
+        border-radius: 26px 26px 0 0;
+        padding: 24px 20px 30px;
+        animation: appMobilePopupIn .28s cubic-bezier(.22, 1, .36, 1);
+    }
+
+    @keyframes appMobilePopupIn {
+
+        from {
+            opacity: 0;
+            transform: translateY(100%);
         }
 
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+    }
+
+}
         .app-popup-icon {
             width: 52px;
             height: 52px;
