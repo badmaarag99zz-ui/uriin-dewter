@@ -9456,6 +9456,152 @@ window.addEventListener(
     </button> 
 
 </div>
+    <!-- ==========================================
+     RENEW SUBSCRIPTION MODAL
+========================================== -->
+
+<div
+    id="renewSubscriptionModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(15,23,42,0.60);
+        z-index:10006;
+        align-items:center;
+        justify-content:center;
+        padding:16px;
+    "
+>
+    <div
+        style="
+            width:100%;
+            max-width:420px;
+            background:white;
+            border-radius:24px;
+            padding:26px 24px;
+            box-shadow:0 24px 60px rgba(15,23,42,0.28);
+            box-sizing:border-box;
+        "
+    >
+
+        <div
+            style="
+                text-align:center;
+                margin-bottom:22px;
+            "
+        >
+            <div
+                style="
+                    width:62px;
+                    height:62px;
+                    margin:0 auto 14px;
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    border-radius:18px;
+                    background:#ecfdf5;
+                    font-size:30px;
+                "
+            >
+                💳
+            </div>
+
+            <h2
+                style="
+                    margin:0 0 6px;
+                    font-size:22px;
+                    color:#0f172a;
+                "
+            >
+                Эрх сунгах
+            </h2>
+
+            <div
+                style="
+                    color:#64748b;
+                    font-size:13px;
+                "
+            >
+                Өрийн дэвтэр ашиглах эрх
+            </div>
+        </div>
+
+
+        <div
+            style="
+                padding:20px;
+                border:2px solid #16a34a;
+                border-radius:18px;
+                background:#f0fdf4;
+                text-align:center;
+            "
+        >
+
+            <div
+                style="
+                    font-size:14px;
+                    color:#64748b;
+                    margin-bottom:6px;
+                "
+            >
+                30 хоногийн эрх
+            </div>
+
+            <div
+                style="
+                    font-size:30px;
+                    font-weight:800;
+                    color:#15803d;
+                "
+            >
+                9,900₮
+            </div>
+
+        </div>
+
+
+        <button
+            type="button"
+            id="paySubscriptionButton"
+            style="
+                width:100%;
+                min-height:52px;
+                margin-top:16px;
+                border:0;
+                border-radius:14px;
+                background:#16a34a;
+                color:white;
+                font-size:16px;
+                font-weight:700;
+                cursor:pointer;
+            "
+        >
+            💳 Төлбөр төлөх
+        </button>
+
+
+        <button
+            type="button"
+            id="closeRenewSubscriptionButton"
+            style="
+                width:100%;
+                min-height:46px;
+                margin-top:10px;
+                border:0;
+                border-radius:14px;
+                background:#f1f5f9;
+                color:#475569;
+                font-size:14px;
+                font-weight:600;
+                cursor:pointer;
+            "
+        >
+            Буцах
+        </button>
+
+    </div>
+</div>
     <script>
 window.addEventListener("online", function () {
 
@@ -9531,6 +9677,38 @@ async function handlePasswordReset() {
 
     }
 }
+        /* ==========================================
+   SUBSCRIPTION RENEW MODAL
+========================================== */
+
+document
+    .getElementById("renewSubscriptionButton")
+    .addEventListener("click", function () {
+
+        document
+            .getElementById("subscriptionExpiredModal")
+            .style.display = "none";
+
+        document
+            .getElementById("renewSubscriptionModal")
+            .style.display = "flex";
+
+    });
+
+
+document
+    .getElementById("closeRenewSubscriptionButton")
+    .addEventListener("click", function () {
+
+        document
+            .getElementById("renewSubscriptionModal")
+            .style.display = "none";
+
+        document
+            .getElementById("subscriptionExpiredModal")
+            .style.display = "flex";
+
+    });
 </script>
 </body>
 
