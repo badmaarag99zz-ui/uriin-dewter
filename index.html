@@ -1925,52 +1925,55 @@ header h1 {
 
     white-space: nowrap;
 }
-    /* ==========================================
-   DASHBOARD SIZE ADJUSTMENT
+   /* ==========================================
+   DASHBOARD STAT SIZE
 ========================================== */
 
-.dashboard-small-stats {
-    min-height: 210px;
+/* НИЙТ ӨР — АРАЙ ТОМ */
+
+.dashboard-stat-card:first-child {
+    padding: 22px 20px;
 }
 
-.dashboard-stat-card {
-    padding: 24px 22px;
+.dashboard-stat-card:first-child .dashboard-stat-icon {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    font-size: 19px;
 }
 
-.dashboard-stat-icon {
-    width: 46px;
-    height: 46px;
-    min-width: 46px;
-    font-size: 20px;
-}
-
-.dashboard-stat-card > div:last-child .dashboard-stat-label {
+.dashboard-stat-card:first-child
+.dashboard-stat-label {
     font-size: 17px;
 }
 
-.dashboard-stat-card > div:last-child .dashboard-stat-value {
+.dashboard-stat-card:first-child
+.dashboard-stat-value {
     font-size: 18px;
 }
 
 
-/* НИЙТ ҮЛДЭГДЭЛ — ЖИЖИГ */
+/* ТӨЛСӨН — АРАЙ ЖИЖИГ */
 
-.dashboard-main-card {
-    min-height: 170px;
-    padding: 20px;
-    border-radius: 20px;
+.dashboard-stat-card:nth-child(2) {
+    padding: 15px 20px;
 }
 
-.dashboard-main-value {
-    margin-top: 16px;
-    font-size: 27px;
+.dashboard-stat-card:nth-child(2) .dashboard-stat-icon {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    font-size: 16px;
 }
 
-.dashboard-main-bottom {
-    left: 20px;
-    right: 20px;
-    bottom: 18px;
-    padding-top: 11px;
+.dashboard-stat-card:nth-child(2)
+.dashboard-stat-label {
+    font-size: 14px;
+}
+
+.dashboard-stat-card:nth-child(2)
+.dashboard-stat-value {
+    font-size: 15px;
 }
 </style>
 
