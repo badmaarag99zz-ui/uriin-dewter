@@ -9338,7 +9338,7 @@ window.addEventListener(
 
         <button
             type="button"
-            onclick="logoutUser()"
+         onclick="closeSubscriptionAndLogout()"
             style="
                 width:100%;
                 min-height:46px;
@@ -9975,7 +9975,23 @@ function selectSubscriptionPlan(button) {
             "₮"
         );
 
-    });      
+    });   
+        async function closeSubscriptionAndLogout() {
+
+    // Эрх дууссан цонх хаах
+    document
+        .getElementById("subscriptionExpiredModal")
+        .style.display = "none";
+
+    // Эрх сунгах цонх хаах
+    document
+        .getElementById("renewSubscriptionModal")
+        .style.display = "none";
+
+    // Одоогийн logout функцийг ажиллуулах
+    await logoutUser();
+
+}
 </script>
 </body>
 
