@@ -2027,6 +2027,33 @@ header h1 {
     #debtListBox {
     display: none;
 }
+    /* ==========================================
+   ӨРТЭЙ ХҮМҮҮС — ДЭЛГЭГДЭХ ХАРАГДАЦ
+========================================== */
+
+#debtListBox {
+    margin-top: 0;
+    border-radius: 20px;
+    border: 1px solid #e8ebf0;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.06);
+    animation: debtListOpen 0.25s ease;
+}
+
+@keyframes debtListOpen {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#debtListBox h2 {
+    margin-top: 0;
+}
 </style>
 
 </head>
