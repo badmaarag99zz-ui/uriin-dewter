@@ -9528,37 +9528,188 @@ window.addEventListener(
         </div>
 
 
+     <!-- ЭРХИЙН БАГЦУУД -->
+
+<div
+    id="subscriptionPlans"
+    style="
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:10px;
+    "
+>
+
+    <!-- 1 САР -->
+    <button
+        type="button"
+        class="subscription-plan selected"
+        data-plan="1month"
+        data-price="9900"
+        data-months="1"
+        onclick="selectSubscriptionPlan(this)"
+        style="
+            padding:16px 10px;
+            border:2px solid #16a34a;
+            border-radius:16px;
+            background:#f0fdf4;
+            cursor:pointer;
+        "
+    >
         <div
             style="
-                padding:20px;
-                border:2px solid #16a34a;
-                border-radius:18px;
-                background:#f0fdf4;
-                text-align:center;
+                font-size:13px;
+                color:#64748b;
+                margin-bottom:5px;
             "
         >
-
-            <div
-                style="
-                    font-size:14px;
-                    color:#64748b;
-                    margin-bottom:6px;
-                "
-            >
-                30 хоногийн эрх
-            </div>
-
-            <div
-                style="
-                    font-size:30px;
-                    font-weight:800;
-                    color:#15803d;
-                "
-            >
-                9,900₮
-            </div>
-
+            1 сар
         </div>
+
+        <div
+            style="
+                font-size:20px;
+                font-weight:800;
+                color:#15803d;
+            "
+        >
+            9,900₮
+        </div>
+    </button>
+
+
+    <!-- 3 САР -->
+    <button
+        type="button"
+        class="subscription-plan"
+        data-plan="3month"
+        data-price="24900"
+        data-months="3"
+        onclick="selectSubscriptionPlan(this)"
+        style="
+            padding:16px 10px;
+            border:1px solid #e2e8f0;
+            border-radius:16px;
+            background:#ffffff;
+            cursor:pointer;
+        "
+    >
+        <div
+            style="
+                font-size:13px;
+                color:#64748b;
+                margin-bottom:5px;
+            "
+        >
+            3 сар
+        </div>
+
+        <div
+            style="
+                font-size:20px;
+                font-weight:800;
+                color:#0f172a;
+            "
+        >
+            24,900₮
+        </div>
+    </button>
+
+
+    <!-- 6 САР -->
+    <button
+        type="button"
+        class="subscription-plan"
+        data-plan="6month"
+        data-price="44900"
+        data-months="6"
+        onclick="selectSubscriptionPlan(this)"
+        style="
+            padding:16px 10px;
+            border:1px solid #e2e8f0;
+            border-radius:16px;
+            background:#ffffff;
+            cursor:pointer;
+        "
+    >
+        <div
+            style="
+                font-size:13px;
+                color:#64748b;
+                margin-bottom:5px;
+            "
+        >
+            6 сар
+        </div>
+
+        <div
+            style="
+                font-size:20px;
+                font-weight:800;
+                color:#0f172a;
+            "
+        >
+            44,900₮
+        </div>
+    </button>
+
+
+    <!-- 1 ЖИЛ -->
+    <button
+        type="button"
+        class="subscription-plan"
+        data-plan="1year"
+        data-price="79900"
+        data-months="12"
+        onclick="selectSubscriptionPlan(this)"
+        style="
+            padding:16px 10px;
+            border:1px solid #e2e8f0;
+            border-radius:16px;
+            background:#ffffff;
+            cursor:pointer;
+            position:relative;
+        "
+    >
+
+        <div
+            style="
+                position:absolute;
+                top:-8px;
+                right:8px;
+                background:#16a34a;
+                color:white;
+                padding:3px 7px;
+                border-radius:8px;
+                font-size:9px;
+                font-weight:700;
+            "
+        >
+            ХЭМНЭЛТТЭЙ
+        </div>
+
+        <div
+            style="
+                font-size:13px;
+                color:#64748b;
+                margin-bottom:5px;
+            "
+        >
+            1 жил
+        </div>
+
+        <div
+            style="
+                font-size:20px;
+                font-weight:800;
+                color:#0f172a;
+            "
+        >
+            79,900₮
+        </div>
+
+    </button>
+
+</div>
 
 
         <button
@@ -9709,6 +9860,87 @@ document
             .style.display = "flex";
 
     });
+        let selectedSubscriptionPlan = {
+    plan: "1month",
+    price: 9900,
+    months: 1
+};
+
+
+function selectSubscriptionPlan(button) {
+
+    document
+        .querySelectorAll(".subscription-plan")
+        .forEach(function (item) {
+
+            item.style.border =
+                "1px solid #e2e8f0";
+
+            item.style.background =
+                "#ffffff";
+
+            const price =
+                item.querySelector(
+                    "div:last-child"
+                );
+
+            if (price) {
+                price.style.color =
+                    "#0f172a";
+            }
+
+            item.classList.remove(
+                "selected"
+            );
+
+        });
+
+
+    button.style.border =
+        "2px solid #16a34a";
+
+    button.style.background =
+        "#f0fdf4";
+
+    const selectedPrice =
+        button.querySelector(
+            "div:last-child"
+        );
+
+    if (selectedPrice) {
+        selectedPrice.style.color =
+            "#15803d";
+    }
+
+    button.classList.add(
+        "selected"
+    );
+
+
+    selectedSubscriptionPlan = {
+
+        plan:
+            button.dataset.plan,
+
+        price:
+            Number(
+                button.dataset.price
+            ),
+
+        months:
+            Number(
+                button.dataset.months
+            )
+
+    };
+
+
+    console.log(
+        "Selected subscription:",
+        selectedSubscriptionPlan
+    );
+
+}
 </script>
 </body>
 
