@@ -4144,25 +4144,38 @@ async function checkLoginOnLoad() {
         subscription
     );
 
-    if (!subscription.valid) {
+   if (!subscription.valid) {
+
+    document
+        .getElementById("appContent")
+        .style.display = "none";
+
+
+    if (subscription.reason === "expired") {
+
+        document
+            .getElementById("loginScreen")
+            .style.display = "none";
+
+        document
+            .getElementById("subscriptionExpiredModal")
+            .style.display = "flex";
+
+    } else {
 
         document
             .getElementById("loginScreen")
             .style.display = "flex";
 
-        document
-            .getElementById("appContent")
-            .style.display = "none";
-
         showMessage(
-            subscription.reason === "error"
-                ? "Эрхийн мэдээлэл шалгахад алдаа гарлаа."
-                : "Таны ашиглах эрхийн хугацаа дууссан байна.",
+            "Эрхийн мэдээлэл шалгахад алдаа гарлаа.",
             true
         );
 
-        return;
     }
+
+    return;
+}
 
     document
         .getElementById("loginScreen")
@@ -9229,6 +9242,118 @@ window.addEventListener(
                 </div>
             </div>
         </div>
+
+    </div>
+</div>
+    <!-- ==========================================
+     SUBSCRIPTION EXPIRED MODAL
+========================================== -->
+
+<div
+    id="subscriptionExpiredModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        background:rgba(15,23,42,0.60);
+        z-index:10005;
+        align-items:center;
+        justify-content:center;
+        padding:16px;
+    "
+>
+    <div
+        style="
+            width:100%;
+            max-width:420px;
+            background:white;
+            border-radius:24px;
+            padding:28px 24px;
+            box-shadow:0 24px 60px rgba(15,23,42,0.28);
+            box-sizing:border-box;
+            text-align:center;
+        "
+    >
+
+        <div
+            style="
+                width:68px;
+                height:68px;
+                margin:0 auto 16px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                border-radius:20px;
+                background:#fff7ed;
+                font-size:32px;
+            "
+        >
+            🔒
+        </div>
+
+
+        <h2
+            style="
+                margin:0 0 9px;
+                font-size:22px;
+                color:#0f172a;
+            "
+        >
+            Таны эрхийн хугацаа дууссан
+        </h2>
+
+
+        <div
+            style="
+                color:#64748b;
+                font-size:14px;
+                line-height:1.6;
+                margin-bottom:22px;
+            "
+        >
+            Өрийн дэвтэр аппыг үргэлжлүүлэн ашиглахын
+            тулд эрхээ сунгана уу.
+        </div>
+
+
+        <button
+            type="button"
+            id="renewSubscriptionButton"
+            style="
+                width:100%;
+                min-height:50px;
+                border:0;
+                border-radius:14px;
+                background:#16a34a;
+                color:white;
+                font-size:16px;
+                font-weight:700;
+                cursor:pointer;
+                box-shadow:0 7px 18px rgba(22,163,74,0.20);
+            "
+        >
+            💳 Эрх сунгах
+        </button>
+
+
+        <button
+            type="button"
+            onclick="logoutUser()"
+            style="
+                width:100%;
+                min-height:46px;
+                margin-top:10px;
+                border:0;
+                border-radius:14px;
+                background:#f1f5f9;
+                color:#475569;
+                font-size:14px;
+                font-weight:600;
+                cursor:pointer;
+            "
+        >
+            🚪 Өөр бүртгэлээр нэвтрэх
+        </button>
 
     </div>
 </div>
