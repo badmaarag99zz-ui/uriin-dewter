@@ -1842,13 +1842,13 @@ header h1 {
                     maxlength="8"
                 >
 
-                <button
-                    type="button"
-                    class="modal-save-btn"
-                    onclick="sendPasswordReset()"
-                >
-                    Код авах
-                </button>
+               <button
+    type="button"
+    class="modal-save-btn"
+    onclick="handlePasswordReset()"
+>
+    Код авах
+</button>
 
             </div>
 
@@ -6977,6 +6977,33 @@ window.addEventListener("online", function () {
     syncOfflineDebts();
 
 });
+async function handlePasswordReset() {
+
+    const message =
+        document.getElementById("forgotMessage");
+
+    /* ==========================================
+       OFFLINE
+    ========================================== */
+
+    if (!navigator.onLine) {
+
+        message.textContent =
+            "🔐 Нууц үг солихын тулд интернеттэй үед дахин оролдоно уу.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+    /* ==========================================
+       ONLINE
+    ========================================== */
+
+    await sendPasswordReset();
+
+}        
 </script>
 </body>
 
