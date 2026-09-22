@@ -3618,7 +3618,23 @@ function closeDebtModalOutside(event) {
             animation: appPopupIn .18s ease;
             box-sizing: border-box;
         }
+.app-popup::before {
+    content: "";
+    display: none;
+    width: 42px;
+    height: 4px;
+    background: #cbd5e1;
+    border-radius: 999px;
+    margin: -10px auto 18px;
+}
 
+@media (max-width: 600px) {
+
+    .app-popup::before {
+        display: block;
+    }
+
+}
       @keyframes appPopupIn {
     from {
         opacity: 0;
