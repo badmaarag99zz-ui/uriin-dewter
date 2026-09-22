@@ -3722,11 +3722,16 @@ if (!navigator.onLine) {
             error: profileError
         } =
             await supabaseClient
-                .from("profiles")
-                .insert({
-                    id: data.user.id,
-                    phone: normalizedPhone
-                });
+               .from("profiles")
+.insert({
+    id: data.user.id,
+    phone: normalizedPhone,
+    plan: "trial",
+    subscription_expires_at:
+        new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000
+        ).toISOString()
+});
 
         if (profileError) {
 
