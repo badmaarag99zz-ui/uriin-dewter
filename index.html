@@ -2286,6 +2286,33 @@ header h1 {
     grid-column: 1 / -1 !important;
     background: #fff1f2 !important;
 }
+    /* ==========================================
+   📅 DETAIL MODAL — DUE DATE
+========================================== */
+
+.detail-due-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 14px 16px;
+    margin-top: 14px;
+    margin-bottom: 5px;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+
+    color: #475569;
+    font-size: 13px;
+    box-sizing: border-box;
+}
+
+.detail-due-date strong {
+    color: #334155;
+    font-weight: 700;
+}
 </style>
 
 </head>
@@ -7125,11 +7152,7 @@ function openDetailModal(id) {
             </div>
 
 
-            <div style="
-                padding:14px 0;
-                border-bottom:1px solid #e2e8f0;
-                margin-bottom:5px;
-            ">
+          <div class="detail-due-date">
 
                 📅
                 <strong>
