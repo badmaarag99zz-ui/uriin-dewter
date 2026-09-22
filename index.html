@@ -4014,7 +4014,103 @@ async function logoutUser() {
             "flex";
 
 }
+/* ==========================================
+   SUBSCRIPTION CHECK
+========================================== */
 
+async function checkSubscription(userId) {
+
+    try {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "plan, subscription_expires_at"
+                )
+                .eq("id", userId)
+                .single();
+
+        if (error) {
+
+            console.error(
+                "Subscription check error:",
+                error
+            );
+
+            return {
+                valid: false,
+                reason: "error"
+            };
+        }
+
+
+        if (!data.subscription_expires_at) {
+
+            return {
+                valid: false,
+                reason: "expired"
+            };
+        }
+
+
+        const expiresAt =
+            new Date(
+                data.subscription_expires_at
+            );
+
+        const now =
+            new Date();
+
+
+        const valid =
+            expiresAt.getTime() >
+            now.getTime();
+
+
+        /* OFFLINE ШАЛГАЛТАД ХАДГАЛНА */
+
+        localStorage.setItem(
+            "uriin_dewter_subscription",
+            JSON.stringify({
+                userId: userId,
+                plan: data.plan || "trial",
+                expiresAt:
+                    data.subscription_expires_at
+            })
+        );
+
+
+        return {
+            valid: valid,
+            reason:
+                valid
+                    ? "active"
+                    : "expired",
+            plan:
+                data.plan || "trial",
+            expiresAt:
+                data.subscription_expires_at
+        };
+
+    } catch (error) {
+
+        console.error(
+            "Subscription check failed:",
+            error
+        );
+
+        return {
+            valid: false,
+            reason: "error"
+        };
+
+    }
+
+}
 /* ==========================================
    LOGIN CHECK
 ========================================== */
