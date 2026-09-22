@@ -9941,6 +9941,41 @@ function selectSubscriptionPlan(button) {
     );
 
 }
+  document
+    .getElementById("paySubscriptionButton")
+    .addEventListener("click", function () {
+
+        console.log(
+            "Төлбөрийн багц:",
+            selectedSubscriptionPlan
+        );
+
+        const months =
+            selectedSubscriptionPlan.months;
+
+        const price =
+            selectedSubscriptionPlan.price;
+
+        let planName = "";
+
+        if (months === 1) {
+            planName = "1 сарын эрх";
+        } else if (months === 3) {
+            planName = "3 сарын эрх";
+        } else if (months === 6) {
+            planName = "6 сарын эрх";
+        } else if (months === 12) {
+            planName = "1 жилийн эрх";
+        }
+
+        appAlert(
+            planName +
+            "\nТөлөх дүн: " +
+            price.toLocaleString() +
+            "₮"
+        );
+
+    });      
 </script>
 </body>
 
