@@ -8256,7 +8256,19 @@ async function handlePasswordReset() {
     await sendPasswordReset();
 
 }   
-        
+     document
+    .getElementById("remainingCard")
+    .addEventListener("click", function () {
+
+        const debtList = document.getElementById("debtListBox");
+
+        if (debtList.style.display === "none" || debtList.style.display === "") {
+            debtList.style.display = "block";
+        } else {
+            debtList.style.display = "none";
+        }
+
+    });   
 </script>
 </body>
 
