@@ -2054,6 +2054,55 @@ header h1 {
 #debtListBox h2 {
     margin-top: 0;
 }
+    /* ==========================================
+   ӨРТЭЙ ХҮМҮҮС — CARD POLISH
+========================================== */
+
+#debtListBox .debt-card {
+    border: 1px solid #e8ebf0;
+    border-radius: 16px;
+    background: #ffffff;
+    padding: 16px;
+    margin-bottom: 10px;
+    box-shadow: 0 3px 12px rgba(15, 23, 42, 0.04);
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        border-color 0.18s ease;
+    cursor: pointer;
+}
+
+#debtListBox .debt-card:hover {
+    transform: translateY(-2px);
+    border-color: #dfe3ea;
+    box-shadow: 0 7px 18px rgba(15, 23, 42, 0.08);
+}
+
+#debtListBox .person-name {
+    font-weight: 700;
+    color: #172033;
+}
+
+#debtListBox .person-phone {
+    margin-top: 5px;
+    color: #8a93a3;
+    font-size: 13px;
+}
+
+#debtListBox .debt-total {
+    font-weight: 750;
+    color: #172033;
+}
+
+#debtListBox .debt-total.done {
+    color: #16a34a;
+}
+
+#debtListBox .debt-due {
+    margin-top: 5px;
+    font-size: 12px;
+    color: #8a93a3;
+}
 </style>
 
 </head>
