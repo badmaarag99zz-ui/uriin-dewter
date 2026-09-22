@@ -1635,9 +1635,9 @@ header h1 {
 ========================================== */
 
 .dashboard-overview {
-    display: grid;
-    grid-template-columns: 0.85fr 1.15fr;
-    gap: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
     margin-bottom: 24px;
 }
 
@@ -2106,55 +2106,14 @@ header h1 {
 
 <div class="container">
 
-  <div class="dashboard-overview">
+  ```html
+<div class="dashboard-overview">
 
-    <!-- MAIN BALANCE CARD -->
-
-    <div class="dashboard-main-card">
-
-        <div class="dashboard-main-top">
-
-            <div>
-                <div class="dashboard-welcome">
-                    Таны өрийн тойм
-                </div>
-
-                <div class="dashboard-main-label">
-                    Нийт үлдэгдэл
-                </div>
-            </div>
-
-            <div class="dashboard-main-icon">
-                💰
-            </div>
-
-        </div>
-
-        <div
-            class="dashboard-main-value"
-            id="totalRemaining"
-        >
-            0 ₮
-        </div>
-
-        <div class="dashboard-main-bottom">
-
-            <span>
-                Нийт бүртгэлтэй хүмүүс
-            </span>
-
-            <strong id="totalPeople">
-                0
-            </strong>
-
-        </div>
-
-    </div>
-
-
-    <!-- SMALL STATS -->
+    <!-- TOP STATS -->
 
     <div class="dashboard-small-stats">
+
+        <!-- НИЙТ ӨР -->
 
         <div class="dashboard-stat-card">
 
@@ -2180,6 +2139,8 @@ header h1 {
         </div>
 
 
+        <!-- ТӨЛСӨН -->
+
         <div class="dashboard-stat-card">
 
             <div class="dashboard-stat-icon paid">
@@ -2203,11 +2164,59 @@ header h1 {
 
         </div>
 
+    </div>
 
+
+    <!-- MAIN BALANCE -->
+
+    <div class="dashboard-main-card">
+
+        <div class="dashboard-main-top">
+
+            <div>
+
+                <div class="dashboard-welcome">
+                    Таны өрийн тойм
+                </div>
+
+                <div class="dashboard-main-label">
+                    Нийт үлдэгдэл
+                </div>
+
+            </div>
+
+            <div class="dashboard-main-icon">
+                💰
+            </div>
+
+        </div>
+
+
+        <div
+            class="dashboard-main-value"
+            id="totalRemaining"
+        >
+            0 ₮
+        </div>
+
+
+        <div class="dashboard-main-bottom">
+
+            <span>
+                Нийт бүртгэлтэй хүмүүс
+            </span>
+
+            <strong id="totalPeople">
+                0
+            </strong>
+
+        </div>
 
     </div>
 
 </div>
+
+
 
 
     <div class="debt-box">
