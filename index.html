@@ -6478,17 +6478,27 @@ if (
     Эрх нь дууссан бол апп ашиглаж болно.
     Харин ШИНЭ хүн нэмэхгүй.
 */
-if (
-    subscription.plan === "paid" &&
-    subscription.canAddCustomer === false
-) {
+if (subscription.plan === "paid") {
 
-    console.log(
-        "🔒 PAID SUBSCRIPTION EXPIRED"
-    );
+    const paidExpiresAt =
+        subscription.expiresAt
+            ? new Date(subscription.expiresAt)
+            : null;
 
-    showFreeCustomerLimitModal();
-    return;
+    const paidActive =
+        paidExpiresAt &&
+        !isNaN(paidExpiresAt.getTime()) &&
+        paidExpiresAt.getTime() > Date.now();
+
+    if (!paidActive) {
+
+        console.log(
+            "🔒 PAID SUBSCRIPTION EXPIRED - NEW CUSTOMER BLOCKED"
+        );
+
+        showFreeCustomerLimitModal();
+        return;
+    }
 }
     }
 
