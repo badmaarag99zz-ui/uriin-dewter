@@ -3909,46 +3909,65 @@ async function loginUser() {
             }
 
 
-            const expiresAt =
-                new Date(
-                    subscription.expiresAt
-                );
+           /* ==========================================
+   OFFLINE FREE / PAID CHECK
+========================================== */
 
-            const now =
-                new Date();
+if (subscription.plan === "paid") {
+
+    const expiresAt =
+        new Date(
+            subscription.expiresAt
+        );
+
+    const now =
+        new Date();
 
 
-            /* ==========================================
-               SUBSCRIPTION EXPIRED
-            ========================================== */
+    if (
+        !subscription.expiresAt ||
+        isNaN(expiresAt.getTime()) ||
+        expiresAt.getTime() <= now.getTime()
+    ) {
 
-            if (
-                !subscription.expiresAt ||
-                isNaN(expiresAt.getTime()) ||
-                expiresAt.getTime() <= now.getTime()
-            ) {
+        console.log(
+            "🔴 OFFLINE PAID SUBSCRIPTION EXPIRED"
+        );
 
-                console.log(
-                    "🔴 OFFLINE SUBSCRIPTION EXPIRED"
-                );
+        document
+            .getElementById("loginScreen")
+            .style.display = "none";
 
-                document
-                    .getElementById("loginScreen")
-                    .style.display = "none";
+        document
+            .getElementById("appContent")
+            .style.display = "none";
 
-                document
-                    .getElementById("appContent")
-                    .style.display = "none";
+        document
+            .getElementById(
+                "subscriptionExpiredModal"
+            )
+            .style.display = "flex";
 
-                document
-                    .getElementById(
-                        "subscriptionExpiredModal"
-                    )
-                    .style.display = "flex";
+        return;
+    }
 
-                return;
-            }
+}
 
+
+/* ==========================================
+   FREE PLAN
+========================================== */
+
+if (subscription.plan === "free") {
+
+    console.log(
+        "🟢 OFFLINE FREE PLAN:",
+        subscription.freeCustomerCount,
+        "/",
+        subscription.freeCustomerLimit
+    );
+
+}
 
             console.log(
                 "🟢 OFFLINE SUBSCRIPTION ACTIVE:",
@@ -4213,10 +4232,11 @@ async function checkSubscription(userId) {
             await supabaseClient
                 .from("profiles")
                 .select(
-                    "phone, plan, subscription_expires_at"
+                    "phone, plan, subscription_expires_at, free_customer_count"
                 )
                 .eq("id", userId)
                 .single();
+
 
         if (error) {
 
@@ -4232,86 +4252,214 @@ async function checkSubscription(userId) {
         }
 
 
-        if (!data.subscription_expires_at) {
+        /* ==========================================
+           PLAN
+        ========================================== */
 
-            return {
-                valid: false,
-                reason: "expired"
-            };
-        }
+        const plan =
+            data.plan || "free";
 
-
-        const expiresAt =
-            new Date(
-                data.subscription_expires_at
+        const freeCustomerCount =
+            Number(
+                data.free_customer_count || 0
             );
-
-        const now =
-            new Date();
-
-
-        const valid =
-            expiresAt.getTime() >
-            now.getTime();
 
 
         /* ==========================================
-           OFFLINE SUBSCRIPTION CACHE
-           ХЭРЭГЛЭГЧ ТУС БҮРЭЭР ХАДГАЛНА
+           FREE PLAN
+           15 ХАРИЛЦАГЧ ХҮРТЭЛ ҮНЭГҮЙ
         ========================================== */
 
-        const subscriptionData = {
+        if (plan === "free") {
 
-            userId: userId,
+            const subscriptionData = {
 
-            plan:
-                data.plan || "trial",
+                userId: userId,
 
-            expiresAt:
-                data.subscription_expires_at
+                plan: "free",
 
-        };
+                expiresAt: null,
+
+                freeCustomerCount:
+                    freeCustomerCount,
+
+                freeCustomerLimit: 15
+
+            };
 
 
-        if (data.phone) {
+            /* OFFLINE CACHE */
+
+            if (data.phone) {
+
+                localStorage.setItem(
+                    "uriin_dewter_subscription_" +
+                    data.phone,
+                    JSON.stringify(
+                        subscriptionData
+                    )
+                );
+
+            }
+
+
+            /* ХУУЧИН KEY-ТЭЙ НИЙЦҮҮЛНЭ */
 
             localStorage.setItem(
-                "uriin_dewter_subscription_" +
-                data.phone,
+                "uriin_dewter_subscription",
                 JSON.stringify(
                     subscriptionData
                 )
             );
 
+
+            return {
+
+                valid: true,
+
+                reason: "free",
+
+                plan: "free",
+
+                expiresAt: null,
+
+                freeCustomerCount:
+                    freeCustomerCount,
+
+                freeCustomerLimit: 15,
+
+                canAddCustomer:
+                    freeCustomerCount < 15
+
+            };
+
         }
 
 
         /* ==========================================
-           ХУУЧИН СИСТЕМТЭЙ НИЙЦҮҮЛНЭ
+           PAID PLAN
         ========================================== */
 
-        localStorage.setItem(
-            "uriin_dewter_subscription",
-            JSON.stringify(
-                subscriptionData
-            )
-        );
+        if (plan === "paid") {
 
+            if (!data.subscription_expires_at) {
+
+                return {
+
+                    valid: false,
+
+                    reason: "expired",
+
+                    plan: "paid",
+
+                    expiresAt: null,
+
+                    freeCustomerCount:
+                        freeCustomerCount
+
+                };
+
+            }
+
+
+            const expiresAt =
+                new Date(
+                    data.subscription_expires_at
+                );
+
+            const now =
+                new Date();
+
+
+            const valid =
+                !isNaN(expiresAt.getTime()) &&
+                expiresAt.getTime() >
+                now.getTime();
+
+
+            const subscriptionData = {
+
+                userId: userId,
+
+                plan: "paid",
+
+                expiresAt:
+                    data.subscription_expires_at,
+
+                freeCustomerCount:
+                    freeCustomerCount,
+
+                freeCustomerLimit: 15
+
+            };
+
+
+            /* OFFLINE CACHE */
+
+            if (data.phone) {
+
+                localStorage.setItem(
+                    "uriin_dewter_subscription_" +
+                    data.phone,
+                    JSON.stringify(
+                        subscriptionData
+                    )
+                );
+
+            }
+
+
+            /* ХУУЧИН KEY-ТЭЙ НИЙЦҮҮЛНЭ */
+
+            localStorage.setItem(
+                "uriin_dewter_subscription",
+                JSON.stringify(
+                    subscriptionData
+                )
+            );
+
+
+            return {
+
+                valid: valid,
+
+                reason:
+                    valid
+                        ? "active"
+                        : "expired",
+
+                plan: "paid",
+
+                expiresAt:
+                    data.subscription_expires_at,
+
+                freeCustomerCount:
+                    freeCustomerCount,
+
+                freeCustomerLimit: 15,
+
+                canAddCustomer:
+                    valid
+
+            };
+
+        }
+
+
+        /* ==========================================
+           UNKNOWN PLAN
+        ========================================== */
+
+        console.error(
+            "Unknown subscription plan:",
+            plan
+        );
 
         return {
 
-            valid: valid,
+            valid: false,
 
-            reason:
-                valid
-                    ? "active"
-                    : "expired",
-
-            plan:
-                data.plan || "trial",
-
-            expiresAt:
-                data.subscription_expires_at
+            reason: "error"
 
         };
 
@@ -4324,8 +4472,11 @@ async function checkSubscription(userId) {
         );
 
         return {
+
             valid: false,
+
             reason: "error"
+
         };
 
     }
@@ -4557,47 +4708,65 @@ async function checkLoginOnLoad() {
                 return;
             }
 
+/* ==========================================
+   OFFLINE FREE / PAID CHECK
+========================================== */
 
-            const expiresAt =
-                new Date(
-                    subscription.expiresAt
-                );
+if (subscription.plan === "paid") {
 
-            const now =
-                new Date();
+    const expiresAt =
+        new Date(
+            subscription.expiresAt
+        );
+
+    const now =
+        new Date();
 
 
-            /* ==========================================
-               SUBSCRIPTION EXPIRED
-            ========================================== */
+    if (
+        !subscription.expiresAt ||
+        isNaN(expiresAt.getTime()) ||
+        expiresAt.getTime() <= now.getTime()
+    ) {
 
-            if (
-                !subscription.expiresAt ||
-                isNaN(expiresAt.getTime()) ||
-                expiresAt.getTime() <= now.getTime()
-            ) {
+        console.log(
+            "🔒 OFFLINE PAID SUBSCRIPTION EXPIRED"
+        );
 
-                console.log(
-                    "🔒 OFFLINE SUBSCRIPTION EXPIRED"
-                );
+        document
+            .getElementById("appContent")
+            .style.display = "none";
 
-                document
-                    .getElementById("appContent")
-                    .style.display = "none";
+        document
+            .getElementById("loginScreen")
+            .style.display = "none";
 
-                document
-                    .getElementById("loginScreen")
-                    .style.display = "none";
+        document
+            .getElementById(
+                "subscriptionExpiredModal"
+            )
+            .style.display = "flex";
 
-                document
-                    .getElementById(
-                        "subscriptionExpiredModal"
-                    )
-                    .style.display = "flex";
+        return;
+    }
 
-                return;
-            }
+}
 
+
+/* ==========================================
+   FREE PLAN
+========================================== */
+
+if (subscription.plan === "free") {
+
+    console.log(
+        "🟢 OFFLINE FREE PLAN:",
+        subscription.freeCustomerCount,
+        "/",
+        subscription.freeCustomerLimit
+    );
+
+}
 
             /* ==========================================
                SUBSCRIPTION ACTIVE
