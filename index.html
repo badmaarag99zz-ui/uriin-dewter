@@ -4419,29 +4419,38 @@ async function checkSubscription(userId) {
             );
 
 
-            return {
+           return {
 
-                valid: valid,
+    /*
+        Paid эрх дууссан байсан ч
+        аппын хуучин мэдээлэл рүү
+        нэвтрэх эрхтэй байна.
+    */
+    valid: true,
 
-                reason:
-                    valid
-                        ? "active"
-                        : "expired",
+    reason:
+        valid
+            ? "active"
+            : "expired",
 
-                plan: "paid",
+    plan: "paid",
 
-                expiresAt:
-                    data.subscription_expires_at,
+    expiresAt:
+        data.subscription_expires_at,
 
-                freeCustomerCount:
-                    freeCustomerCount,
+    freeCustomerCount:
+        freeCustomerCount,
 
-                freeCustomerLimit: 15,
+    freeCustomerLimit: 15,
 
-                canAddCustomer:
-                    valid
+    /*
+        Зөвхөн идэвхтэй paid хэрэглэгч
+        ШИНЭ харилцагч нэмж чадна.
+    */
+    canAddCustomer:
+        valid
 
-            };
+};
 
         }
 
