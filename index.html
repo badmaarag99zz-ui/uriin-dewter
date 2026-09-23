@@ -3897,22 +3897,29 @@ async function loginUser() {
 
         /* Эрх дууссан */
         if (
-            !subscription.expiresAt ||
-            isNaN(expiresAt.getTime()) ||
-            expiresAt.getTime() <= now.getTime()
-        ) {
+    !subscription.expiresAt ||
+    isNaN(expiresAt.getTime()) ||
+    expiresAt.getTime() <= now.getTime()
+) {
 
-            console.log(
-                "🔴 OFFLINE SUBSCRIPTION EXPIRED"
-            );
+    console.log(
+        "🔴 OFFLINE SUBSCRIPTION EXPIRED"
+    );
 
-            showMessage(
-                "Таны ашиглах эрхийн хугацаа дууссан байна. Интернетэд холбогдож эрхээ сунгана уу.",
-                true
-            );
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
 
-            return;
-        }
+    document
+        .getElementById("appContent")
+        .style.display = "none";
+
+    document
+        .getElementById("subscriptionExpiredModal")
+        .style.display = "flex";
+
+    return;
+}
 
         console.log(
             "🟢 OFFLINE SUBSCRIPTION ACTIVE:",
@@ -8672,7 +8679,14 @@ window.addEventListener(
    START
 ========================================== */
 
-checkLoginOnLoad();
+window.addEventListener(
+    "DOMContentLoaded",
+    async function () {
+
+        await checkLoginOnLoad();
+
+    }
+);
 
 
 /* ==========================================
