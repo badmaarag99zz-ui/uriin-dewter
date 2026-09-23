@@ -3305,56 +3305,111 @@ header h1 {
                 Утасны дугаар
             </label>
 
-            <input
-                id="registerPhone"
-                type="tel"
-                placeholder="99112233"
-                maxlength="8"
-                inputmode="numeric"
-            >
+           <!-- =========================
+     REGISTER STEP 1
+========================= -->
 
-            <label>
-                Нууц үг
-            </label>
+<div id="registerStepForm">
 
-            <input
-                id="registerPassword"
-                type="password"
-                placeholder="Хамгийн багадаа 6 тэмдэгт"
-            >
+    <label>
+        Утасны дугаар
+    </label>
 
-            <label>
-                Нууц үг давтах
-            </label>
+    <input
+        id="registerPhone"
+        type="tel"
+        placeholder="99112233"
+        maxlength="8"
+        inputmode="numeric"
+    >
 
-            <input
-                id="registerConfirmPassword"
-                type="password"
-                placeholder="Нууц үгээ дахин оруулна уу"
-            >
+    <label>
+        Нууц үг
+    </label>
 
-            <button
-                type="button"
-                class="modal-save-btn"
-                onclick="registerUser()"
-            >
-                Бүртгэл үүсгэх
-            </button>
+    <input
+        id="registerPassword"
+        type="password"
+        placeholder="Хамгийн багадаа 6 тэмдэгт"
+    >
 
-            <div
-                id="registerMessage"
-                style="
-                    margin-top:14px;
-                    text-align:center;
-                    font-size:14px;
-                "
-            ></div>
+    <label>
+        Нууц үг давтах
+    </label>
 
-        </div>
+    <input
+        id="registerConfirmPassword"
+        type="password"
+        placeholder="Нууц үгээ дахин оруулна уу"
+    >
 
-    </div>
+    <button
+        type="button"
+        class="modal-save-btn"
+        onclick="registerUser()"
+    >
+        SMS код авах
+    </button>
 
 </div>
+
+
+<!-- =========================
+     REGISTER STEP 2
+========================= -->
+
+<div
+    id="registerStepOtp"
+    style="display:none;"
+>
+
+    <label>
+        SMS баталгаажуулах код
+    </label>
+
+    <input
+        id="registerOtp"
+        type="text"
+        placeholder="6 оронтой код"
+        maxlength="6"
+        inputmode="numeric"
+        autocomplete="one-time-code"
+    >
+
+    <button
+        type="button"
+        class="modal-save-btn"
+        onclick="verifyRegisterOtp()"
+    >
+        Код баталгаажуулах
+    </button>
+
+    <button
+        type="button"
+        onclick="backToRegisterForm()"
+        style="
+            width:100%;
+            margin-top:10px;
+            border:none;
+            background:transparent;
+            cursor:pointer;
+            font-size:14px;
+        "
+    >
+        ← Буцах
+    </button>
+
+</div>
+
+
+<div
+    id="registerMessage"
+    style="
+        margin-top:14px;
+        text-align:center;
+        font-size:14px;
+    "
+></div>
 
 
 <script>
@@ -3599,6 +3654,10 @@ async function registerUser() {
 
     message.textContent = "";
 
+    const normalizedPhone =
+        normalizePhone(phone);
+
+
     if (!phone) {
 
         message.textContent =
@@ -3608,11 +3667,8 @@ async function registerUser() {
             "#dc2626";
 
         return;
-
     }
 
-    const normalizedPhone =
-        normalizePhone(phone);
 
     if (normalizedPhone.length !== 8) {
 
@@ -3623,8 +3679,8 @@ async function registerUser() {
             "#dc2626";
 
         return;
-
     }
+
 
     if (!password) {
 
@@ -3635,8 +3691,8 @@ async function registerUser() {
             "#dc2626";
 
         return;
-
     }
+
 
     if (password.length < 6) {
 
@@ -3647,8 +3703,8 @@ async function registerUser() {
             "#dc2626";
 
         return;
-
     }
+
 
     if (password !== confirmPassword) {
 
@@ -3659,116 +3715,125 @@ async function registerUser() {
             "#dc2626";
 
         return;
-
     }
-if (!navigator.onLine) {
+
+
+    if (!navigator.onLine) {
+
+        message.textContent =
+            "📡 Бүртгэл шинээр үүсгэхийн тулд интернетэд холбогдоно уу.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
 
     message.textContent =
-        "📡 Бүртгэл шинээр үүсгэхийн тулд интернетэд холбогдоно уу.";
-
-    message.style.color =
-        "#dc2626";
-
-    return;
-}
-    message.textContent =
-        "Бүртгэл үүсгэж байна...";
+        "SMS код илгээж байна...";
 
     message.style.color =
         "#6366f1";
 
+
     try {
 
-        const email =
-            phoneEmail(normalizedPhone);
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
+                {
+                    method: "POST",
 
-        const {
-            data,
-            error
-        } =
-            await supabaseClient.auth.signUp({
-                email,
-                password
-            });
+                    headers: {
+                       "apikey":
+    SUPABASE_KEY,
 
-        if (error) {
+                        "Content-Type":
+                            "application/json"
+                    },
 
-            console.log(error);
+                    body:
+                        JSON.stringify({
+                            action:
+                                "send_register_otp",
+
+                            phone:
+                                "976" +
+                                normalizedPhone
+                        })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
 
             message.textContent =
-                error.message ||
-                "Бүртгэл үүсгэхэд алдаа гарлаа.";
+                result.message ||
+                "SMS код илгээхэд алдаа гарлаа.";
 
             message.style.color =
                 "#dc2626";
 
             return;
-
         }
 
-        if (!data.user) {
 
-            message.textContent =
-                "Бүртгэл үүсгэхэд алдаа гарлаа.";
+        window.pendingRegisterPhone =
+            normalizedPhone;
 
-            message.style.color =
-                "#dc2626";
+        window.pendingRegisterPassword =
+            password;
 
-            return;
 
-        }
+        document
+            .getElementById(
+                "registerStepForm"
+            )
+            .style.display =
+                "none";
 
-      const {
-    error: profileError
-} =
-    await supabaseClient
-        .from("profiles")
-        .insert({
-            id: data.user.id,
-            phone: normalizedPhone,
-            plan: "free",
-            free_customer_count: 0,
-            subscription_expires_at: null
-        });
 
-        if (profileError) {
+        document
+            .getElementById(
+                "registerStepOtp"
+            )
+            .style.display =
+                "block";
 
-            console.log(profileError);
 
-            message.textContent =
-                "Бүртгэл үүссэн боловч профайл хадгалахад алдаа гарлаа.";
+        document
+            .getElementById(
+                "registerOtp"
+            )
+            .value = "";
 
-            message.style.color =
-                "#dc2626";
-
-            return;
-
-        }
 
         message.textContent =
-            "✅ Бүртгэл амжилттай үүслээ.";
+            "✅ SMS код илгээгдлээ.";
 
         message.style.color =
             "#16a34a";
 
-        document
-            .getElementById("authPhone")
-            .value =
-                normalizedPhone;
-
-        document
-            .getElementById("authPassword")
-            .value = "";
 
         setTimeout(() => {
 
-            closeRegisterModal();
+            document
+                .getElementById(
+                    "registerOtp"
+                )
+                .focus();
 
-            showMessage(
-                "Бүртгэл амжилттай үүслээ. Нэвтэрнэ үү."
-            );
+        }, 100);
 
-        }, 1500);
 
     } catch (error) {
 
@@ -3779,12 +3844,262 @@ if (!navigator.onLine) {
 
         message.style.color =
             "#dc2626";
+    }
+}
+async function verifyRegisterOtp() {
 
+    const otp =
+        document
+            .getElementById("registerOtp")
+            .value
+            .trim();
+
+    const message =
+        document
+            .getElementById("registerMessage");
+
+    const phone =
+        window.pendingRegisterPhone;
+
+    const password =
+        window.pendingRegisterPassword;
+
+
+    if (!phone || !password) {
+
+        message.textContent =
+            "Бүртгэлийн мэдээлэл олдсонгүй. Дахин эхлүүлнэ үү.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
     }
 
+
+    if (!/^\d{6}$/.test(otp)) {
+
+        message.textContent =
+            "6 оронтой SMS код оруулна уу.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    message.textContent =
+        "Код шалгаж байна...";
+
+    message.style.color =
+        "#6366f1";
+
+
+    try {
+
+        // 1. SMS OTP баталгаажуулах
+        const verifyResponse =
+            await fetch(
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "apikey":
+                            SUPABASE_KEY,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            action:
+                                "verify_register_otp",
+
+                            phone:
+                                "976" + phone,
+
+                            otp:
+                                otp
+                        })
+                }
+            );
+
+
+        const verifyResult =
+            await verifyResponse.json();
+
+
+        if (
+            !verifyResponse.ok ||
+            !verifyResult.success
+        ) {
+
+            message.textContent =
+                verifyResult.message ||
+                "SMS код буруу байна.";
+
+            message.style.color =
+                "#dc2626";
+
+            return;
+        }
+
+
+        if (!verifyResult.registrationToken) {
+
+            message.textContent =
+                "Баталгаажуулалтын token ирсэнгүй.";
+
+            message.style.color =
+                "#dc2626";
+
+            return;
+        }
+
+
+        message.textContent =
+            "Бүртгэл үүсгэж байна...";
+
+
+        // 2. Баталгаажсан дугаараар account үүсгэх
+        const createResponse =
+            await fetch(
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "apikey":
+                            SUPABASE_KEY,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            action:
+                                "create_register_account",
+
+                            phone:
+                                "976" + phone,
+
+                            registrationToken:
+                                verifyResult.registrationToken,
+
+                            password:
+                                password
+                        })
+                }
+            );
+
+
+        const createResult =
+            await createResponse.json();
+
+
+        if (
+            !createResponse.ok ||
+            !createResult.success
+        ) {
+
+            message.textContent =
+                createResult.message ||
+                "Бүртгэл үүсгэхэд алдаа гарлаа.";
+
+            message.style.color =
+                "#dc2626";
+
+            return;
+        }
+
+
+        message.textContent =
+            "✅ Бүртгэл амжилттай үүслээ.";
+
+        message.style.color =
+            "#16a34a";
+
+
+        document
+            .getElementById("authPhone")
+            .value =
+                phone;
+
+
+        document
+            .getElementById("authPassword")
+            .value = "";
+
+
+        window.pendingRegisterPhone =
+            null;
+
+        window.pendingRegisterPassword =
+            null;
+
+
+        setTimeout(() => {
+
+            closeRegisterModal();
+
+            showMessage(
+                "Бүртгэл амжилттай үүслээ. Нэвтэрнэ үү."
+            );
+
+        }, 1200);
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        message.textContent =
+            "Сервертэй холбогдоход алдаа гарлаа.";
+
+        message.style.color =
+            "#dc2626";
+    }
 }
 
 
+function backToRegisterForm() {
+
+    document
+        .getElementById("registerStepOtp")
+        .style.display =
+            "none";
+
+
+    document
+        .getElementById("registerStepForm")
+        .style.display =
+            "block";
+
+
+    document
+        .getElementById("registerOtp")
+        .value = "";
+
+
+    const message =
+        document
+            .getElementById("registerMessage");
+
+    message.textContent = "";
+
+
+    window.pendingRegisterPhone =
+        null;
+
+    window.pendingRegisterPassword =
+        null;
+}
 /* ==========================================
    LOGIN
 ========================================== */
