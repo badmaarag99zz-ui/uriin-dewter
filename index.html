@@ -6449,20 +6449,47 @@ async function addDebt() {
         }
 
 
-        if (
-            subscription.plan === "free" &&
-            Number(subscription.freeCustomerCount || 0) >=
-                Number(subscription.freeCustomerLimit || 15)
-        ) {
+       /* ==========================================
+   NEW CUSTOMER ACCESS CHECK
+========================================== */
 
-            console.log(
-                "🔒 FREE CUSTOMER LIMIT REACHED:",
-                subscription.freeCustomerCount
-            );
+/*
+    FREE:
+    15 хүн хүрсэн бол шинэ хүн нэмэхгүй.
+*/
+if (
+    subscription.plan === "free" &&
+    Number(subscription.freeCustomerCount || 0) >=
+        Number(subscription.freeCustomerLimit || 15)
+) {
 
-            showFreeCustomerLimitModal();
-            return;
-        }
+    console.log(
+        "🔒 FREE CUSTOMER LIMIT REACHED:",
+        subscription.freeCustomerCount
+    );
+
+    showFreeCustomerLimitModal();
+    return;
+}
+
+
+/*
+    PAID:
+    Эрх нь дууссан бол апп ашиглаж болно.
+    Харин ШИНЭ хүн нэмэхгүй.
+*/
+if (
+    subscription.plan === "paid" &&
+    subscription.canAddCustomer === false
+) {
+
+    console.log(
+        "🔒 PAID SUBSCRIPTION EXPIRED"
+    );
+
+    showFreeCustomerLimitModal();
+    return;
+}
     }
 
 
