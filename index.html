@@ -6991,67 +6991,7 @@ if (subscription.plan === "paid") {
        ШИНЭ ХҮН АМЖИЛТТАЙ ХАДГАЛАГДСАН ДАРАА
     ========================================== */
 
-    if (
-        subscription &&
-        subscription.plan === "free"
-    ) {
-
-        const newFreeCount =
-            Number(
-                subscription.freeCustomerCount || 0
-            ) + 1;
-
-        const {
-            error: countError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .update({
-                    free_customer_count:
-                        newFreeCount
-                })
-                .eq("id", user.id);
-
-
-        if (countError) {
-
-            console.error(
-                "Free customer count update error:",
-                countError
-            );
-
-        } else {
-
-            subscription.freeCustomerCount =
-                newFreeCount;
-
-            subscription.freeCustomerLimit = 15;
-
-            let currentPhone = "";
-
-            try {
-                const current = JSON.parse(
-                    localStorage.getItem(
-                        "uriin_dewter_offline_current"
-                    ) || "null"
-                );
-
-                currentPhone =
-                    current && current.phone
-                        ? current.phone
-                        : "";
-            } catch (cacheError) {
-                console.error(cacheError);
-            }
-
-            saveSubscriptionCache(
-                subscription,
-                currentPhone
-            );
-        }
-    }
-
-
+   
     /* ==========================================
        LOCAL LIST-Д ШУУД НЭМНЭ
     ========================================== */
@@ -8193,72 +8133,7 @@ if (
          * SERVER-ТЭЙ НИЙЦҮҮЛНЭ
          */
 
-        try {
-
-            const cachedSubscription =
-                getCachedSubscriptionForUser(user.id);
-
-            if (
-                cachedSubscription &&
-                cachedSubscription.plan === "free"
-            ) {
-
-                const {
-                    data: profileData,
-                    error: profileReadError
-                } =
-                    await supabaseClient
-                        .from("profiles")
-                        .select("free_customer_count")
-                        .eq("id", user.id)
-                        .single();
-
-                if (!profileReadError) {
-
-                    const serverCount =
-                        Number(
-                            profileData.free_customer_count || 0
-                        );
-
-                    const cachedCount =
-                        Number(
-                            cachedSubscription.freeCustomerCount || 0
-                        );
-
-                    const finalCount =
-                        Math.max(
-                            serverCount,
-                            cachedCount
-                        );
-
-                    if (finalCount !== serverCount) {
-
-                        const { error: profileUpdateError } =
-                            await supabaseClient
-                                .from("profiles")
-                                .update({
-                                    free_customer_count: finalCount
-                                })
-                                .eq("id", user.id);
-
-                        if (profileUpdateError) {
-                            console.error(
-                                "Free customer count sync error:",
-                                profileUpdateError
-                            );
-                        }
-                    }
-                }
-            }
-
-        } catch (countSyncError) {
-
-            console.error(
-                "Free customer count sync failed:",
-                countSyncError
-            );
-        }
-
+     
 
         /*
          * =====================================
