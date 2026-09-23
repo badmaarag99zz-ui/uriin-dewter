@@ -3844,34 +3844,123 @@ async function loginUser() {
     const enteredHash =
         await hashOfflinePassword(password);
 
-    if (
-        offlineAuth.phone === phone &&
-        offlineAuth.passwordHash === enteredHash
-    ) {
+   if (
+    offlineAuth.phone === phone &&
+    offlineAuth.passwordHash === enteredHash
+) {
 
-        localStorage.setItem(
-            "uriin_dewter_offline_current",
-            JSON.stringify({
-                userId: offlineAuth.userId,
-                phone: offlineAuth.phone
-            })
+    /* ==========================================
+       OFFLINE SUBSCRIPTION CHECK
+    ========================================== */
+
+    const savedSubscription =
+        localStorage.getItem(
+            "uriin_dewter_subscription"
         );
 
-        document
-            .getElementById("loginScreen")
-            .style.display = "none";
+    if (!savedSubscription) {
 
-        document
-            .getElementById("appContent")
-            .style.display = "block";
-
-        showMessage("");
-
-        await loadDebts();
+        showMessage(
+            "Эрхийн мэдээлэл олдсонгүй. Интернеттэй үед нэг удаа нэвтэрнэ үү.",
+            true
+        );
 
         return;
     }
 
+    try {
+
+        const subscription =
+            JSON.parse(savedSubscription);
+
+        /* Өөр хэрэглэгчийн хадгалсан эрх эсэх */
+        if (
+            subscription.userId !==
+            offlineAuth.userId
+        ) {
+
+            showMessage(
+                "Энэ хэрэглэгчийн эрхийн мэдээлэл олдсонгүй. Интернеттэй үед нэг удаа нэвтэрнэ үү.",
+                true
+            );
+
+            return;
+        }
+
+        const expiresAt =
+            new Date(
+                subscription.expiresAt
+            );
+
+        const now =
+            new Date();
+
+        /* Эрх дууссан */
+        if (
+            !subscription.expiresAt ||
+            isNaN(expiresAt.getTime()) ||
+            expiresAt.getTime() <= now.getTime()
+        ) {
+
+            console.log(
+                "🔴 OFFLINE SUBSCRIPTION EXPIRED"
+            );
+
+            showMessage(
+                "Таны ашиглах эрхийн хугацаа дууссан байна. Интернетэд холбогдож эрхээ сунгана уу.",
+                true
+            );
+
+            return;
+        }
+
+        console.log(
+            "🟢 OFFLINE SUBSCRIPTION ACTIVE:",
+            subscription
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Offline subscription error:",
+            error
+        );
+
+        showMessage(
+            "Эрхийн мэдээллийг шалгаж чадсангүй. Интернеттэй үед дахин нэвтэрнэ үү.",
+            true
+        );
+
+        return;
+    }
+
+
+    /* ==========================================
+       OFFLINE LOGIN SUCCESS
+    ========================================== */
+
+    localStorage.setItem(
+        "uriin_dewter_offline_current",
+        JSON.stringify({
+            userId: offlineAuth.userId,
+            phone: offlineAuth.phone
+        })
+    );
+
+    document
+        .getElementById("loginScreen")
+        .style.display = "none";
+
+    document
+        .getElementById("appContent")
+        .style.display = "block";
+
+    showMessage("");
+
+    await loadDebts();
+
+    return;
+}
 } catch (error) {
 
     console.error(
