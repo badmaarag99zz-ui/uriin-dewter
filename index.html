@@ -3916,39 +3916,41 @@ async function loginUser() {
 if (subscription.plan === "paid") {
 
     const expiresAt =
-        new Date(
-            subscription.expiresAt
-        );
+        subscription.expiresAt
+            ? new Date(subscription.expiresAt)
+            : null;
 
     const now =
         new Date();
 
+    const paidActive =
+        expiresAt &&
+        !isNaN(expiresAt.getTime()) &&
+        expiresAt.getTime() > now.getTime();
 
-    if (
-        !subscription.expiresAt ||
-        isNaN(expiresAt.getTime()) ||
-        expiresAt.getTime() <= now.getTime()
-    ) {
+
+    if (paidActive) {
 
         console.log(
-            "🔴 OFFLINE PAID SUBSCRIPTION EXPIRED"
+            "🟢 OFFLINE PAID PLAN ACTIVE"
         );
 
-        document
-            .getElementById("loginScreen")
-            .style.display = "none";
+    } else {
 
-        document
-            .getElementById("appContent")
-            .style.display = "none";
+        /*
+            Paid эрх дууссан ч
+            offline үед апп руу орно.
 
-        document
-            .getElementById(
-                "subscriptionExpiredModal"
-            )
-            .style.display = "flex";
+            Харин шинэ харилцагч
+            нэмэх эрхгүй.
+        */
 
-        return;
+        console.log(
+            "🟠 OFFLINE PAID PLAN EXPIRED"
+        );
+
+        subscription.canAddCustomer = false;
+
     }
 
 }
@@ -4342,24 +4344,72 @@ async function checkSubscription(userId) {
 
         if (plan === "paid") {
 
-            if (!data.subscription_expires_at) {
+         if (!data.subscription_expires_at) {
 
-                return {
+    const subscriptionData = {
 
-                    valid: false,
+        userId: userId,
 
-                    reason: "expired",
+        plan: "paid",
 
-                    plan: "paid",
+        expiresAt: null,
 
-                    expiresAt: null,
+        freeCustomerCount:
+            freeCustomerCount,
 
-                    freeCustomerCount:
-                        freeCustomerCount
+        freeCustomerLimit: 15
 
-                };
+    };
 
-            }
+
+    /* OFFLINE CACHE */
+
+    if (data.phone) {
+
+        localStorage.setItem(
+            "uriin_dewter_subscription_" +
+            data.phone,
+            JSON.stringify(
+                subscriptionData
+            )
+        );
+
+    }
+
+
+    localStorage.setItem(
+        "uriin_dewter_subscription",
+        JSON.stringify(
+            subscriptionData
+        )
+    );
+
+
+    return {
+
+        /*
+            Эрх дууссан ч апп руу орно.
+            Харин шинэ харилцагч нэмэхгүй.
+        */
+
+        valid: true,
+
+        reason: "expired",
+
+        plan: "paid",
+
+        expiresAt: null,
+
+        freeCustomerCount:
+            freeCustomerCount,
+
+        freeCustomerLimit: 15,
+
+        canAddCustomer: false
+
+    };
+
+}
 
 
             const expiresAt =
@@ -4724,39 +4774,40 @@ async function checkLoginOnLoad() {
 if (subscription.plan === "paid") {
 
     const expiresAt =
-        new Date(
-            subscription.expiresAt
-        );
+        subscription.expiresAt
+            ? new Date(subscription.expiresAt)
+            : null;
 
     const now =
         new Date();
 
+    const paidActive =
+        expiresAt &&
+        !isNaN(expiresAt.getTime()) &&
+        expiresAt.getTime() > now.getTime();
 
-    if (
-        !subscription.expiresAt ||
-        isNaN(expiresAt.getTime()) ||
-        expiresAt.getTime() <= now.getTime()
-    ) {
+
+    if (paidActive) {
 
         console.log(
-            "🔒 OFFLINE PAID SUBSCRIPTION EXPIRED"
+            "🟢 OFFLINE PAID PLAN ACTIVE"
         );
 
-        document
-            .getElementById("appContent")
-            .style.display = "none";
+    } else {
 
-        document
-            .getElementById("loginScreen")
-            .style.display = "none";
+        /*
+            Эрх дууссан Paid хэрэглэгчийг
+            апп руу оруулна.
 
-        document
-            .getElementById(
-                "subscriptionExpiredModal"
-            )
-            .style.display = "flex";
+            Шинэ харилцагч нэмэх эрхгүй.
+        */
 
-        return;
+        console.log(
+            "🟠 OFFLINE PAID PLAN EXPIRED"
+        );
+
+        subscription.canAddCustomer = false;
+
     }
 
 }
