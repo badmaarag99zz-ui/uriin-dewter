@@ -4053,18 +4053,182 @@ if (subscription.plan === "free") {
         phoneEmail(phone);
 
 
-    const {
-        data,
-        error
-    } =
+   let data = null;
+let error = null;
+
+try {
+
+    const result =
         await supabaseClient.auth
             .signInWithPassword({
-
                 email: email,
-
                 password: password
-
             });
+
+    data = result.data;
+    error = result.error;
+
+} catch (networkError) {
+
+    console.error(
+        "Online login network error:",
+        networkError
+    );
+
+    /*
+        Browser online гэж мэдээлсэн боловч
+        Supabase-д холбогдож чадахгүй үед
+        offline login руу шилжинэ.
+    */
+
+    const savedAuth =
+        localStorage.getItem(
+            "uriin_dewter_offline_auth_" + phone
+        );
+
+    const savedSubscription =
+        localStorage.getItem(
+            "uriin_dewter_subscription_" + phone
+        );
+
+    if (!savedAuth || !savedSubscription) {
+
+        showMessage(
+            "Интернет холболт алга. Энэ бүртгэлээр өмнө нь онлайн нэвтэрсэн байх шаардлагатай.",
+            true
+        );
+
+        return;
+    }
+
+
+    try {
+
+        const offlineAuth =
+            JSON.parse(savedAuth);
+
+        const subscription =
+            JSON.parse(savedSubscription);
+
+        const enteredHash =
+            await hashOfflinePassword(password);
+
+
+        if (
+            offlineAuth.phone !== phone ||
+            offlineAuth.passwordHash !== enteredHash
+        ) {
+
+            showMessage(
+                "Утасны дугаар эсвэл нууц үг буруу байна.",
+                true
+            );
+
+            return;
+        }
+
+
+        if (
+            subscription.userId !==
+            offlineAuth.userId
+        ) {
+
+            showMessage(
+                "Offline бүртгэлийн мэдээлэл тохирохгүй байна.",
+                true
+            );
+
+            return;
+        }
+
+
+        /* PAID */
+
+        if (subscription.plan === "paid") {
+
+            const expiresAt =
+                subscription.expiresAt
+                    ? new Date(subscription.expiresAt)
+                    : null;
+
+            const paidActive =
+                expiresAt &&
+                !isNaN(expiresAt.getTime()) &&
+                expiresAt.getTime() > Date.now();
+
+            subscription.canAddCustomer =
+                Boolean(paidActive);
+        }
+
+
+        /* FREE */
+
+        if (subscription.plan === "free") {
+
+            subscription.canAddCustomer =
+                Number(
+                    subscription.freeCustomerCount || 0
+                ) <
+                Number(
+                    subscription.freeCustomerLimit || 15
+                );
+        }
+
+
+        localStorage.setItem(
+            "uriin_dewter_offline_current",
+            JSON.stringify({
+                userId: offlineAuth.userId,
+                phone: offlineAuth.phone
+            })
+        );
+
+        localStorage.setItem(
+            "uriin_dewter_offline_auth",
+            JSON.stringify(offlineAuth)
+        );
+
+        localStorage.setItem(
+            "uriin_dewter_subscription",
+            JSON.stringify(subscription)
+        );
+
+
+        document
+            .getElementById("loginScreen")
+            .style.display = "none";
+
+        document
+            .getElementById("appContent")
+            .style.display = "block";
+
+
+        showMessage("");
+
+        console.log(
+            "🟠 NETWORK FAILED -> OFFLINE LOGIN SUCCESS"
+        );
+
+        await loadDebts();
+
+        return;
+
+
+    } catch (offlineError) {
+
+        console.error(
+            "Offline fallback login error:",
+            offlineError
+        );
+
+        showMessage(
+            "Offline нэвтрэхэд алдаа гарлаа.",
+            true
+        );
+
+        return;
+    }
+}
 
 
     if (error) {
