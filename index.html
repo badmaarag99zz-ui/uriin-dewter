@@ -3718,20 +3718,18 @@ if (!navigator.onLine) {
 
         }
 
-        const {
-            error: profileError
-        } =
-            await supabaseClient
-               .from("profiles")
-.insert({
-    id: data.user.id,
-    phone: normalizedPhone,
-    plan: "trial",
-    subscription_expires_at:
-        new Date(
-            Date.now() + 7 * 24 * 60 * 60 * 1000
-        ).toISOString()
-});
+      const {
+    error: profileError
+} =
+    await supabaseClient
+        .from("profiles")
+        .insert({
+            id: data.user.id,
+            phone: normalizedPhone,
+            plan: "free",
+            free_customer_count: 0,
+            subscription_expires_at: null
+        });
 
         if (profileError) {
 
