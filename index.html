@@ -4786,9 +4786,9 @@ async function checkLoginOnLoad() {
                     .getElementById("appContent")
                     .style.display = "block";
 
-                await loadDebts();
+             await syncOfflineDebts();
 
-                return;
+return;
             }
 
         } catch (error) {
