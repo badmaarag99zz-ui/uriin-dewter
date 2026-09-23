@@ -3581,9 +3581,28 @@ function loadOfflineDebts(userId) {
 
 function showRegisterModal() {
 
+    // Бүртгэлийн modal нээх
     document
         .getElementById("registerModal")
         .classList.add("show");
+
+
+    // ==========================================
+    // БҮРТГЭЛИЙГ АНХНЫ STEP РҮҮ RESET ХИЙХ
+    // ==========================================
+
+    document
+        .getElementById("registerStepForm")
+        .style.display = "block";
+
+    document
+        .getElementById("registerStepOtp")
+        .style.display = "none";
+
+
+    // ==========================================
+    // INPUT-УУД ЦЭВЭРЛЭХ
+    // ==========================================
 
     document.getElementById("registerPhone")
         .value = "";
@@ -3594,9 +3613,34 @@ function showRegisterModal() {
     document.getElementById("registerConfirmPassword")
         .value = "";
 
+    document.getElementById("registerOtp")
+        .value = "";
+
+
+    // ==========================================
+    // MESSAGE ЦЭВЭРЛЭХ
+    // ==========================================
+
     document.getElementById("registerMessage")
         .textContent = "";
 
+    const otpMessage =
+        document.getElementById("registerOtpMessage");
+
+    if (otpMessage) {
+        otpMessage.textContent = "";
+    }
+
+
+    // ==========================================
+    // ХУУЧИН PENDING REGISTER МЭДЭЭЛЭЛ ЦЭВЭРЛЭХ
+    // ==========================================
+
+    window.pendingRegisterPhone = null;
+    window.pendingRegisterPassword = null;
+
+
+    // Утасны талбар дээр cursor тавих
     setTimeout(() => {
 
         document
