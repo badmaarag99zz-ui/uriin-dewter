@@ -5465,6 +5465,20 @@ body{
     transform:rotate(180deg);
 }
 
+
+/* Collapsed state: keep only the newest 3 movements visible */
+#historyView .report-recent-wrap:not(.open){
+    display:block;
+    opacity:1;
+    margin-top:12px;
+}
+#historyView .report-recent-wrap:not(.open) > .report-list{
+    overflow:visible;
+}
+#historyView .report-recent-wrap:not(.open) #reportRecentActivity > *:nth-child(n+4){
+    display:none !important;
+}
+
 </style>
 
 </head>
@@ -5792,7 +5806,7 @@ body{
                     class="report-section-title report-recent-toggle"
                     id="reportRecentToggle"
                     onclick="toggleReportRecentActivity()"
-                    aria-expanded="true">
+                    aria-expanded="false">
                     <span>
                         <h3>🧾 Сүүлд хийсэн хөдөлгөөн</h3>
                         <small>Өр нэмсэн болон төлсөн түүх</small>
@@ -5800,7 +5814,7 @@ body{
                     <span class="report-recent-chevron">▲</span>
                 </button>
 
-                <div id="reportRecentActivityWrap" class="report-recent-wrap open">
+                <div id="reportRecentActivityWrap" class="report-recent-wrap">
                     <div id="reportRecentActivity" class="report-list"></div>
                 </div>
         </div>
