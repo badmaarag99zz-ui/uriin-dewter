@@ -12,87 +12,7 @@
 
 <title>Өрийн дэвтэр</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
-/* ===== TOP MENU FINAL FIX ===== */
-(function () {
-    function getTopMenu() {
-        return document.getElementById("topMenu");
-    }
-
-    function getTopMenuButton() {
-        return document.getElementById("helpTopBtn");
-    }
-
-    window.closeTopMenu = function () {
-        const menu = getTopMenu();
-        if (menu) menu.style.display = "none";
-    };
-
-    window.toggleTopMenu = function (event) {
-        if (event) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-
-        const menu = getTopMenu();
-        const button = getTopMenuButton();
-        if (!menu || !button) return;
-
-        if (menu.parentElement !== document.body) {
-            document.body.appendChild(menu);
-        }
-
-        const isOpen = menu.style.display === "block";
-        if (isOpen) {
-            closeTopMenu();
-            return;
-        }
-
-        const rect = button.getBoundingClientRect();
-        menu.style.position = "fixed";
-        menu.style.left = Math.max(10, rect.left) + "px";
-        menu.style.right = "auto";
-        menu.style.top = (rect.bottom + 7) + "px";
-        menu.style.zIndex = "100000";
-        menu.style.display = "block";
-    };
-
-    const button = getTopMenuButton();
-    if (button) {
-        button.onclick = function (event) {
-            toggleTopMenu(event);
-        };
-    }
-
-    const menu = getTopMenu();
-    if (menu) {
-        if (menu.parentElement !== document.body) {
-            document.body.appendChild(menu);
-        }
-        menu.addEventListener("click", function (event) {
-            event.stopPropagation();
-        });
-    }
-
-    document.addEventListener("click", function (event) {
-        const currentMenu = getTopMenu();
-        const currentButton = getTopMenuButton();
-
-        if (!currentMenu || currentMenu.style.display !== "block") return;
-
-        if (!currentMenu.contains(event.target) &&
-            !(currentButton && currentButton.contains(event.target))) {
-            closeTopMenu();
-        }
-    });
-
-    window.addEventListener("resize", closeTopMenu);
-    window.addEventListener("scroll", closeTopMenu, true);
-})();
-
-</script>
-
-<link rel="manifest" href="/manifest.json">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <style>
 
@@ -11678,6 +11598,66 @@ function showLedgerView(viewId, buttonElement = null) {
     });
 })();
 </script>
+
+<script>
+/* ===== TOP MENU RELIABLE CONTROLLER ===== */
+(function () {
+    const button = document.getElementById("helpTopBtn");
+    const menu = document.getElementById("topMenu");
+
+    if (!button || !menu) return;
+
+    if (menu.parentElement !== document.body) {
+        document.body.appendChild(menu);
+    }
+
+    function hideMenu() {
+        menu.style.display = "none";
+    }
+
+    function openMenu() {
+        const rect = button.getBoundingClientRect();
+
+        menu.style.position = "fixed";
+        menu.style.left = Math.max(10, rect.left) + "px";
+        menu.style.right = "auto";
+        menu.style.top = (rect.bottom + 7) + "px";
+        menu.style.zIndex = "100000";
+        menu.style.display = "block";
+    }
+
+    window.closeTopMenu = hideMenu;
+
+    button.onclick = function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        if (menu.style.display === "block") {
+            hideMenu();
+        } else {
+            openMenu();
+        }
+    };
+
+    menu.onclick = function (event) {
+        event.stopPropagation();
+    };
+
+    document.addEventListener("click", function (event) {
+        if (
+            menu.style.display === "block" &&
+            !menu.contains(event.target) &&
+            !button.contains(event.target)
+        ) {
+            hideMenu();
+        }
+    });
+
+    window.addEventListener("resize", hideMenu);
+    window.addEventListener("scroll", hideMenu, true);
+})();
+</script>
+
 </body>
 
 </html>
