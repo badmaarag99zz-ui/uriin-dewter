@@ -5278,6 +5278,30 @@ body{
   #historyView .report-status span{grid-column:1/-1}
 }
 
+
+/* ===== REPORT V1.1 — CLARITY ===== */
+#historyView .report-filter-note{
+    padding:10px 12px;
+    border-radius:11px;
+    background:#F1F5F8;
+    color:#6F7D89;
+    font-size:12px;
+    line-height:1.45;
+}
+#historyView .report-filter-note b{
+    color:#52677D;
+}
+#historyView .report-stat span small{
+    display:block;
+    margin-top:3px;
+    color:#98A2AB;
+    font-size:10px;
+    font-weight:650;
+}
+#historyView .report-section-title h3{
+    line-height:1.25;
+}
+
 </style>
 
 </head>
@@ -5516,26 +5540,30 @@ body{
         <div class="report-head">
             <div>
                 <h2>📊 Тайлан</h2>
-                <p>Авлага, төлөлт болон хугацааны төлөв</p>
+                <p>Одоогийн авлага болон сонгосон хугацааны мөнгөний хөдөлгөөн</p>
             </div>
             <div class="report-filter" id="reportFilter">
                 <button type="button" data-days="7">7 хоног</button>
                 <button type="button" data-days="30" class="active">30 хоног</button>
                 <button type="button" data-days="all">Бүгд</button>
             </div>
+            <div class="report-filter-note">
+                <b>7 / 30 хоног / Бүгд</b> нь зөвхөн доорх “Хөдөлгөөн”-ийг шүүнэ.
+                Дээд талын авлага нь таны <b>одоогийн нийт төлөв</b>.
+            </div>
         </div>
 
         <div class="report-main-grid">
             <div class="report-stat">
-                <span>Нийт авлага</span>
+                <span>Нийт авлага <small>Одоогийн</small></span>
                 <strong id="reportTotalDebt">0 ₮</strong>
             </div>
             <div class="report-stat">
-                <span>Төлсөн</span>
+                <span>Нийт төлсөн <small>Одоогийн бүртгэлээр</small></span>
                 <strong id="reportTotalPaid">0 ₮</strong>
             </div>
             <div class="report-stat report-stat-wide">
-                <span>Үлдэгдэл авлага</span>
+                <span>Одоо авах үлдэгдэл</span>
                 <strong id="reportRemaining">0 ₮</strong>
             </div>
         </div>
@@ -5566,16 +5594,16 @@ body{
 
         <div class="report-section">
             <div class="report-section-title">
-                <h3>↕ Хөдөлгөөн</h3>
+                <h3>↕ Сонгосон хугацааны хөдөлгөөн</h3>
                 <small id="reportPeriodLabel">Сүүлийн 30 хоног</small>
             </div>
             <div class="report-flow">
                 <div class="report-flow-row">
-                    <div><span>➕ Өр нэмэгдсэн</span><b id="reportAdded">0 ₮</b></div>
+                    <div><span>➕ Шинээр нэмэгдсэн өр</span><b id="reportAdded">0 ₮</b></div>
                     <div class="report-bar"><i id="reportAddedBar"></i></div>
                 </div>
                 <div class="report-flow-row">
-                    <div><span>💰 Төлөгдсөн</span><b id="reportPaidPeriod">0 ₮</b></div>
+                    <div><span>💰 Орж ирсэн төлөлт</span><b id="reportPaidPeriod">0 ₮</b></div>
                     <div class="report-bar paid"><i id="reportPaidBar"></i></div>
                 </div>
             </div>
@@ -5583,15 +5611,15 @@ body{
 
         <div class="report-section">
             <div class="report-section-title">
-                <h3>👥 Анхаарах авлагууд</h3>
-                <small>Үлдэгдэл хамгийн өндөр 5</small>
+                <h3>👥 Анхаарах хүмүүс</h3>
+                <small>Хамгийн их үлдэгдэлтэй 5 хүн</small>
             </div>
             <div id="reportTopDebtors" class="report-list"></div>
         </div>
 
         <div class="report-section">
             <div class="report-section-title">
-                <h3>🧾 Сүүлийн хөдөлгөөн</h3>
+                <h3>🧾 Сүүлд хийсэн хөдөлгөөн</h3>
                 <small>Өр нэмсэн болон төлсөн түүх</small>
             </div>
             <div id="reportRecentActivity" class="report-list"></div>
