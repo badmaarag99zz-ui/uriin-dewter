@@ -11658,6 +11658,72 @@ function showLedgerView(viewId, buttonElement = null) {
 })();
 </script>
 
+
+<script>
+/* ===== INFO MENU ITEMS RELIABLE FIX ===== */
+(function () {
+    const menu = document.getElementById("topMenu");
+
+    function openInfoModal(modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+
+        if (modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
+
+        if (menu) menu.style.display = "none";
+        modal.style.display = "flex";
+        modal.style.zIndex = "100001";
+    }
+
+    const menuButtons = menu ? Array.from(menu.querySelectorAll("button")) : [];
+
+    menuButtons.forEach(function (btn) {
+        const label = (btn.textContent || "").trim();
+
+        if (label.includes("Танилцуулга")) {
+            btn.onclick = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                openInfoModal("helpModal");
+            };
+        }
+
+        if (label.includes("Санал хүсэлт")) {
+            btn.onclick = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                openInfoModal("feedbackModal");
+            };
+        }
+
+        if (label.includes("Холбоо барих")) {
+            btn.onclick = function (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                openInfoModal("contactModal");
+            };
+        }
+    });
+
+    ["helpModal", "feedbackModal", "contactModal"].forEach(function (modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+
+        if (modal.parentElement !== document.body) {
+            document.body.appendChild(modal);
+        }
+
+        modal.addEventListener("click", function (event) {
+            if (event.target === modal) {
+                modal.style.display = "none";
+            }
+        });
+    });
+})();
+</script>
+
 </body>
 
 </html>
