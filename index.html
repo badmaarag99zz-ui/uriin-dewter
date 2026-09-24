@@ -5481,15 +5481,14 @@ body{
 
 
 
-/* ===== NOTEBOOK PAPER FLIP — CLICK TEST V2 ===== */
+/* ===== NOTEBOOK PAPER FLIP — CURVED PAPER V4 ===== */
 .ledger-main{
     position:relative;
-    perspective:1500px;
+    perspective:1900px;
     transform-style:preserve-3d;
-    overflow-x:hidden;
+    overflow:hidden;
 }
 
-/* Flip үед хоёр view давхарласан нэг дэвтрийн хоёр хуудас шиг байна. */
 .ledger-main.ledger-flipping-forward,
 .ledger-main.ledger-flipping-back{
     min-height:calc(100vh - 150px);
@@ -5504,99 +5503,184 @@ body{
 
 .ledger-view.ledger-paper-under{
     z-index:1;
-    transform:none;
     opacity:1;
+    transform:none;
 }
 
-/* Эргэж буй бодит "цаас". */
+/*
+ * Эргэж буй хуудас:
+ * rotateY + skew + scaleX нь хавтгай карт биш,
+ * нумарч байгаа нимгэн цаасны мэдрэмж өгнө.
+ */
 .ledger-view.ledger-paper-front{
     z-index:3;
     background:#F6F7F9;
     backface-visibility:hidden;
     -webkit-backface-visibility:hidden;
     transform-style:preserve-3d;
-    will-change:transform,filter;
-    box-shadow:0 0 0 rgba(37,42,52,0);
+    will-change:transform,filter,clip-path;
+    overflow:hidden;
 }
 
-/* Баруун тийш дараагийн tab: хуудас баруун ирмэгээс зүүн тийш эргэнэ. */
 .ledger-view.ledger-paper-flip-forward{
     transform-origin:left center;
-    animation:ledgerRealFlipForward .68s cubic-bezier(.22,.61,.36,1) forwards;
+    animation:ledgerCurvedForward .92s cubic-bezier(.20,.68,.28,1) forwards;
 }
 
-/* Буцах tab: эсрэг талаасаа эргэнэ. */
 .ledger-view.ledger-paper-flip-back{
     transform-origin:right center;
-    animation:ledgerRealFlipBack .68s cubic-bezier(.22,.61,.36,1) forwards;
+    animation:ledgerCurvedBack .92s cubic-bezier(.20,.68,.28,1) forwards;
 }
 
+/* Цаасны гадаргуу дээр хөдөлдөг нумарсан гэрэл/сүүдэр */
+.ledger-view.ledger-paper-front::before{
+    content:"";
+    position:absolute;
+    z-index:20;
+    top:-4%;
+    bottom:-4%;
+    width:34%;
+    pointer-events:none;
+    opacity:0;
+    filter:blur(5px);
+    border-radius:50%;
+    background:linear-gradient(
+        90deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,.62) 34%,
+        rgba(55,65,75,.18) 67%,
+        rgba(20,30,40,0) 100%
+    );
+}
+
+.ledger-paper-flip-forward::before{
+    right:-8%;
+    animation:ledgerCurlLightForward .92s cubic-bezier(.20,.68,.28,1) forwards;
+}
+
+.ledger-paper-flip-back::before{
+    left:-8%;
+    transform:scaleX(-1);
+    animation:ledgerCurlLightBack .92s cubic-bezier(.20,.68,.28,1) forwards;
+}
+
+/* binding талаас цаас салж нумарч байгаа сүүдэр */
 .ledger-view.ledger-paper-front::after{
     content:"";
     position:absolute;
+    z-index:19;
     inset:0;
     pointer-events:none;
     opacity:0;
     background:linear-gradient(
         90deg,
-        rgba(20,30,40,.20) 0%,
-        rgba(255,255,255,.10) 16%,
-        rgba(255,255,255,0) 55%,
-        rgba(20,30,40,.08) 100%
+        rgba(30,40,50,.20) 0%,
+        rgba(30,40,50,.07) 9%,
+        rgba(255,255,255,.12) 24%,
+        rgba(255,255,255,0) 58%
     );
-    animation:ledgerPaperShade .68s ease-in-out forwards;
+    animation:ledgerCurlShade .92s ease-in-out forwards;
 }
 
 .ledger-paper-flip-back::after{
     transform:scaleX(-1);
 }
 
-@keyframes ledgerRealFlipForward{
+@keyframes ledgerCurvedForward{
     0%{
-        transform:rotateY(0deg) translateZ(0);
+        transform:rotateY(0deg) skewY(0deg) scaleX(1) translateZ(0);
         filter:brightness(1);
+        clip-path:inset(0 0 0 0 round 0);
         box-shadow:0 0 0 rgba(37,42,52,0);
     }
-    45%{
-        transform:rotateY(-58deg) translateZ(3px);
+    22%{
+        transform:rotateY(-18deg) skewY(.7deg) scaleX(.995) translateZ(7px);
+        filter:brightness(.995);
+        clip-path:inset(0 0 0 .4% round 0 12px 12px 0);
+        box-shadow:8px 2px 16px rgba(37,42,52,.08);
+    }
+    48%{
+        transform:rotateY(-68deg) skewY(1.5deg) scaleX(.965) translateZ(15px);
+        filter:brightness(.97);
+        clip-path:inset(0 0 0 1.4% round 0 24px 24px 0);
+        box-shadow:20px 4px 32px rgba(37,42,52,.14);
+    }
+    72%{
+        transform:rotateY(-125deg) skewY(.8deg) scaleX(.98) translateZ(9px);
         filter:brightness(.94);
-        box-shadow:12px 0 22px rgba(37,42,52,.12);
+        clip-path:inset(0 0 0 .8% round 0 16px 16px 0);
+        box-shadow:25px 3px 38px rgba(37,42,52,.15);
     }
     100%{
-        transform:rotateY(-178deg) translateZ(0);
-        filter:brightness(.90);
-        box-shadow:20px 0 30px rgba(37,42,52,.14);
+        transform:rotateY(-178deg) skewY(0deg) scaleX(1) translateZ(0);
+        filter:brightness(.92);
+        clip-path:inset(0 0 0 0 round 0);
+        box-shadow:18px 0 28px rgba(37,42,52,.11);
     }
 }
 
-@keyframes ledgerRealFlipBack{
+@keyframes ledgerCurvedBack{
     0%{
-        transform:rotateY(0deg) translateZ(0);
+        transform:rotateY(0deg) skewY(0deg) scaleX(1) translateZ(0);
         filter:brightness(1);
+        clip-path:inset(0 0 0 0 round 0);
         box-shadow:0 0 0 rgba(37,42,52,0);
     }
-    45%{
-        transform:rotateY(58deg) translateZ(3px);
+    22%{
+        transform:rotateY(18deg) skewY(-.7deg) scaleX(.995) translateZ(7px);
+        filter:brightness(.995);
+        clip-path:inset(0 .4% 0 0 round 12px 0 0 12px);
+        box-shadow:-8px 2px 16px rgba(37,42,52,.08);
+    }
+    48%{
+        transform:rotateY(68deg) skewY(-1.5deg) scaleX(.965) translateZ(15px);
+        filter:brightness(.97);
+        clip-path:inset(0 1.4% 0 0 round 24px 0 0 24px);
+        box-shadow:-20px 4px 32px rgba(37,42,52,.14);
+    }
+    72%{
+        transform:rotateY(125deg) skewY(-.8deg) scaleX(.98) translateZ(9px);
         filter:brightness(.94);
-        box-shadow:-12px 0 22px rgba(37,42,52,.12);
+        clip-path:inset(0 .8% 0 0 round 16px 0 0 16px);
+        box-shadow:-25px 3px 38px rgba(37,42,52,.15);
     }
     100%{
-        transform:rotateY(178deg) translateZ(0);
-        filter:brightness(.90);
-        box-shadow:-20px 0 30px rgba(37,42,52,.14);
+        transform:rotateY(178deg) skewY(0deg) scaleX(1) translateZ(0);
+        filter:brightness(.92);
+        clip-path:inset(0 0 0 0 round 0);
+        box-shadow:-18px 0 28px rgba(37,42,52,.11);
     }
 }
 
-@keyframes ledgerPaperShade{
+@keyframes ledgerCurlLightForward{
+    0%{opacity:0;transform:translateX(42%) scaleX(.55)}
+    30%{opacity:.48;transform:translateX(4%) scaleX(.88)}
+    58%{opacity:.78;transform:translateX(-75%) scaleX(1.15)}
+    82%{opacity:.36;transform:translateX(-145%) scaleX(.82)}
+    100%{opacity:0;transform:translateX(-185%) scaleX(.55)}
+}
+
+@keyframes ledgerCurlLightBack{
+    0%{opacity:0;transform:scaleX(-1) translateX(42%) scaleX(.55)}
+    30%{opacity:.48;transform:scaleX(-1) translateX(4%) scaleX(.88)}
+    58%{opacity:.78;transform:scaleX(-1) translateX(-75%) scaleX(1.15)}
+    82%{opacity:.36;transform:scaleX(-1) translateX(-145%) scaleX(.82)}
+    100%{opacity:0;transform:scaleX(-1) translateX(-185%) scaleX(.55)}
+}
+
+@keyframes ledgerCurlShade{
     0%{opacity:0}
-    38%{opacity:.30}
-    70%{opacity:.48}
-    100%{opacity:.18}
+    25%{opacity:.22}
+    52%{opacity:.56}
+    76%{opacity:.34}
+    100%{opacity:.08}
 }
 
 @media (prefers-reduced-motion:reduce){
     .ledger-view.ledger-paper-flip-forward,
     .ledger-view.ledger-paper-flip-back,
+    .ledger-paper-flip-forward::before,
+    .ledger-paper-flip-back::before,
     .ledger-view.ledger-paper-front::after{
         animation-duration:.01ms!important;
     }
@@ -15254,7 +15338,7 @@ function showLedgerView(viewId, buttonElement = null) {
         forward ? "ledger-paper-flip-forward" : "ledger-paper-flip-back"
     );
 
-    window.setTimeout(finish, 680);
+    window.setTimeout(finish, 920);
 }
 
 </script>
