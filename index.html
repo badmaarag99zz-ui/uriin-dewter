@@ -14588,7 +14588,7 @@ async function exportReportExcel() {
         ["Тайлангийн хугацаа", periodLabel, "Татсан огноо", new Date().toLocaleString("mn-MN")],
         [],
         ["ЕРӨНХИЙ ҮЗҮҮЛЭЛТ"],
-        ["Одоогийн өртэй хүн", active.length, "Устгасан бүртгэл", archived.length],
+        ["Идэвхтэй харилцагч", active.length, "Устгасан бүртгэл", archived.length],
         ["Нийт авлага", activeTotal, "Нийт төлсөн", activePaid],
         ["Одоо авах үлдэгдэл", remaining, "Хугацаа хэтэрсэн", overdueAmount],
         ["Хугацаа хэтэрсэн хүн", overdueCount, "", ""],
@@ -14608,7 +14608,7 @@ async function exportReportExcel() {
         money(d.paid),
         Math.max(0,money(d.amount)-money(d.paid)),
         d.dueDate || "",
-        d.archivedAt ? "Устгасан" : "Одоогийн",
+        d.archivedAt ? "Устгасан" : "Идэвхтэй",
         shortDate(d.createdAt),
         shortDate(d.archivedAt)
     ]));
@@ -14618,10 +14618,10 @@ async function exportReportExcel() {
     const movements=[];
     source.forEach(d => {
         reportHistoryArray(d.additions).forEach(x => movements.push({
-            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Өр нэмсэн", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Одоогийн"
+            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Өр нэмсэн", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Идэвхтэй"
         }));
         reportHistoryArray(d.payments).forEach(x => movements.push({
-            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Төлөлт", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Одоогийн"
+            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Төлөлт", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Идэвхтэй"
         }));
     });
     movements.sort((a,b)=>new Date(b.date)-new Date(a.date));
@@ -14645,6 +14645,60 @@ async function exportReportExcel() {
         {wch:7},{wch:22},{wch:14},{wch:18},{wch:18},
         {wch:18},{wch:16},{wch:14},{wch:16},{wch:18}
     ];
+
+    /* Тайлангийн хэсгүүдийг нүдний хүрээтэй, хүснэгт маягаар цэгцэлнэ */
+    const reportBorder = {
+        top: {style:"thin", color:{rgb:"B8C3CC"}},
+        bottom: {style:"thin", color:{rgb:"B8C3CC"}},
+        left: {style:"thin", color:{rgb:"B8C3CC"}},
+        right: {style:"thin", color:{rgb:"B8C3CC"}}
+    };
+
+    const styleReportRange = (r1,c1,r2,c2,extra={}) => {
+        for (let r=r1; r<=r2; r++) {
+            for (let c=c1; c<=c2; c++) {
+                const addr = XLSX.utils.encode_cell({r:r-1,c:c-1});
+                if (!ws[addr]) ws[addr] = {t:"s",v:""};
+                ws[addr].s = {
+                    ...(ws[addr].s || {}),
+                    border: reportBorder,
+                    alignment: {vertical:"center", ...(extra.alignment || {})},
+                    ...(extra.font ? {font:extra.font} : {}),
+                    ...(extra.fill ? {fill:extra.fill} : {})
+                };
+            }
+        }
+    };
+
+    /* Ерөнхий үзүүлэлт */
+    styleReportRange(5,1,7,4);
+
+    /* Сонгосон хугацааны хөдөлгөөн */
+    styleReportRange(10,1,11,4);
+
+    /* Харилцагчдын дэлгэрэнгүй */
+    styleReportRange(14,1,14 + source.length,10);
+
+    /* Гүйлгээний түүх */
+    const movementHeaderStyleRow = movementTitleRow + 1;
+    const movementLastStyleRow =
+        movementHeaderStyleRow + Math.max(movements.length,1);
+    styleReportRange(movementHeaderStyleRow,1,movementLastStyleRow,6);
+
+    /* Хүснэгтийн толгой мөрүүд */
+    [
+        [5,1,5,4],
+        [10,1,10,4],
+        [14,1,14,10],
+        [movementHeaderStyleRow,1,movementHeaderStyleRow,6]
+    ].forEach(([r1,c1,r2,c2]) => {
+        styleReportRange(r1,c1,r2,c2,{
+            font:{bold:true},
+            fill:{fgColor:{rgb:"E9EEF3"}},
+            alignment:{horizontal:"center"}
+        });
+    });
+
 
     /* SheetJS Community styling support may vary, but these preserve print/layout metadata. */
     ws["!autofilter"] = { ref: "A14:J" + (14 + source.length) };
