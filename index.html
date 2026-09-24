@@ -5480,6 +5480,18 @@ body{
 }
 
 
+
+/* ===== LEDGER PAGE TURN — TAB CLICK ONLY ===== */
+.ledger-view.page-turn-out-left{animation:ledgerPageOutLeft .16s ease-in forwards;transform-origin:left center;backface-visibility:hidden}
+.ledger-view.page-turn-out-right{animation:ledgerPageOutRight .16s ease-in forwards;transform-origin:right center;backface-visibility:hidden}
+.ledger-view.page-turn-in-left{animation:ledgerPageInLeft .22s ease-out both;transform-origin:left center;backface-visibility:hidden}
+.ledger-view.page-turn-in-right{animation:ledgerPageInRight .22s ease-out both;transform-origin:right center;backface-visibility:hidden}
+@keyframes ledgerPageOutLeft{from{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}to{opacity:.15;transform:perspective(900px) translateX(-18px) rotateY(10deg)}}
+@keyframes ledgerPageOutRight{from{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}to{opacity:.15;transform:perspective(900px) translateX(18px) rotateY(-10deg)}}
+@keyframes ledgerPageInLeft{from{opacity:.15;transform:perspective(900px) translateX(-18px) rotateY(10deg)}to{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}}
+@keyframes ledgerPageInRight{from{opacity:.15;transform:perspective(900px) translateX(18px) rotateY(-10deg)}to{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}}
+@media (prefers-reduced-motion:reduce){.ledger-view.page-turn-out-left,.ledger-view.page-turn-out-right,.ledger-view.page-turn-in-left,.ledger-view.page-turn-in-right{animation:none!important}}
+
 </style>
 
 </head>
@@ -15058,22 +15070,48 @@ function setReportPeriod(days, button) {
 // MODERN LEDGER NAVIGATION
 // ==========================================
 function showLedgerView(viewId, buttonElement = null) {
-    document.querySelectorAll(".ledger-view").forEach(function(view) {
-        view.classList.remove("active");
-    });
+    const order = ["homeView", "customersView", "historyView", "menuView"];
+    const current = document.querySelector(".ledger-view.active");
     const target = document.getElementById(viewId);
-    if (target) target.classList.add("active");
 
-    if (viewId === "historyView") {
-        renderReport();
+    if (!target || current === target) return;
+
+    const currentIndex = current ? order.indexOf(current.id) : -1;
+    const targetIndex = order.indexOf(viewId);
+    const forward = currentIndex === -1 || targetIndex === -1
+        ? true
+        : targetIndex > currentIndex;
+
+    const finishSwitch = function() {
+        document.querySelectorAll(".ledger-view").forEach(function(view) {
+            view.classList.remove("active","page-turn-out-left","page-turn-out-right","page-turn-in-left","page-turn-in-right");
+        });
+
+        target.classList.add("active", forward ? "page-turn-in-right" : "page-turn-in-left");
+
+        if (viewId === "historyView") renderReport();
+
+        document.querySelectorAll(".ledger-tab[data-view]").forEach(function(btn) {
+            btn.classList.remove("active");
+        });
+
+        const nav = buttonElement || document.querySelector('.ledger-tab[data-view="' + viewId + '"]');
+        if (nav) nav.classList.add("active");
+
+        window.scrollTo({top:0,behavior:"auto"});
+
+        window.setTimeout(function() {
+            target.classList.remove("page-turn-in-left","page-turn-in-right");
+        }, 240);
+    };
+
+    if (!current) {
+        finishSwitch();
+        return;
     }
 
-    document.querySelectorAll(".ledger-tab[data-view]").forEach(function(btn) {
-        btn.classList.remove("active");
-    });
-    const nav = buttonElement || document.querySelector('.ledger-tab[data-view="' + viewId + '"]');
-    if (nav) nav.classList.add("active");
-    window.scrollTo({top:0,behavior:"smooth"});
+    current.classList.add(forward ? "page-turn-out-left" : "page-turn-out-right");
+    window.setTimeout(finishSwitch, 150);
 }
 
 </script>
