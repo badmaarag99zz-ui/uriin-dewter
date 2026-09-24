@@ -3226,6 +3226,114 @@ header h1 {
     }
 }
 
+
+/* ===== DASHBOARD V3 — MORE COLOR + BIGGER TYPE ===== */
+
+/* Slightly richer home background without becoming flashy */
+body{
+    background:
+        linear-gradient(180deg, #F2F6F9 0%, #F6F7F9 42%, #EEF3F6 100%) !important;
+}
+
+/* Main dashboard card */
+.summary-card,
+.overview-card{
+    background:
+        linear-gradient(145deg, #FFFFFF 0%, #F3F7FA 54%, #E8EFF4 100%) !important;
+    border:1px solid #D4DFE8 !important;
+    box-shadow:
+        0 16px 38px rgba(82,103,125,.13),
+        inset 0 1px 0 rgba(255,255,255,.95) !important;
+}
+
+/* Main label + amount + helper text */
+.summary-card .summary-label,
+.overview-card .summary-label{
+    font-size:17px !important;
+    font-weight:850 !important;
+    color:#52677D !important;
+}
+#totalRemaining{
+    margin-top:9px !important;
+    font-size:50px !important;
+    line-height:1 !important;
+    font-weight:900 !important;
+    letter-spacing:-1.35px !important;
+    color:#344F68 !important;
+}
+.summary-card .summary-note,
+.overview-card .summary-note{
+    margin-top:13px !important;
+    font-size:15px !important;
+    font-weight:650 !important;
+    color:#7D8995 !important;
+}
+
+/* Lower three sections: bigger labels and values */
+.summary-card .metric-label,
+.overview-card .metric-label{
+    font-size:14px !important;
+    font-weight:800 !important;
+    color:#708090 !important;
+}
+#totalDebt,
+#totalPaid,
+#totalPeople{
+    margin-top:7px !important;
+    font-size:24px !important;
+    line-height:1.05 !important;
+    font-weight:900 !important;
+    color:#314A61 !important;
+}
+
+/* Very soft color accents per metric, still one coherent palette */
+.summary-card .metric:nth-child(1),
+.overview-card .metric:nth-child(1){
+    background:rgba(82,103,125,.055);
+}
+.summary-card .metric:nth-child(2),
+.overview-card .metric:nth-child(2){
+    background:rgba(55,126,109,.065);
+}
+.summary-card .metric:nth-child(3),
+.overview-card .metric:nth-child(3){
+    background:rgba(91,105,135,.055);
+}
+.summary-card .metric,
+.overview-card .metric{
+    border-radius:14px !important;
+    padding:12px 10px !important;
+}
+
+/* A little more brand color around the hero/date area */
+.brand-message .home-today-date{
+    background:#EDF2F6 !important;
+    border-color:#D9E2E9 !important;
+    color:#52677D !important;
+}
+.brand-subtitle{
+    color:#52677D !important;
+}
+
+@media(max-width:380px){
+    #totalRemaining{
+        font-size:44px !important;
+    }
+    .summary-card .summary-label,
+    .overview-card .summary-label{
+        font-size:15.5px !important;
+    }
+    #totalDebt,
+    #totalPaid,
+    #totalPeople{
+        font-size:21px !important;
+    }
+    .summary-card .metric-label,
+    .overview-card .metric-label{
+        font-size:12.5px !important;
+    }
+}
+
 </style>
 
 </head>
