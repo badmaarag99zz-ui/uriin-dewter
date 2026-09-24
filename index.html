@@ -4010,6 +4010,140 @@ body{
     color:#617486 !important;
 }
 
+
+/* =========================================================
+   SUMMARY FINAL POLISH — LOCK THIS LAYOUT
+   ========================================================= */
+
+/* Main white container: enough bottom room for people pill */
+.summary-layout-final{
+    padding:16px 16px 24px !important;
+    margin-bottom:18px !important;
+    overflow:visible !important;
+}
+
+/* Top two cards */
+.summary-top{
+    gap:9px !important;
+}
+.summary-mini{
+    min-width:0 !important;
+    min-height:92px !important;
+    padding:14px 10px !important;
+    border-radius:15px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+}
+.summary-mini span{
+    font-size:14px !important;
+    line-height:1.15 !important;
+}
+
+/* Important: long receivable value always fits instead of ellipsis */
+.summary-mini b{
+    width:100% !important;
+    margin-top:8px !important;
+    font-size:clamp(14px, 3.65vw, 19px) !important;
+    line-height:1.05 !important;
+    letter-spacing:-.55px !important;
+    white-space:nowrap !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+}
+
+/* Remaining receivable: still the hero, but not oversized */
+.summary-remaining{
+    margin-top:9px !important;
+    min-height:174px !important;
+    padding:22px 14px 28px !important;
+    border-radius:17px !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+}
+.summary-remaining > span{
+    font-size:17px !important;
+}
+.summary-remaining > strong,
+.summary-remaining #totalRemaining{
+    margin:10px 0 9px !important;
+    font-size:clamp(28px, 6.35vw, 37px) !important;
+    line-height:1.03 !important;
+    letter-spacing:-.8px !important;
+    white-space:nowrap !important;
+}
+.summary-remaining > small{
+    font-size:13px !important;
+}
+
+/* People: now fully INSIDE the card, no hanging/cropping */
+.summary-people-pill{
+    position:static !important;
+    transform:none !important;
+    width:max-content !important;
+    min-width:150px !important;
+    max-width:80% !important;
+    margin:12px auto 0 !important;
+    padding:9px 16px !important;
+    border-radius:999px !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:8px !important;
+    background:#E8F0F4 !important;
+    border:1px solid #CCD9E2 !important;
+    box-shadow:none !important;
+}
+.summary-people-pill span,
+.summary-people-pill b,
+#totalPeople{
+    margin:0 !important;
+    padding:0 !important;
+    font-size:13px !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    color:#5F7284 !important;
+}
+
+/* Tight phone tuning */
+@media(max-width:420px){
+    .summary-layout-final{
+        padding:13px 13px 20px !important;
+    }
+    .summary-mini{
+        min-height:84px !important;
+        padding:12px 7px !important;
+    }
+    .summary-mini span{
+        font-size:12.5px !important;
+    }
+    .summary-mini b{
+        font-size:clamp(12.5px, 3.7vw, 17px) !important;
+        letter-spacing:-.65px !important;
+    }
+    .summary-remaining{
+        min-height:160px !important;
+        padding:20px 10px 24px !important;
+    }
+    .summary-remaining > span{
+        font-size:15.5px !important;
+    }
+    .summary-remaining > strong,
+    .summary-remaining #totalRemaining{
+        font-size:clamp(25px, 6.3vw, 34px) !important;
+    }
+    .summary-remaining > small{
+        font-size:12px !important;
+    }
+    .summary-people-pill{
+        margin-top:10px !important;
+        padding:8px 14px !important;
+    }
+}
+
 </style>
 
 </head>
