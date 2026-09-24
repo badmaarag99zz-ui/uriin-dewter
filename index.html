@@ -4849,6 +4849,145 @@ body{
     line-height:1.2 !important;
 }
 
+
+/* =========================================================
+   DETAIL MODAL — VISUAL REFRESH ONLY
+   Existing actions/history functions remain unchanged.
+========================================================= */
+
+#detailModal .detail-box{
+    border-radius:24px !important;
+    padding:22px 18px 18px !important;
+    background:#F7F9FB !important;
+    border:1px solid #DCE4EA !important;
+    box-shadow:0 22px 55px rgba(37,42,52,.18) !important;
+}
+
+#detailContent .detail-person-name{
+    margin:0 38px 4px 0 !important;
+    font-size:23px !important;
+    line-height:1.2 !important;
+    color:#2F4050 !important;
+    font-weight:900 !important;
+}
+
+#detailContent .detail-person-phone{
+    margin-bottom:16px !important;
+    color:#74818C !important;
+    font-size:14px !important;
+    font-weight:650 !important;
+}
+
+/* Нийт авлага + Төлсөн */
+#detailContent .detail-stats{
+    gap:9px !important;
+    margin-bottom:9px !important;
+}
+
+#detailContent .detail-stat{
+    border-radius:16px !important;
+    border:1px solid #D9E3EA !important;
+    background:#FFFFFF !important;
+    box-shadow:0 4px 12px rgba(82,103,125,.055) !important;
+}
+
+#detailContent .detail-stat-label,
+#detailContent .detail-balance-label{
+    color:#74818C !important;
+    font-weight:750 !important;
+}
+
+#detailContent .detail-stat-value{
+    color:#52677D !important;
+    font-weight:900 !important;
+}
+
+/* Үлдэгдэл авлага — гол card */
+#detailContent .detail-balance{
+    margin-top:9px !important;
+    border-radius:18px !important;
+    border:1px solid #C9D8E2 !important;
+    background:#EAF1F5 !important;
+    box-shadow:none !important;
+}
+
+#detailContent .detail-balance-value{
+    color:#405A70 !important;
+    font-weight:950 !important;
+}
+
+/* Төлөх хугацаа */
+#detailContent .detail-due-date{
+    margin:10px 0 12px !important;
+    padding:12px 14px !important;
+    border:1px solid #DCE4EA !important;
+    border-radius:14px !important;
+    background:#FFFFFF !important;
+    color:#5F6E7A !important;
+}
+
+/* History panels */
+#detailContent .history-panel{
+    border-radius:14px !important;
+    border:1px solid #DDE5EB !important;
+    background:#FFFFFF !important;
+}
+
+#detailContent .history-title{
+    color:#52677D !important;
+    font-weight:850 !important;
+}
+
+/* Actions: same size, cleaner rhythm */
+#detailContent .detail-actions{
+    gap:8px !important;
+    margin-top:12px !important;
+}
+
+#detailContent .detail-actions button{
+    min-height:44px !important;
+    border-radius:13px !important;
+    font-weight:800 !important;
+    box-shadow:none !important;
+}
+
+/* Main money actions */
+#detailContent .detail-pay{
+    background:#2F8F5B !important;
+    border-color:#2F8F5B !important;
+    color:#FFFFFF !important;
+}
+
+#detailContent .detail-more{
+    background:#52677D !important;
+    border-color:#52677D !important;
+    color:#FFFFFF !important;
+}
+
+/* Secondary actions */
+#detailContent .detail-call,
+#detailContent .detail-edit{
+    background:#FFFFFF !important;
+    border:1px solid #CBD7E0 !important;
+    color:#52677D !important;
+}
+
+#detailContent .detail-delete{
+    background:#FFF2F2 !important;
+    border:1px solid #E8CACA !important;
+    color:#B45B5B !important;
+}
+
+@media(max-width:430px){
+    #detailModal .detail-box{
+        padding:20px 15px 16px !important;
+        border-radius:22px !important;
+    }
+    #detailContent .detail-person-name{
+        font-size:21px !important;
+    }
+}
+
 </style>
 
 </head>
@@ -10899,7 +11038,7 @@ function openDetailModal(id) {
     document.getElementById("detailContent")
         .innerHTML = `
 
-            <h2 style="
+            <h2 class="detail-person-name" style="
                 margin:0 0 5px;
                 font-size:24px;
             ">
@@ -10909,7 +11048,7 @@ function openDetailModal(id) {
 
             </h2>
 
-            <div style="
+            <div class="detail-person-phone" style="
                 color:#64748b;
                 margin-bottom:20px;
             ">
