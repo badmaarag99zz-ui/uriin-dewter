@@ -5042,6 +5042,35 @@ body{
     }
 }
 
+
+/* ===== MOBILE SEARCH + SORT BALANCE FIX ===== */
+/* 2 баганыг хүчээр шахахгүй — жижиг дэлгэц дээр дээр/доор байрлуулна */
+@media(max-width:520px){
+    #customersView .tools{
+        grid-template-columns:1fr !important;
+        gap:8px !important;
+    }
+
+    #customersView #search,
+    #customersView #sort{
+        width:100% !important;
+        min-width:0 !important;
+        min-height:48px !important;
+    }
+
+    #customersView #search{
+        font-size:15px !important;
+        padding-left:15px !important;
+        padding-right:15px !important;
+    }
+
+    #customersView #sort{
+        font-size:15px !important;
+        padding-left:15px !important;
+        padding-right:34px !important;
+    }
+}
+
 </style>
 
 </head>
