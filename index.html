@@ -5480,6 +5480,24 @@ body{
 }
 
 
+
+/* ===== LEDGER SWIPE — FINGER FOLLOW V1 ===== */
+.ledger-view{
+    will-change:auto;
+}
+.ledger-view.ledger-swipe-dragging{
+    position:relative;
+    z-index:20;
+    will-change:transform;
+    transition:none!important;
+}
+.ledger-view.ledger-swipe-snap{
+    position:relative;
+    z-index:20;
+    will-change:transform;
+    transition:transform .22s ease-out!important;
+}
+
 </style>
 
 </head>
@@ -15057,6 +15075,143 @@ function setReportPeriod(days, button) {
 // ==========================================
 // MODERN LEDGER NAVIGATION
 // ==========================================
+
+/* ==========================================
+   LEDGER SWIPE — хурууны хөдөлгөөнийг дагана
+   Нүүр ↔ Жагсаалт ↔ Тайлан ↔ Тохиргоо
+========================================== */
+(function setupLedgerSwipe() {
+    const viewOrder = ["homeView", "customersView", "historyView", "menuView"];
+    let startX = 0;
+    let startY = 0;
+    let deltaX = 0;
+    let dragging = false;
+    let horizontal = false;
+    let activeView = null;
+
+    function isSwipeBlocked(target) {
+        return Boolean(
+            target.closest(
+                "input, textarea, select, button, a, .modal, .detail-modal, " +
+                ".app-modal, [contenteditable='true']"
+            )
+        );
+    }
+
+    function currentIndex() {
+        const current = document.querySelector(".ledger-view.active");
+        return current ? viewOrder.indexOf(current.id) : -1;
+    }
+
+    function cleanup(view) {
+        if (!view) return;
+        view.classList.remove("ledger-swipe-dragging", "ledger-swipe-snap");
+        view.style.transform = "";
+    }
+
+    document.addEventListener("touchstart", function(e) {
+        if (e.touches.length !== 1 || isSwipeBlocked(e.target)) return;
+
+        const idx = currentIndex();
+        if (idx < 0) return;
+
+        activeView = document.querySelector(".ledger-view.active");
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+        deltaX = 0;
+        dragging = true;
+        horizontal = false;
+    }, {passive:true});
+
+    document.addEventListener("touchmove", function(e) {
+        if (!dragging || !activeView || e.touches.length !== 1) return;
+
+        deltaX = e.touches[0].clientX - startX;
+        const deltaY = e.touches[0].clientY - startY;
+
+        if (!horizontal) {
+            if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return;
+
+            if (Math.abs(deltaY) > Math.abs(deltaX)) {
+                dragging = false;
+                cleanup(activeView);
+                activeView = null;
+                return;
+            }
+
+            horizontal = true;
+        }
+
+        const idx = currentIndex();
+
+        // First/last page дээр гадагш татахад rubber-band resistance.
+        let visualX = deltaX;
+        if ((idx === 0 && deltaX > 0) ||
+            (idx === viewOrder.length - 1 && deltaX < 0)) {
+            visualX *= 0.22;
+        }
+
+        activeView.classList.add("ledger-swipe-dragging");
+        activeView.style.transform = "translate3d(" + visualX + "px,0,0)";
+
+        // Horizontal gesture болсон үед page scroll/overscroll-ийг зогсооно.
+        e.preventDefault();
+    }, {passive:false});
+
+    document.addEventListener("touchend", function() {
+        if (!dragging || !activeView) {
+            cleanup(activeView);
+            activeView = null;
+            return;
+        }
+
+        const view = activeView;
+        const idx = currentIndex();
+        const threshold = Math.min(90, window.innerWidth * 0.22);
+
+        let nextIndex = idx;
+        if (horizontal && Math.abs(deltaX) >= threshold) {
+            if (deltaX < 0 && idx < viewOrder.length - 1) nextIndex = idx + 1;
+            if (deltaX > 0 && idx > 0) nextIndex = idx - 1;
+        }
+
+        view.classList.remove("ledger-swipe-dragging");
+        view.classList.add("ledger-swipe-snap");
+
+        if (nextIndex !== idx) {
+            const exitX = deltaX < 0 ? -window.innerWidth : window.innerWidth;
+            view.style.transform = "translate3d(" + exitX + "px,0,0)";
+
+            window.setTimeout(function() {
+                cleanup(view);
+                const nextId = viewOrder[nextIndex];
+                const nav = document.querySelector(
+                    '.ledger-tab[data-view="' + nextId + '"]'
+                );
+                showLedgerView(nextId, nav);
+            }, 190);
+        } else {
+            view.style.transform = "translate3d(0,0,0)";
+            window.setTimeout(function() {
+                cleanup(view);
+            }, 230);
+        }
+
+        dragging = false;
+        horizontal = false;
+        activeView = null;
+        deltaX = 0;
+    }, {passive:true});
+
+    document.addEventListener("touchcancel", function() {
+        cleanup(activeView);
+        dragging = false;
+        horizontal = false;
+        activeView = null;
+        deltaX = 0;
+    }, {passive:true});
+})();
+
 function showLedgerView(viewId, buttonElement = null) {
     document.querySelectorAll(".ledger-view").forEach(function(view) {
         view.classList.remove("active");
