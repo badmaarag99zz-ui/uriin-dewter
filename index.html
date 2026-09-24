@@ -5481,16 +5481,126 @@ body{
 
 
 
-/* ===== LEDGER PAGE TURN — TAB CLICK ONLY ===== */
-.ledger-view.page-turn-out-left{animation:ledgerPageOutLeft .16s ease-in forwards;transform-origin:left center;backface-visibility:hidden}
-.ledger-view.page-turn-out-right{animation:ledgerPageOutRight .16s ease-in forwards;transform-origin:right center;backface-visibility:hidden}
-.ledger-view.page-turn-in-left{animation:ledgerPageInLeft .22s ease-out both;transform-origin:left center;backface-visibility:hidden}
-.ledger-view.page-turn-in-right{animation:ledgerPageInRight .22s ease-out both;transform-origin:right center;backface-visibility:hidden}
-@keyframes ledgerPageOutLeft{from{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}to{opacity:.15;transform:perspective(900px) translateX(-18px) rotateY(10deg)}}
-@keyframes ledgerPageOutRight{from{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}to{opacity:.15;transform:perspective(900px) translateX(18px) rotateY(-10deg)}}
-@keyframes ledgerPageInLeft{from{opacity:.15;transform:perspective(900px) translateX(-18px) rotateY(10deg)}to{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}}
-@keyframes ledgerPageInRight{from{opacity:.15;transform:perspective(900px) translateX(18px) rotateY(-10deg)}to{opacity:1;transform:perspective(900px) translateX(0) rotateY(0)}}
-@media (prefers-reduced-motion:reduce){.ledger-view.page-turn-out-left,.ledger-view.page-turn-out-right,.ledger-view.page-turn-in-left,.ledger-view.page-turn-in-right{animation:none!important}}
+/* ===== NOTEBOOK PAPER FLIP — CLICK TEST V2 ===== */
+.ledger-main{
+    position:relative;
+    perspective:1500px;
+    transform-style:preserve-3d;
+    overflow-x:hidden;
+}
+
+/* Flip үед хоёр view давхарласан нэг дэвтрийн хоёр хуудас шиг байна. */
+.ledger-main.ledger-flipping-forward,
+.ledger-main.ledger-flipping-back{
+    min-height:calc(100vh - 150px);
+}
+
+.ledger-main.ledger-flipping-forward .ledger-view.active,
+.ledger-main.ledger-flipping-back .ledger-view.active{
+    position:absolute;
+    inset:0;
+    width:100%;
+}
+
+.ledger-view.ledger-paper-under{
+    z-index:1;
+    transform:none;
+    opacity:1;
+}
+
+/* Эргэж буй бодит "цаас". */
+.ledger-view.ledger-paper-front{
+    z-index:3;
+    background:#F6F7F9;
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+    transform-style:preserve-3d;
+    will-change:transform,filter;
+    box-shadow:0 0 0 rgba(37,42,52,0);
+}
+
+/* Баруун тийш дараагийн tab: хуудас баруун ирмэгээс зүүн тийш эргэнэ. */
+.ledger-view.ledger-paper-flip-forward{
+    transform-origin:left center;
+    animation:ledgerRealFlipForward .52s cubic-bezier(.58,.02,.25,1) forwards;
+}
+
+/* Буцах tab: эсрэг талаасаа эргэнэ. */
+.ledger-view.ledger-paper-flip-back{
+    transform-origin:right center;
+    animation:ledgerRealFlipBack .52s cubic-bezier(.58,.02,.25,1) forwards;
+}
+
+.ledger-view.ledger-paper-front::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    opacity:0;
+    background:linear-gradient(
+        90deg,
+        rgba(20,30,40,.20) 0%,
+        rgba(255,255,255,.10) 16%,
+        rgba(255,255,255,0) 55%,
+        rgba(20,30,40,.08) 100%
+    );
+    animation:ledgerPaperShade .52s ease-in-out forwards;
+}
+
+.ledger-paper-flip-back::after{
+    transform:scaleX(-1);
+}
+
+@keyframes ledgerRealFlipForward{
+    0%{
+        transform:rotateY(0deg) translateZ(0);
+        filter:brightness(1);
+        box-shadow:0 0 0 rgba(37,42,52,0);
+    }
+    45%{
+        transform:rotateY(-72deg) translateZ(5px);
+        filter:brightness(.94);
+        box-shadow:18px 0 28px rgba(37,42,52,.16);
+    }
+    100%{
+        transform:rotateY(-178deg) translateZ(0);
+        filter:brightness(.82);
+        box-shadow:30px 0 38px rgba(37,42,52,.18);
+    }
+}
+
+@keyframes ledgerRealFlipBack{
+    0%{
+        transform:rotateY(0deg) translateZ(0);
+        filter:brightness(1);
+        box-shadow:0 0 0 rgba(37,42,52,0);
+    }
+    45%{
+        transform:rotateY(72deg) translateZ(5px);
+        filter:brightness(.94);
+        box-shadow:-18px 0 28px rgba(37,42,52,.16);
+    }
+    100%{
+        transform:rotateY(178deg) translateZ(0);
+        filter:brightness(.82);
+        box-shadow:-30px 0 38px rgba(37,42,52,.18);
+    }
+}
+
+@keyframes ledgerPaperShade{
+    0%{opacity:0}
+    38%{opacity:.45}
+    70%{opacity:.72}
+    100%{opacity:.18}
+}
+
+@media (prefers-reduced-motion:reduce){
+    .ledger-view.ledger-paper-flip-forward,
+    .ledger-view.ledger-paper-flip-back,
+    .ledger-view.ledger-paper-front::after{
+        animation-duration:.01ms!important;
+    }
+}
 
 </style>
 
@@ -15078,40 +15188,73 @@ function showLedgerView(viewId, buttonElement = null) {
 
     const currentIndex = current ? order.indexOf(current.id) : -1;
     const targetIndex = order.indexOf(viewId);
-    const forward = currentIndex === -1 || targetIndex === -1
-        ? true
-        : targetIndex > currentIndex;
+    const forward =
+        currentIndex === -1 || targetIndex === -1
+            ? true
+            : targetIndex > currentIndex;
 
-    const finishSwitch = function() {
-        document.querySelectorAll(".ledger-view").forEach(function(view) {
-            view.classList.remove("active","page-turn-out-left","page-turn-out-right","page-turn-in-left","page-turn-in-right");
-        });
-
-        target.classList.add("active", forward ? "page-turn-in-right" : "page-turn-in-left");
-
-        if (viewId === "historyView") renderReport();
-
+    const activateNav = function() {
         document.querySelectorAll(".ledger-tab[data-view]").forEach(function(btn) {
             btn.classList.remove("active");
         });
 
-        const nav = buttonElement || document.querySelector('.ledger-tab[data-view="' + viewId + '"]');
+        const nav =
+            buttonElement ||
+            document.querySelector('.ledger-tab[data-view="' + viewId + '"]');
+
         if (nav) nav.classList.add("active");
+    };
 
-        window.scrollTo({top:0,behavior:"auto"});
+    const finish = function() {
+        if (current) {
+            current.classList.remove(
+                "active",
+                "ledger-paper-front",
+                "ledger-paper-flip-forward",
+                "ledger-paper-flip-back"
+            );
+        }
 
-        window.setTimeout(function() {
-            target.classList.remove("page-turn-in-left","page-turn-in-right");
-        }, 240);
+        target.classList.add("active");
+        target.classList.remove("ledger-paper-under");
+
+        const stage = document.querySelector(".ledger-main");
+        if (stage) {
+            stage.classList.remove("ledger-flipping-forward","ledger-flipping-back");
+        }
+
+        if (viewId === "historyView") {
+            renderReport();
+        }
+
+        activateNav();
+        window.scrollTo({top:0, behavior:"auto"});
     };
 
     if (!current) {
-        finishSwitch();
+        finish();
         return;
     }
 
-    current.classList.add(forward ? "page-turn-out-left" : "page-turn-out-right");
-    window.setTimeout(finishSwitch, 150);
+    /*
+     * Дараагийн хуудас одоогийн цаасны ЦААНА урьдчилж харагдана.
+     * Одоогийн view өөрөө бүтнээрээ binding edge-ээс эргэнэ.
+     */
+    target.classList.add("active", "ledger-paper-under");
+
+    const stage = document.querySelector(".ledger-main");
+    if (stage) {
+        stage.classList.add(
+            forward ? "ledger-flipping-forward" : "ledger-flipping-back"
+        );
+    }
+
+    current.classList.add(
+        "ledger-paper-front",
+        forward ? "ledger-paper-flip-forward" : "ledger-paper-flip-back"
+    );
+
+    window.setTimeout(finish, 520);
 }
 
 </script>
