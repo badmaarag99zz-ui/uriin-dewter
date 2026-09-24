@@ -3584,6 +3584,97 @@ body{
     }
 }
 
+
+/* ===== SUMMARY POLISH V2 ===== */
+
+/* Top two secondary metrics: smaller, cleaner mini-cards */
+.summary-side > div:nth-child(1),
+.summary-side > div:nth-child(2){
+    margin:10px 8px !important;
+    padding:14px 16px !important;
+    min-height:82px !important;
+    border:1px solid #DFE6EC !important;
+    border-radius:15px !important;
+    background:rgba(255,255,255,.70) !important;
+    box-shadow:0 4px 12px rgba(82,103,125,.045) !important;
+}
+.summary-side > div:nth-child(1){
+    margin-right:5px !important;
+}
+.summary-side > div:nth-child(2){
+    margin-left:5px !important;
+}
+.summary-side > div:nth-child(1) > span,
+.summary-side > div:nth-child(2) > span{
+    font-size:14px !important;
+    font-weight:800 !important;
+    color:#74818D !important;
+}
+.summary-side > div:nth-child(1) > b,
+.summary-side > div:nth-child(2) > b{
+    margin-top:6px !important;
+    font-size:20px !important;
+    font-weight:900 !important;
+    color:#40566C !important;
+}
+
+/* People count: separate centered badge/card under the two metrics */
+.summary-side > div:nth-child(3){
+    grid-column:1 / -1 !important;
+    margin:4px 8px 10px !important;
+    padding:13px 18px !important;
+    min-height:66px !important;
+    border:1px solid #D8E2EA !important;
+    border-radius:15px !important;
+    background:linear-gradient(135deg,#EEF3F7,#F8FAFB) !important;
+    box-shadow:none !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+}
+.summary-side > div:nth-child(3) > span{
+    font-size:15px !important;
+    font-weight:850 !important;
+    color:#52677D !important;
+}
+.summary-side > div:nth-child(3) > span::before{
+    content:"👥";
+    margin-right:8px;
+    font-size:17px;
+}
+.summary-side > div:nth-child(3) > b{
+    margin:0 !important;
+    font-size:24px !important;
+    font-weight:900 !important;
+    color:#344F68 !important;
+}
+
+@media(max-width:600px){
+    .summary-side > div:nth-child(1),
+    .summary-side > div:nth-child(2){
+        padding:12px 12px !important;
+        min-height:76px !important;
+    }
+    .summary-side > div:nth-child(1) > span,
+    .summary-side > div:nth-child(2) > span{
+        font-size:13px !important;
+    }
+    .summary-side > div:nth-child(1) > b,
+    .summary-side > div:nth-child(2) > b{
+        font-size:18px !important;
+    }
+    .summary-side > div:nth-child(3){
+        padding:12px 14px !important;
+    }
+    .summary-side > div:nth-child(3) > span{
+        font-size:14px !important;
+    }
+    .summary-side > div:nth-child(3) > b{
+        font-size:22px !important;
+    }
+}
+
 </style>
 
 </head>
