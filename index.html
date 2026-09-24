@@ -14531,9 +14531,46 @@ async function exportReportExcel() {
         }
     });
 
-    const periodLabel = window.reportDays === "all"
-        ? "Бүх хугацаа"
-        : "Сүүлийн " + window.reportDays + " хоног";
+    const formatReportDate = value => {
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return "";
+        return d.getFullYear() + "." +
+            String(d.getMonth() + 1).padStart(2, "0") + "." +
+            String(d.getDate()).padStart(2, "0");
+    };
+
+    const reportEndDate = new Date();
+    reportEndDate.setHours(23, 59, 59, 999);
+
+    let reportStartDate = null;
+
+    if (window.reportDays === "all") {
+        const allDates = [];
+
+        source.forEach(d => {
+            if (d.createdAt) allDates.push(new Date(d.createdAt));
+
+            reportHistoryArray(d.additions).forEach(x => {
+                if (x.createdAt) allDates.push(new Date(x.createdAt));
+            });
+
+            reportHistoryArray(d.payments).forEach(x => {
+                if (x.createdAt) allDates.push(new Date(x.createdAt));
+            });
+        });
+
+        const validDates = allDates.filter(d => !Number.isNaN(d.getTime()));
+        reportStartDate = validDates.length
+            ? new Date(Math.min(...validDates.map(d => d.getTime())))
+            : new Date();
+    } else {
+        reportStartDate = new Date();
+        reportStartDate.setHours(0, 0, 0, 0);
+        reportStartDate.setDate(reportStartDate.getDate() - (Number(window.reportDays) - 1));
+    }
+
+    const periodLabel =
+        formatReportDate(reportStartDate) + " - " + formatReportDate(reportEndDate);
 
     let periodAdded = 0, periodPaid = 0;
     source.forEach(d => {
@@ -14551,7 +14588,7 @@ async function exportReportExcel() {
         ["Тайлангийн хугацаа", periodLabel, "Татсан огноо", new Date().toLocaleString("mn-MN")],
         [],
         ["ЕРӨНХИЙ ҮЗҮҮЛЭЛТ"],
-        ["Идэвхтэй харилцагч", active.length, "Архивласан", archived.length],
+        ["Одоогийн өртэй хүн", active.length, "Устгасан бүртгэл", archived.length],
         ["Нийт авлага", activeTotal, "Нийт төлсөн", activePaid],
         ["Одоо авах үлдэгдэл", remaining, "Хугацаа хэтэрсэн", overdueAmount],
         ["Хугацаа хэтэрсэн хүн", overdueCount, "", ""],
@@ -14560,7 +14597,7 @@ async function exportReportExcel() {
         ["Шинээр нэмэгдсэн өр", periodAdded, "Орж ирсэн төлөлт", periodPaid],
         [],
         ["ХАРИЛЦАГЧДЫН ДЭЛГЭРЭНГҮЙ"],
-        ["№","Нэр","Утас","Нийт авлага","Төлсөн","Үлдэгдэл","Төлөх хугацаа","Төлөв","Бүртгэсэн","Архивласан"]
+        ["№","Нэр","Утас","Нийт авлага","Төлсөн","Үлдэгдэл","Төлөх хугацаа","Төлөв","Бүртгэсэн","Устгасан огноо"]
     ];
 
     source.forEach((d,i) => rows.push([
@@ -14571,7 +14608,7 @@ async function exportReportExcel() {
         money(d.paid),
         Math.max(0,money(d.amount)-money(d.paid)),
         d.dueDate || "",
-        d.archivedAt ? "Архивласан" : "Идэвхтэй",
+        d.archivedAt ? "Устгасан" : "Одоогийн",
         shortDate(d.createdAt),
         shortDate(d.archivedAt)
     ]));
@@ -14581,10 +14618,10 @@ async function exportReportExcel() {
     const movements=[];
     source.forEach(d => {
         reportHistoryArray(d.additions).forEach(x => movements.push({
-            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Өр нэмсэн", amount:money(x.amount), status:d.archivedAt?"Архивласан":"Идэвхтэй"
+            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Өр нэмсэн", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Одоогийн"
         }));
         reportHistoryArray(d.payments).forEach(x => movements.push({
-            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Төлөлт", amount:money(x.amount), status:d.archivedAt?"Архивласан":"Идэвхтэй"
+            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Төлөлт", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Одоогийн"
         }));
     });
     movements.sort((a,b)=>new Date(b.date)-new Date(a.date));
@@ -14615,16 +14652,36 @@ async function exportReportExcel() {
     ws["!margins"] = { left:0.3, right:0.3, top:0.5, bottom:0.5, header:0.2, footer:0.2 };
     ws["!pageSetup"] = { orientation:"landscape", fitToWidth:1, fitToHeight:0, paperSize:9 };
 
-    /* Мөнгөний багануудыг Excel number format-аар ойлгомжтой харуулна. */
-    const range = XLSX.utils.decode_range(ws["!ref"]);
-    for (let R=0; R<=range.e.r; R++) {
-        for (let C=0; C<=range.e.c; C++) {
-            const cell = ws[XLSX.utils.encode_cell({r:R,c:C})];
-            if (!cell) continue;
-            if (typeof cell.v === "number" && (C===3 || C===4 || C===5 || (R>=4 && R<=10))) {
-                cell.z = '#,##0 "₮"';
-            }
+    /* Зөвхөн МӨНГӨНИЙ нүдэнд ₮ формат өгнө.
+       Хүний тоо / устгасан бүртгэлийн тоонд ₮ огт нэмэхгүй. */
+    const setTugrik = (row, col) => {
+        const cell = ws[XLSX.utils.encode_cell({ r: row - 1, c: col - 1 })];
+        if (cell && typeof cell.v === "number") {
+            cell.z = '#,##0 "₮"';
         }
+    };
+
+    /* Ерөнхий үзүүлэлт: 6,7-р мөрүүдийн мөнгөн дүн */
+    setTugrik(6, 2);  // Нийт авлага
+    setTugrik(6, 4);  // Нийт төлсөн
+    setTugrik(7, 2);  // Одоо авах үлдэгдэл
+    setTugrik(7, 4);  // Хугацаа хэтэрсэн дүн
+
+    /* Сонгосон хугацааны хөдөлгөөн */
+    setTugrik(11, 2); // Шинээр нэмэгдсэн өр
+    setTugrik(11, 4); // Орж ирсэн төлөлт
+
+    /* Харилцагчдын дэлгэрэнгүй: D/E/F багана */
+    for (let row = 15; row < 15 + source.length; row++) {
+        setTugrik(row, 4);
+        setTugrik(row, 5);
+        setTugrik(row, 6);
+    }
+
+    /* Гүйлгээний түүх: E багана */
+    const firstMovementDataRow = movementTitleRow + 2;
+    for (let row = firstMovementDataRow; row < firstMovementDataRow + movements.length; row++) {
+        setTugrik(row, 5);
     }
 
     XLSX.utils.book_append_sheet(wb, ws, "Тайлан");
