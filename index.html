@@ -3512,6 +3512,78 @@ body{
     }
 }
 
+
+/* ===== HERO BOX + PEOPLE BOTTOM ROW ===== */
+
+/* Slogan becomes a compact branded box */
+.brand-message{
+    max-width:650px !important;
+    margin:0 auto 18px !important;
+    padding:17px 22px !important;
+    border:1px solid #D8E2EA !important;
+    border-radius:20px !important;
+    background:
+        linear-gradient(135deg, rgba(255,255,255,.96), rgba(232,239,244,.94)) !important;
+    box-shadow:0 10px 26px rgba(82,103,125,.09) !important;
+}
+.brand-message h1{
+    font-size:22px !important;
+    line-height:1.2 !important;
+    letter-spacing:-.35px !important;
+    color:#2F3E4D !important;
+}
+.brand-subtitle{
+    margin-top:7px !important;
+    font-size:14px !important;
+    font-weight:750 !important;
+    color:#52677D !important;
+}
+
+/* Date stays visually separate above the slogan */
+.brand-message .home-today-date{
+    margin-top:-39px !important;
+    margin-bottom:18px !important;
+    background:#F4F7F9 !important;
+}
+
+/* Current summary-side contains 3 items.
+   Make first two share the top row, third ("Нийт хүмүүс") span bottom. */
+.summary-side{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    grid-template-rows:auto auto !important;
+}
+.summary-side > div{
+    min-width:0 !important;
+}
+.summary-side > div:nth-child(3){
+    grid-column:1 / -1 !important;
+    border-left:0 !important;
+    border-top:1px solid #DCE4EB !important;
+    padding-top:18px !important;
+    margin-top:4px !important;
+}
+
+/* Give the people row a very subtle tint */
+.summary-side > div:nth-child(3){
+    background:rgba(82,103,125,.045) !important;
+}
+
+@media(max-width:600px){
+    .brand-message{
+        margin-left:10px !important;
+        margin-right:10px !important;
+        padding:15px 16px !important;
+        border-radius:18px !important;
+    }
+    .brand-message h1{
+        font-size:19px !important;
+    }
+    .brand-subtitle{
+        font-size:13px !important;
+    }
+}
+
 </style>
 
 </head>
