@@ -5230,6 +5230,54 @@ body{
     display:none;
 }
 
+
+/* ===== REPORT V1 ===== */
+#historyView .report-page{padding:4px 0 96px}
+#historyView .report-head{display:flex;flex-direction:column;gap:14px;margin-bottom:14px}
+#historyView .report-head h2{margin:0;color:#2F4050;font-size:25px;font-weight:900}
+#historyView .report-head p{margin:4px 0 0;color:#74818C;font-size:14px;font-weight:600}
+#historyView .report-filter{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+#historyView .report-filter button{min-height:42px;border:1px solid #D5DEE6;border-radius:11px;background:#FFF;color:#657583;font-size:14px;font-weight:800}
+#historyView .report-filter button.active{background:#52677D;color:#FFF;border-color:#52677D}
+#historyView .report-main-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px}
+#historyView .report-stat{background:#FFF;border:1px solid #DCE4EA;border-radius:15px;padding:14px}
+#historyView .report-stat span{display:block;color:#74818C;font-size:13px;font-weight:700;margin-bottom:6px}
+#historyView .report-stat strong{display:block;color:#2F4050;font-size:18px;font-weight:900}
+#historyView .report-stat-wide{grid-column:1/-1;background:#E9EEF3}
+#historyView .report-stat-wide strong{font-size:24px;color:#52677D}
+#historyView .report-section{background:#FFF;border:1px solid #DCE4EA;border-radius:17px;padding:15px;margin-top:11px}
+#historyView .report-section-title{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-bottom:12px}
+#historyView .report-section-title h3{margin:0;color:#2F4050;font-size:17px;font-weight:900}
+#historyView .report-section-title small{color:#8A96A0;font-size:11px;text-align:right}
+#historyView .report-status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+#historyView .report-status{border-radius:13px;padding:11px 8px;min-width:0}
+#historyView .report-status span,#historyView .report-status b,#historyView .report-status strong{display:block}
+#historyView .report-status span{font-size:11px;font-weight:800;line-height:1.2;margin-bottom:7px}
+#historyView .report-status b{font-size:13px;margin-bottom:4px}
+#historyView .report-status strong{font-size:13px;overflow:hidden;text-overflow:ellipsis}
+#historyView .report-status.overdue{background:#FFF1F1;color:#A85050}
+#historyView .report-status.soon{background:#FFF9E8;color:#8D742E}
+#historyView .report-status.normal{background:#F1F8F3;color:#4F7F60}
+#historyView .report-flow-row+ .report-flow-row{margin-top:13px}
+#historyView .report-flow-row>div:first-child{display:flex;justify-content:space-between;gap:12px;margin-bottom:7px;color:#52606D;font-size:14px;font-weight:750}
+#historyView .report-flow-row b{color:#2F4050}
+#historyView .report-bar{height:9px;border-radius:99px;background:#EEF2F5;overflow:hidden}
+#historyView .report-bar i{display:block;height:100%;width:0;border-radius:99px;background:#52677D;transition:width .25s ease}
+#historyView .report-bar.paid i{background:#2F8F5B}
+#historyView .report-list{display:flex;flex-direction:column;gap:8px}
+#historyView .report-list-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 11px;border-radius:12px;background:#F7F9FB;border:1px solid #E5EBF0}
+#historyView .report-list-main{min-width:0}
+#historyView .report-list-main b{display:block;color:#2F4050;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#historyView .report-list-main small{display:block;color:#85919B;font-size:11px;margin-top:3px}
+#historyView .report-list-amount{flex:none;color:#52677D;font-size:14px;font-weight:900;text-align:right}
+#historyView .report-list-amount.paid{color:#2F8F5B}
+#historyView .report-empty{padding:15px 8px;text-align:center;color:#8A96A0;font-size:13px}
+@media(max-width:380px){
+  #historyView .report-status-grid{grid-template-columns:1fr}
+  #historyView .report-status{display:grid;grid-template-columns:1fr auto;align-items:center}
+  #historyView .report-status span{grid-column:1/-1}
+}
+
 </style>
 
 </head>
@@ -5464,11 +5512,90 @@ body{
 </section>
 
 <section id="historyView" class="ledger-view">
-    <div class="empty-ledger">
-        <div class="empty-symbol">↻</div>
-        <h2>Түүх</h2>
-        <p>Өр нэмсэн болон төлөлтийн хөдөлгөөнийг энд нэг дор харуулна.</p>
-        <small>Дараагийн алхамд одоогийн түүхийн мэдээлэлтэй холбоно.</small>
+    <div class="report-page">
+        <div class="report-head">
+            <div>
+                <h2>📊 Тайлан</h2>
+                <p>Авлага, төлөлт болон хугацааны төлөв</p>
+            </div>
+            <div class="report-filter" id="reportFilter">
+                <button type="button" data-days="7">7 хоног</button>
+                <button type="button" data-days="30" class="active">30 хоног</button>
+                <button type="button" data-days="all">Бүгд</button>
+            </div>
+        </div>
+
+        <div class="report-main-grid">
+            <div class="report-stat">
+                <span>Нийт авлага</span>
+                <strong id="reportTotalDebt">0 ₮</strong>
+            </div>
+            <div class="report-stat">
+                <span>Төлсөн</span>
+                <strong id="reportTotalPaid">0 ₮</strong>
+            </div>
+            <div class="report-stat report-stat-wide">
+                <span>Үлдэгдэл авлага</span>
+                <strong id="reportRemaining">0 ₮</strong>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <div class="report-section-title">
+                <h3>⏰ Хугацааны төлөв</h3>
+                <small>Одоогийн үлдэгдэлтэй өрүүд</small>
+            </div>
+            <div class="report-status-grid">
+                <div class="report-status overdue">
+                    <span>Хугацаа хэтэрсэн</span>
+                    <b id="reportOverdueCount">0 хүн</b>
+                    <strong id="reportOverdueAmount">0 ₮</strong>
+                </div>
+                <div class="report-status soon">
+                    <span>3 хоногт төлөх</span>
+                    <b id="reportSoonCount">0 хүн</b>
+                    <strong id="reportSoonAmount">0 ₮</strong>
+                </div>
+                <div class="report-status normal">
+                    <span>Хугацаа хэвийн</span>
+                    <b id="reportNormalCount">0 хүн</b>
+                    <strong id="reportNormalAmount">0 ₮</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <div class="report-section-title">
+                <h3>↕ Хөдөлгөөн</h3>
+                <small id="reportPeriodLabel">Сүүлийн 30 хоног</small>
+            </div>
+            <div class="report-flow">
+                <div class="report-flow-row">
+                    <div><span>➕ Өр нэмэгдсэн</span><b id="reportAdded">0 ₮</b></div>
+                    <div class="report-bar"><i id="reportAddedBar"></i></div>
+                </div>
+                <div class="report-flow-row">
+                    <div><span>💰 Төлөгдсөн</span><b id="reportPaidPeriod">0 ₮</b></div>
+                    <div class="report-bar paid"><i id="reportPaidBar"></i></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="report-section">
+            <div class="report-section-title">
+                <h3>👥 Анхаарах авлагууд</h3>
+                <small>Үлдэгдэл хамгийн өндөр 5</small>
+            </div>
+            <div id="reportTopDebtors" class="report-list"></div>
+        </div>
+
+        <div class="report-section">
+            <div class="report-section-title">
+                <h3>🧾 Сүүлийн хөдөлгөөн</h3>
+                <small>Өр нэмсэн болон төлсөн түүх</small>
+            </div>
+            <div id="reportRecentActivity" class="report-list"></div>
+        </div>
     </div>
 </section>
 
@@ -13871,6 +13998,196 @@ if (topMenuElement) {
 });
 
 
+
+// ==========================================
+// REPORT V1
+// Uses existing debts + additions + payments data.
+// ==========================================
+let reportDays = 30;
+
+function reportMoney(value) {
+    if (typeof formatMoney === "function") return formatMoney(Number(value || 0));
+    return Number(value || 0).toLocaleString("mn-MN") + " ₮";
+}
+
+function reportDate(value) {
+    if (!value) return "";
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return "";
+    return d.toLocaleDateString("mn-MN");
+}
+
+function isInReportPeriod(value) {
+    if (reportDays === "all") return true;
+    if (!value) return false;
+
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return false;
+
+    const from = new Date();
+    from.setHours(0,0,0,0);
+    from.setDate(from.getDate() - Number(reportDays) + 1);
+
+    return d >= from;
+}
+
+function renderReport() {
+    const source = Array.isArray(debts) ? debts : [];
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    let totalDebt = 0;
+    let totalPaid = 0;
+    let overdueCount = 0, overdueAmount = 0;
+    let soonCount = 0, soonAmount = 0;
+    let normalCount = 0, normalAmount = 0;
+    let periodAdded = 0, periodPaid = 0;
+    const activity = [];
+
+    source.forEach(function(debt) {
+        const amount = Number(debt.amount || 0);
+        const paid = Number(debt.paid || 0);
+        const remaining = Math.max(0, amount - paid);
+
+        totalDebt += amount;
+        totalPaid += paid;
+
+        if (remaining > 0) {
+            if (debt.dueDate) {
+                const due = new Date(debt.dueDate + "T00:00:00");
+                const diff = Math.ceil((due - today) / 86400000);
+
+                if (diff < 0) {
+                    overdueCount++;
+                    overdueAmount += remaining;
+                } else if (diff <= 3) {
+                    soonCount++;
+                    soonAmount += remaining;
+                } else {
+                    normalCount++;
+                    normalAmount += remaining;
+                }
+            } else {
+                normalCount++;
+                normalAmount += remaining;
+            }
+        }
+
+        const additions = Array.isArray(debt.additions) ? debt.additions : [];
+        additions.forEach(function(item) {
+            const value = Number(item.amount || 0);
+            if (isInReportPeriod(item.createdAt)) periodAdded += value;
+            activity.push({
+                type: "add",
+                name: debt.name || "Нэргүй",
+                amount: value,
+                date: item.createdAt || debt.createdAt || ""
+            });
+        });
+
+        const payments = Array.isArray(debt.payments) ? debt.payments : [];
+        payments.forEach(function(item) {
+            const value = Number(item.amount || 0);
+            if (isInReportPeriod(item.createdAt)) periodPaid += value;
+            activity.push({
+                type: "paid",
+                name: debt.name || "Нэргүй",
+                amount: value,
+                date: item.createdAt || ""
+            });
+        });
+    });
+
+    const remainingTotal = Math.max(0, totalDebt - totalPaid);
+
+    const setText = function(id, value) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+    };
+
+    setText("reportTotalDebt", reportMoney(totalDebt));
+    setText("reportTotalPaid", reportMoney(totalPaid));
+    setText("reportRemaining", reportMoney(remainingTotal));
+    setText("reportOverdueCount", overdueCount + " хүн");
+    setText("reportOverdueAmount", reportMoney(overdueAmount));
+    setText("reportSoonCount", soonCount + " хүн");
+    setText("reportSoonAmount", reportMoney(soonAmount));
+    setText("reportNormalCount", normalCount + " хүн");
+    setText("reportNormalAmount", reportMoney(normalAmount));
+    setText("reportAdded", reportMoney(periodAdded));
+    setText("reportPaidPeriod", reportMoney(periodPaid));
+    setText(
+        "reportPeriodLabel",
+        reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + reportDays + " хоног"
+    );
+
+    const maxFlow = Math.max(periodAdded, periodPaid, 1);
+    const addedBar = document.getElementById("reportAddedBar");
+    const paidBar = document.getElementById("reportPaidBar");
+    if (addedBar) addedBar.style.width = Math.round(periodAdded / maxFlow * 100) + "%";
+    if (paidBar) paidBar.style.width = Math.round(periodPaid / maxFlow * 100) + "%";
+
+    const topBox = document.getElementById("reportTopDebtors");
+    if (topBox) {
+        const top = source
+            .map(function(debt) {
+                return {
+                    name: debt.name || "Нэргүй",
+                    phone: debt.phone || "",
+                    remaining: Math.max(0, Number(debt.amount || 0) - Number(debt.paid || 0))
+                };
+            })
+            .filter(function(item) { return item.remaining > 0; })
+            .sort(function(a,b) { return b.remaining - a.remaining; })
+            .slice(0,5);
+
+        topBox.innerHTML = top.length
+            ? top.map(function(item, index) {
+                return '<div class="report-list-item">' +
+                    '<div class="report-list-main"><b>' + (index + 1) + '. ' + escapeHtml(item.name) + '</b>' +
+                    '<small>' + (item.phone ? '📞 ' + escapeHtml(item.phone) : 'Утасгүй') + '</small></div>' +
+                    '<div class="report-list-amount">' + reportMoney(item.remaining) + '</div>' +
+                '</div>';
+            }).join("")
+            : '<div class="report-empty">Үлдэгдэлтэй авлага алга 👌</div>';
+    }
+
+    const recentBox = document.getElementById("reportRecentActivity");
+    if (recentBox) {
+        const recent = activity
+            .filter(function(item) { return item.date; })
+            .sort(function(a,b) { return new Date(b.date) - new Date(a.date); })
+            .slice(0,8);
+
+        recentBox.innerHTML = recent.length
+            ? recent.map(function(item) {
+                const isPaid = item.type === "paid";
+                return '<div class="report-list-item">' +
+                    '<div class="report-list-main"><b>' + (isPaid ? '💰 ' : '➕ ') + escapeHtml(item.name) + '</b>' +
+                    '<small>' + (isPaid ? 'Төлөлт' : 'Өр нэмсэн') + ' · ' + escapeHtml(reportDate(item.date)) + '</small></div>' +
+                    '<div class="report-list-amount ' + (isPaid ? 'paid' : '') + '">' +
+                    (isPaid ? '− ' : '+ ') + reportMoney(item.amount) + '</div>' +
+                '</div>';
+            }).join("")
+            : '<div class="report-empty">Одоогоор хөдөлгөөний түүх алга.</div>';
+    }
+}
+
+document.addEventListener("click", function(event) {
+    const button = event.target.closest("#reportFilter button");
+    if (!button) return;
+
+    reportDays = button.dataset.days === "all"
+        ? "all"
+        : Number(button.dataset.days);
+
+    document.querySelectorAll("#reportFilter button").forEach(function(btn) {
+        btn.classList.toggle("active", btn === button);
+    });
+
+    renderReport();
+});
+
 // ==========================================
 // MODERN LEDGER NAVIGATION
 // ==========================================
@@ -13880,6 +14197,10 @@ function showLedgerView(viewId, buttonElement = null) {
     });
     const target = document.getElementById(viewId);
     if (target) target.classList.add("active");
+
+    if (viewId === "historyView") {
+        renderReport();
+    }
 
     document.querySelectorAll(".ledger-tab[data-view]").forEach(function(btn) {
         btn.classList.remove("active");
