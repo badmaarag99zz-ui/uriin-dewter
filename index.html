@@ -2664,6 +2664,362 @@ header h1 {
 #moreMenu button:hover {
     background: #f1f5ff !important;
 }
+
+
+/* =========================================================
+   ӨРИЙН ДЭВТЭР — 5 TAB MOBILE APP LAYOUT
+========================================================= */
+#appContent{
+    min-height:100vh;
+    background:#f5f7f4;
+    padding-bottom:82px;
+}
+.mobile-app-header{
+    position:sticky!important;
+    top:0;
+    z-index:70;
+    background:#ffffff!important;
+    border-bottom:1px solid #e5ebe6!important;
+    box-shadow:none!important;
+}
+.mobile-header-inner{
+    max-width:760px;
+    min-height:72px;
+    margin:auto;
+    padding:10px 14px;
+    display:grid;
+    grid-template-columns:44px 1fr 44px;
+    align-items:center;
+    gap:10px;
+}
+#helpTopBtn,.notification-btn{
+    width:42px!important;
+    height:42px!important;
+    border-radius:13px!important;
+    border:1px solid #dfe7e1!important;
+    background:#f8faf8!important;
+    color:#2d4938!important;
+    box-shadow:none!important;
+    display:grid!important;
+    place-items:center!important;
+    cursor:pointer;
+}
+#helpTopBtn{font-size:25px!important}
+.notification-btn{font-size:17px}
+.mobile-brand{
+    min-width:0;
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.mobile-brand strong{
+    color:#17452b;
+    font-size:17px;
+    font-weight:850;
+    letter-spacing:.35px;
+}
+.mobile-brand span{
+    max-width:250px;
+    margin-top:3px;
+    color:#7c8a81;
+    font-size:9px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+
+.mobile-app-main{
+    width:100%;
+    max-width:760px;
+    margin:auto;
+    padding:20px 14px 24px;
+}
+.app-view{display:none}
+.app-view.active{display:block;animation:viewIn .18s ease}
+@keyframes viewIn{
+    from{opacity:.4;transform:translateY(3px)}
+    to{opacity:1;transform:none}
+}
+
+.home-title{margin:2px 2px 14px}
+.home-title span,.view-heading span{
+    color:#7d8d83;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.15px;
+}
+.home-title h1,.view-heading h2{
+    margin:4px 0 0;
+    color:#173b27;
+    font-size:22px;
+    letter-spacing:-.45px;
+}
+
+.overview-card{
+    position:relative;
+    overflow:hidden;
+    cursor:pointer;
+    min-height:260px;
+    padding:24px;
+    border-radius:24px;
+    color:#fff;
+    background:
+        radial-gradient(circle at 92% 10%,rgba(255,255,255,.13),transparent 25%),
+        linear-gradient(145deg,#208553,#12643d);
+    box-shadow:0 16px 34px rgba(18,100,61,.19);
+}
+.overview-card:before{
+    content:"";
+    position:absolute;
+    left:14px;
+    top:0;
+    bottom:0;
+    border-left:1px dashed rgba(255,255,255,.18);
+}
+.overview-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:15px;
+    position:relative;
+    z-index:2;
+}
+.overview-label{
+    display:block;
+    color:rgba(255,255,255,.70);
+    font-size:11px;
+    font-weight:750;
+    letter-spacing:1px;
+}
+.overview-head strong{
+    display:block;
+    margin-top:9px;
+    font-size:34px;
+    line-height:1;
+    font-weight:900;
+    letter-spacing:-1px;
+}
+.overview-money{
+    width:48px;height:48px;
+    display:grid;place-items:center;
+    border-radius:15px;
+    background:rgba(255,255,255,.12);
+    border:1px solid rgba(255,255,255,.12);
+    font-size:22px;font-weight:850;
+}
+.overview-grid{
+    position:relative;
+    z-index:2;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+    margin-top:28px;
+}
+.overview-stat{
+    padding:12px 13px;
+    border-radius:14px;
+    background:rgba(255,255,255,.10);
+    border:1px solid rgba(255,255,255,.10);
+}
+.overview-stat.people{grid-column:1/-1}
+.overview-stat span{
+    display:block;
+    color:rgba(255,255,255,.67);
+    font-size:10px;
+    margin-bottom:5px;
+}
+.overview-stat b{font-size:15px}
+.overview-hint{
+    position:relative;
+    z-index:2;
+    margin-top:14px;
+    text-align:right;
+    color:rgba(255,255,255,.70);
+    font-size:10px;
+}
+.overview-hint b{font-size:15px}
+
+.home-quick{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:13px;
+}
+.home-quick button{
+    min-width:0;
+    padding:14px 13px;
+    border:1px solid #e0e8e2;
+    border-radius:17px;
+    background:#fff;
+    display:grid;
+    grid-template-columns:36px minmax(0,1fr) auto;
+    align-items:center;
+    gap:9px;
+    text-align:left;
+    cursor:pointer;
+    color:#254032;
+}
+.home-quick button>span{
+    width:36px;height:36px;
+    display:grid;place-items:center;
+    border-radius:11px;
+    background:#edf6f0;
+    color:#167044;
+    font-size:18px;
+}
+.home-quick button div{min-width:0}
+.home-quick button strong{
+    display:block;
+    font-size:12px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+}
+.home-quick button small{
+    display:block;
+    margin-top:3px;
+    color:#89958d;
+    font-size:9px;
+}
+.home-quick button>b{color:#92a098}
+
+.view-heading{margin:2px 2px 14px}
+.debt-box#debtListBox{
+    display:block!important;
+    padding:15px!important;
+    border-radius:19px!important;
+    background:#fff!important;
+    border:1px solid #e0e8e2!important;
+    box-shadow:0 8px 24px rgba(29,64,40,.055)!important;
+}
+#listView .tools{
+    display:grid!important;
+    grid-template-columns:minmax(0,1fr) 190px;
+    gap:8px!important;
+    margin-bottom:13px!important;
+}
+#listView .tools input,#listView .tools select{
+    min-height:43px;
+    width:100%;
+    background:#f8faf8!important;
+    border:1px solid #dfe7e1!important;
+    border-radius:12px!important;
+}
+#debtListBox .debt-card{
+    background:#fff!important;
+    border:1px solid #e2e9e3!important;
+    border-left:3px solid #83b394!important;
+    border-radius:14px!important;
+    box-shadow:none!important;
+    padding:14px 15px!important;
+}
+#debtListBox .person-name{color:#193a26!important}
+#debtListBox .debt-total{
+    padding:0!important;
+    background:transparent!important;
+    color:#a7680c!important;
+}
+#debtListBox .debt-total.done{color:#177447!important}
+
+.placeholder-view{
+    min-height:55vh;
+    padding:60px 24px;
+    text-align:center;
+    border:1px solid #e0e8e2;
+    border-radius:22px;
+    background:#fff;
+}
+.placeholder-icon{
+    width:58px;height:58px;
+    margin:0 auto 14px;
+    display:grid;place-items:center;
+    border-radius:18px;
+    background:#edf6f0;
+    color:#176f43;
+    font-size:26px;
+}
+.placeholder-view h2{margin:0;color:#173a27}
+.placeholder-view p{
+    max-width:320px;
+    margin:8px auto 0;
+    color:#7e8b83;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.bottom-app-nav{
+    position:fixed;
+    z-index:80;
+    left:50%;
+    bottom:0;
+    transform:translateX(-50%);
+    width:min(100%,760px);
+    height:72px;
+    padding:7px 8px calc(7px + env(safe-area-inset-bottom));
+    background:rgba(255,255,255,.97);
+    border:1px solid #e0e7e1;
+    border-bottom:0;
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -8px 26px rgba(30,62,39,.08);
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    align-items:end;
+}
+.nav-item,.nav-add{
+    border:0;
+    background:transparent;
+    color:#87938b;
+    cursor:pointer;
+    min-width:0;
+    height:55px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:3px;
+}
+.nav-item span{font-size:20px;line-height:1}
+.nav-item small,.nav-add small{font-size:9px;font-weight:700}
+.nav-item.active{color:#176f43}
+.nav-add{
+    position:relative;
+    color:#176f43;
+}
+.nav-add>span{
+    width:48px;height:48px;
+    margin-top:-27px;
+    display:grid;place-items:center;
+    border-radius:16px;
+    background:linear-gradient(145deg,#208553,#12643d);
+    color:#fff;
+    border:4px solid #f5f7f4;
+    box-shadow:0 8px 18px rgba(18,100,61,.23);
+    font-size:25px;
+}
+.nav-add small{margin-top:1px}
+
+.floating-add-btn{display:none!important}
+
+.debt-modal,#detailModal{z-index:100!important}
+
+@media(max-width:600px){
+    .mobile-header-inner{min-height:66px;padding:8px 12px}
+    #helpTopBtn,.notification-btn{width:39px!important;height:39px!important}
+    .mobile-brand strong{font-size:15px}
+    .mobile-brand span{font-size:8px;max-width:205px}
+    .mobile-app-main{padding:16px 12px 22px}
+    .home-title h1,.view-heading h2{font-size:20px}
+    .overview-card{min-height:245px;padding:20px;border-radius:21px}
+    .overview-head strong{font-size:29px}
+    .overview-grid{margin-top:23px}
+    .home-quick{grid-template-columns:1fr}
+    .home-quick button{padding:12px}
+    #listView .tools{grid-template-columns:1fr!important}
+    .debt-modal{align-items:flex-end!important;padding:9px!important}
+    .debt-modal-box{border-radius:22px 22px 12px 12px!important;max-height:92vh!important}
+}
+
 </style>
 
 </head>
@@ -2825,302 +3181,169 @@ header h1 {
 
 <div id="appContent" style="display:none;">
 
-<header>
+<header class="mobile-app-header">
+    <div class="mobile-header-inner">
+        <button id="helpTopBtn" type="button" onclick="toggleTopMenu()" aria-label="Цэс">⋮</button>
 
-    <div class="header-inner">
+        <div class="mobile-brand">
+            <strong>ӨРИЙН ДЭВТЭР</strong>
+            <span>/Нэвтэрсэн бүртгэлээ хялбархан хяна/</span>
+        </div>
 
-        <h1>📒 Өрийн дэвтэр</h1>
-<button
-    id="helpTopBtn"
-    type="button"
-    onclick="toggleTopMenu()"
-    aria-label="Цэс"
->
-    ⋮
-</button>
-        
+        <button type="button" class="notification-btn" onclick="appAlert('Мэдэгдлийн хэсгийг дараагийн алхамд холбоно.')">
+            <span>🔔</span>
+        </button>
     </div>
-
 </header>
 
-<div class="container">
+<main class="mobile-app-main">
 
-
-<div class="dashboard-overview">
-
-    <!-- TOP STATS -->
-
-    <div class="dashboard-small-stats">
-
-        <!-- НИЙТ ӨР -->
-
-        <div class="dashboard-stat-card">
-
-            <div class="dashboard-stat-icon people">
-                👥
-            </div>
-
-            <div>
-
-                <div class="dashboard-stat-label">
-                    Нийт өр
-                </div>
-
-                <div
-                    class="dashboard-stat-value"
-                    id="totalDebt"
-                >
-                    0 ₮
-                </div>
-
-            </div>
-
+    <section id="homeView" class="app-view active">
+        <div class="home-title">
+            <span>ЕРӨНХИЙ МЭДЭЭЛЭЛ</span>
+            <h1>Таны өрийн тойм</h1>
         </div>
 
-
-        <!-- ТӨЛСӨН -->
-
-        <div class="dashboard-stat-card">
-
-            <div class="dashboard-stat-icon paid">
-                ✅
+        <div class="overview-card" id="remainingCard">
+            <div class="overview-head">
+                <div>
+                    <span class="overview-label">НИЙТ ҮЛДЭГДЭЛ</span>
+                    <strong id="totalRemaining">0 ₮</strong>
+                </div>
+                <div class="overview-money">₮</div>
             </div>
 
-            <div>
-
-                <div class="dashboard-stat-label">
-                    Төлсөн
+            <div class="overview-grid">
+                <div class="overview-stat">
+                    <span>Нийт өр</span>
+                    <b id="totalDebt">0 ₮</b>
                 </div>
 
-                <div
-                    class="dashboard-stat-value"
-                    id="totalPaid"
-                >
-                    0 ₮
+                <div class="overview-stat">
+                    <span>Төлсөн</span>
+                    <b id="totalPaid">0 ₮</b>
                 </div>
 
-            </div>
-
-        </div>
-
-    </div>
-
-
-    <!-- MAIN BALANCE -->
-
- <div class="dashboard-main-card" id="remainingCard">
-
-        <div class="dashboard-main-top">
-
-            <div>
-
-                <div class="dashboard-welcome">
-                    Таны өрийн тойм
+                <div class="overview-stat people">
+                    <span>Нийт бүртгэлтэй хүмүүс</span>
+                    <b id="totalPeople">0</b>
                 </div>
-
-                <div class="dashboard-main-label">
-                    Нийт үлдэгдэл
-                </div>
-
             </div>
 
-            <div class="dashboard-main-icon">
-                💰
-            </div>
-
+            <div class="overview-hint">Жагсаалтыг харах <b>›</b></div>
         </div>
 
-
-        <div
-            class="dashboard-main-value"
-            id="totalRemaining"
-        >
-            0 ₮
-        </div>
-
-
-        <div class="dashboard-main-bottom">
-
-            <span>
-                Нийт бүртгэлтэй хүмүүс
-            </span>
-
-            <strong id="totalPeople">
-                0
-            </strong>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-
-
-<div class="debt-box" id="debtListBox">
-
-        <h2>Өртэй хүмүүс</h2>
-
-        <div class="tools">
-
-            <input
-                id="search"
-                type="text"
-                placeholder="Нэр эсвэл утсаар хайх..."
-            >
-
-            <select id="sort">
-
-                <option value="newest">
-                    Шинээр бүртгэгдсэн
-                </option>
-
-                <option value="oldest">
-                    Хуучнаар бүртгэгдсэн
-                </option>
-
-                <option value="highest">
-                    Өр ихээс бага
-                </option>
-
-                <option value="lowest">
-                    Өр багаас их
-                </option>
-
-                <option value="due">
-                    Төлөх хугацаа
-                </option>
-
-            </select>
-
-        </div>
-
-        <div id="list"></div>
-
-    </div>
-
-</div>
-
-
-<button
-    type="button"
-    class="floating-add-btn"
-    onclick="openDebtModal()"
->
-    ➕ Өр бүртгэх
-</button>
-
-
-<!-- ADD MODAL -->
-
-<div
-    id="debtModal"
-    class="debt-modal"
-    onclick="closeDebtModalOutside(event)"
->
-
-    <div
-        class="debt-modal-box"
-        onclick="event.stopPropagation()"
-    >
-
-        <div class="debt-modal-header">
-
-            <div>
-
-                <h2 id="debtModalTitle">
-                    Шинэ өр бүртгэх
-                </h2>
-
-                <p id="debtModalSubtitle">
-                    Шинэ өрийн мэдээллийг оруулна уу
-                </p>
-
-            </div>
-
-            <button
-                type="button"
-                class="modal-close"
-                onclick="closeDebtModal()"
-            >
-                ✕
+        <div class="home-quick">
+            <button type="button" onclick="showAppView('listView')">
+                <span>☷</span>
+                <div><strong>Өрийн жагсаалт</strong><small>Харилцагчдаа харах</small></div>
+                <b>›</b>
             </button>
 
+            <button type="button" onclick="openDebtModal()">
+                <span>＋</span>
+                <div><strong>Шинэ өр бүртгэх</strong><small>Өр хурдан нэмэх</small></div>
+                <b>›</b>
+            </button>
+        </div>
+    </section>
+
+    <section id="listView" class="app-view">
+        <div class="view-heading">
+            <div>
+                <span>ЖАГСААЛТ</span>
+                <h2>Өртэй хүмүүс</h2>
+            </div>
+        </div>
+
+        <div class="debt-box" id="debtListBox">
+            <div class="tools">
+                <input id="search" type="text" placeholder="Нэр эсвэл утсаар хайх...">
+
+                <select id="sort">
+                    <option value="newest">Шинээр бүртгэгдсэн</option>
+                    <option value="oldest">Хуучнаар бүртгэгдсэн</option>
+                    <option value="highest">Өр ихээс бага</option>
+                    <option value="lowest">Өр багаас их</option>
+                    <option value="due">Төлөх хугацаа</option>
+                </select>
+            </div>
+
+            <div id="list"></div>
+        </div>
+    </section>
+
+    <section id="reportView" class="app-view placeholder-view">
+        <div class="placeholder-icon">▥</div>
+        <h2>Тайлан</h2>
+        <p>Тайлангийн хэсгийг дараагийн алхамд бодит мэдээлэлтэй холбоно.</p>
+    </section>
+
+    <section id="settingsView" class="app-view placeholder-view">
+        <div class="placeholder-icon">⚙</div>
+        <h2>Тохиргоо</h2>
+        <p>Тохиргооны хэсгийг дараагийн алхамд холбоно.</p>
+    </section>
+
+</main>
+
+<nav class="bottom-app-nav">
+    <button type="button" class="nav-item active" data-view="homeView" onclick="showAppView('homeView', this)">
+        <span>⌂</span><small>Нүүр</small>
+    </button>
+
+    <button type="button" class="nav-item" data-view="listView" onclick="showAppView('listView', this)">
+        <span>☷</span><small>Жагсаалт</small>
+    </button>
+
+    <button type="button" class="nav-add" onclick="openDebtModal()" aria-label="Өр нэмэх">
+        <span>＋</span><small>Өр нэмэх</small>
+    </button>
+
+    <button type="button" class="nav-item" data-view="reportView" onclick="showAppView('reportView', this)">
+        <span>▥</span><small>Тайлан</small>
+    </button>
+
+    <button type="button" class="nav-item" data-view="settingsView" onclick="showAppView('settingsView', this)">
+        <span>⚙</span><small>Тохиргоо</small>
+    </button>
+</nav>
+
+<!-- ADD MODAL -->
+<div id="debtModal" class="debt-modal" onclick="closeDebtModalOutside(event)">
+    <div class="debt-modal-box" onclick="event.stopPropagation()">
+        <div class="debt-modal-header">
+            <div>
+                <h2 id="debtModalTitle">Шинэ өр бүртгэх</h2>
+                <p id="debtModalSubtitle">Шинэ өрийн мэдээллийг оруулна уу</p>
+            </div>
+            <button type="button" class="modal-close" onclick="closeDebtModal()">✕</button>
         </div>
 
         <div class="debt-form">
-
             <label>Хүний нэр</label>
-
-            <input
-                id="personName"
-                type="text"
-                placeholder="Жишээ: Бат"
-            >
+            <input id="personName" type="text" placeholder="Жишээ: Бат">
 
             <label>Утасны дугаар</label>
-
-            <input
-                id="personPhone"
-                type="tel"
-                placeholder="Жишээ: 99112233"
-            >
+            <input id="personPhone" type="tel" placeholder="Жишээ: 99112233">
 
             <label>Өрийн дүн</label>
-
-            <input
-                id="debtAmount"
-                type="number"
-                placeholder="Жишээ: 150000"
-            >
+            <input id="debtAmount" type="number" placeholder="Жишээ: 150000">
 
             <label>Төлөх хугацаа</label>
+            <input id="dueDate" type="date">
 
-            <input
-                id="dueDate"
-                type="date"
-            >
-
-            <button
-                type="button"
-                class="modal-save-btn"
-                id="addButton"
-            >
-                💾 Өр бүртгэх
-            </button>
-
+            <button type="button" class="modal-save-btn" id="addButton">💾 Өр бүртгэх</button>
         </div>
-
     </div>
-
 </div>
 
-
 <!-- DETAIL MODAL -->
-
-<div
-    id="detailModal"
-    onclick="closeDetailModalOutside(event)"
->
-
-    <div
-        class="detail-box"
-        onclick="event.stopPropagation()"
-    >
-
-        <button
-            type="button"
-            class="detail-close"
-            onclick="closeDetailModal()"
-        >
-            ✕
-        </button>
-
+<div id="detailModal" onclick="closeDetailModalOutside(event)">
+    <div class="detail-box" onclick="event.stopPropagation()">
+        <button type="button" class="detail-close" onclick="closeDetailModal()">✕</button>
         <div id="detailContent"></div>
-
     </div>
-
 </div>
 
 </div>
@@ -11333,6 +11556,36 @@ const topMenuElement =
 if (topMenuElement) {
     document.body.appendChild(topMenuElement);
 }
+
+
+// ==========================================
+// 5 TAB APP NAVIGATION
+// ==========================================
+function showAppView(viewId, buttonElement = null) {
+    document.querySelectorAll(".app-view").forEach(function(view) {
+        view.classList.remove("active");
+    });
+
+    const targetView = document.getElementById(viewId);
+    if (targetView) {
+        targetView.classList.add("active");
+    }
+
+    document.querySelectorAll(".bottom-app-nav .nav-item").forEach(function(btn) {
+        btn.classList.remove("active");
+    });
+
+    const navButton =
+        buttonElement ||
+        document.querySelector('.bottom-app-nav .nav-item[data-view="' + viewId + '"]');
+
+    if (navButton) {
+        navButton.classList.add("active");
+    }
+
+    window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 </script>
 </body>
 
