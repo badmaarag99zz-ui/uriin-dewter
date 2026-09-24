@@ -14,6 +14,8 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
 
 <style>
 
@@ -14458,8 +14460,8 @@ async function renderReport() {
 
 
 async function exportReportExcel() {
-    if (typeof XLSX === "undefined") {
-        alert("Excel файл үүсгэх сан ачаалагдсангүй. Интернэтээ шалгаад дахин оролдоно уу.");
+    if (typeof ExcelJS === "undefined" || typeof saveAs === "undefined") {
+        alert("Excel тайлан үүсгэх сан ачаалагдсангүй. Интернэтээ шалгаад дахин оролдоно уу.");
         return;
     }
 
@@ -14504,245 +14506,298 @@ async function exportReportExcel() {
         return;
     }
 
-    const money = value => Number(value || 0);
-    const shortDate = value => {
-        if (!value) return "";
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return String(value);
-        return d.toLocaleDateString("mn-MN");
+    const money = v => Number(v || 0);
+    const asDate = v => {
+        if (!v) return null;
+        const d = new Date(v);
+        return Number.isNaN(d.getTime()) ? null : d;
+    };
+    const dateText = v => {
+        const d = asDate(v);
+        if (!d) return v ? String(v) : "";
+        return d.getFullYear() + "." +
+            String(d.getMonth()+1).padStart(2,"0") + "." +
+            String(d.getDate()).padStart(2,"0");
     };
 
     const active = source.filter(d => !d.archivedAt);
-    const archived = source.filter(d => d.archivedAt);
+    const deleted = source.filter(d => d.archivedAt);
     const activeTotal = active.reduce((s,d) => s + money(d.amount), 0);
     const activePaid = active.reduce((s,d) => s + money(d.paid), 0);
-    const remaining = Math.max(0, activeTotal - activePaid);
+    const activeRemaining = Math.max(0, activeTotal - activePaid);
 
-    let overdueCount = 0, overdueAmount = 0;
-    const today = new Date(); today.setHours(0,0,0,0);
+    const today = new Date();
+    today.setHours(0,0,0,0);
+    let overdueCount = 0;
+    let overdueAmount = 0;
     active.forEach(d => {
-        const rem = Math.max(0, money(d.amount)-money(d.paid));
-        if (rem > 0 && d.dueDate) {
-            const due = new Date(d.dueDate + "T00:00:00");
-            if (!Number.isNaN(due.getTime()) && due < today) {
-                overdueCount++;
-                overdueAmount += rem;
-            }
+        if (!d.dueDate) return;
+        const due = new Date(d.dueDate + "T00:00:00");
+        const remaining = Math.max(0, money(d.amount) - money(d.paid));
+        if (due < today && remaining > 0) {
+            overdueCount++;
+            overdueAmount += remaining;
         }
     });
 
-    const formatReportDate = value => {
-        const d = new Date(value);
-        if (Number.isNaN(d.getTime())) return "";
-        return d.getFullYear() + "." +
-            String(d.getMonth() + 1).padStart(2, "0") + "." +
-            String(d.getDate()).padStart(2, "0");
-    };
-
-    const reportEndDate = new Date();
-    reportEndDate.setHours(23, 59, 59, 999);
-
-    let reportStartDate = null;
+    const reportEnd = new Date();
+    reportEnd.setHours(23,59,59,999);
+    let reportStart;
 
     if (window.reportDays === "all") {
-        const allDates = [];
-
+        const dates = [];
         source.forEach(d => {
-            if (d.createdAt) allDates.push(new Date(d.createdAt));
-
+            const c = asDate(d.createdAt); if (c) dates.push(c);
             reportHistoryArray(d.additions).forEach(x => {
-                if (x.createdAt) allDates.push(new Date(x.createdAt));
+                const z = asDate(x.createdAt); if (z) dates.push(z);
             });
-
             reportHistoryArray(d.payments).forEach(x => {
-                if (x.createdAt) allDates.push(new Date(x.createdAt));
+                const z = asDate(x.createdAt); if (z) dates.push(z);
             });
         });
-
-        const validDates = allDates.filter(d => !Number.isNaN(d.getTime()));
-        reportStartDate = validDates.length
-            ? new Date(Math.min(...validDates.map(d => d.getTime())))
+        reportStart = dates.length
+            ? new Date(Math.min(...dates.map(d => d.getTime())))
             : new Date();
     } else {
-        reportStartDate = new Date();
-        reportStartDate.setHours(0, 0, 0, 0);
-        reportStartDate.setDate(reportStartDate.getDate() - (Number(window.reportDays) - 1));
+        reportStart = new Date();
+        reportStart.setHours(0,0,0,0);
+        reportStart.setDate(reportStart.getDate() - (Number(window.reportDays) - 1));
     }
 
-    const periodLabel =
-        formatReportDate(reportStartDate) + " - " + formatReportDate(reportEndDate);
-
-    let periodAdded = 0, periodPaid = 0;
-    source.forEach(d => {
-        reportHistoryArray(d.additions).forEach(x => {
-            if (isInReportPeriod(x.createdAt)) periodAdded += money(x.amount);
-        });
-        reportHistoryArray(d.payments).forEach(x => {
-            if (isInReportPeriod(x.createdAt)) periodPaid += money(x.amount);
-        });
-    });
-
-    /* НЭГ Л ХУУДАС */
-    const rows = [
-        ["ӨРИЙН ДЭВТЭР — ТАЙЛАН"],
-        ["Тайлангийн хугацаа", periodLabel, "Татсан огноо", new Date().toLocaleString("mn-MN")],
-        [],
-        ["ЕРӨНХИЙ ҮЗҮҮЛЭЛТ"],
-        ["Идэвхтэй харилцагч", active.length, "Устгасан бүртгэл", archived.length],
-        ["Нийт авлага", activeTotal, "Нийт төлсөн", activePaid],
-        ["Одоо авах үлдэгдэл", remaining, "Хугацаа хэтэрсэн", overdueAmount],
-        ["Хугацаа хэтэрсэн хүн", overdueCount, "", ""],
-        [],
-        ["СОНГОСОН ХУГАЦААНЫ ХӨДӨЛГӨӨН"],
-        ["Шинээр нэмэгдсэн өр", periodAdded, "Орж ирсэн төлөлт", periodPaid],
-        [],
-        ["ХАРИЛЦАГЧДЫН ДЭЛГЭРЭНГҮЙ"],
-        ["№","Нэр","Утас","Нийт авлага","Төлсөн","Үлдэгдэл","Төлөх хугацаа","Төлөв","Бүртгэсэн","Устгасан огноо"]
-    ];
-
-    source.forEach((d,i) => rows.push([
-        i+1,
-        d.name,
-        d.phone,
-        money(d.amount),
-        money(d.paid),
-        Math.max(0,money(d.amount)-money(d.paid)),
-        d.dueDate || "",
-        d.archivedAt ? "Устгасан" : "Идэвхтэй",
-        shortDate(d.createdAt),
-        shortDate(d.archivedAt)
-    ]));
-
-    rows.push([], ["ГҮЙЛГЭЭНИЙ ТҮҮХ"], ["Огноо","Нэр","Утас","Төрөл","Дүн","Төлөв"]);
-
-    const movements=[];
-    source.forEach(d => {
-        reportHistoryArray(d.additions).forEach(x => movements.push({
-            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Өр нэмсэн", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Идэвхтэй"
-        }));
-        reportHistoryArray(d.payments).forEach(x => movements.push({
-            date:x.createdAt||"", name:d.name, phone:d.phone, type:"Төлөлт", amount:money(x.amount), status:d.archivedAt?"Устгасан":"Идэвхтэй"
-        }));
-    });
-    movements.sort((a,b)=>new Date(b.date)-new Date(a.date));
-    movements.forEach(x => rows.push([shortDate(x.date),x.name,x.phone,x.type,x.amount,x.status]));
-
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.aoa_to_sheet(rows);
-
-    /* Гарчиг, хэсгүүд */
-    ws["!merges"] = [
-        XLSX.utils.decode_range("A1:J1"),
-        XLSX.utils.decode_range("A4:J4"),
-        XLSX.utils.decode_range("A10:J10"),
-        XLSX.utils.decode_range("A13:J13")
-    ];
-
-    const movementTitleRow = 15 + source.length + 1;
-    ws["!merges"].push(XLSX.utils.decode_range("A" + movementTitleRow + ":J" + movementTitleRow));
-
-    ws["!cols"] = [
-        {wch:7},{wch:22},{wch:14},{wch:18},{wch:18},
-        {wch:18},{wch:16},{wch:14},{wch:16},{wch:18}
-    ];
-
-    /* Тайлангийн хэсгүүдийг нүдний хүрээтэй, хүснэгт маягаар цэгцэлнэ */
-    const reportBorder = {
-        top: {style:"thin", color:{rgb:"B8C3CC"}},
-        bottom: {style:"thin", color:{rgb:"B8C3CC"}},
-        left: {style:"thin", color:{rgb:"B8C3CC"}},
-        right: {style:"thin", color:{rgb:"B8C3CC"}}
+    const inPeriod = v => {
+        const d = asDate(v);
+        return d && d >= reportStart && d <= reportEnd;
     };
 
-    const styleReportRange = (r1,c1,r2,c2,extra={}) => {
-        for (let r=r1; r<=r2; r++) {
-            for (let c=c1; c<=c2; c++) {
-                const addr = XLSX.utils.encode_cell({r:r-1,c:c-1});
-                if (!ws[addr]) ws[addr] = {t:"s",v:""};
-                ws[addr].s = {
-                    ...(ws[addr].s || {}),
-                    border: reportBorder,
-                    alignment: {vertical:"center", ...(extra.alignment || {})},
-                    ...(extra.font ? {font:extra.font} : {}),
-                    ...(extra.fill ? {fill:extra.fill} : {})
+    let addedInPeriod = 0;
+    let paidInPeriod = 0;
+    const movements = [];
+
+    source.forEach(d => {
+        reportHistoryArray(d.additions).forEach(x => {
+            if (!inPeriod(x.createdAt)) return;
+            addedInPeriod += money(x.amount);
+            movements.push({
+                date: asDate(x.createdAt),
+                name: d.name,
+                phone: d.phone,
+                type: "Өр нэмсэн",
+                amount: money(x.amount),
+                status: d.archivedAt ? "Устгасан" : "Идэвхтэй"
+            });
+        });
+        reportHistoryArray(d.payments).forEach(x => {
+            if (!inPeriod(x.createdAt)) return;
+            paidInPeriod += money(x.amount);
+            movements.push({
+                date: asDate(x.createdAt),
+                name: d.name,
+                phone: d.phone,
+                type: "Төлөлт",
+                amount: money(x.amount),
+                status: d.archivedAt ? "Устгасан" : "Идэвхтэй"
+            });
+        });
+    });
+    movements.sort((a,b) => (b.date?.getTime() || 0) - (a.date?.getTime() || 0));
+
+    const workbook = new ExcelJS.Workbook();
+    workbook.creator = "Өрийн дэвтэр";
+    workbook.created = new Date();
+
+    const ws = workbook.addWorksheet("Тайлан", {
+        pageSetup: {
+            orientation: "landscape",
+            fitToPage: true,
+            fitToWidth: 1,
+            fitToHeight: 0,
+            paperSize: 9,
+            margins: {left:0.25,right:0.25,top:0.5,bottom:0.5,header:0.2,footer:0.2}
+        },
+        views: [{state:"frozen", ySplit:4}]
+    });
+
+    ws.columns = [
+        {width:8},{width:23},{width:15},{width:18},{width:18},
+        {width:18},{width:17},{width:16},{width:17},{width:19}
+    ];
+
+    const slate = "52677D";
+    const light = "E9EEF3";
+    const green = "2F8F5B";
+    const white = "FFFFFF";
+    const textColor = "252A34";
+    const borderColor = "C9D2DA";
+    const moneyFmt = '#,##0" ₮"';
+
+    const border = {
+        top:{style:"thin",color:{argb:borderColor}},
+        left:{style:"thin",color:{argb:borderColor}},
+        bottom:{style:"thin",color:{argb:borderColor}},
+        right:{style:"thin",color:{argb:borderColor}}
+    };
+
+    const styleRange = (r1,c1,r2,c2,opts={}) => {
+        for (let r=r1;r<=r2;r++) {
+            for (let c=c1;c<=c2;c++) {
+                const cell = ws.getCell(r,c);
+                cell.border = border;
+                cell.alignment = {
+                    vertical:"middle",
+                    horizontal: opts.center ? "center" : "left",
+                    wrapText:true
                 };
+                if (opts.fill) cell.fill = {type:"pattern",pattern:"solid",fgColor:{argb:opts.fill}};
+                if (opts.bold || opts.color || opts.size) {
+                    cell.font = {
+                        name:"Arial",
+                        bold:!!opts.bold,
+                        color:{argb:opts.color || textColor},
+                        size:opts.size || 10
+                    };
+                }
             }
         }
     };
 
-    /* Ерөнхий үзүүлэлт */
-    styleReportRange(5,1,7,4);
+    // Title
+    ws.mergeCells("A1:J1");
+    ws.getCell("A1").value = "ӨРИЙН ДЭВТЭР — ТАЙЛАН";
+    ws.getCell("A1").font = {name:"Arial",size:18,bold:true,color:{argb:white}};
+    ws.getCell("A1").fill = {type:"pattern",pattern:"solid",fgColor:{argb:slate}};
+    ws.getCell("A1").alignment = {vertical:"middle",horizontal:"center"};
+    ws.getRow(1).height = 32;
 
-    /* Сонгосон хугацааны хөдөлгөөн */
-    styleReportRange(10,1,11,4);
+    ws.mergeCells("A2:E2");
+    ws.getCell("A2").value =
+        "Тайлангийн хугацаа: " + dateText(reportStart) + " - " + dateText(reportEnd);
+    ws.getCell("A2").font = {name:"Arial",bold:true,color:{argb:slate}};
 
-    /* Харилцагчдын дэлгэрэнгүй */
-    styleReportRange(14,1,14 + source.length,10);
+    ws.mergeCells("F2:J2");
+    ws.getCell("F2").value =
+        "Татсан огноо: " + new Date().toLocaleString("mn-MN");
+    ws.getCell("F2").alignment = {horizontal:"right"};
 
-    /* Гүйлгээний түүх */
-    const movementHeaderStyleRow = movementTitleRow + 1;
-    const movementLastStyleRow =
-        movementHeaderStyleRow + Math.max(movements.length,1);
-    styleReportRange(movementHeaderStyleRow,1,movementLastStyleRow,6);
+    // General summary
+    ws.mergeCells("A4:J4");
+    ws.getCell("A4").value = "ЕРӨНХИЙ ҮЗҮҮЛЭЛТ";
+    styleRange(4,1,4,10,{fill:slate,bold:true,color:white,size:11});
+    ws.getCell("A4").alignment = {vertical:"middle",horizontal:"left"};
 
-    /* Хүснэгтийн толгой мөрүүд */
-    [
-        [5,1,5,4],
-        [10,1,10,4],
-        [14,1,14,10],
-        [movementHeaderStyleRow,1,movementHeaderStyleRow,6]
-    ].forEach(([r1,c1,r2,c2]) => {
-        styleReportRange(r1,c1,r2,c2,{
-            font:{bold:true},
-            fill:{fgColor:{rgb:"E9EEF3"}},
-            alignment:{horizontal:"center"}
-        });
+    const summary = [
+        ["Идэвхтэй харилцагч", active.length, "Устгасан бүртгэл", deleted.length],
+        ["Нийт авлага", activeTotal, "Нийт төлсөн", activePaid],
+        ["Одоо авах үлдэгдэл", activeRemaining, "Хугацаа хэтэрсэн дүн", overdueAmount],
+        ["Хугацаа хэтэрсэн хүн", overdueCount, "", ""]
+    ];
+    summary.forEach((row,i) => {
+        const r = 5+i;
+        ws.getCell(r,1).value=row[0]; ws.getCell(r,2).value=row[1];
+        ws.getCell(r,3).value=row[2]; ws.getCell(r,4).value=row[3];
+        ws.mergeCells(r,4,r,5);
+        ws.mergeCells(r,2,r,2);
+        styleRange(r,1,r,5,{});
+        ws.getCell(r,1).font={name:"Arial",bold:true,color:{argb:textColor}};
+        ws.getCell(r,3).font={name:"Arial",bold:true,color:{argb:textColor}};
+    });
+    [6,7].forEach(r => {
+        ws.getCell(r,2).numFmt=moneyFmt;
+        ws.getCell(r,4).numFmt=moneyFmt;
     });
 
+    // Period movement summary
+    ws.mergeCells("A10:J10");
+    ws.getCell("A10").value = "СОНГОСОН ХУГАЦААНЫ ХӨДӨЛГӨӨ";
+    styleRange(10,1,10,10,{fill:slate,bold:true,color:white,size:11});
 
-    /* SheetJS Community styling support may vary, but these preserve print/layout metadata. */
-    ws["!autofilter"] = { ref: "A14:J" + (14 + source.length) };
-    ws["!freeze"] = { xSplit: 0, ySplit: 14 };
-    ws["!margins"] = { left:0.3, right:0.3, top:0.5, bottom:0.5, header:0.2, footer:0.2 };
-    ws["!pageSetup"] = { orientation:"landscape", fitToWidth:1, fitToHeight:0, paperSize:9 };
+    ws.getCell("A11").value="Шинээр нэмэгдсэн өр";
+    ws.getCell("B11").value=addedInPeriod;
+    ws.getCell("C11").value="Орж ирсэн төлөлт";
+    ws.getCell("D11").value=paidInPeriod;
+    ws.getCell("B11").numFmt=moneyFmt;
+    ws.getCell("D11").numFmt=moneyFmt;
+    styleRange(11,1,11,5,{});
+    ws.getCell("A11").font={name:"Arial",bold:true};
+    ws.getCell("C11").font={name:"Arial",bold:true};
 
-    /* Зөвхөн МӨНГӨНИЙ нүдэнд ₮ формат өгнө.
-       Хүний тоо / устгасан бүртгэлийн тоонд ₮ огт нэмэхгүй. */
-    const setTugrik = (row, col) => {
-        const cell = ws[XLSX.utils.encode_cell({ r: row - 1, c: col - 1 })];
-        if (cell && typeof cell.v === "number") {
-            cell.z = '#,##0 "₮"';
+    // Customer table
+    ws.mergeCells("A13:J13");
+    ws.getCell("A13").value="ХАРИЛЦАГЧДЫН ДЭЛГЭРЭНГҮЙ";
+    styleRange(13,1,13,10,{fill:slate,bold:true,color:white,size:11});
+
+    const headers = ["№","Нэр","Утас","Нийт авлага","Төлсөн","Үлдэгдэл",
+                     "Төлөх хугацаа","Төлөв","Бүртгэсэн","Устгасан огноо"];
+    headers.forEach((h,i) => ws.getCell(14,i+1).value=h);
+    styleRange(14,1,14,10,{fill:light,bold:true,center:true});
+
+    source.forEach((d,i) => {
+        const r=15+i;
+        const values=[
+            i+1,d.name,d.phone,money(d.amount),money(d.paid),
+            Math.max(0,money(d.amount)-money(d.paid)),
+            d.dueDate ? dateText(d.dueDate+"T00:00:00") : "",
+            d.archivedAt ? "Устгасан" : "Идэвхтэй",
+            dateText(d.createdAt),dateText(d.archivedAt)
+        ];
+        values.forEach((v,c) => ws.getCell(r,c+1).value=v);
+        [4,5,6].forEach(c => ws.getCell(r,c).numFmt=moneyFmt);
+        styleRange(r,1,r,10,{});
+        if (d.archivedAt) {
+            for(let c=1;c<=10;c++) {
+                ws.getCell(r,c).fill={type:"pattern",pattern:"solid",fgColor:{argb:"F3F4F6"}};
+            }
         }
+    });
+
+    ws.autoFilter = {
+        from:{row:14,column:1},
+        to:{row:14+source.length,column:10}
     };
 
-    /* Ерөнхий үзүүлэлт: 6,7-р мөрүүдийн мөнгөн дүн */
-    setTugrik(6, 2);  // Нийт авлага
-    setTugrik(6, 4);  // Нийт төлсөн
-    setTugrik(7, 2);  // Одоо авах үлдэгдэл
-    setTugrik(7, 4);  // Хугацаа хэтэрсэн дүн
+    // Movement history
+    const moveTitleRow = 16 + source.length;
+    ws.mergeCells(moveTitleRow,1,moveTitleRow,10);
+    ws.getCell(moveTitleRow,1).value="ГҮЙЛГЭЭНИЙ ТҮҮХ";
+    styleRange(moveTitleRow,1,moveTitleRow,10,{fill:slate,bold:true,color:white,size:11});
 
-    /* Сонгосон хугацааны хөдөлгөөн */
-    setTugrik(11, 2); // Шинээр нэмэгдсэн өр
-    setTugrik(11, 4); // Орж ирсэн төлөлт
+    const moveHeaderRow=moveTitleRow+1;
+    ["Огноо","Нэр","Утас","Төрөл","Дүн","Төлөв"].forEach((h,i)=>{
+        ws.getCell(moveHeaderRow,i+1).value=h;
+    });
+    styleRange(moveHeaderRow,1,moveHeaderRow,6,{fill:light,bold:true,center:true});
 
-    /* Харилцагчдын дэлгэрэнгүй: D/E/F багана */
-    for (let row = 15; row < 15 + source.length; row++) {
-        setTugrik(row, 4);
-        setTugrik(row, 5);
-        setTugrik(row, 6);
+    if (movements.length) {
+        movements.forEach((m,i)=>{
+            const r=moveHeaderRow+1+i;
+            [dateText(m.date),m.name,m.phone,m.type,m.amount,m.status]
+                .forEach((v,c)=>ws.getCell(r,c+1).value=v);
+            ws.getCell(r,5).numFmt=moneyFmt;
+            styleRange(r,1,r,6,{});
+        });
+    } else {
+        const r=moveHeaderRow+1;
+        ws.mergeCells(r,1,r,6);
+        ws.getCell(r,1).value="Сонгосон хугацаанд гүйлгээ алга.";
+        styleRange(r,1,r,6,{center:true});
     }
 
-    /* Гүйлгээний түүх: E багана */
-    const firstMovementDataRow = movementTitleRow + 2;
-    for (let row = firstMovementDataRow; row < firstMovementDataRow + movements.length; row++) {
-        setTugrik(row, 5);
-    }
+    // Print/header/footer
+    ws.headerFooter.oddFooter =
+        '&LӨрийн дэвтэр&CТайлан&RХуудас &P / &N';
+    ws.pageSetup.printTitlesRow = "1:4";
 
-    XLSX.utils.book_append_sheet(wb, ws, "Тайлан");
+    const buffer = await workbook.xlsx.writeBuffer();
+    const stamp =
+        new Date().getFullYear() + "-" +
+        String(new Date().getMonth()+1).padStart(2,"0") + "-" +
+        String(new Date().getDate()).padStart(2,"0");
 
-    const now = new Date();
-    const stamp = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0")+"-"+String(now.getDate()).padStart(2,"0");
-    XLSX.writeFile(wb, "uriin-dewter-tailan-" + stamp + ".xlsx");
+    saveAs(
+        new Blob([buffer], {
+            type:"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        }),
+        "uriin-dewter-tailan-" + stamp + ".xlsx"
+    );
 }
 
 function setReportPeriod(days, button) {
