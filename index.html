@@ -14687,7 +14687,7 @@ async function exportReportExcel() {
     const summary = [
         ["Идэвхтэй харилцагч", active.length, "Устгасан бүртгэл", deleted.length],
         ["Нийт авлага", activeTotal, "Нийт төлсөн", activePaid],
-        ["Одоо авах үлдэгдэл", activeRemaining, "Хугацаа хэтэрсэн дүн", overdueAmount],
+        ["Үлдэгдэл авлага", activeRemaining, "Хугацаа хэтэрсэн дүн", overdueAmount],
         ["Хугацаа хэтэрсэн хүн", overdueCount, "", ""]
     ];
     summary.forEach((row,i) => {
@@ -14705,33 +14705,18 @@ async function exportReportExcel() {
         ws.getCell(r,4).numFmt=moneyFmt;
     });
 
-    // Period movement summary
-    ws.mergeCells("A10:J10");
-    ws.getCell("A10").value = "СОНГОСОН ХУГАЦААНЫ ХӨДӨЛГӨӨ";
-    styleRange(10,1,10,10,{fill:slate,bold:true,color:white,size:11});
-
-    ws.getCell("A11").value="Шинээр нэмэгдсэн өр";
-    ws.getCell("B11").value=addedInPeriod;
-    ws.getCell("C11").value="Орж ирсэн төлөлт";
-    ws.getCell("D11").value=paidInPeriod;
-    ws.getCell("B11").numFmt=moneyFmt;
-    ws.getCell("D11").numFmt=moneyFmt;
-    styleRange(11,1,11,5,{});
-    ws.getCell("A11").font={name:"Arial",bold:true};
-    ws.getCell("C11").font={name:"Arial",bold:true};
-
     // Customer table
-    ws.mergeCells("A13:J13");
-    ws.getCell("A13").value="ХАРИЛЦАГЧДЫН ДЭЛГЭРЭНГҮЙ";
-    styleRange(13,1,13,10,{fill:slate,bold:true,color:white,size:11});
+    ws.mergeCells("A10:J10");
+    ws.getCell("A10").value="ХАРИЛЦАГЧДЫН ДЭЛГЭРЭНГҮЙ";
+    styleRange(10,1,10,10,{fill:slate,bold:true,color:white,size:11});
 
     const headers = ["№","Нэр","Утас","Нийт авлага","Төлсөн","Үлдэгдэл",
                      "Төлөх хугацаа","Төлөв","Бүртгэсэн","Устгасан огноо"];
-    headers.forEach((h,i) => ws.getCell(14,i+1).value=h);
-    styleRange(14,1,14,10,{fill:light,bold:true,center:true});
+    headers.forEach((h,i) => ws.getCell(11,i+1).value=h);
+    styleRange(11,1,11,10,{fill:light,bold:true,center:true});
 
     source.forEach((d,i) => {
-        const r=15+i;
+        const r=12+i;
         const values=[
             i+1,d.name,d.phone,money(d.amount),money(d.paid),
             Math.max(0,money(d.amount)-money(d.paid)),
@@ -14750,12 +14735,12 @@ async function exportReportExcel() {
     });
 
     ws.autoFilter = {
-        from:{row:14,column:1},
-        to:{row:14+source.length,column:10}
+        from:{row:11,column:1},
+        to:{row:11+source.length,column:10}
     };
 
     // Movement history
-    const moveTitleRow = 16 + source.length;
+    const moveTitleRow = 13 + source.length;
     ws.mergeCells(moveTitleRow,1,moveTitleRow,10);
     ws.getCell(moveTitleRow,1).value="ГҮЙЛГЭЭНИЙ ТҮҮХ";
     styleRange(moveTitleRow,1,moveTitleRow,10,{fill:slate,bold:true,color:white,size:11});
@@ -14779,6 +14764,32 @@ async function exportReportExcel() {
         ws.mergeCells(r,1,r,6);
         ws.getCell(r,1).value="Сонгосон хугацаанд гүйлгээ алга.";
         styleRange(r,1,r,6,{center:true});
+    }
+
+
+    /* Тайлангийн харагдацыг цэгцлэх */
+    [4,10,moveTitleRow].forEach(r => ws.getRow(r).height = 24);
+    [5,6,7,8].forEach(r => ws.getRow(r).height = 23);
+    ws.getRow(11).height = 25;
+    ws.getRow(moveHeaderRow).height = 25;
+
+    /* Мөнгөн дүнг баруун, тоо/төлөвийг төвд */
+    for (let r = 5; r <= 8; r++) {
+        ws.getCell(r,2).alignment = {vertical:"middle",horizontal:"right"};
+        ws.getCell(r,4).alignment = {vertical:"middle",horizontal:"right"};
+    }
+    for (let r = 12; r < 12 + source.length; r++) {
+        [1,7,8,9,10].forEach(c => {
+            ws.getCell(r,c).alignment = {vertical:"middle",horizontal:"center",wrapText:true};
+        });
+        [4,5,6].forEach(c => {
+            ws.getCell(r,c).alignment = {vertical:"middle",horizontal:"right"};
+        });
+    }
+    for (let r = moveHeaderRow + 1; r <= moveHeaderRow + Math.max(movements.length,1); r++) {
+        ws.getCell(r,1).alignment = {vertical:"middle",horizontal:"center"};
+        ws.getCell(r,5).alignment = {vertical:"middle",horizontal:"right"};
+        ws.getCell(r,6).alignment = {vertical:"middle",horizontal:"center"};
     }
 
     // Print/header/footer
