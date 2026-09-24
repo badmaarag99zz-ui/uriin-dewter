@@ -5201,6 +5201,37 @@ body{
     font-size:17px !important;
 }
 
+
+/* ===== NEW DEBT — QUICK DUE DATE ===== */
+#debtModal .due-quick-buttons{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    margin:0 0 10px;
+}
+
+#debtModal .due-quick-buttons button{
+    min-height:38px;
+    padding:6px 4px;
+    border:1px solid #D5DEE6;
+    border-radius:10px;
+    background:#FFFFFF;
+    color:#52677D;
+    font-size:13px;
+    font-weight:750;
+    cursor:pointer;
+}
+
+#debtModal .due-quick-buttons button:active{
+    background:#E9EEF3;
+}
+
+@media(max-width:380px){
+    #debtModal .due-quick-buttons{
+        grid-template-columns:repeat(2,1fr);
+    }
+}
+
 </style>
 
 </head>
@@ -5490,6 +5521,12 @@ body{
             <label>Өрийн дүн</label>
             <input id="debtAmount" type="number" placeholder="Жишээ: 150000">
             <label>Төлөх хугацаа</label>
+            <div class="due-quick-buttons">
+                <button type="button" onclick="setQuickDueDate(0)">Өнөөдөр</button>
+                <button type="button" onclick="setQuickDueDate(3)">+3 хоног</button>
+                <button type="button" onclick="setQuickDueDate(7)">+7 хоног</button>
+                <button type="button" onclick="setQuickDueDate(14)">+14 хоног</button>
+            </div>
             <input id="dueDate" type="date">
             <button type="button" class="modal-save-btn" id="addButton">Өр бүртгэх</button>
         </div>
@@ -8553,6 +8590,19 @@ function showDebts() {
             })
             .join("");
 
+}
+
+function setQuickDueDate(daysToAdd) {
+    const date = new Date();
+    date.setHours(12, 0, 0, 0);
+    date.setDate(date.getDate() + daysToAdd);
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+
+    document.getElementById("dueDate").value =
+        `${year}-${month}-${day}`;
 }
 
 /* ==========================================
