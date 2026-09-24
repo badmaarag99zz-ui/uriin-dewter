@@ -8095,6 +8095,7 @@ async function loadDebts() {
                     .from("debts")
                     .select("*")
                     .eq("user_id", user.id)
+                    .is("archived_at", null)
                     .order(
                         "created_at",
                         {
@@ -10546,116 +10547,96 @@ async function deleteDebt(id) {
 
     if (!debt) return;
 
+    const confirmed =
+        await appConfirm(
+            `${debt.name}-ийн бүртгэлийг жагсаалтаас хасах уу?\n\nМэдээлэл нь архивт хадгалагдана.`
+        );
 
-   const confirmed =
-    await appConfirm(
-        `${debt.name}-ийн өрийг устгах уу?`
-    );
-
-if (!confirmed) return;
-
+    if (!confirmed) return;
 
     const user =
         await getCurrentUser();
 
     if (!user) {
-
-        alert(
-            "Эхлээд нэвтэрнэ үү."
-        );
-
+        alert("Эхлээд нэвтэрнэ үү.");
         return;
-
     }
+
+    const archivedAt =
+        new Date().toISOString();
 
 
     /* ==========================================
-       OFFLINE
+       OFFLINE → ARCHIVE QUEUE
     ========================================== */
 
     if (!navigator.onLine) {
 
         /*
-         * Сервер дээр аль хэдийн байгаа өр бол
-         * дараа нь серверээс бас устгах хэрэгтэй.
+         * Сервер дээр байгаа бүртгэлийг дараа нь
+         * archived_at огноотой болгож sync хийнэ.
          */
-
         if (
             debt.id &&
             !String(debt.id).startsWith("offline_")
         ) {
 
-            let pendingDeletes =
+            let pendingArchives =
                 JSON.parse(
                     localStorage.getItem(
-                        `pendingDeletes_${user.id}`
+                        `pendingArchives_${user.id}`
                     ) || "[]"
                 );
 
-
-            if (
-                !pendingDeletes.includes(debt.id)
-            ) {
-
-                pendingDeletes.push(
-                    debt.id
+            const alreadyQueued =
+                pendingArchives.some(
+                    item =>
+                        item &&
+                        item.id === debt.id
                 );
 
+            if (!alreadyQueued) {
+                pendingArchives.push({
+                    id: debt.id,
+                    archivedAt
+                });
             }
 
-
             localStorage.setItem(
-                `pendingDeletes_${user.id}`,
-                JSON.stringify(
-                    pendingDeletes
-                )
+                `pendingArchives_${user.id}`,
+                JSON.stringify(pendingArchives)
             );
-
         }
 
-
         /*
-         * Төхөөрөмж дээрээс шууд устгана.
+         * Offline дээр шинээр үүссэн, серверт хараахан
+         * очоогүй бүртгэл бол sync хийх шаардлагагүй.
+         * Идэвхтэй local жагсаалтаас л авна.
          */
-
         const index =
             debts.findIndex(
                 d => d.id === id
             );
 
-
         if (index !== -1) {
-
-            debts.splice(
-                index,
-                1
-            );
-
+            debts.splice(index, 1);
         }
 
-
-        saveOfflineDebts(
-            user.id
-        );
-
+        saveOfflineDebts(user.id);
 
         closeDetailModal();
-
         showDebts();
 
-
         alert(
-            "Өр устгагдлаа."
+            "Бүртгэл жагсаалтаас хасагдлаа.\nМэдээлэл архивт хадгалагдана."
         );
 
-
         return;
-
     }
 
 
     /* ==========================================
-       ONLINE
+       ONLINE → SOFT DELETE / ARCHIVE
     ========================================== */
 
     const {
@@ -10663,7 +10644,10 @@ if (!confirmed) return;
     } =
         await supabaseClient
             .from("debts")
-            .delete()
+            .update({
+                archived_at:
+                    archivedAt
+            })
             .eq(
                 "id",
                 id
@@ -10679,11 +10663,10 @@ if (!confirmed) return;
         console.error(error);
 
         alert(
-            "Устгахад алдаа гарлаа."
+            "Архивлахад алдаа гарлаа."
         );
 
         return;
-
     }
 
 
@@ -10691,9 +10674,11 @@ if (!confirmed) return;
 
     await loadDebts();
 
+    alert(
+        "Бүртгэл жагсаалтаас хасагдлаа.\nМэдээлэл архивт хадгалагдлаа."
+    );
+
 }
-
-
 
 
 /* ==========================================
@@ -10728,87 +10713,119 @@ async function syncOfflineDebts() {
 
 /*
  * =====================================
- * OFFLINE УСТГАСАН ӨРҮҮД
+ * OFFLINE АРХИВЛАСАН БҮРТГЭЛҮҮД
  * =====================================
  */
 
-let pendingDeletes =
+let pendingArchives =
+    JSON.parse(
+        localStorage.getItem(
+            `pendingArchives_${user.id}`
+        ) || "[]"
+    );
+
+/*
+ * Хуучин хувилбараас pendingDeletes үлдсэн байвал
+ * жинхэнээс нь устгахгүй — архив руу шилжүүлнэ.
+ */
+const legacyPendingDeletes =
     JSON.parse(
         localStorage.getItem(
             `pendingDeletes_${user.id}`
         ) || "[]"
     );
 
+if (
+    Array.isArray(legacyPendingDeletes) &&
+    legacyPendingDeletes.length > 0
+) {
+    legacyPendingDeletes.forEach(function(id) {
+        const exists =
+            pendingArchives.some(
+                item =>
+                    item &&
+                    item.id === id
+            );
+
+        if (!exists) {
+            pendingArchives.push({
+                id,
+                archivedAt:
+                    new Date().toISOString()
+            });
+        }
+    });
+
+    localStorage.removeItem(
+        `pendingDeletes_${user.id}`
+    );
+}
 
 if (
-    Array.isArray(pendingDeletes) &&
-    pendingDeletes.length > 0
+    Array.isArray(pendingArchives) &&
+    pendingArchives.length > 0
 ) {
 
     for (
-        const deletedId
-        of pendingDeletes
+        const archiveItem
+        of [...pendingArchives]
     ) {
+
+        if (
+            !archiveItem ||
+            !archiveItem.id
+        ) {
+            continue;
+        }
 
         const {
             error
         } =
             await supabaseClient
                 .from("debts")
-                .delete()
+                .update({
+                    archived_at:
+                        archiveItem.archivedAt ||
+                        new Date().toISOString()
+                })
                 .eq(
                     "id",
-                    deletedId
+                    archiveItem.id
                 )
                 .eq(
                     "user_id",
                     user.id
                 );
 
-
         if (error) {
 
             console.error(
-                "❌ Offline устгалт sync алдаа:",
+                "❌ Offline архив sync алдаа:",
                 error
             );
 
-            /*
-             * Алдаа гарвал ID-г queue-д
-             * хэвээр үлдээнэ.
-             */
-
             continue;
-
         }
 
-
         console.log(
-            "🗑 Offline устгасан өр серверээс устлаа:",
-            deletedId
+            "📦 Offline архив серверт хадгалагдлаа:",
+            archiveItem.id
         );
 
-
-        /*
-         * Амжилттай устсан ID-г queue-ээс авна.
-         */
-
-        pendingDeletes =
-            pendingDeletes.filter(
-                id =>
-                    id !== deletedId
+        pendingArchives =
+            pendingArchives.filter(
+                item =>
+                    !item ||
+                    item.id !== archiveItem.id
             );
-
     }
 
-
     localStorage.setItem(
-        `pendingDeletes_${user.id}`,
+        `pendingArchives_${user.id}`,
         JSON.stringify(
-            pendingDeletes
+            pendingArchives
         )
     );
-
 }
 
 
@@ -10833,6 +10850,10 @@ if (
                 .eq(
                     "user_id",
                     user.id
+                )
+                .is(
+                    "archived_at",
+                    null
                 )
                 .order(
                     "created_at",
@@ -11191,6 +11212,10 @@ if (
                 .eq(
                     "user_id",
                     user.id
+                )
+                .is(
+                    "archived_at",
+                    null
                 )
                 .order(
                     "created_at",
