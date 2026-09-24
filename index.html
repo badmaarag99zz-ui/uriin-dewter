@@ -5302,6 +5302,20 @@ body{
     line-height:1.25;
 }
 
+
+/* ===== REPORT FILTER TAP FIX ===== */
+#historyView .report-filter{
+    position:relative;
+    z-index:5;
+}
+#historyView .report-filter button{
+    position:relative;
+    z-index:6;
+    pointer-events:auto !important;
+    cursor:pointer;
+    touch-action:manipulation;
+}
+
 </style>
 
 </head>
@@ -5543,9 +5557,9 @@ body{
                 <p>Одоогийн авлага болон сонгосон хугацааны мөнгөний хөдөлгөөн</p>
             </div>
             <div class="report-filter" id="reportFilter">
-                <button type="button" data-days="7">7 хоног</button>
-                <button type="button" data-days="30" class="active">30 хоног</button>
-                <button type="button" data-days="all">Бүгд</button>
+                <button type="button" data-days="7" onclick="setReportPeriod(7,this)">7 хоног</button>
+                <button type="button" data-days="30" class="active" onclick="setReportPeriod(30,this)">30 хоног</button>
+                <button type="button" data-days="all" onclick="setReportPeriod('all',this)">Бүгд</button>
             </div>
             <div class="report-filter-note">
                 <b>7 / 30 хоног / Бүгд</b> нь зөвхөн доорх “Хөдөлгөөн”-ийг шүүнэ.
@@ -14312,20 +14326,19 @@ async function renderReport() {
     }
 }
 
-document.addEventListener("click", function(event) {
-    const button = event.target.closest("#reportFilter button");
-    if (!button) return;
-
-    reportDays = button.dataset.days === "all"
-        ? "all"
-        : Number(button.dataset.days);
+function setReportPeriod(days, button) {
+    reportDays = days === "all" ? "all" : Number(days);
 
     document.querySelectorAll("#reportFilter button").forEach(function(btn) {
-        btn.classList.toggle("active", btn === button);
+        btn.classList.remove("active");
     });
 
+    if (button) {
+        button.classList.add("active");
+    }
+
     renderReport();
-});
+}
 
 // ==========================================
 // MODERN LEDGER NAVIGATION
