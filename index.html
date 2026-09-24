@@ -3883,6 +3883,177 @@ body{
     }
 }
 
+
+/* ===== SUMMARY LAYOUT — EXACT USER SKETCH ===== */
+
+/* Main card becomes one clean grid */
+.summary-card,
+.overview-card{
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    grid-template-areas:
+        "side side"
+        "main main" !important;
+    padding:18px !important;
+    gap:10px !important;
+    min-height:0 !important;
+}
+
+/* Top area contains Нийт авлага + Төлсөн + people */
+.summary-side{
+    grid-area:side !important;
+    display:grid !important;
+    grid-template-columns:1fr 1fr !important;
+    grid-template-areas:
+        "debt paid"
+        "people people" !important;
+    gap:10px !important;
+    padding:0 !important;
+}
+.summary-side > div:nth-child(1){ grid-area:debt !important; }
+.summary-side > div:nth-child(2){ grid-area:paid !important; }
+.summary-side > div:nth-child(3){ grid-area:people !important; }
+
+/* Нийт авлага + Төлсөн */
+.summary-side > div:nth-child(1),
+.summary-side > div:nth-child(2){
+    min-height:92px !important;
+    margin:0 !important;
+    padding:15px 16px !important;
+    border:1px solid #D8E2EA !important;
+    border-radius:16px !important;
+    background:#F7FAFC !important;
+    display:flex !important;
+    flex-direction:column !important;
+    justify-content:center !important;
+    align-items:center !important;
+    text-align:center !important;
+}
+.summary-side > div:nth-child(1) > span,
+.summary-side > div:nth-child(2) > span{
+    font-size:14px !important;
+    font-weight:800 !important;
+}
+.summary-side > div:nth-child(1) > b,
+.summary-side > div:nth-child(2) > b{
+    width:100% !important;
+    margin-top:7px !important;
+    font-size:clamp(17px,4vw,22px) !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+    text-align:center !important;
+}
+
+/* Main Үлдэгдэл авлага block below the two top cards */
+.summary-main,
+.overview-main{
+    grid-area:main !important;
+    min-height:150px !important;
+    padding:22px 20px 25px !important;
+    border:1px solid #D8E2EA !important;
+    border-radius:18px !important;
+    background:linear-gradient(145deg,#EEF4F7,#F9FBFC) !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+}
+.summary-primary > span{
+    font-size:17px !important;
+}
+#totalRemaining{
+    margin-top:8px !important;
+    font-size:40px !important;
+}
+.summary-primary > small{
+    margin-top:9px !important;
+    font-size:13px !important;
+}
+
+/* People becomes a small centered tab under the remaining block.
+   It visually hangs from the bottom edge, matching the sketch. */
+.summary-side > div:nth-child(3){
+    position:absolute !important;
+    left:50% !important;
+    bottom:2px !important;
+    transform:translate(-50%, 50%) !important;
+    z-index:5 !important;
+    width:auto !important;
+    min-width:130px !important;
+    min-height:0 !important;
+    margin:0 !important;
+    padding:8px 15px !important;
+    border:1px solid #C9D7E1 !important;
+    border-radius:12px !important;
+    background:#E7EFF4 !important;
+    display:flex !important;
+    flex-direction:row !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:8px !important;
+    text-align:center !important;
+}
+.summary-side > div:nth-child(3)::before{
+    content:none !important;
+}
+.summary-side > div:nth-child(3) > span{
+    order:1 !important;
+    margin:0 !important;
+    font-size:12px !important;
+    font-weight:800 !important;
+    white-space:nowrap !important;
+}
+.summary-side > div:nth-child(3) > span::after{
+    content:none !important;
+}
+.summary-side > div:nth-child(3) > b{
+    order:2 !important;
+    width:auto !important;
+    margin:0 !important;
+    font-size:16px !important;
+    font-weight:900 !important;
+}
+
+/* Needed for the hanging people tab */
+.summary-card,
+.overview-card{
+    position:relative !important;
+    margin-bottom:28px !important;
+}
+
+@media(max-width:600px){
+    .summary-card,
+    .overview-card{
+        padding:14px !important;
+        gap:8px !important;
+    }
+    .summary-side{
+        gap:8px !important;
+    }
+    .summary-side > div:nth-child(1),
+    .summary-side > div:nth-child(2){
+        min-height:82px !important;
+        padding:12px 8px !important;
+    }
+    .summary-side > div:nth-child(1) > span,
+    .summary-side > div:nth-child(2) > span{
+        font-size:12.5px !important;
+    }
+    .summary-side > div:nth-child(1) > b,
+    .summary-side > div:nth-child(2) > b{
+        font-size:clamp(15px,4.5vw,20px) !important;
+    }
+    .summary-main,
+    .overview-main{
+        min-height:140px !important;
+    }
+    #totalRemaining{
+        font-size:38px !important;
+    }
+}
+
 </style>
 
 </head>
@@ -12738,6 +12909,20 @@ function showLedgerView(viewId, buttonElement = null) {
 
     renderHomeDate();
     setInterval(renderHomeDate, 60000);
+})();
+</script>
+
+
+<script>
+/* Place the existing people metric as the bottom tab of the summary card */
+(function () {
+    const card = document.querySelector(".summary-card, .overview-card");
+    const side = card && card.querySelector(".summary-side");
+    const people = side && side.children[2];
+
+    if (card && people) {
+        card.appendChild(people);
+    }
 })();
 </script>
 
