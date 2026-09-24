@@ -14395,16 +14395,22 @@ async function renderReport() {
      * Ингэснээр хүн архивлагдсан ч хуучин өр/төлөлт тайлангаас алга болохгүй.
      */
     allHistory.forEach(function(debt) {
-        const additions = reportHistoryArray(debt.additions);
+        let additions = reportHistoryArray(debt.additions);
 
         /*
-         * Хуучин/импортлогдсон бүртгэлд additions хоосон байж болно.
-         * Тийм үед debt.amount-ийг шууд хөдөлгөөн гэж тооцохгүй:
-         * amount нь дараа нэмсэн өрүүдийг ч багтаасан нийт дүн тул давхар тоолох эрсдэлтэй.
-         *
-         * Харин additions байгаа бол item-ийн огноо байхгүй үед
-         * тухайн өрийн createdAt-ийг fallback болгон ашиглана.
+         * LEGACY FALLBACK:
+         * Хуучин бүртгэлүүд additions/payments түүхгүй мөртлөө
+         * amount/paid нийлбэртэй үлдсэн байж болно.
+         * Тийм бүртгэлийг Тайлан 0 ₮ гэж алгасахгүй.
          */
+        if (!additions.length && Number(debt.amount || 0) > 0 && debt.createdAt) {
+            additions = [{
+                amount: Number(debt.amount || 0),
+                createdAt: debt.createdAt,
+                legacyFallback: true
+            }];
+        }
+
         additions.forEach(function(item) {
             const value = Number(item.amount || 0);
             const itemDate = item.createdAt || item.created_at || debt.createdAt || "";
@@ -14418,10 +14424,19 @@ async function renderReport() {
             });
         });
 
-        const payments = reportHistoryArray(debt.payments);
+        let payments = reportHistoryArray(debt.payments);
+
+        if (!payments.length && Number(debt.paid || 0) > 0 && debt.createdAt) {
+            payments = [{
+                amount: Number(debt.paid || 0),
+                createdAt: debt.createdAt,
+                legacyFallback: true
+            }];
+        }
+
         payments.forEach(function(item) {
             const value = Number(item.amount || 0);
-            const itemDate = item.createdAt || item.created_at || "";
+            const itemDate = item.createdAt || item.created_at || debt.createdAt || "";
             if (isInReportPeriod(itemDate)) periodPaid += value;
             activity.push({
                 type: "paid",
