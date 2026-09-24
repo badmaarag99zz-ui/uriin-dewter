@@ -12,7 +12,85 @@
 
 <title>Өрийн дэвтэр</title>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2">
+/* ===== TOP MENU FINAL FIX ===== */
+(function () {
+    function getTopMenu() {
+        return document.getElementById("topMenu");
+    }
+
+    function getTopMenuButton() {
+        return document.getElementById("helpTopBtn");
+    }
+
+    window.closeTopMenu = function () {
+        const menu = getTopMenu();
+        if (menu) menu.style.display = "none";
+    };
+
+    window.toggleTopMenu = function (event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+
+        const menu = getTopMenu();
+        const button = getTopMenuButton();
+        if (!menu || !button) return;
+
+        if (menu.parentElement !== document.body) {
+            document.body.appendChild(menu);
+        }
+
+        const isOpen = menu.style.display === "block";
+        if (isOpen) {
+            closeTopMenu();
+            return;
+        }
+
+        const rect = button.getBoundingClientRect();
+        menu.style.position = "fixed";
+        menu.style.left = Math.max(10, rect.left) + "px";
+        menu.style.right = "auto";
+        menu.style.top = (rect.bottom + 7) + "px";
+        menu.style.zIndex = "100000";
+        menu.style.display = "block";
+    };
+
+    const button = getTopMenuButton();
+    if (button) {
+        button.onclick = function (event) {
+            toggleTopMenu(event);
+        };
+    }
+
+    const menu = getTopMenu();
+    if (menu) {
+        if (menu.parentElement !== document.body) {
+            document.body.appendChild(menu);
+        }
+        menu.addEventListener("click", function (event) {
+            event.stopPropagation();
+        });
+    }
+
+    document.addEventListener("click", function (event) {
+        const currentMenu = getTopMenu();
+        const currentButton = getTopMenuButton();
+
+        if (!currentMenu || currentMenu.style.display !== "block") return;
+
+        if (!currentMenu.contains(event.target) &&
+            !(currentButton && currentButton.contains(event.target))) {
+            closeTopMenu();
+        }
+    });
+
+    window.addEventListener("resize", closeTopMenu);
+    window.addEventListener("scroll", closeTopMenu, true);
+})();
+
+</script>
 
 <link rel="manifest" href="/manifest.json">
 
@@ -3130,8 +3208,8 @@ header h1 {
 <section id="homeView" class="ledger-view active">
     <div class="page-intro brand-message">
         <div>
-            <span class="eyebrow">ӨРИЙН ДЭВТЭР</span>
-            <h1>Өрөө цэгцтэй, тооцоогоо тодорхой.</h1>
+            <span class="eyebrow">Таны туслах — Өрийн дэвтэр.</span>
+            <h1>Өр бүртгэлээ ухаалгаар хөтөл.</h1>
         </div>
     </div>
 
@@ -11576,6 +11654,29 @@ function showLedgerView(viewId, buttonElement = null) {
     window.scrollTo({top:0,behavior:"smooth"});
 }
 
+</script>
+<script>
+/* ===== CLOSE INFO MODALS BY CLICKING OUTSIDE ===== */
+(function () {
+    ["helpModal", "feedbackModal", "contactModal"].forEach(function (modalId) {
+        const modal = document.getElementById(modalId);
+        if (!modal) return;
+
+        modal.addEventListener("click", function (event) {
+            if (event.target !== modal) return;
+
+            if (modalId === "helpModal" && typeof closeHelp === "function") {
+                closeHelp();
+            } else if (modalId === "feedbackModal" && typeof closeFeedback === "function") {
+                closeFeedback();
+            } else if (modalId === "contactModal" && typeof closeContact === "function") {
+                closeContact();
+            } else {
+                modal.style.display = "none";
+            }
+        });
+    });
+})();
 </script>
 </body>
 
