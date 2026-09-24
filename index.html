@@ -3075,6 +3075,66 @@ header h1 {
     }
 }
 
+
+/* ===== DASHBOARD CARDS — BIGGER ===== */
+.hero-card{
+    padding:25px 22px !important;
+    border-radius:22px !important;
+    min-height:150px !important;
+}
+.hero-card .label,
+.hero-card small{
+    font-size:15px !important;
+    font-weight:800 !important;
+}
+.hero-card .value,
+.hero-card strong{
+    font-size:34px !important;
+    line-height:1.08 !important;
+    letter-spacing:-.7px !important;
+}
+
+.stat-grid{
+    gap:12px !important;
+}
+.stat-card{
+    min-height:112px !important;
+    padding:18px 16px !important;
+    border-radius:18px !important;
+}
+.stat-card span,
+.stat-card small,
+.stat-card .label{
+    font-size:13px !important;
+    font-weight:750 !important;
+}
+.stat-card strong,
+.stat-card .value{
+    margin-top:7px !important;
+    font-size:22px !important;
+    line-height:1.1 !important;
+    letter-spacing:-.35px !important;
+}
+
+@media(max-width:380px){
+    .hero-card{
+        padding:22px 18px !important;
+        min-height:140px !important;
+    }
+    .hero-card .value,
+    .hero-card strong{
+        font-size:30px !important;
+    }
+    .stat-card{
+        padding:16px 12px !important;
+        min-height:105px !important;
+    }
+    .stat-card strong,
+    .stat-card .value{
+        font-size:19px !important;
+    }
+}
+
 </style>
 
 </head>
