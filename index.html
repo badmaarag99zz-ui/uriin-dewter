@@ -3135,6 +3135,97 @@ header h1 {
     }
 }
 
+
+/* ===== HOME DASHBOARD COLOR + EMPHASIS ===== */
+
+/* Give the home area a subtle brand-tinted atmosphere */
+#ledgerHome{
+    position:relative;
+}
+#ledgerHome::before{
+    content:"";
+    position:absolute;
+    z-index:-1;
+    left:-22px;
+    right:-22px;
+    top:145px;
+    height:430px;
+    background:
+        radial-gradient(circle at 18% 18%, rgba(82,103,125,.12), transparent 38%),
+        radial-gradient(circle at 88% 58%, rgba(82,103,125,.08), transparent 42%);
+    pointer-events:none;
+}
+
+/* Main receivable card: subtle slate gradient, not a loud color */
+.summary-card,
+.overview-card{
+    background:
+        linear-gradient(145deg, #FFFFFF 0%, #F7FAFC 58%, #EEF3F7 100%) !important;
+    border:1px solid #DCE4EB !important;
+    box-shadow:0 14px 34px rgba(82,103,125,.10) !important;
+}
+
+/* Main remaining receivable amount */
+#totalRemaining{
+    font-size:44px !important;
+    line-height:1.02 !important;
+    font-weight:850 !important;
+    letter-spacing:-1.1px !important;
+    color:#40566C !important;
+}
+
+/* Labels and secondary figures inside the summary card */
+.summary-card .summary-label,
+.summary-card .metric-label,
+.overview-card .summary-label,
+.overview-card .metric-label{
+    font-size:15px !important;
+    font-weight:800 !important;
+    color:#6D7A87 !important;
+}
+#totalDebt,
+#totalPaid,
+#totalPeople{
+    font-size:21px !important;
+    line-height:1.08 !important;
+    font-weight:850 !important;
+    color:#34495E !important;
+}
+
+/* Add a light visual distinction to the lower three metric cells */
+.summary-card .metric,
+.overview-card .metric{
+    position:relative;
+}
+.summary-card .metric::before,
+.overview-card .metric::before{
+    content:"";
+    position:absolute;
+    inset:-10px -8px;
+    border-radius:13px;
+    background:rgba(255,255,255,.46);
+    z-index:-1;
+}
+
+/* Small description below the main amount */
+.summary-card .summary-note,
+.overview-card .summary-note{
+    font-size:14px !important;
+    color:#8A949F !important;
+}
+
+/* Keep it balanced on narrow phones */
+@media(max-width:380px){
+    #totalRemaining{
+        font-size:39px !important;
+    }
+    #totalDebt,
+    #totalPaid,
+    #totalPeople{
+        font-size:18px !important;
+    }
+}
+
 </style>
 
 </head>
