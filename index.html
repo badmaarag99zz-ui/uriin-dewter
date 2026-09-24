@@ -4211,6 +4211,59 @@ body{
     }
 }
 
+
+/* ===== TOP TWO CARDS — SAME SIZE + COMPACT ===== */
+
+/* Нийт авлага / Төлсөн — яг ижил хэмжээ */
+.summary-top .summary-mini b,
+#totalDebt,
+#totalPaid{
+    font-size:clamp(15px, 3.7vw, 18px) !important;
+    line-height:1.05 !important;
+    font-weight:900 !important;
+    letter-spacing:-.55px !important;
+    margin-top:6px !important;
+}
+
+/* Хоёр card-ын илүү хоосон зайг багасгана */
+.summary-top .summary-mini{
+    min-height:0 !important;
+    padding:11px 8px !important;
+}
+.summary-top .summary-mini span{
+    margin:0 !important;
+    line-height:1.1 !important;
+}
+
+/* Дээд хоёр card ба үлдэгдэл авлагын хоорондын зай */
+.summary-top{
+    gap:8px !important;
+}
+.summary-remaining{
+    margin-top:7px !important;
+}
+
+/* Үлдэгдэл авлага болон Нийт хүмүүсийн зай */
+.summary-people-pill{
+    margin-top:4px !important;
+}
+
+/* Гадна card-ын илүү padding */
+.summary-layout-final{
+    padding:12px 12px 12px !important;
+}
+
+@media(max-width:420px){
+    .summary-top .summary-mini b,
+    #totalDebt,
+    #totalPaid{
+        font-size:clamp(14px, 3.65vw, 17px) !important;
+    }
+    .summary-top .summary-mini{
+        padding:10px 6px !important;
+    }
+}
+
 </style>
 
 </head>
