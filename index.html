@@ -4144,6 +4144,58 @@ body{
     }
 }
 
+
+/* ===== SUMMARY FINAL COMPACT TUNE ===== */
+
+/* Нийт авлага дүнг бага зэрэг жижигрүүлнэ */
+.summary-top .summary-mini:first-child b,
+#totalDebt{
+    font-size:clamp(13px, 3.25vw, 17px) !important;
+    letter-spacing:-.55px !important;
+}
+
+/* Үлдэгдэл авлагын box доторх сул зайг багасгана */
+.summary-remaining{
+    min-height:0 !important;
+    padding:16px 12px 17px !important;
+    justify-content:center !important;
+}
+.summary-remaining > span{
+    margin:0 !important;
+}
+.summary-remaining > strong,
+.summary-remaining #totalRemaining{
+    margin:7px 0 6px !important;
+}
+.summary-remaining > small{
+    margin:0 !important;
+}
+
+/* Нийт хүмүүсийг үлдэгдэл авлагад ойртуулна */
+.summary-people-pill{
+    margin:6px auto 0 !important;
+    padding:8px 15px !important;
+}
+
+/* Гадна цагаан card-ын доод сул зайг мөн багасгана */
+.summary-layout-final{
+    padding-bottom:15px !important;
+    margin-bottom:14px !important;
+}
+
+@media(max-width:420px){
+    .summary-top .summary-mini:first-child b,
+    #totalDebt{
+        font-size:clamp(12px, 3.2vw, 15.5px) !important;
+    }
+    .summary-remaining{
+        padding:14px 10px 15px !important;
+    }
+    .summary-people-pill{
+        margin-top:5px !important;
+    }
+}
+
 </style>
 
 </head>
