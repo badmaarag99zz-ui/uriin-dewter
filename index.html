@@ -14396,14 +14396,24 @@ async function renderReport() {
      */
     allHistory.forEach(function(debt) {
         const additions = reportHistoryArray(debt.additions);
+
+        /*
+         * Хуучин/импортлогдсон бүртгэлд additions хоосон байж болно.
+         * Тийм үед debt.amount-ийг шууд хөдөлгөөн гэж тооцохгүй:
+         * amount нь дараа нэмсэн өрүүдийг ч багтаасан нийт дүн тул давхар тоолох эрсдэлтэй.
+         *
+         * Харин additions байгаа бол item-ийн огноо байхгүй үед
+         * тухайн өрийн createdAt-ийг fallback болгон ашиглана.
+         */
         additions.forEach(function(item) {
             const value = Number(item.amount || 0);
-            if (isInReportPeriod(item.createdAt)) periodAdded += value;
+            const itemDate = item.createdAt || item.created_at || debt.createdAt || "";
+            if (isInReportPeriod(itemDate)) periodAdded += value;
             activity.push({
                 type: "add",
                 name: debt.name || "Нэргүй",
                 amount: value,
-                date: item.createdAt || debt.createdAt || "",
+                date: itemDate,
                 archived: Boolean(debt.archivedAt)
             });
         });
@@ -14411,12 +14421,13 @@ async function renderReport() {
         const payments = reportHistoryArray(debt.payments);
         payments.forEach(function(item) {
             const value = Number(item.amount || 0);
-            if (isInReportPeriod(item.createdAt)) periodPaid += value;
+            const itemDate = item.createdAt || item.created_at || "";
+            if (isInReportPeriod(itemDate)) periodPaid += value;
             activity.push({
                 type: "paid",
                 name: debt.name || "Нэргүй",
                 amount: value,
-                date: item.createdAt || "",
+                date: itemDate,
                 archived: Boolean(debt.archivedAt)
             });
         });
