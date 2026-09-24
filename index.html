@@ -14640,8 +14640,8 @@ async function exportReportExcel() {
     });
 
     ws.columns = [
-        {width:8},{width:23},{width:15},{width:18},{width:18},
-        {width:18},{width:17},{width:16},{width:17},{width:19}
+        {width:13},{width:24},{width:16},{width:18},{width:18},
+        {width:18},{width:18},{width:16},{width:17},{width:19}
     ];
 
     const slate = "52677D";
@@ -14823,6 +14823,7 @@ async function exportReportExcel() {
         });
     }
     for (let r = moveHeaderRow + 1; r <= moveHeaderRow + Math.max(movements.length,1); r++) {
+        ws.getRow(r).height = 21;
         ws.getCell(r,1).alignment = {vertical:"middle",horizontal:"center"};
         ws.getCell(r,5).alignment = {vertical:"middle",horizontal:"right"};
         ws.getCell(r,6).alignment = {vertical:"middle",horizontal:"center"};
