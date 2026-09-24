@@ -2971,6 +2971,44 @@ header h1 {
     }
 }
 
+
+/* ===== BOTTOM NAV V3 — BIGGER ===== */
+.ledger-nav{
+    height:94px !important;
+    padding:8px 6px calc(8px + env(safe-area-inset-bottom)) !important;
+}
+.ledger-tab,.ledger-create{
+    min-height:72px !important;
+    gap:6px !important;
+}
+.ledger-tab span{
+    font-size:28px !important;
+    line-height:1 !important;
+}
+.ledger-tab small,.ledger-create small{
+    font-size:13px !important;
+    font-weight:800 !important;
+    line-height:1.05 !important;
+}
+.ledger-create span{
+    width:50px !important;
+    height:50px !important;
+    font-size:28px !important;
+    margin-top:-21px !important;
+}
+@media(max-width:380px){
+    .ledger-tab span{
+        font-size:25px !important;
+    }
+    .ledger-tab small,.ledger-create small{
+        font-size:11.5px !important;
+    }
+    .ledger-create span{
+        width:46px !important;
+        height:46px !important;
+    }
+}
+
 </style>
 
 </head>
@@ -3230,7 +3268,7 @@ header h1 {
         <span>＋</span><small>Шинэ өр</small>
     </button>
     <button class="ledger-tab" data-view="historyView" type="button" onclick="showLedgerView('historyView',this)">
-        <span>↻</span><small>Тайлан</small>
+        <span>📊</span><small>Тайлан</small>
     </button>
     <button class="ledger-tab" data-view="menuView" type="button" onclick="showLedgerView('menuView',this)">
         <span>⚙</span><small>Тохиргоо</small>
