@@ -14331,6 +14331,30 @@ function isInReportPeriod(value) {
 
 async function renderReport() {
     /*
+     * Нэг render эхлэх мөчийн хугацааг snapshot хийнэ.
+     * renderReport() async тул refresh/login/sync зэрэг олон дуудлага
+     * зэрэгцэхэд window.reportDays дундаас нь өөрчлөгдөж болохгүй.
+     */
+    const reportDaysSnapshot =
+        window.reportDays === "all"
+            ? "all"
+            : (Number(window.reportDays) || 30);
+
+    const isInThisReportPeriod = function(value) {
+        if (reportDaysSnapshot === "all") return true;
+        if (!value) return false;
+
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return false;
+
+        const from = new Date();
+        from.setHours(0,0,0,0);
+        from.setDate(from.getDate() - reportDaysSnapshot + 1);
+
+        return d >= from;
+    };
+
+    /*
      * ЖАГСААЛТ = зөвхөн идэвхтэй debts
      * ТАЙЛАНГИЙН ТҮҮХ = идэвхтэй + архивлагдсан debts
      */
@@ -14450,7 +14474,7 @@ async function renderReport() {
         additions.forEach(function(item) {
             const value = Number(item.amount || 0);
             const itemDate = item.createdAt || item.created_at || debt.createdAt || "";
-            if (isInReportPeriod(itemDate)) periodAdded += value;
+            if (isInThisReportPeriod(itemDate)) periodAdded += value;
             activity.push({
                 type: "add",
                 name: debt.name || "Нэргүй",
@@ -14473,7 +14497,7 @@ async function renderReport() {
         payments.forEach(function(item) {
             const value = Number(item.amount || 0);
             const itemDate = item.createdAt || item.created_at || debt.createdAt || "";
-            if (isInReportPeriod(itemDate)) periodPaid += value;
+            if (isInThisReportPeriod(itemDate)) periodPaid += value;
             activity.push({
                 type: "paid",
                 name: debt.name || "Нэргүй",
@@ -14485,6 +14509,19 @@ async function renderReport() {
     });
 
     const remainingTotal = Math.max(0, totalDebt - totalPaid);
+
+    /*
+     * Энэ render хүлээж байх хооронд хэрэглэгч өөр хугацаа сонгосон бол
+     * хуучин async render UI-г буцааж overwrite хийхгүй.
+     */
+    const currentReportDays =
+        window.reportDays === "all"
+            ? "all"
+            : (Number(window.reportDays) || 30);
+
+    if (currentReportDays !== reportDaysSnapshot) {
+        return;
+    }
 
     const setText = function(id, value) {
         const el = document.getElementById(id);
@@ -14504,11 +14541,11 @@ async function renderReport() {
     setText("reportPaidPeriod", reportMoney(periodPaid));
     setText(
         "reportPeriodLabel",
-        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + (window.reportDays ?? 30) + " хоног"
+        reportDaysSnapshot === "all" ? "Бүх хугацаа" : "Сүүлийн " + reportDaysSnapshot + " хоног"
     );
     setText(
         "reportPeriodBannerText",
-        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + (window.reportDays ?? 30) + " хоног"
+        reportDaysSnapshot === "all" ? "Бүх хугацаа" : "Сүүлийн " + reportDaysSnapshot + " хоног"
     );
 
     const maxFlow = Math.max(periodAdded, periodPaid, 1);
