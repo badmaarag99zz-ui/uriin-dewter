@@ -5314,8 +5314,7 @@ body{
             <input id="search" type="text" placeholder="🔍 Нэр эсвэл утсаар хайх...">
             <select id="sort">
                 <option value="newest">↕ Эрэмбэлэх</option>
-                <option value="name-az">Үсгийн дарааллаар А-Я / A-Z</option>
-                <option value="name-za">Үсгийн дарааллаар Я-А / Z-A</option>
+                <option value="name-az">Үсгийн дарааллаар</option>
                 <option value="oldest">Хуучнаар бүртгэгдсэн</option>
                 <option value="highest">Өр ихээс бага</option>
                 <option value="lowest">Өр багаас их</option>
@@ -8024,13 +8023,7 @@ function showDebts() {
                         { sensitivity: "base" }
                     );
                 }
-
-                if (sort === "name-za") {
-                    return String(b.name || "").localeCompare(
-                        String(a.name || ""),
-                        ["mn", "en"],
-                        { sensitivity: "base" }
-                    );
+);
                 }
 
                 if (sort === "highest") {
