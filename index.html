@@ -5486,7 +5486,7 @@ body{
             <label>Хүний нэр</label>
             <input id="personName" type="text" placeholder="Жишээ: Бат">
             <label>Утасны дугаар</label>
-            <input id="personPhone" type="tel" placeholder="Жишээ: 99112233">
+            <input id="personPhone" type="tel" inputmode="numeric" maxlength="8" pattern="[0-9]{8}" placeholder="Жишээ: 99112233">
             <label>Өрийн дүн</label>
             <input id="debtAmount" type="number" placeholder="Жишээ: 150000">
             <label>Төлөх хугацаа</label>
@@ -14081,6 +14081,15 @@ function showLedgerView(viewId, buttonElement = null) {
     renderHomeDate();
     setInterval(renderHomeDate, 60000);
 })();
+</script>
+
+
+<script>
+document.addEventListener("input", function (event) {
+    if (event.target && event.target.id === "personPhone") {
+        event.target.value = event.target.value.replace(/\D/g, "").slice(0, 8);
+    }
+});
 </script>
 
 </body>
