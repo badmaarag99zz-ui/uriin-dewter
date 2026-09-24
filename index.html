@@ -2892,6 +2892,59 @@ header h1 {
     }
 }
 
+
+/* =========================================================
+   HOME CLEANUP + LARGER BOTTOM NAV
+========================================================= */
+.brand-message{
+    margin-bottom:18px !important;
+}
+.brand-message > div{
+    width:100%;
+}
+.brand-message .eyebrow{
+    letter-spacing:.14em;
+}
+.brand-message h1{
+    max-width:520px;
+    margin-top:6px !important;
+    font-size:26px !important;
+    line-height:1.18 !important;
+    letter-spacing:-.55px;
+}
+
+.bottom-nav{
+    min-height:76px !important;
+    padding:8px 8px calc(8px + env(safe-area-inset-bottom)) !important;
+}
+.bottom-nav button{
+    min-height:58px !important;
+    font-size:12px !important;
+    font-weight:700 !important;
+    gap:5px !important;
+}
+.bottom-nav button span,
+.bottom-nav button .nav-icon{
+    font-size:23px !important;
+}
+.bottom-nav .nav-add,
+.bottom-nav .center-add{
+    transform:scale(1.08);
+}
+
+@media (max-width:380px){
+    .brand-message h1{
+        font-size:23px !important;
+    }
+    .bottom-nav{
+        padding-left:4px !important;
+        padding-right:4px !important;
+    }
+    .bottom-nav button{
+        font-size:11px !important;
+    }
+}
+
 </style>
 
 </head>
@@ -3075,12 +3128,11 @@ header h1 {
 <main class="ledger-main">
 
 <section id="homeView" class="ledger-view active">
-    <div class="page-intro">
+    <div class="page-intro brand-message">
         <div>
-            <span class="eyebrow">ӨНӨӨДРИЙН БҮРТГЭЛ</span>
-            <h1>Товч мэдээлэл</h1>
+            <span class="eyebrow">ӨРИЙН ДЭВТЭР</span>
+            <h1>Өрөө цэгцтэй, тооцоогоо тодорхой.</h1>
         </div>
-        <button class="quiet-link" type="button" onclick="showLedgerView('customersView')">Жагсаалт →</button>
     </div>
 
     <div class="summary-strip">
@@ -3094,40 +3146,6 @@ header h1 {
             <div><span>Төлсөн</span><b id="totalPaid">0 ₮</b></div>
             <div><span>Харилцагч</span><b id="totalPeople">0</b></div>
         </div>
-    </div>
-
-    <button id="remainingCard" class="customer-shortcut" type="button">
-        <span class="shortcut-icon">👤</span>
-        <span class="shortcut-copy">
-            <strong>Өртэй хүмүүс</strong>
-            <small>Бүх харилцагчийн үлдэгдлийг харах</small>
-        </span>
-        <span class="shortcut-arrow">→</span>
-    </button>
-
-    <div class="section-head">
-        <div>
-            <span class="eyebrow">ХУРДАН ҮЙЛДЭЛ</span>
-            <h2>Юу хийх вэ?</h2>
-        </div>
-    </div>
-
-    <div class="quick-grid">
-        <button type="button" onclick="openDebtModal()">
-            <span class="quick-icon">＋</span>
-            <strong>Шинэ өр</strong>
-            <small>Өр бүртгэх</small>
-        </button>
-        <button type="button" onclick="showLedgerView('customersView')">
-            <span class="quick-icon">☷</span>
-            <strong>Харилцагч</strong>
-            <small>Жагсаалт харах</small>
-        </button>
-        <button type="button" onclick="showLedgerView('historyView')">
-            <span class="quick-icon">↻</span>
-            <strong>Түүх</strong>
-            <small>Хөдөлгөөн харах</small>
-        </button>
     </div>
 </section>
 
