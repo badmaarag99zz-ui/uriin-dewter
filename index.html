@@ -5232,6 +5232,88 @@ body{
     }
 }
 
+
+/* ===== DUE DATE EMPTY FIELD HINT ===== */
+#debtModal #dueDate{
+    position:relative;
+}
+
+#debtModal #dueDate:invalid::-webkit-datetime-edit{
+    color:#74818C;
+}
+
+
+#debtModal .due-date-field-wrap{
+    position:relative;
+}
+
+#debtModal .due-date-field-wrap #dueDate{
+    position:relative;
+    z-index:2;
+    background:transparent !important;
+}
+
+#debtModal .due-date-hint{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    z-index:1;
+    color:#74818C;
+    font-size:16px;
+    font-weight:650;
+    pointer-events:none;
+}
+
+#debtModal .due-date-field-wrap:focus-within .due-date-hint{
+    display:none;
+}
+
+#debtModal .due-date-field-wrap.has-date .due-date-hint{
+    display:none;
+}
+
+
+/* ===== QUICK DUE DATE POPOVER ===== */
+#debtModal .due-date-picker-wrap{
+    position:relative;
+}
+
+#debtModal .due-quick-buttons{
+    display:none !important;
+}
+
+#debtModal .due-quick-popover{
+    display:none;
+    grid-template-columns:repeat(4,1fr);
+    gap:6px;
+    position:absolute;
+    left:0;
+    right:0;
+    bottom:calc(100% + 7px);
+    z-index:20;
+    padding:8px;
+    border:1px solid #D5DEE6;
+    border-radius:12px;
+    background:#FFFFFF;
+    box-shadow:0 10px 26px rgba(37,42,52,.14);
+}
+
+#debtModal .due-date-picker-wrap.quick-open .due-quick-popover{
+    display:grid;
+}
+
+#debtModal .due-quick-popover button{
+    min-height:36px;
+    padding:5px 3px;
+    border:1px solid #D5DEE6;
+    border-radius:9px;
+    background:#F7F9FB;
+    color:#52677D;
+    font-size:13px;
+    font-weight:800;
+}
+
 </style>
 
 </head>
@@ -5521,13 +5603,18 @@ body{
             <label>Өрийн дүн</label>
             <input id="debtAmount" type="number" placeholder="Жишээ: 150000">
             <label>Төлөх хугацаа</label>
-            <div class="due-quick-buttons">
-                <button type="button" onclick="setQuickDueDate(0)">Өнөөдөр</button>
-                <button type="button" onclick="setQuickDueDate(3)">+3 хоног</button>
-                <button type="button" onclick="setQuickDueDate(7)">+7 хоног</button>
-                <button type="button" onclick="setQuickDueDate(14)">+14 хоног</button>
+            <div class="due-date-picker-wrap">
+                <div class="due-date-field-wrap">
+                <input id="dueDate" type="date">
+                <span class="due-date-hint">📅 Өдөр сонгох</span>
+                </div>
+                <div class="due-quick-popover" id="dueQuickPopover">
+                    <button type="button" onclick="setQuickDueDate(0)">Өнөөдөр</button>
+                    <button type="button" onclick="setQuickDueDate(3)">+3</button>
+                    <button type="button" onclick="setQuickDueDate(7)">+7</button>
+                    <button type="button" onclick="setQuickDueDate(14)">+14</button>
+                </div>
             </div>
-            <input id="dueDate" type="date">
             <button type="button" class="modal-save-btn" id="addButton">Өр бүртгэх</button>
         </div>
     </div>
@@ -14140,6 +14227,59 @@ document.addEventListener("input", function (event) {
         event.target.value = event.target.value.replace(/\D/g, "").slice(0, 8);
     }
 });
+</script>
+
+
+<script>
+(function () {
+    function syncDueDateHint() {
+        const input = document.getElementById("dueDate");
+        if (!input) return;
+        const wrap = input.closest(".due-date-field-wrap");
+        if (wrap) wrap.classList.toggle("has-date", Boolean(input.value));
+    }
+
+    document.addEventListener("change", function (event) {
+        if (event.target && event.target.id === "dueDate") {
+            syncDueDateHint();
+        }
+    });
+
+    const originalSetQuickDueDate = window.setQuickDueDate;
+    window.setQuickDueDate = function (daysToAdd) {
+        originalSetQuickDueDate(daysToAdd);
+        syncDueDateHint();
+    };
+
+    document.addEventListener("click", function () {
+        setTimeout(syncDueDateHint, 0);
+    });
+})();
+</script>
+
+
+<script>
+(function () {
+    document.addEventListener("click", function (event) {
+        const picker = document.querySelector("#debtModal .due-date-picker-wrap");
+        const input = document.getElementById("dueDate");
+        if (!picker || !input) return;
+
+        if (event.target === input || event.target.classList.contains("due-date-hint")) {
+            picker.classList.add("quick-open");
+            return;
+        }
+
+        if (event.target.closest("#dueQuickPopover button")) {
+            picker.classList.remove("quick-open");
+            return;
+        }
+
+        if (!event.target.closest(".due-date-picker-wrap")) {
+            picker.classList.remove("quick-open");
+        }
+    });
+})();
 </script>
 
 </body>
