@@ -13,6 +13,7 @@
 <title>Өрийн дэвтэр</title>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
 <style>
 
@@ -5416,6 +5417,24 @@ body{
     }
 }
 
+
+/* ===== REPORT EXCEL EXPORT ===== */
+#historyView .report-excel-btn{
+    width:100%;
+    min-height:46px;
+    border:0;
+    border-radius:13px;
+    background:#2F8F5B;
+    color:#FFF;
+    font-size:15px;
+    font-weight:900;
+    cursor:pointer;
+    box-shadow:0 6px 15px rgba(47,143,91,.18);
+}
+#historyView .report-excel-btn:active{
+    transform:scale(.985);
+}
+
 </style>
 
 </head>
@@ -5656,6 +5675,9 @@ body{
                 <h2>📊 Тайлан</h2>
                 <p>Одоогийн авлага болон сонгосон хугацааны мөнгөний хөдөлгөөн</p>
             </div>
+            <button type="button" class="report-excel-btn" onclick="exportReportExcel()">
+                📥 Excel татах
+            </button>
             <div class="report-filter" id="reportFilter">
                 <button type="button" data-days="7" onclick="setReportPeriod(7,this)">7 хоног</button>
                 <button type="button" data-days="30" class="active" onclick="setReportPeriod(30,this)">30 хоног</button>
@@ -14432,6 +14454,153 @@ async function renderReport() {
             }).join("")
             : '<div class="report-empty">Одоогоор хөдөлгөөний түүх алга.</div>';
     }
+}
+
+
+async function exportReportExcel() {
+    if (typeof XLSX === "undefined") {
+        alert("Excel файл үүсгэх сан ачаалагдсангүй. Интернэтээ шалгаад дахин оролдоно уу.");
+        return;
+    }
+
+    /*
+     * Excel нь зөвхөн дэлгэц дээр харагдаж буй хэсгийг биш,
+     * тухайн хэрэглэгчийн идэвхтэй + архивлагдсан бүх бүртгэлийг авна.
+     */
+    const user = await getCurrentUser();
+    if (!user) {
+        alert("Эхлээд нэвтэрнэ үү.");
+        return;
+    }
+
+    let source = Array.isArray(reportDebts) ? reportDebts : [];
+
+    if (navigator.onLine) {
+        const { data, error } =
+            await supabaseClient
+                .from("debts")
+                .select("*")
+                .eq("user_id", user.id)
+                .order("created_at", { ascending: false });
+
+        if (error) {
+            console.error("Excel тайлан унших алдаа:", error);
+            alert("Excel тайлангийн мэдээлэл авахад алдаа гарлаа.");
+            return;
+        }
+
+        source = (data || []).map(row => ({
+            id: row.id,
+            name: row.name || "",
+            phone: row.phone || "",
+            amount: Number(row.amount || 0),
+            paid: Number(row.paid || 0),
+            dueDate: row.due_date || "",
+            createdAt: row.created_at || "",
+            archivedAt: row.archived_at || "",
+            additions: reportHistoryArray(row.additions),
+            payments: reportHistoryArray(row.payments)
+        }));
+
+        reportDebts = source;
+    }
+
+    if (!source.length) {
+        alert("Excel-д гаргах мэдээлэл алга.");
+        return;
+    }
+
+    const money = value => Number(value || 0);
+    const dateOnly = value => {
+        if (!value) return "";
+        const d = new Date(value);
+        if (Number.isNaN(d.getTime())) return String(value);
+        return d.toLocaleString("mn-MN");
+    };
+
+    const active = source.filter(item => !item.archivedAt);
+    const activeTotal = active.reduce((s, d) => s + money(d.amount), 0);
+    const activePaid = active.reduce((s, d) => s + money(d.paid), 0);
+
+    const summaryRows = [
+        ["Үзүүлэлт", "Дүн"],
+        ["Идэвхтэй харилцагч", active.length],
+        ["Архивласан бүртгэл", source.filter(d => d.archivedAt).length],
+        ["Одоогийн нийт авлага", activeTotal],
+        ["Одоогийн нийт төлсөн", activePaid],
+        ["Одоо авах үлдэгдэл", Math.max(0, activeTotal - activePaid)],
+        ["Тайлан татсан огноо", new Date().toLocaleString("mn-MN")]
+    ];
+
+    const customerRows = source.map((d, i) => ({
+        "№": i + 1,
+        "Нэр": d.name,
+        "Утас": d.phone,
+        "Нийт авлага": money(d.amount),
+        "Төлсөн": money(d.paid),
+        "Үлдэгдэл": Math.max(0, money(d.amount) - money(d.paid)),
+        "Төлөх хугацаа": d.dueDate || "",
+        "Бүртгэсэн": dateOnly(d.createdAt),
+        "Төлөв": d.archivedAt ? "Архивласан" : "Идэвхтэй",
+        "Архивласан огноо": dateOnly(d.archivedAt)
+    }));
+
+    const additionRows = [];
+    const paymentRows = [];
+
+    source.forEach(d => {
+        reportHistoryArray(d.additions).forEach(item => {
+            additionRows.push({
+                "Нэр": d.name,
+                "Утас": d.phone,
+                "Өр нэмсэн дүн": money(item.amount),
+                "Огноо": dateOnly(item.createdAt),
+                "Төлөв": d.archivedAt ? "Архивласан" : "Идэвхтэй"
+            });
+        });
+
+        reportHistoryArray(d.payments).forEach(item => {
+            paymentRows.push({
+                "Нэр": d.name,
+                "Утас": d.phone,
+                "Төлсөн дүн": money(item.amount),
+                "Огноо": dateOnly(item.createdAt),
+                "Төлөв": d.archivedAt ? "Архивласан" : "Идэвхтэй"
+            });
+        });
+    });
+
+    const wb = XLSX.utils.book_new();
+
+    const wsSummary = XLSX.utils.aoa_to_sheet(summaryRows);
+    const wsCustomers = XLSX.utils.json_to_sheet(customerRows);
+    const wsAdditions = XLSX.utils.json_to_sheet(
+        additionRows.length ? additionRows : [{"Мэдээлэл":"Өр нэмсэн түүх алга"}]
+    );
+    const wsPayments = XLSX.utils.json_to_sheet(
+        paymentRows.length ? paymentRows : [{"Мэдээлэл":"Төлөлтийн түүх алга"}]
+    );
+
+    wsSummary["!cols"] = [{wch:28},{wch:22}];
+    wsCustomers["!cols"] = [
+        {wch:5},{wch:22},{wch:14},{wch:18},{wch:18},
+        {wch:18},{wch:16},{wch:22},{wch:14},{wch:22}
+    ];
+    wsAdditions["!cols"] = [{wch:22},{wch:14},{wch:18},{wch:22},{wch:14}];
+    wsPayments["!cols"] = [{wch:22},{wch:14},{wch:18},{wch:22},{wch:14}];
+
+    XLSX.utils.book_append_sheet(wb, wsSummary, "Ерөнхий тайлан");
+    XLSX.utils.book_append_sheet(wb, wsCustomers, "Харилцагчид");
+    XLSX.utils.book_append_sheet(wb, wsAdditions, "Өр нэмсэн түүх");
+    XLSX.utils.book_append_sheet(wb, wsPayments, "Төлөлтийн түүх");
+
+    const now = new Date();
+    const stamp =
+        now.getFullYear() + "-" +
+        String(now.getMonth() + 1).padStart(2, "0") + "-" +
+        String(now.getDate()).padStart(2, "0");
+
+    XLSX.writeFile(wb, "uriin-dewter-tailan-" + stamp + ".xlsx");
 }
 
 function setReportPeriod(days, button) {
