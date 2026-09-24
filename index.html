@@ -5582,6 +5582,72 @@ body{
     #historyView .report-chart-label{font-size:8px}
 }
 
+
+/* ===== SIMPLE REPORT COMPARISON CHART ===== */
+#historyView .report-compare-card{
+    padding:16px 16px 14px;
+}
+#historyView .report-compare-chart{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:22px;
+    align-items:end;
+    min-height:205px;
+    padding:8px 8px 0;
+}
+#historyView .report-compare-item{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+}
+#historyView .report-compare-item strong{
+    min-height:24px;
+    margin-bottom:8px;
+    font-size:15px;
+    color:#252A34;
+    white-space:nowrap;
+}
+#historyView .report-compare-track{
+    width:min(74px,72%);
+    height:125px;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    border-radius:13px 13px 5px 5px;
+    background:#F1F4F7;
+    overflow:hidden;
+}
+#historyView .report-compare-column{
+    display:block;
+    width:100%;
+    min-height:4px;
+    height:4px;
+    border-radius:12px 12px 4px 4px;
+    background:#52677D;
+    transition:height .32s ease;
+}
+#historyView .report-compare-column.pay{
+    background:#2F8F5B;
+}
+#historyView .report-compare-item > span{
+    margin-top:9px;
+    font-size:12px;
+    font-weight:700;
+    color:#52606D;
+}
+#historyView .report-compare-difference{
+    margin-top:14px;
+    padding:10px 12px;
+    border-radius:12px;
+    background:#F6F7F9;
+    text-align:center;
+    font-size:12px;
+    font-weight:700;
+    color:#52677D;
+}
+
 </style>
 
 </head>
@@ -5889,18 +5955,33 @@ body{
                     <div class="report-bar paid"><i id="reportPaidBar"></i></div>
                 </div>
             </div>
-            <div class="report-chart-card">
+            <div class="report-chart-card report-compare-card">
                 <div class="report-chart-head">
                     <div>
-                        <b>📈 Өр ба төлөлтийн хөдөлгөөн</b>
-                        <small id="reportChartHint">Сонгосон хугацааны өдрүүдээр</small>
-                    </div>
-                    <div class="report-chart-legend">
-                        <span><i class="add"></i>Өр</span>
-                        <span><i class="pay"></i>Төлөлт</span>
+                        <b>📊 Өр ба төлөлт</b>
+                        <small id="reportChartHint">Сүүлийн 30 хоногийн харьцуулалт</small>
                     </div>
                 </div>
-                <div id="reportMovementChart" class="report-movement-chart"></div>
+
+                <div class="report-compare-chart">
+                    <div class="report-compare-item">
+                        <strong id="reportCompareAddedValue">0 ₮</strong>
+                        <div class="report-compare-track">
+                            <i id="reportCompareAddedBar" class="report-compare-column add"></i>
+                        </div>
+                        <span>➕ Нэмэгдсэн өр</span>
+                    </div>
+
+                    <div class="report-compare-item">
+                        <strong id="reportComparePaidValue">0 ₮</strong>
+                        <div class="report-compare-track">
+                            <i id="reportComparePaidBar" class="report-compare-column pay"></i>
+                        </div>
+                        <span>💰 Төлөлт</span>
+                    </div>
+                </div>
+
+                <div id="reportCompareDifference" class="report-compare-difference">Зөрүү: 0 ₮</div>
             </div>
         </div>
 
@@ -14408,127 +14489,47 @@ function isInReportPeriod(value) {
 
 
 function renderReportMovementChart(activity) {
-    const box = document.getElementById("reportMovementChart");
+    const addedValue = document.getElementById("reportCompareAddedValue");
+    const paidValue = document.getElementById("reportComparePaidValue");
+    const addedBar = document.getElementById("reportCompareAddedBar");
+    const paidBar = document.getElementById("reportComparePaidBar");
+    const difference = document.getElementById("reportCompareDifference");
     const hint = document.getElementById("reportChartHint");
-    if (!box) return;
 
-    const source = Array.isArray(activity) ? activity.filter(function(item) {
-        return item && item.date && isInReportPeriod(item.date);
-    }) : [];
+    if (!addedValue || !paidValue || !addedBar || !paidBar || !difference) return;
 
-    const dayMs = 86400000;
-    const today = new Date();
-    today.setHours(0,0,0,0);
+    let added = 0;
+    let paid = 0;
 
-    let start = new Date(today);
-    let bucketMode = "day";
-
-    if (window.reportDays === "all") {
-        const validDates = source
-            .map(function(item) { return new Date(item.date); })
-            .filter(function(d) { return !Number.isNaN(d.getTime()); });
-
-        if (!validDates.length) {
-            box.innerHTML = '<div class="report-chart-empty">Энэ хугацаанд хөдөлгөөн алга.</div>';
-            if (hint) hint.textContent = "Бүх хугацааны хөдөлгөөн";
-            return;
-        }
-
-        const minDate = new Date(Math.min.apply(null, validDates.map(function(d){ return d.getTime(); })));
-        minDate.setHours(0,0,0,0);
-        const spanDays = Math.max(1, Math.round((today - minDate) / dayMs) + 1);
-
-        if (spanDays > 45) {
-            bucketMode = "month";
-            start = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
-        } else {
-            start = minDate;
-        }
-    } else {
-        const days = Number(window.reportDays) || 30;
-        start.setDate(start.getDate() - (days - 1));
-    }
-
-    const buckets = [];
-    const bucketMap = new Map();
-
-    if (bucketMode === "month") {
-        let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
-        const end = new Date(today.getFullYear(), today.getMonth(), 1);
-        while (cursor <= end && buckets.length < 24) {
-            const key = cursor.getFullYear() + "-" + String(cursor.getMonth()+1).padStart(2,"0");
-            const row = {key:key, label:(cursor.getMonth()+1) + " сар", add:0, pay:0};
-            buckets.push(row); bucketMap.set(key,row);
-            cursor = new Date(cursor.getFullYear(), cursor.getMonth()+1, 1);
-        }
-        if (hint) hint.textContent = "Бүх хугацааг сараар";
-    } else {
-        const totalDays = Math.max(1, Math.round((today - start) / dayMs) + 1);
-        const step = totalDays > 14 ? 3 : 1;
-
-        for (let i=0; i<totalDays; i+=step) {
-            const from = new Date(start); from.setDate(start.getDate()+i);
-            const to = new Date(from); to.setDate(from.getDate()+step-1);
-            if (to > today) to.setTime(today.getTime());
-
-            const key = from.toISOString().slice(0,10);
-            const row = {
-                key:key,
-                from:new Date(from),
-                to:new Date(to),
-                label: step === 1
-                    ? (from.getMonth()+1) + "/" + from.getDate()
-                    : (from.getMonth()+1) + "/" + from.getDate(),
-                add:0, pay:0
-            };
-            buckets.push(row);
-        }
-        if (hint) hint.textContent = totalDays > 14
-            ? "3 өдрийн багцаар"
-            : "Өдрөөр";
-    }
-
-    source.forEach(function(item) {
-        const d = new Date(item.date);
-        if (Number.isNaN(d.getTime())) return;
-        d.setHours(0,0,0,0);
-
-        let bucket = null;
-        if (bucketMode === "month") {
-            const key = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
-            bucket = bucketMap.get(key);
-        } else {
-            bucket = buckets.find(function(row) { return d >= row.from && d <= row.to; });
-        }
-        if (!bucket) return;
-
-        const value = Number(item.amount || 0);
-        if (item.type === "pay") bucket.pay += value;
-        else if (item.type === "add") bucket.add += value;
+    (Array.isArray(activity) ? activity : []).forEach(function(item) {
+        if (!item || !item.date || !isInReportPeriod(item.date)) return;
+        const amount = Number(item.amount || 0);
+        if (item.type === "add") added += amount;
+        if (item.type === "pay") paid += amount;
     });
 
-    const maxValue = Math.max(1, ...buckets.map(function(row){ return Math.max(row.add,row.pay); }));
-    const hasMovement = buckets.some(function(row){ return row.add > 0 || row.pay > 0; });
+    addedValue.textContent = formatMoney(added);
+    paidValue.textContent = formatMoney(paid);
 
-    if (!hasMovement) {
-        box.innerHTML = '<div class="report-chart-empty">Энэ хугацаанд хөдөлгөөн алга.</div>';
-        return;
+    const maxValue = Math.max(added, paid, 1);
+    addedBar.style.height = (added > 0 ? Math.max(7, Math.round((added / maxValue) * 125)) : 4) + "px";
+    paidBar.style.height = (paid > 0 ? Math.max(7, Math.round((paid / maxValue) * 125)) : 4) + "px";
+
+    const periodText = window.reportDays === "all"
+        ? "Бүх хугацааны харьцуулалт"
+        : "Сүүлийн " + (window.reportDays || 30) + " хоногийн харьцуулалт";
+    if (hint) hint.textContent = periodText;
+
+    const diff = added - paid;
+    if (diff > 0) {
+        difference.textContent = "Зөрүү: " + formatMoney(diff) + " өр илүү нэмэгдсэн";
+    } else if (diff < 0) {
+        difference.textContent = "Зөрүү: " + formatMoney(Math.abs(diff)) + " төлөлт илүү";
+    } else if (added === 0 && paid === 0) {
+        difference.textContent = "Энэ хугацаанд хөдөлгөөн алга";
+    } else {
+        difference.textContent = "Өр ба төлөлт тэнцүү";
     }
-
-    box.innerHTML = buckets.map(function(row, index) {
-        const addH = row.add > 0 ? Math.max(3, Math.round((row.add/maxValue)*108)) : 2;
-        const payH = row.pay > 0 ? Math.max(3, Math.round((row.pay/maxValue)*108)) : 2;
-        const showLabel = bucketMode === "month" || buckets.length <= 10 || index % 2 === 0 || index === buckets.length-1;
-        const title = row.label + " | Өр: " + formatMoney(row.add) + " | Төлөлт: " + formatMoney(row.pay);
-
-        return '<div class="report-chart-day" title="' + title.replace(/"/g,"&quot;") + '">' +
-            '<div class="report-chart-bars">' +
-                '<i class="report-chart-bar" style="height:' + addH + 'px"></i>' +
-                '<i class="report-chart-bar pay" style="height:' + payH + 'px"></i>' +
-            '</div>' +
-            '<span class="report-chart-label">' + (showLabel ? row.label : "") + '</span>' +
-        '</div>';
-    }).join("");
 }
 
 async function renderReport() {
