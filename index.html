@@ -10235,8 +10235,8 @@ window.addEventListener(
 </div>
 </div>
 </div>
-    <div
- <div
+
+<div
     id="feedbackModal"
     style="
         display:none;
@@ -11384,6 +11384,18 @@ const topMenuElement =
 if (topMenuElement) {
     document.body.appendChild(topMenuElement);
 }
+
+/* ==========================================
+   OVERLAY MODALS → BODY
+   Keeps these modals independent from app view/layout nesting.
+========================================== */
+["helpModal", "feedbackModal", "contactModal"].forEach(function (modalId) {
+    const modalElement = document.getElementById(modalId);
+
+    if (modalElement) {
+        document.body.appendChild(modalElement);
+    }
+});
 
 
 // ==========================================
