@@ -14444,11 +14444,11 @@ async function renderReport() {
     setText("reportPaidPeriod", reportMoney(periodPaid));
     setText(
         "reportPeriodLabel",
-        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + (window.reportDays ?? 7) + " хоног"
+        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + (window.reportDays ?? 30) + " хоног"
     );
     setText(
         "reportPeriodBannerText",
-        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + (window.reportDays ?? 7) + " хоног"
+        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + (window.reportDays ?? 30) + " хоног"
     );
 
     const maxFlow = Math.max(periodAdded, periodPaid, 1);
@@ -14911,7 +14911,7 @@ function toggleReportRecentActivity() {
     toggle.setAttribute("aria-expanded", String(!isOpen));
 }
 
-window.reportDays = window.reportDays ?? 7;
+window.reportDays = window.reportDays ?? 30;
 
 function setReportPeriod(days, button) {
     window.reportDays = days === "all" ? "all" : Number(days);
@@ -14927,7 +14927,7 @@ function setReportPeriod(days, button) {
     const periodText =
         window.reportDays === "all"
             ? "Бүх хугацаа"
-            : "Сүүлийн " + (window.reportDays ?? 7) + " хоног";
+            : "Сүүлийн " + (window.reportDays ?? 30) + " хоног";
 
     const bannerText =
         document.getElementById("reportPeriodBannerText");
