@@ -5202,61 +5202,21 @@ body{
 }
 
 
-/* ===== NEW DEBT — QUICK DUE DATE ===== */
-#debtModal .due-quick-buttons{
-    display:grid;
-    grid-template-columns:repeat(4,1fr);
-    gap:6px;
-    margin:0 0 10px;
-}
-
-#debtModal .due-quick-buttons button{
-    min-height:38px;
-    padding:6px 4px;
-    border:1px solid #D5DEE6;
-    border-radius:10px;
-    background:#FFFFFF;
-    color:#52677D;
-    font-size:13px;
-    font-weight:750;
-    cursor:pointer;
-}
-
-#debtModal .due-quick-buttons button:active{
-    background:#E9EEF3;
-}
-
-@media(max-width:380px){
-    #debtModal .due-quick-buttons{
-        grid-template-columns:repeat(2,1fr);
-    }
-}
-
-
-/* ===== DUE DATE EMPTY FIELD HINT ===== */
-#debtModal #dueDate{
+/* ===== SIMPLE DUE DATE FIELD ===== */
+#debtModal .due-date-simple-wrap{
     position:relative;
 }
 
-#debtModal #dueDate:invalid::-webkit-datetime-edit{
-    color:#74818C;
-}
-
-
-#debtModal .due-date-field-wrap{
-    position:relative;
-}
-
-#debtModal .due-date-field-wrap #dueDate{
+#debtModal .due-date-simple-wrap #dueDate{
     position:relative;
     z-index:2;
     background:transparent !important;
 }
 
-#debtModal .due-date-hint{
+#debtModal .due-date-simple-hint{
     position:absolute;
     left:14px;
-    top:50%;
+    top:24px;
     transform:translateY(-50%);
     z-index:1;
     color:#74818C;
@@ -5265,53 +5225,9 @@ body{
     pointer-events:none;
 }
 
-#debtModal .due-date-field-wrap:focus-within .due-date-hint{
+#debtModal .due-date-simple-wrap:focus-within .due-date-simple-hint,
+#debtModal .due-date-simple-wrap.has-date .due-date-simple-hint{
     display:none;
-}
-
-#debtModal .due-date-field-wrap.has-date .due-date-hint{
-    display:none;
-}
-
-
-/* ===== QUICK DUE DATE POPOVER ===== */
-#debtModal .due-date-picker-wrap{
-    position:relative;
-}
-
-#debtModal .due-quick-buttons{
-    display:none !important;
-}
-
-#debtModal .due-quick-popover{
-    display:none;
-    grid-template-columns:repeat(4,1fr);
-    gap:6px;
-    position:absolute;
-    left:0;
-    right:0;
-    bottom:calc(100% + 7px);
-    z-index:20;
-    padding:8px;
-    border:1px solid #D5DEE6;
-    border-radius:12px;
-    background:#FFFFFF;
-    box-shadow:0 10px 26px rgba(37,42,52,.14);
-}
-
-#debtModal .due-date-picker-wrap.quick-open .due-quick-popover{
-    display:grid;
-}
-
-#debtModal .due-quick-popover button{
-    min-height:36px;
-    padding:5px 3px;
-    border:1px solid #D5DEE6;
-    border-radius:9px;
-    background:#F7F9FB;
-    color:#52677D;
-    font-size:13px;
-    font-weight:800;
 }
 
 </style>
@@ -5603,17 +5519,9 @@ body{
             <label>Өрийн дүн</label>
             <input id="debtAmount" type="number" placeholder="Жишээ: 150000">
             <label>Төлөх хугацаа</label>
-            <div class="due-date-picker-wrap">
-                <div class="due-date-field-wrap">
+            <div class="due-date-simple-wrap">
                 <input id="dueDate" type="date">
-                <span class="due-date-hint">📅 Өдөр сонгох</span>
-                </div>
-                <div class="due-quick-popover" id="dueQuickPopover">
-                    <button type="button" onclick="setQuickDueDate(0)">Өнөөдөр</button>
-                    <button type="button" onclick="setQuickDueDate(3)">+3</button>
-                    <button type="button" onclick="setQuickDueDate(7)">+7</button>
-                    <button type="button" onclick="setQuickDueDate(14)">+14</button>
-                </div>
+                <span class="due-date-simple-hint">📅 Өдөр сонгох</span>
             </div>
             <button type="button" class="modal-save-btn" id="addButton">Өр бүртгэх</button>
         </div>
@@ -8677,19 +8585,6 @@ function showDebts() {
             })
             .join("");
 
-}
-
-function setQuickDueDate(daysToAdd) {
-    const date = new Date();
-    date.setHours(12, 0, 0, 0);
-    date.setDate(date.getDate() + daysToAdd);
-
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const day = String(date.getDate()).padStart(2, "0");
-
-    document.getElementById("dueDate").value =
-        `${year}-${month}-${day}`;
 }
 
 /* ==========================================
@@ -14231,55 +14126,12 @@ document.addEventListener("input", function (event) {
 
 
 <script>
-(function () {
-    function syncDueDateHint() {
-        const input = document.getElementById("dueDate");
-        if (!input) return;
-        const wrap = input.closest(".due-date-field-wrap");
-        if (wrap) wrap.classList.toggle("has-date", Boolean(input.value));
+document.addEventListener("change", function (event) {
+    if (event.target && event.target.id === "dueDate") {
+        const wrap = event.target.closest(".due-date-simple-wrap");
+        if (wrap) wrap.classList.toggle("has-date", Boolean(event.target.value));
     }
-
-    document.addEventListener("change", function (event) {
-        if (event.target && event.target.id === "dueDate") {
-            syncDueDateHint();
-        }
-    });
-
-    const originalSetQuickDueDate = window.setQuickDueDate;
-    window.setQuickDueDate = function (daysToAdd) {
-        originalSetQuickDueDate(daysToAdd);
-        syncDueDateHint();
-    };
-
-    document.addEventListener("click", function () {
-        setTimeout(syncDueDateHint, 0);
-    });
-})();
-</script>
-
-
-<script>
-(function () {
-    document.addEventListener("click", function (event) {
-        const picker = document.querySelector("#debtModal .due-date-picker-wrap");
-        const input = document.getElementById("dueDate");
-        if (!picker || !input) return;
-
-        if (event.target === input || event.target.classList.contains("due-date-hint")) {
-            picker.classList.add("quick-open");
-            return;
-        }
-
-        if (event.target.closest("#dueQuickPopover button")) {
-            picker.classList.remove("quick-open");
-            return;
-        }
-
-        if (!event.target.closest(".due-date-picker-wrap")) {
-            picker.classList.remove("quick-open");
-        }
-    });
-})();
+});
 </script>
 
 </body>
