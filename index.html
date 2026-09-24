@@ -5316,6 +5316,47 @@ body{
     touch-action:manipulation;
 }
 
+
+/* ===== REPORT PERIOD FEEDBACK ===== */
+#historyView .report-filter button{
+    transition:transform .14s ease, box-shadow .14s ease, background .14s ease, color .14s ease;
+}
+#historyView .report-filter button.active{
+    background:#52677D !important;
+    color:#FFF !important;
+    border-color:#52677D !important;
+    box-shadow:0 5px 13px rgba(82,103,125,.22);
+    transform:translateY(-1px);
+}
+#historyView .report-period-banner{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:10px 12px;
+    border-radius:11px;
+    background:#E9EEF3;
+    border:1px solid #D7E0E7;
+}
+#historyView .report-period-banner span{
+    color:#74818C;
+    font-size:12px;
+    font-weight:700;
+}
+#historyView .report-period-banner strong{
+    color:#52677D;
+    font-size:14px;
+    font-weight:900;
+    text-align:right;
+}
+#historyView .report-period-banner.period-flash{
+    animation:reportPeriodFlash .32s ease;
+}
+@keyframes reportPeriodFlash{
+    0%{transform:scale(.985);opacity:.68}
+    100%{transform:scale(1);opacity:1}
+}
+
 </style>
 
 </head>
@@ -5564,6 +5605,10 @@ body{
             <div class="report-filter-note">
                 <b>7 / 30 хоног / Бүгд</b> нь зөвхөн доорх “Хөдөлгөөн”-ийг шүүнэ.
                 Дээд талын авлага нь таны <b>одоогийн нийт төлөв</b>.
+            </div>
+            <div class="report-period-banner" id="reportPeriodBanner">
+                <span>📅 Харагдаж буй хугацаа</span>
+                <strong id="reportPeriodBannerText">Сүүлийн 30 хоног</strong>
             </div>
         </div>
 
@@ -14266,6 +14311,10 @@ async function renderReport() {
         "reportPeriodLabel",
         window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + window.reportDays + " хоног"
     );
+    setText(
+        "reportPeriodBannerText",
+        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + window.reportDays + " хоног"
+    );
 
     const maxFlow = Math.max(periodAdded, periodPaid, 1);
     const addedBar = document.getElementById("reportAddedBar");
@@ -14335,6 +14384,27 @@ function setReportPeriod(days, button) {
 
     if (button) {
         button.classList.add("active");
+    }
+
+    const periodText =
+        window.reportDays === "all"
+            ? "Бүх хугацаа"
+            : "Сүүлийн " + window.reportDays + " хоног";
+
+    const bannerText =
+        document.getElementById("reportPeriodBannerText");
+
+    if (bannerText) {
+        bannerText.textContent = periodText;
+    }
+
+    const banner =
+        document.getElementById("reportPeriodBanner");
+
+    if (banner) {
+        banner.classList.remove("period-flash");
+        void banner.offsetWidth;
+        banner.classList.add("period-flash");
     }
 
     renderReport();
