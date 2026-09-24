@@ -3751,6 +3751,138 @@ body{
     }
 }
 
+
+/* ===== SUMMARY V3 — CLEAN COMPACT DESIGN ===== */
+
+/* Main remaining amount: large but no longer oversized */
+#totalRemaining{
+    font-size:42px !important;
+    line-height:1.04 !important;
+    letter-spacing:-.8px !important;
+}
+
+/* Reduce empty vertical space in the whole summary */
+.summary-card,
+.overview-card{
+    min-height:0 !important;
+}
+.summary-main,
+.overview-main{
+    min-height:0 !important;
+    padding:25px 28px 22px !important;
+}
+
+/* Secondary section becomes a compact 3-column dashboard strip */
+.summary-side{
+    display:grid !important;
+    grid-template-columns:1fr 1fr .72fr !important;
+    grid-template-rows:1fr !important;
+    gap:10px !important;
+    padding:16px 18px 18px !important;
+    align-items:stretch !important;
+}
+
+/* Reset the previous oversized mini-cards */
+.summary-side > div:nth-child(1),
+.summary-side > div:nth-child(2),
+.summary-side > div:nth-child(3){
+    width:auto !important;
+    min-width:0 !important;
+    min-height:94px !important;
+    margin:0 !important;
+    padding:15px 14px !important;
+    border:1px solid #DCE4EA !important;
+    border-radius:16px !important;
+    background:#F8FAFB !important;
+    box-shadow:none !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:center !important;
+    text-align:left !important;
+}
+
+/* Tiny visual accent, without making the UI colorful/noisy */
+.summary-side > div:nth-child(1){
+    border-top:3px solid #6D8296 !important;
+}
+.summary-side > div:nth-child(2){
+    border-top:3px solid #78988E !important;
+}
+.summary-side > div:nth-child(3){
+    grid-column:auto !important;
+    border-top:3px solid #8793A4 !important;
+}
+
+/* Remove the awkward people icon */
+.summary-side > div:nth-child(3)::before{
+    content:none !important;
+}
+
+/* Labels */
+.summary-side > div > span{
+    order:1 !important;
+    margin:0 !important;
+    font-size:13px !important;
+    line-height:1.15 !important;
+    font-weight:800 !important;
+    color:#75818C !important;
+}
+.summary-side > div:nth-child(3) > span::after{
+    content:none !important;
+}
+
+/* Values: clamp long money amounts so they never wrap badly */
+.summary-side > div > b{
+    order:2 !important;
+    display:block !important;
+    width:100% !important;
+    margin-top:9px !important;
+    font-size:clamp(17px, 3.2vw, 23px) !important;
+    line-height:1.05 !important;
+    font-weight:900 !important;
+    letter-spacing:-.35px !important;
+    color:#344F68 !important;
+    white-space:nowrap !important;
+    overflow:hidden !important;
+    text-overflow:ellipsis !important;
+}
+.summary-side > div:nth-child(3) > b{
+    font-size:24px !important;
+}
+
+/* Mobile: still 3 columns, but compact enough to fit naturally */
+@media(max-width:600px){
+    #totalRemaining{
+        font-size:40px !important;
+    }
+    .summary-main,
+    .overview-main{
+        padding:23px 22px 20px !important;
+    }
+    .summary-side{
+        grid-template-columns:1.15fr 1fr .72fr !important;
+        gap:7px !important;
+        padding:14px 12px 16px !important;
+    }
+    .summary-side > div:nth-child(1),
+    .summary-side > div:nth-child(2),
+    .summary-side > div:nth-child(3){
+        min-height:86px !important;
+        padding:12px 10px !important;
+        border-radius:13px !important;
+    }
+    .summary-side > div > span{
+        font-size:11.5px !important;
+    }
+    .summary-side > div > b{
+        font-size:clamp(15px, 4.1vw, 20px) !important;
+    }
+    .summary-side > div:nth-child(3) > b{
+        font-size:22px !important;
+    }
+}
+
 </style>
 
 </head>
