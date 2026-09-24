@@ -14071,6 +14071,22 @@ function reportDate(value) {
     return d.toLocaleDateString("mn-MN");
 }
 
+function reportHistoryArray(value) {
+    if (Array.isArray(value)) return value;
+
+    if (typeof value === "string") {
+        try {
+            const parsed = JSON.parse(value);
+            return Array.isArray(parsed) ? parsed : [];
+        } catch (error) {
+            console.warn("Тайлангийн түүх JSON parse алдаа:", error);
+            return [];
+        }
+    }
+
+    return [];
+}
+
 function isInReportPeriod(value) {
     if (reportDays === "all") return true;
     if (!value) return false;
@@ -14111,8 +14127,8 @@ async function renderReport() {
                     dueDate: row.due_date || "",
                     createdAt: row.created_at || "",
                     archivedAt: row.archived_at || "",
-                    additions: Array.isArray(row.additions) ? row.additions : [],
-                    payments: Array.isArray(row.payments) ? row.payments : []
+                    additions: reportHistoryArray(row.additions),
+                    payments: reportHistoryArray(row.payments)
                 }));
             } else {
                 console.error("Тайлангийн архив унших алдаа:", error);
@@ -14187,7 +14203,7 @@ async function renderReport() {
      * Ингэснээр хүн архивлагдсан ч хуучин өр/төлөлт тайлангаас алга болохгүй.
      */
     allHistory.forEach(function(debt) {
-        const additions = Array.isArray(debt.additions) ? debt.additions : [];
+        const additions = reportHistoryArray(debt.additions);
         additions.forEach(function(item) {
             const value = Number(item.amount || 0);
             if (isInReportPeriod(item.createdAt)) periodAdded += value;
@@ -14200,7 +14216,7 @@ async function renderReport() {
             });
         });
 
-        const payments = Array.isArray(debt.payments) ? debt.payments : [];
+        const payments = reportHistoryArray(debt.payments);
         payments.forEach(function(item) {
             const value = Number(item.amount || 0);
             if (isInReportPeriod(item.createdAt)) periodPaid += value;
