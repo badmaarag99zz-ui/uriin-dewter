@@ -2667,426 +2667,139 @@ header h1 {
 
 
 /* =========================================================
-   ӨРИЙН ДЭВТЭР — PAPER / NOTEBOOK IDENTITY
-   Deliberately avoids mobile-banking visual language.
+   ӨРИЙН ДЭВТЭР — MODERN LEDGER V3
 ========================================================= */
 #appContent{
     min-height:100vh;
     padding-bottom:78px;
-    color:#292c28;
-    background:#f3f0e8;
-    background-image:
-        linear-gradient(rgba(91,102,91,.045) 1px,transparent 1px);
-    background-size:100% 30px;
+    background:#f7f7f5;
+    color:#20231f;
 }
-
-.notebook-header{
-    position:sticky!important;
-    top:0;
-    z-index:70;
-    background:rgba(249,247,240,.96)!important;
-    border-bottom:1px solid #ded9cb!important;
+.ledger-header{
+    position:sticky!important;top:0;z-index:70;
+    background:rgba(255,255,255,.96)!important;
+    border-bottom:1px solid #e8e9e5!important;
     box-shadow:none!important;
+    backdrop-filter:blur(12px);
 }
-.notebook-header-inner{
-    width:min(100%,760px);
-    min-height:66px;
-    margin:auto;
-    padding:8px 14px;
-    display:grid;
-    grid-template-columns:42px 1fr 42px;
-    align-items:center;
-    gap:10px;
+.ledger-header-inner{
+    width:min(100%,780px);min-height:66px;margin:auto;padding:8px 15px;
+    display:grid;grid-template-columns:42px 1fr 42px;align-items:center;gap:10px;
 }
-#helpTopBtn,.header-add{
-    width:40px!important;height:40px!important;
-    border:1px solid #d9d5ca!important;
-    border-radius:10px!important;
-    background:#fffdf7!important;
-    color:#3f4941!important;
-    box-shadow:none!important;
-    cursor:pointer;
-    display:grid!important;
-    place-items:center!important;
+.icon-btn{
+    width:40px!important;height:40px!important;border:1px solid #e5e7e2!important;
+    border-radius:12px!important;background:#fff!important;color:#30362f!important;
+    display:grid!important;place-items:center!important;box-shadow:none!important;
+    font-size:20px!important;cursor:pointer;
 }
-#helpTopBtn{font-size:19px!important}
-.header-add{font-size:23px}
-.notebook-brand{
-    justify-self:center;
-    display:flex;
-    align-items:center;
-    gap:8px;
+.ledger-brand{justify-self:center;display:flex;align-items:center;gap:9px}
+.brand-mark{
+    width:31px;height:31px;border-radius:9px;background:#263a2d;color:#fff;
+    display:grid;place-items:center;font-weight:900;font-size:15px;
 }
-.notebook-mini{font-size:24px}
-.notebook-brand div{display:flex;flex-direction:column}
-.notebook-brand strong{
-    color:#29372d;
-    font-size:16px;
-    line-height:1.05;
+.ledger-brand div:last-child{display:flex;flex-direction:column}
+.ledger-brand strong{font-size:15px;line-height:1.05;color:#242b25}
+.ledger-brand small{margin-top:3px;font-size:8px;color:#969c96}
+.ledger-main{width:min(100%,780px);margin:auto;padding:22px 15px 28px}
+.ledger-view{display:none}.ledger-view.active{display:block;animation:ledgerIn .16s ease}
+@keyframes ledgerIn{from{opacity:.35;transform:translateY(3px)}to{opacity:1;transform:none}}
+.page-intro{display:flex;justify-content:space-between;align-items:flex-end;gap:14px;margin:2px 1px 17px}
+.eyebrow{font-size:9px;font-weight:850;letter-spacing:1.2px;color:#9a9f99}
+.page-intro h1,.section-head h2{margin:4px 0 0;color:#242824;font-size:23px;letter-spacing:-.55px}
+.quiet-link{border:0;background:transparent;padding:5px 0;color:#657168;font-size:10px;cursor:pointer}
+.summary-strip{
+    display:grid;grid-template-columns:1.35fr 1fr;overflow:hidden;
+    background:#fff;border:1px solid #e5e7e3;border-radius:18px;
+    box-shadow:0 8px 25px rgba(37,44,38,.045);
 }
-.notebook-brand small{
-    margin-top:4px;
-    color:#918e83;
-    font-size:9px;
+.summary-primary{padding:23px;border-right:1px solid #eceeea}
+.summary-primary>span{font-size:10px;color:#808780;font-weight:700}
+.summary-primary strong{display:block;margin:9px 0 6px;font-size:31px;letter-spacing:-1px;color:#253229}
+.summary-primary small{font-size:9px;color:#a0a59f}
+.summary-side{display:grid;grid-template-columns:1fr 1fr;padding:11px}
+.summary-side>div{padding:10px;border-bottom:1px solid #eef0ec}
+.summary-side>div:nth-child(2){border-bottom:1px solid #eef0ec}
+.summary-side>div:last-child{grid-column:1/-1;border-bottom:0}
+.summary-side span{display:block;font-size:9px;color:#929892;margin-bottom:4px}
+.summary-side b{font-size:12px;color:#3b423c}
+.customer-shortcut{
+    width:100%;margin-top:10px;padding:13px 14px;border:1px solid #e4e7e2;border-radius:14px;
+    background:#fff;display:grid;grid-template-columns:39px 1fr auto;align-items:center;gap:11px;
+    text-align:left;color:#303630;cursor:pointer;
 }
-
-.paper-main{
-    width:min(100%,760px);
-    margin:auto;
-    padding:22px 14px 28px;
+.shortcut-icon{width:39px;height:39px;border-radius:11px;background:#eef2ee;display:grid;place-items:center}
+.shortcut-copy strong{display:block;font-size:12px}.shortcut-copy small{display:block;margin-top:3px;font-size:9px;color:#989e98}
+.shortcut-arrow{font-size:17px;color:#8e958f}
+.section-head{margin:24px 1px 10px}.section-head h2{font-size:17px}
+.quick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.quick-grid button{
+    min-width:0;padding:15px 12px;border:1px solid #e5e7e3;border-radius:14px;background:#fff;
+    text-align:left;color:#333a34;cursor:pointer;
 }
-.app-view{display:none}
-.app-view.active{display:block;animation:paperIn .16s ease}
-@keyframes paperIn{from{opacity:.45}to{opacity:1}}
-
-.paper-date-row{
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-end;
-    gap:14px;
-    margin:0 3px 15px;
+.quick-icon{width:34px;height:34px;border-radius:10px;background:#f0f2ef;display:grid;place-items:center;font-size:17px;margin-bottom:12px}
+.quick-grid strong{display:block;font-size:11px}.quick-grid small{display:block;margin-top:3px;font-size:8px;color:#9ba09b}
+.solid-small{border:0;border-radius:10px;background:#263a2d;color:#fff;padding:9px 11px;font-size:10px;font-weight:750;cursor:pointer}
+.ledger-list#debtListBox{
+    display:block!important;padding:14px!important;background:#fff!important;border:1px solid #e5e7e3!important;
+    border-radius:17px!important;box-shadow:0 8px 25px rgba(37,44,38,.04)!important;
 }
-.paper-kicker,.section-caption span{
-    color:#999487;
-    font-size:9px;
-    font-weight:800;
-    letter-spacing:1.35px;
-}
-.paper-date-row h1{
-    margin:4px 0 0;
-    color:#2e3931;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:25px;
-    font-weight:700;
-}
-.text-link{
-    border:0;
-    background:none;
-    color:#6d796f;
-    font-size:10px;
-    cursor:pointer;
-    padding:5px 0;
-}
-
-.notebook-sheet{
-    position:relative;
-    overflow:hidden;
-    padding:26px 23px 19px 38px;
-    border:1px solid #ded9cc;
-    border-radius:5px 14px 14px 5px;
-    background:
-        repeating-linear-gradient(
-            to bottom,
-            #fffef9 0,
-            #fffef9 31px,
-            #e9e7df 32px
-        );
-    box-shadow:5px 7px 0 #e5e0d4,0 12px 26px rgba(70,65,51,.08);
-}
-.notebook-sheet:before{
-    content:"";
-    position:absolute;
-    left:22px;top:0;bottom:0;
-    border-left:1px solid #e5aaa0;
-}
-.sheet-margin{
-    position:absolute;
-    left:8px;top:14px;bottom:14px;
-    width:8px;
-    background:
-        radial-gradient(circle,#b8b3a8 2px,transparent 2.5px)
-        center top/8px 27px repeat-y;
-}
-.sheet-title{
-    min-height:72px;
-    position:relative;
-    z-index:2;
-    display:flex;
-    justify-content:space-between;
-    align-items:flex-start;
-}
-.sheet-title span{
-    display:block;
-    color:#77766f;
-    font-size:11px;
-}
-.sheet-title strong{
-    display:block;
-    margin-top:8px;
-    color:#29372e;
-    font-family:Georgia,"Times New Roman",serif;
-    font-size:34px;
-    line-height:1;
-    letter-spacing:-.8px;
-}
-.pencil-mark{
-    color:#7b827b!important;
-    font-size:25px!important;
-    transform:rotate(-8deg);
-}
-.sheet-rule{
-    height:1px;
-    margin:8px 0 16px;
-    border-top:1px dashed #d3d0c7;
-}
-.sheet-stats{
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:8px;
-    position:relative;
-    z-index:2;
-}
-.sheet-stats>div{
-    padding:10px 8px;
-    border-right:1px solid #e1ded5;
-}
-.sheet-stats>div:last-child{border-right:0}
-.sheet-stats span{
-    display:block;
-    color:#8c8980;
-    font-size:9px;
-    margin-bottom:5px;
-}
-.sheet-stats b{
-    color:#343c36;
-    font-size:14px;
-}
-.sheet-open{
-    width:100%;
-    margin-top:17px;
-    padding:10px 0 4px;
-    border:0;
-    border-top:1px dashed #d3d0c7;
-    background:transparent;
-    color:#657068;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-size:10px;
-    cursor:pointer;
-}
-.sheet-open span{font-size:17px}
-
-.section-caption{margin:23px 3px 9px}
-.paper-actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:9px;
-}
-.paper-actions button{
-    min-width:0;
-    padding:13px;
-    border:1px solid #dedacf;
-    border-radius:11px;
-    background:#fffdf8;
-    color:#414942;
-    display:flex;
-    align-items:center;
-    gap:10px;
-    text-align:left;
-    cursor:pointer;
-}
-.action-symbol{
-    width:35px;height:35px;
-    flex:0 0 35px;
-    display:grid;place-items:center;
-    border-radius:8px;
-    background:#eeece4;
-    color:#4f5d53;
-    font-size:18px;
-}
-.paper-actions strong{display:block;font-size:12px}
-.paper-actions small{display:block;margin-top:3px;color:#99958a;font-size:9px}
-.notebook-tip{
-    margin-top:10px;
-    padding:11px 13px;
-    border:1px dashed #d7d1c4;
-    border-radius:10px;
-    background:rgba(255,253,247,.58);
-    display:flex;
-    gap:9px;
-    align-items:flex-start;
-}
-.notebook-tip p{
-    margin:0;
-    color:#827f75;
-    font-size:10px;
-    line-height:1.45;
-}
-
-.paper-add-btn{
-    border:1px solid #d7d2c6;
-    border-radius:9px;
-    background:#fffdf8;
-    color:#4c574f;
-    padding:8px 10px;
-    font-size:10px;
-    font-weight:700;
-    cursor:pointer;
-}
-.paper-list#debtListBox{
-    display:block!important;
-    padding:15px!important;
-    border:1px solid #ddd8cc!important;
-    border-radius:11px!important;
-    background:#fffef9!important;
-    box-shadow:4px 5px 0 #e6e1d6!important;
-}
-#listView .tools{
-    display:grid!important;
-    grid-template-columns:minmax(0,1fr) 190px;
-    gap:8px!important;
-    margin-bottom:13px!important;
-}
-#listView .tools input,#listView .tools select{
-    width:100%;
-    min-height:42px;
-    border:1px solid #ddd9ce!important;
-    border-radius:8px!important;
-    background:#faf9f4!important;
-    color:#454a45!important;
+#customersView .tools{display:grid!important;grid-template-columns:minmax(0,1fr) 185px;gap:8px!important;margin-bottom:12px!important}
+#customersView .tools input,#customersView .tools select{
+    width:100%;min-height:42px;background:#f7f8f6!important;border:1px solid #e3e6e1!important;border-radius:10px!important;color:#3a403b!important;
 }
 #debtListBox .debt-card{
-    padding:14px 12px 14px 17px!important;
-    border:0!important;
-    border-bottom:1px dashed #d8d4ca!important;
-    border-radius:0!important;
-    background:transparent!important;
-    box-shadow:none!important;
+    padding:14px 12px!important;background:#fff!important;border:0!important;border-bottom:1px solid #eceeea!important;
+    border-radius:0!important;box-shadow:none!important;
 }
 #debtListBox .debt-card:last-child{border-bottom:0!important}
-#debtListBox .debt-card:hover{
-    transform:none!important;
-    background:#faf8f1!important;
-    box-shadow:none!important;
+#debtListBox .debt-card:hover{transform:none!important;box-shadow:none!important;background:#fafbf9!important}
+#debtListBox .person-name{color:#2c332d!important;font-weight:800!important}
+#debtListBox .person-phone{color:#9aa09a!important}
+#debtListBox .debt-total{background:transparent!important;padding:0!important;color:#745535!important;font-weight:800!important}
+#debtListBox .debt-total.done{color:#56705d!important}
+.empty-ledger{
+    min-height:52vh;padding:70px 25px;text-align:center;background:#fff;border:1px solid #e5e7e3;border-radius:18px;
 }
-#debtListBox .person-name{
-    color:#303a33!important;
-    font-family:Georgia,"Times New Roman",serif!important;
-    font-weight:700!important;
+.empty-symbol{width:50px;height:50px;margin:0 auto 13px;border-radius:14px;background:#f0f2ef;display:grid;place-items:center;color:#536058;font-size:22px}
+.empty-ledger h2{margin:0;color:#2d342e}.empty-ledger p{max-width:330px;margin:7px auto 0;color:#7f867f;font-size:12px;line-height:1.5}
+.empty-ledger small{display:block;margin-top:7px;color:#aaa}
+.ledger-nav{
+    position:fixed;z-index:80;left:50%;bottom:0;transform:translateX(-50%);
+    width:min(100%,780px);height:69px;padding:5px 7px calc(5px + env(safe-area-inset-bottom));
+    display:grid;grid-template-columns:repeat(5,1fr);background:rgba(255,255,255,.98);
+    border:1px solid #e4e6e2;border-bottom:0;border-radius:17px 17px 0 0;box-shadow:0 -6px 22px rgba(37,44,38,.055);
 }
-#debtListBox .person-phone{color:#8f8b81!important}
-#debtListBox .debt-total{
-    padding:0!important;
-    background:transparent!important;
-    color:#7d5731!important;
-    font-family:Georgia,"Times New Roman",serif!important;
-    font-weight:700!important;
+.ledger-tab,.ledger-create{
+    border:0;background:transparent;color:#969c96;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;
 }
-#debtListBox .debt-total.done{color:#5e7764!important}
-
-.empty-paper{
-    min-height:55vh;
-    padding:65px 25px;
-    text-align:center;
-    border:1px solid #ded9cc;
-    border-radius:10px;
-    background:
-        repeating-linear-gradient(to bottom,#fffef9 0,#fffef9 31px,#ece9e1 32px);
-    box-shadow:4px 5px 0 #e5e0d5;
+.ledger-tab span{font-size:18px}.ledger-tab small,.ledger-create small{font-size:8px;font-weight:750}
+.ledger-tab.active{color:#263a2d}
+.ledger-create{color:#263a2d}
+.ledger-create span{
+    width:39px;height:39px;border-radius:12px;background:#263a2d;color:#fff;display:grid;place-items:center;
+    font-size:21px;margin-top:-17px;box-shadow:0 6px 14px rgba(38,58,45,.18);
 }
-.empty-paper>span{font-size:30px;color:#777d78}
-.empty-paper h2{
-    margin:10px 0 5px;
-    font-family:Georgia,"Times New Roman",serif;
-    color:#343d36;
-}
-.empty-paper p{max-width:330px;margin:0 auto;color:#807e76;font-size:12px}
-.empty-paper small{display:block;margin-top:8px;color:#aaa69b}
-
-.paper-tabs{
-    position:fixed;
-    z-index:80;
-    left:50%;
-    bottom:0;
-    transform:translateX(-50%);
-    width:min(100%,760px);
-    height:68px;
-    padding:5px 6px calc(5px + env(safe-area-inset-bottom));
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    background:#fffdf8;
-    border:1px solid #ded9cd;
-    border-bottom:0;
-    border-radius:13px 13px 0 0;
-    box-shadow:0 -5px 18px rgba(65,59,45,.06);
-}
-.paper-tab{
-    border:0;
-    background:transparent;
-    color:#979388;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    gap:3px;
-    cursor:pointer;
-}
-.paper-tab span{font-size:18px}
-.paper-tab small{font-size:9px;font-weight:650}
-.paper-tab.active{
-    color:#3f5847;
-    background:#f0eee6;
-    border-radius:9px;
-}
-.write-tab{color:#665f53}
-.write-tab span{
-    width:32px;height:32px;
-    display:grid;place-items:center;
-    border:1px solid #cfc9bc;
-    border-radius:50%;
-    background:#f8f5ed;
-    font-size:16px;
-}
-
+.ledger-create small{margin-top:1px}
 .floating-add-btn{display:none!important}
-
-.debt-modal,#detailModal{
-    background:rgba(48,46,39,.48)!important;
-    backdrop-filter:blur(4px)!important;
-}
-.debt-modal-box,.detail-box{
-    border:1px solid #ded9cd!important;
-    border-radius:15px!important;
-    background:#fffef9!important;
-    box-shadow:0 25px 60px rgba(52,47,36,.22)!important;
-}
-.debt-modal-header h2{
-    font-family:Georgia,"Times New Roman",serif;
-    color:#343d36!important;
-}
-.modal-close,.detail-close{background:#f1eee6!important;color:#77756e!important}
-.debt-form input{
-    border-color:#ddd9ce!important;
-    border-radius:8px!important;
-    background:#faf9f4!important;
-}
-.debt-form input:focus{
-    border-color:#aaa79d!important;
-    box-shadow:0 0 0 3px rgba(110,110,100,.07)!important;
-}
-.modal-save-btn{
-    border-radius:9px!important;
-    background:#3f5847!important;
-    box-shadow:none!important;
-}
-
+.debt-modal,#detailModal{z-index:100!important}
+.debt-modal-box,.detail-box{border-radius:18px!important}
+.modal-save-btn{background:#263a2d!important;border-radius:11px!important;box-shadow:none!important}
 @media(max-width:600px){
-    .notebook-header-inner{min-height:62px;padding:7px 11px}
-    #helpTopBtn,.header-add{width:37px!important;height:37px!important}
-    .notebook-brand strong{font-size:14px}
-    .notebook-brand small{font-size:8px}
-    .notebook-mini{font-size:21px}
-    .paper-main{padding:17px 11px 23px}
-    .paper-date-row h1{font-size:22px}
-    .notebook-sheet{padding:22px 17px 17px 34px}
-    .sheet-title strong{font-size:29px}
-    .sheet-stats{gap:2px}
-    .sheet-stats b{font-size:12px}
-    .paper-actions{grid-template-columns:1fr}
-    #listView .tools{grid-template-columns:1fr!important}
+    .ledger-header-inner{min-height:62px;padding:7px 11px}
+    .icon-btn{width:37px!important;height:37px!important}
+    .ledger-brand strong{font-size:14px}.ledger-main{padding:17px 11px 24px}
+    .page-intro h1{font-size:21px}
+    .summary-strip{grid-template-columns:1fr}
+    .summary-primary{padding:20px;border-right:0;border-bottom:1px solid #eceeea}
+    .summary-primary strong{font-size:28px}
+    .summary-side{grid-template-columns:repeat(3,1fr)}
+    .summary-side>div,.summary-side>div:nth-child(2){border-bottom:0;border-right:1px solid #eef0ec}
+    .summary-side>div:last-child{grid-column:auto;border-right:0}
+    .summary-side b{font-size:11px}
+    .quick-grid{gap:7px}.quick-grid button{padding:12px 9px}
+    #customersView .tools{grid-template-columns:1fr!important}
     .debt-modal{align-items:flex-end!important;padding:8px!important}
-    .debt-modal-box{max-height:92vh!important;border-radius:15px 15px 8px 8px!important}
+    .debt-modal-box{max-height:92vh!important;border-radius:18px 18px 9px 9px!important}
 }
 
 </style>
@@ -3250,146 +2963,138 @@ header h1 {
 
 <div id="appContent" style="display:none;">
 
-<header class="notebook-header">
-    <div class="notebook-header-inner">
-        <button id="helpTopBtn" type="button" onclick="toggleTopMenu()" aria-label="Цэс">☰</button>
-
-        <div class="notebook-brand">
-            <span class="notebook-mini">📒</span>
+<header class="ledger-header">
+    <div class="ledger-header-inner">
+        <button id="helpTopBtn" class="icon-btn" type="button" onclick="toggleTopMenu()" aria-label="Цэс">☰</button>
+        <div class="ledger-brand">
+            <div class="brand-mark">Ө</div>
             <div>
                 <strong>Өрийн дэвтэр</strong>
-                <small>Өдөр тутмын бүртгэл</small>
+                <small>Өр, төлөлтийн бүртгэл</small>
             </div>
         </div>
-
-        <button class="header-add" type="button" onclick="openDebtModal()" aria-label="Өр нэмэх">＋</button>
+        <button class="icon-btn" type="button" onclick="openDebtModal()" aria-label="Шинэ өр">＋</button>
     </div>
 </header>
 
-<main class="paper-main">
+<main class="ledger-main">
 
-    <section id="homeView" class="app-view active">
-        <div class="paper-date-row">
-            <div>
-                <span class="paper-kicker">ТОЙМ</span>
-                <h1>Миний дэвтэр</h1>
-            </div>
-            <button type="button" class="text-link" onclick="showAppView('listView')">Бүгдийг харах →</button>
+<section id="homeView" class="ledger-view active">
+    <div class="page-intro">
+        <div>
+            <span class="eyebrow">ӨНӨӨДРИЙН БҮРТГЭЛ</span>
+            <h1>Товч мэдээлэл</h1>
         </div>
+        <button class="quiet-link" type="button" onclick="showLedgerView('customersView')">Жагсаалт →</button>
+    </div>
 
-        <div class="notebook-sheet">
-            <div class="sheet-margin"></div>
-
-            <div class="sheet-title">
-                <div>
-                    <span>Үлдэгдэл өр</span>
-                    <strong id="totalRemaining">0 ₮</strong>
-                </div>
-                <span class="pencil-mark">✎</span>
-            </div>
-
-            <div class="sheet-rule"></div>
-
-            <div class="sheet-stats">
-                <div>
-                    <span>Нийт өр</span>
-                    <b id="totalDebt">0 ₮</b>
-                </div>
-                <div>
-                    <span>Төлсөн</span>
-                    <b id="totalPaid">0 ₮</b>
-                </div>
-                <div>
-                    <span>Хүмүүс</span>
-                    <b id="totalPeople">0</b>
-                </div>
-            </div>
-
-            <button id="remainingCard" class="sheet-open" type="button">
-                Өртэй хүмүүсийн жагсаалтыг нээх <span>→</span>
-            </button>
+    <div class="summary-strip">
+        <div class="summary-primary">
+            <span>Үлдэгдэл өр</span>
+            <strong id="totalRemaining">0 ₮</strong>
+            <small>Одоогоор төлөгдөөгүй нийт дүн</small>
         </div>
-
-        <div class="section-caption">
-            <span>ХУРДАН ҮЙЛДЭЛ</span>
+        <div class="summary-side">
+            <div><span>Нийт өр</span><b id="totalDebt">0 ₮</b></div>
+            <div><span>Төлсөн</span><b id="totalPaid">0 ₮</b></div>
+            <div><span>Харилцагч</span><b id="totalPeople">0</b></div>
         </div>
+    </div>
 
-        <div class="paper-actions">
-            <button type="button" onclick="openDebtModal()">
-                <span class="action-symbol">＋</span>
-                <div><strong>Өр бичих</strong><small>Шинэ бүртгэл нэмэх</small></div>
-            </button>
-            <button type="button" onclick="showAppView('listView')">
-                <span class="action-symbol">☷</span>
-                <div><strong>Жагсаалт</strong><small>Өртэй хүмүүсээ харах</small></div>
-            </button>
-        </div>
+    <button id="remainingCard" class="customer-shortcut" type="button">
+        <span class="shortcut-icon">👤</span>
+        <span class="shortcut-copy">
+            <strong>Өртэй хүмүүс</strong>
+            <small>Бүх харилцагчийн үлдэгдлийг харах</small>
+        </span>
+        <span class="shortcut-arrow">→</span>
+    </button>
 
-        <div class="notebook-tip">
-            <span>💡</span>
-            <p>Үлдэгдэл өр дээр дарж харилцагчдын жагсаалтыг хурдан нээж болно.</p>
+    <div class="section-head">
+        <div>
+            <span class="eyebrow">ХУРДАН ҮЙЛДЭЛ</span>
+            <h2>Юу хийх вэ?</h2>
         </div>
-    </section>
+    </div>
 
-    <section id="listView" class="app-view">
-        <div class="paper-date-row">
-            <div>
-                <span class="paper-kicker">БҮРТГЭЛ</span>
-                <h1>Өртэй хүмүүс</h1>
-            </div>
-            <button type="button" class="paper-add-btn" onclick="openDebtModal()">＋ Өр бичих</button>
-        </div>
+    <div class="quick-grid">
+        <button type="button" onclick="openDebtModal()">
+            <span class="quick-icon">＋</span>
+            <strong>Шинэ өр</strong>
+            <small>Өр бүртгэх</small>
+        </button>
+        <button type="button" onclick="showLedgerView('customersView')">
+            <span class="quick-icon">☷</span>
+            <strong>Харилцагч</strong>
+            <small>Жагсаалт харах</small>
+        </button>
+        <button type="button" onclick="showLedgerView('historyView')">
+            <span class="quick-icon">↻</span>
+            <strong>Түүх</strong>
+            <small>Хөдөлгөөн харах</small>
+        </button>
+    </div>
+</section>
 
-        <div class="debt-box paper-list" id="debtListBox">
-            <div class="tools">
-                <input id="search" type="text" placeholder="Нэр эсвэл утсаар хайх...">
-                <select id="sort">
-                    <option value="newest">Шинээр бүртгэгдсэн</option>
-                    <option value="oldest">Хуучнаар бүртгэгдсэн</option>
-                    <option value="highest">Өр ихээс бага</option>
-                    <option value="lowest">Өр багаас их</option>
-                    <option value="due">Төлөх хугацаа</option>
-                </select>
-            </div>
-            <div id="list"></div>
+<section id="customersView" class="ledger-view">
+    <div class="page-intro">
+        <div>
+            <span class="eyebrow">ХАРИЛЦАГЧ</span>
+            <h1>Өртэй хүмүүс</h1>
         </div>
-    </section>
+        <button class="solid-small" type="button" onclick="openDebtModal()">＋ Шинэ өр</button>
+    </div>
 
-    <section id="reportView" class="app-view">
-        <div class="empty-paper">
-            <span>▤</span>
-            <h2>Тайлан</h2>
-            <p>Энд орлого биш, өрийн хөдөлгөөн ба төлөлтийн тайлан байрлана.</p>
-            <small>Дараагийн алхамд холбоно.</small>
+    <div class="debt-box ledger-list" id="debtListBox">
+        <div class="tools">
+            <input id="search" type="text" placeholder="Нэр эсвэл утсаар хайх...">
+            <select id="sort">
+                <option value="newest">Шинээр бүртгэгдсэн</option>
+                <option value="oldest">Хуучнаар бүртгэгдсэн</option>
+                <option value="highest">Өр ихээс бага</option>
+                <option value="lowest">Өр багаас их</option>
+                <option value="due">Төлөх хугацаа</option>
+            </select>
         </div>
-    </section>
+        <div id="list"></div>
+    </div>
+</section>
 
-    <section id="settingsView" class="app-view">
-        <div class="empty-paper">
-            <span>⚙</span>
-            <h2>Тохиргоо</h2>
-            <p>Бүртгэл, апп болон бусад тохиргоонууд энд байрлана.</p>
-            <small>Дараагийн алхамд холбоно.</small>
-        </div>
-    </section>
+<section id="historyView" class="ledger-view">
+    <div class="empty-ledger">
+        <div class="empty-symbol">↻</div>
+        <h2>Түүх</h2>
+        <p>Өр нэмсэн болон төлөлтийн хөдөлгөөнийг энд нэг дор харуулна.</p>
+        <small>Дараагийн алхамд одоогийн түүхийн мэдээлэлтэй холбоно.</small>
+    </div>
+</section>
+
+<section id="menuView" class="ledger-view">
+    <div class="empty-ledger">
+        <div class="empty-symbol">☰</div>
+        <h2>Цэс</h2>
+        <p>Тайлан, тохиргоо, тусламж болон эрхийн мэдээллийг энд төвлөрүүлнэ.</p>
+        <small>Дараагийн алхамд холбоно.</small>
+    </div>
+</section>
 
 </main>
 
-<nav class="paper-tabs">
-    <button class="paper-tab active" data-view="homeView" type="button" onclick="showAppView('homeView',this)">
+<nav class="ledger-nav">
+    <button class="ledger-tab active" data-view="homeView" type="button" onclick="showLedgerView('homeView',this)">
         <span>⌂</span><small>Нүүр</small>
     </button>
-    <button class="paper-tab" data-view="listView" type="button" onclick="showAppView('listView',this)">
-        <span>☷</span><small>Жагсаалт</small>
+    <button class="ledger-tab" data-view="customersView" type="button" onclick="showLedgerView('customersView',this)">
+        <span>♙</span><small>Харилцагч</small>
     </button>
-    <button class="paper-tab write-tab" type="button" onclick="openDebtModal()">
-        <span>✎</span><small>Өр бичих</small>
+    <button class="ledger-create" type="button" onclick="openDebtModal()" aria-label="Шинэ өр">
+        <span>＋</span><small>Шинэ өр</small>
     </button>
-    <button class="paper-tab" data-view="reportView" type="button" onclick="showAppView('reportView',this)">
-        <span>▤</span><small>Тайлан</small>
+    <button class="ledger-tab" data-view="historyView" type="button" onclick="showLedgerView('historyView',this)">
+        <span>↻</span><small>Түүх</small>
     </button>
-    <button class="paper-tab" data-view="settingsView" type="button" onclick="showAppView('settingsView',this)">
-        <span>⚙</span><small>Тохиргоо</small>
+    <button class="ledger-tab" data-view="menuView" type="button" onclick="showLedgerView('menuView',this)">
+        <span>☰</span><small>Цэс</small>
     </button>
 </nav>
 
@@ -11638,27 +11343,21 @@ if (topMenuElement) {
 
 
 // ==========================================
-// PAPER APP NAVIGATION
+// MODERN LEDGER NAVIGATION
 // ==========================================
-function showAppView(viewId, buttonElement = null) {
-    document.querySelectorAll(".app-view").forEach(function(view) {
+function showLedgerView(viewId, buttonElement = null) {
+    document.querySelectorAll(".ledger-view").forEach(function(view) {
         view.classList.remove("active");
     });
-
     const target = document.getElementById(viewId);
     if (target) target.classList.add("active");
 
-    document.querySelectorAll(".paper-tab[data-view]").forEach(function(btn) {
+    document.querySelectorAll(".ledger-tab[data-view]").forEach(function(btn) {
         btn.classList.remove("active");
     });
-
-    const nav =
-        buttonElement ||
-        document.querySelector('.paper-tab[data-view="' + viewId + '"]');
-
+    const nav = buttonElement || document.querySelector('.ledger-tab[data-view="' + viewId + '"]');
     if (nav) nav.classList.add("active");
-
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({top:0,behavior:"smooth"});
 }
 
 </script>
