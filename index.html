@@ -5479,6 +5479,109 @@ body{
     display:none !important;
 }
 
+
+/* ===== REPORT MOVEMENT CHART ===== */
+#historyView .report-chart-card{
+    margin-top:18px;
+    padding:15px 14px 12px;
+    border:1px solid #E2E8F0;
+    border-radius:16px;
+    background:#FFFFFF;
+}
+#historyView .report-chart-head{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:14px;
+}
+#historyView .report-chart-head b{
+    display:block;
+    color:#252A34;
+    font-size:14px;
+}
+#historyView .report-chart-head small{
+    display:block;
+    margin-top:3px;
+    color:#7B8794;
+    font-size:11px;
+}
+#historyView .report-chart-legend{
+    display:flex;
+    gap:9px;
+    flex-wrap:wrap;
+    justify-content:flex-end;
+    font-size:11px;
+    color:#64748B;
+}
+#historyView .report-chart-legend span{
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
+#historyView .report-chart-legend i{
+    width:9px;height:9px;border-radius:3px;display:inline-block;
+}
+#historyView .report-chart-legend i.add{background:#52677D}
+#historyView .report-chart-legend i.pay{background:#2F8F5B}
+#historyView .report-movement-chart{
+    min-height:155px;
+    display:flex;
+    align-items:flex-end;
+    gap:5px;
+    padding:8px 2px 0;
+    border-bottom:1px solid #DCE3EA;
+    overflow:hidden;
+}
+#historyView .report-chart-day{
+    flex:1 1 0;
+    min-width:0;
+    height:140px;
+    display:flex;
+    flex-direction:column;
+    justify-content:flex-end;
+    align-items:center;
+    gap:4px;
+}
+#historyView .report-chart-bars{
+    width:100%;
+    flex:1;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    gap:2px;
+    min-height:0;
+}
+#historyView .report-chart-bar{
+    width:min(42%,12px);
+    min-height:2px;
+    border-radius:4px 4px 1px 1px;
+    background:#52677D;
+    opacity:.92;
+}
+#historyView .report-chart-bar.pay{background:#2F8F5B}
+#historyView .report-chart-label{
+    min-height:14px;
+    font-size:9px;
+    line-height:1;
+    color:#8A96A3;
+    white-space:nowrap;
+}
+#historyView .report-chart-empty{
+    width:100%;
+    align-self:center;
+    text-align:center;
+    color:#8A96A3;
+    font-size:12px;
+    padding:28px 8px;
+}
+@media (max-width:480px){
+    #historyView .report-chart-head{display:block}
+    #historyView .report-chart-legend{justify-content:flex-start;margin-top:8px}
+    #historyView .report-movement-chart{gap:3px}
+    #historyView .report-chart-label{font-size:8px}
+}
+
 </style>
 
 </head>
@@ -5790,6 +5893,19 @@ body{
                     <div><span>💰 Орж ирсэн төлөлт</span><b id="reportPaidPeriod">0 ₮</b></div>
                     <div class="report-bar paid"><i id="reportPaidBar"></i></div>
                 </div>
+            </div>
+            <div class="report-chart-card">
+                <div class="report-chart-head">
+                    <div>
+                        <b>📈 Өр ба төлөлтийн хөдөлгөөн</b>
+                        <small id="reportChartHint">Сонгосон хугацааны өдрүүдээр</small>
+                    </div>
+                    <div class="report-chart-legend">
+                        <span><i class="add"></i>Өр</span>
+                        <span><i class="pay"></i>Төлөлт</span>
+                    </div>
+                </div>
+                <div id="reportMovementChart" class="report-movement-chart"></div>
             </div>
         </div>
 
@@ -14295,6 +14411,131 @@ function isInReportPeriod(value) {
     return d >= from;
 }
 
+
+function renderReportMovementChart(activity) {
+    const box = document.getElementById("reportMovementChart");
+    const hint = document.getElementById("reportChartHint");
+    if (!box) return;
+
+    const source = Array.isArray(activity) ? activity.filter(function(item) {
+        return item && item.date && isInReportPeriod(item.date);
+    }) : [];
+
+    const dayMs = 86400000;
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    let start = new Date(today);
+    let bucketMode = "day";
+
+    if (window.reportDays === "all") {
+        const validDates = source
+            .map(function(item) { return new Date(item.date); })
+            .filter(function(d) { return !Number.isNaN(d.getTime()); });
+
+        if (!validDates.length) {
+            box.innerHTML = '<div class="report-chart-empty">Энэ хугацаанд хөдөлгөөн алга.</div>';
+            if (hint) hint.textContent = "Бүх хугацааны хөдөлгөөн";
+            return;
+        }
+
+        const minDate = new Date(Math.min.apply(null, validDates.map(function(d){ return d.getTime(); })));
+        minDate.setHours(0,0,0,0);
+        const spanDays = Math.max(1, Math.round((today - minDate) / dayMs) + 1);
+
+        if (spanDays > 45) {
+            bucketMode = "month";
+            start = new Date(minDate.getFullYear(), minDate.getMonth(), 1);
+        } else {
+            start = minDate;
+        }
+    } else {
+        const days = Number(window.reportDays) || 30;
+        start.setDate(start.getDate() - (days - 1));
+    }
+
+    const buckets = [];
+    const bucketMap = new Map();
+
+    if (bucketMode === "month") {
+        let cursor = new Date(start.getFullYear(), start.getMonth(), 1);
+        const end = new Date(today.getFullYear(), today.getMonth(), 1);
+        while (cursor <= end && buckets.length < 24) {
+            const key = cursor.getFullYear() + "-" + String(cursor.getMonth()+1).padStart(2,"0");
+            const row = {key:key, label:(cursor.getMonth()+1) + " сар", add:0, pay:0};
+            buckets.push(row); bucketMap.set(key,row);
+            cursor = new Date(cursor.getFullYear(), cursor.getMonth()+1, 1);
+        }
+        if (hint) hint.textContent = "Бүх хугацааг сараар";
+    } else {
+        const totalDays = Math.max(1, Math.round((today - start) / dayMs) + 1);
+        const step = totalDays > 14 ? 3 : 1;
+
+        for (let i=0; i<totalDays; i+=step) {
+            const from = new Date(start); from.setDate(start.getDate()+i);
+            const to = new Date(from); to.setDate(from.getDate()+step-1);
+            if (to > today) to.setTime(today.getTime());
+
+            const key = from.toISOString().slice(0,10);
+            const row = {
+                key:key,
+                from:new Date(from),
+                to:new Date(to),
+                label: step === 1
+                    ? (from.getMonth()+1) + "/" + from.getDate()
+                    : (from.getMonth()+1) + "/" + from.getDate(),
+                add:0, pay:0
+            };
+            buckets.push(row);
+        }
+        if (hint) hint.textContent = totalDays > 14
+            ? "3 өдрийн багцаар"
+            : "Өдрөөр";
+    }
+
+    source.forEach(function(item) {
+        const d = new Date(item.date);
+        if (Number.isNaN(d.getTime())) return;
+        d.setHours(0,0,0,0);
+
+        let bucket = null;
+        if (bucketMode === "month") {
+            const key = d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0");
+            bucket = bucketMap.get(key);
+        } else {
+            bucket = buckets.find(function(row) { return d >= row.from && d <= row.to; });
+        }
+        if (!bucket) return;
+
+        const value = Number(item.amount || 0);
+        if (item.type === "pay") bucket.pay += value;
+        else if (item.type === "add") bucket.add += value;
+    });
+
+    const maxValue = Math.max(1, ...buckets.map(function(row){ return Math.max(row.add,row.pay); }));
+    const hasMovement = buckets.some(function(row){ return row.add > 0 || row.pay > 0; });
+
+    if (!hasMovement) {
+        box.innerHTML = '<div class="report-chart-empty">Энэ хугацаанд хөдөлгөөн алга.</div>';
+        return;
+    }
+
+    box.innerHTML = buckets.map(function(row, index) {
+        const addH = row.add > 0 ? Math.max(3, Math.round((row.add/maxValue)*108)) : 2;
+        const payH = row.pay > 0 ? Math.max(3, Math.round((row.pay/maxValue)*108)) : 2;
+        const showLabel = bucketMode === "month" || buckets.length <= 10 || index % 2 === 0 || index === buckets.length-1;
+        const title = row.label + " | Өр: " + formatMoney(row.add) + " | Төлөлт: " + formatMoney(row.pay);
+
+        return '<div class="report-chart-day" title="' + title.replace(/"/g,"&quot;") + '">' +
+            '<div class="report-chart-bars">' +
+                '<i class="report-chart-bar" style="height:' + addH + 'px"></i>' +
+                '<i class="report-chart-bar pay" style="height:' + payH + 'px"></i>' +
+            '</div>' +
+            '<span class="report-chart-label">' + (showLabel ? row.label : "") + '</span>' +
+        '</div>';
+    }).join("");
+}
+
 async function renderReport() {
     /*
      * ЖАГСААЛТ = зөвхөн идэвхтэй debts
@@ -14484,6 +14725,8 @@ async function renderReport() {
             }).join("")
             : '<div class="report-empty">Үлдэгдэлтэй авлага алга 👌</div>';
     }
+
+    renderReportMovementChart(activity);
 
     /*
      * Сүүлийн хөдөлгөөн = архивын түүхийг ч харуулна.
