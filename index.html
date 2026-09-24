@@ -14071,7 +14071,7 @@ if (topMenuElement) {
 // REPORT V1
 // Uses existing debts + additions + payments data.
 // ==========================================
-let reportDays = 30;
+window.reportDays = window.reportDays || 30;
 
 function reportMoney(value) {
     if (typeof formatMoney === "function") return formatMoney(Number(value || 0));
@@ -14102,7 +14102,7 @@ function reportHistoryArray(value) {
 }
 
 function isInReportPeriod(value) {
-    if (reportDays === "all") return true;
+    if (window.reportDays === "all") return true;
     if (!value) return false;
 
     const d = new Date(value);
@@ -14110,7 +14110,7 @@ function isInReportPeriod(value) {
 
     const from = new Date();
     from.setHours(0,0,0,0);
-    from.setDate(from.getDate() - Number(reportDays) + 1);
+    from.setDate(from.getDate() - Number(window.reportDays) + 1);
 
     return d >= from;
 }
@@ -14264,7 +14264,7 @@ async function renderReport() {
     setText("reportPaidPeriod", reportMoney(periodPaid));
     setText(
         "reportPeriodLabel",
-        reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + reportDays + " хоног"
+        window.reportDays === "all" ? "Бүх хугацаа" : "Сүүлийн " + window.reportDays + " хоног"
     );
 
     const maxFlow = Math.max(periodAdded, periodPaid, 1);
@@ -14327,7 +14327,7 @@ async function renderReport() {
 }
 
 function setReportPeriod(days, button) {
-    reportDays = days === "all" ? "all" : Number(days);
+    window.reportDays = days === "all" ? "all" : Number(days);
 
     document.querySelectorAll("#reportFilter button").forEach(function(btn) {
         btn.classList.remove("active");
