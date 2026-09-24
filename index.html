@@ -11168,6 +11168,26 @@ if (
 
             showDebts();
 
+            /*
+             * ЧУХАЛ:
+             * Sync хийх pending зүйлгүй үед энэ branch эндээс return хийдэг.
+             * Refresh-ийн дараах Тайлан render нь checkLoginOnLoad() хүртэл
+             * хүлээхэд report data бэлэн болсон ч хөдөлгөөний UI 0 хэвээр
+             * үлдэх тохиолдол гарч байсан.
+             *
+             * Тайлан одоо харагдаж байвал server data local-д орсны ДАРАА
+             * яг энд дахин render хийнэ.
+             */
+            const activeReportView =
+                document.getElementById("historyView");
+
+            if (
+                activeReportView &&
+                activeReportView.classList.contains("active")
+            ) {
+                await renderReport();
+            }
+
             return;
 
         }
