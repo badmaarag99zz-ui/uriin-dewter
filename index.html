@@ -5524,12 +5524,12 @@ body{
 
 .ledger-view.ledger-paper-flip-forward{
     transform-origin:left center;
-    animation:ledgerCurvedForward .92s cubic-bezier(.20,.68,.28,1) forwards;
+    animation:ledgerCurvedForward 1.5s cubic-bezier(.20,.68,.28,1) forwards;
 }
 
 .ledger-view.ledger-paper-flip-back{
     transform-origin:right center;
-    animation:ledgerCurvedBack .92s cubic-bezier(.20,.68,.28,1) forwards;
+    animation:ledgerCurvedBack 1.5s cubic-bezier(.20,.68,.28,1) forwards;
 }
 
 /* Цаасны гадаргуу дээр хөдөлдөг нумарсан гэрэл/сүүдэр */
@@ -5555,13 +5555,13 @@ body{
 
 .ledger-paper-flip-forward::before{
     right:-8%;
-    animation:ledgerCurlLightForward .92s cubic-bezier(.20,.68,.28,1) forwards;
+    animation:ledgerCurlLightForward 1.5s cubic-bezier(.20,.68,.28,1) forwards;
 }
 
 .ledger-paper-flip-back::before{
     left:-8%;
     transform:scaleX(-1);
-    animation:ledgerCurlLightBack .92s cubic-bezier(.20,.68,.28,1) forwards;
+    animation:ledgerCurlLightBack 1.5s cubic-bezier(.20,.68,.28,1) forwards;
 }
 
 /* binding талаас цаас салж нумарч байгаа сүүдэр */
@@ -5579,7 +5579,7 @@ body{
         rgba(255,255,255,.12) 24%,
         rgba(255,255,255,0) 58%
     );
-    animation:ledgerCurlShade .92s ease-in-out forwards;
+    animation:ledgerCurlShade 1.5s ease-in-out forwards;
 }
 
 .ledger-paper-flip-back::after{
@@ -15338,7 +15338,7 @@ function showLedgerView(viewId, buttonElement = null) {
         forward ? "ledger-paper-flip-forward" : "ledger-paper-flip-back"
     );
 
-    window.setTimeout(finish, 920);
+    window.setTimeout(finish, 1500);
 }
 
 </script>
