@@ -2943,6 +2943,34 @@ header h1 {
     }
 }
 
+
+/* ===== LARGER LEDGER BOTTOM NAV ===== */
+.ledger-nav{
+    height:82px !important;
+    padding:7px 7px calc(7px + env(safe-area-inset-bottom)) !important;
+}
+.ledger-tab,.ledger-create{
+    gap:5px !important;
+}
+.ledger-tab span{
+    font-size:23px !important;
+}
+.ledger-tab small,.ledger-create small{
+    font-size:11px !important;
+    font-weight:800 !important;
+}
+.ledger-create span{
+    width:44px !important;
+    height:44px !important;
+    font-size:24px !important;
+    margin-top:-18px !important;
+}
+@media(max-width:380px){
+    .ledger-tab small,.ledger-create small{
+        font-size:10px !important;
+    }
+}
+
 </style>
 
 </head>
@@ -3196,16 +3224,16 @@ header h1 {
         <span>⌂</span><small>Нүүр</small>
     </button>
     <button class="ledger-tab" data-view="customersView" type="button" onclick="showLedgerView('customersView',this)">
-        <span>♙</span><small>Харилцагч</small>
+        <span>♙</span><small>Жагсаалт</small>
     </button>
     <button class="ledger-create" type="button" onclick="openDebtModal()" aria-label="Шинэ өр">
         <span>＋</span><small>Шинэ өр</small>
     </button>
     <button class="ledger-tab" data-view="historyView" type="button" onclick="showLedgerView('historyView',this)">
-        <span>↻</span><small>Түүх</small>
+        <span>↻</span><small>Тайлан</small>
     </button>
     <button class="ledger-tab" data-view="menuView" type="button" onclick="showLedgerView('menuView',this)">
-        <span>☰</span><small>Цэс</small>
+        <span>⚙</span><small>Тохиргоо</small>
     </button>
 </nav>
 
@@ -11721,6 +11749,55 @@ function showLedgerView(viewId, buttonElement = null) {
             }
         });
     });
+})();
+</script>
+
+
+<script>
+/* ===== HEADER PHONE RELIABLE REFRESH ===== */
+(async function () {
+    const el = document.getElementById("headerUserPhone");
+    if (!el || typeof supabaseClient === "undefined") return;
+
+    function formatPhone(value) {
+        let d = String(value || "").replace(/\D/g, "");
+        if (d.startsWith("976") && d.length >= 11) d = d.slice(-8);
+        if (d.length > 8) d = d.slice(-8);
+        return d.length === 8 ? d.slice(0,4) + " " + d.slice(4) : d;
+    }
+
+    async function loadPhone() {
+        try {
+            const { data: userData } = await supabaseClient.auth.getUser();
+            const user = userData && userData.user;
+            if (!user) return;
+
+            let phone =
+                user.phone ||
+                (user.user_metadata && user.user_metadata.phone) ||
+                "";
+
+            if (!phone) {
+                const { data: profile } = await supabaseClient
+                    .from("profiles")
+                    .select("phone")
+                    .eq("id", user.id)
+                    .maybeSingle();
+
+                phone = profile && profile.phone ? profile.phone : "";
+            }
+
+            if (phone) el.textContent = formatPhone(phone);
+        } catch (error) {
+            console.error("Header phone load error:", error);
+        }
+    }
+
+    window.refreshHeaderPhone = loadPhone;
+    await loadPhone();
+
+    setTimeout(loadPhone, 500);
+    setTimeout(loadPhone, 1500);
 })();
 </script>
 
