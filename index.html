@@ -5480,174 +5480,6 @@ body{
 }
 
 
-/* ===== REPORT MOVEMENT CHART ===== */
-#historyView .report-chart-card{
-    margin-top:18px;
-    padding:15px 14px 12px;
-    border:1px solid #E2E8F0;
-    border-radius:16px;
-    background:#FFFFFF;
-}
-#historyView .report-chart-head{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:12px;
-    margin-bottom:14px;
-}
-#historyView .report-chart-head b{
-    display:block;
-    color:#252A34;
-    font-size:14px;
-}
-#historyView .report-chart-head small{
-    display:block;
-    margin-top:3px;
-    color:#7B8794;
-    font-size:11px;
-}
-#historyView .report-chart-legend{
-    display:flex;
-    gap:9px;
-    flex-wrap:wrap;
-    justify-content:flex-end;
-    font-size:11px;
-    color:#64748B;
-}
-#historyView .report-chart-legend span{
-    display:flex;
-    align-items:center;
-    gap:4px;
-}
-#historyView .report-chart-legend i{
-    width:9px;height:9px;border-radius:3px;display:inline-block;
-}
-#historyView .report-chart-legend i.add{background:#52677D}
-#historyView .report-chart-legend i.pay{background:#2F8F5B}
-#historyView .report-movement-chart{
-    min-height:155px;
-    display:flex;
-    align-items:flex-end;
-    gap:5px;
-    padding:8px 2px 0;
-    border-bottom:1px solid #DCE3EA;
-    overflow:hidden;
-}
-#historyView .report-chart-day{
-    flex:1 1 0;
-    min-width:0;
-    height:140px;
-    display:flex;
-    flex-direction:column;
-    justify-content:flex-end;
-    align-items:center;
-    gap:4px;
-}
-#historyView .report-chart-bars{
-    width:100%;
-    flex:1;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    gap:2px;
-    min-height:0;
-}
-#historyView .report-chart-bar{
-    width:min(42%,12px);
-    min-height:2px;
-    border-radius:4px 4px 1px 1px;
-    background:#52677D;
-    opacity:.92;
-}
-#historyView .report-chart-bar.pay{background:#2F8F5B}
-#historyView .report-chart-label{
-    min-height:14px;
-    font-size:9px;
-    line-height:1;
-    color:#8A96A3;
-    white-space:nowrap;
-}
-#historyView .report-chart-empty{
-    width:100%;
-    align-self:center;
-    text-align:center;
-    color:#8A96A3;
-    font-size:12px;
-    padding:28px 8px;
-}
-@media (max-width:480px){
-    #historyView .report-chart-head{display:block}
-    #historyView .report-chart-legend{justify-content:flex-start;margin-top:8px}
-    #historyView .report-movement-chart{gap:3px}
-    #historyView .report-chart-label{font-size:8px}
-}
-
-
-/* ===== SIMPLE REPORT COMPARISON CHART ===== */
-#historyView .report-compare-card{
-    padding:16px 16px 14px;
-}
-#historyView .report-compare-chart{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:22px;
-    align-items:end;
-    min-height:205px;
-    padding:8px 8px 0;
-}
-#historyView .report-compare-item{
-    min-width:0;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    text-align:center;
-}
-#historyView .report-compare-item strong{
-    min-height:24px;
-    margin-bottom:8px;
-    font-size:15px;
-    color:#252A34;
-    white-space:nowrap;
-}
-#historyView .report-compare-track{
-    width:min(74px,72%);
-    height:125px;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    border-radius:13px 13px 5px 5px;
-    background:#F1F4F7;
-    overflow:hidden;
-}
-#historyView .report-compare-column{
-    display:block;
-    width:100%;
-    min-height:4px;
-    height:4px;
-    border-radius:12px 12px 4px 4px;
-    background:#52677D;
-    transition:height .32s ease;
-}
-#historyView .report-compare-column.pay{
-    background:#2F8F5B;
-}
-#historyView .report-compare-item > span{
-    margin-top:9px;
-    font-size:12px;
-    font-weight:700;
-    color:#52606D;
-}
-#historyView .report-compare-difference{
-    margin-top:14px;
-    padding:10px 12px;
-    border-radius:12px;
-    background:#F6F7F9;
-    text-align:center;
-    font-size:12px;
-    font-weight:700;
-    color:#52677D;
-}
-
 </style>
 
 </head>
@@ -5954,34 +5786,6 @@ body{
                     <div><span>💰 Орж ирсэн төлөлт</span><b id="reportPaidPeriod">0 ₮</b></div>
                     <div class="report-bar paid"><i id="reportPaidBar"></i></div>
                 </div>
-            </div>
-            <div class="report-chart-card report-compare-card">
-                <div class="report-chart-head">
-                    <div>
-                        <b>📊 Өр ба төлөлт</b>
-                        <small id="reportChartHint">Сүүлийн 30 хоногийн харьцуулалт</small>
-                    </div>
-                </div>
-
-                <div class="report-compare-chart">
-                    <div class="report-compare-item">
-                        <strong id="reportCompareAddedValue">0 ₮</strong>
-                        <div class="report-compare-track">
-                            <i id="reportCompareAddedBar" class="report-compare-column add"></i>
-                        </div>
-                        <span>➕ Нэмэгдсэн өр</span>
-                    </div>
-
-                    <div class="report-compare-item">
-                        <strong id="reportComparePaidValue">0 ₮</strong>
-                        <div class="report-compare-track">
-                            <i id="reportComparePaidBar" class="report-compare-column pay"></i>
-                        </div>
-                        <span>💰 Төлөлт</span>
-                    </div>
-                </div>
-
-                <div id="reportCompareDifference" class="report-compare-difference">Зөрүү: 0 ₮</div>
             </div>
         </div>
 
@@ -14488,49 +14292,6 @@ function isInReportPeriod(value) {
 }
 
 
-function renderReportMovementChart(activity) {
-    const addedValue = document.getElementById("reportCompareAddedValue");
-    const paidValue = document.getElementById("reportComparePaidValue");
-    const addedBar = document.getElementById("reportCompareAddedBar");
-    const paidBar = document.getElementById("reportComparePaidBar");
-    const difference = document.getElementById("reportCompareDifference");
-    const hint = document.getElementById("reportChartHint");
-
-    if (!addedValue || !paidValue || !addedBar || !paidBar || !difference) return;
-
-    let added = 0;
-    let paid = 0;
-
-    (Array.isArray(activity) ? activity : []).forEach(function(item) {
-        if (!item || !item.date || !isInReportPeriod(item.date)) return;
-        const amount = Number(item.amount || 0);
-        if (item.type === "add") added += amount;
-        if (item.type === "pay") paid += amount;
-    });
-
-    addedValue.textContent = formatMoney(added);
-    paidValue.textContent = formatMoney(paid);
-
-    const maxValue = Math.max(added, paid, 1);
-    addedBar.style.height = (added > 0 ? Math.max(7, Math.round((added / maxValue) * 125)) : 4) + "px";
-    paidBar.style.height = (paid > 0 ? Math.max(7, Math.round((paid / maxValue) * 125)) : 4) + "px";
-
-    const periodText = window.reportDays === "all"
-        ? "Бүх хугацааны харьцуулалт"
-        : "Сүүлийн " + (window.reportDays || 30) + " хоногийн харьцуулалт";
-    if (hint) hint.textContent = periodText;
-
-    const diff = added - paid;
-    if (diff > 0) {
-        difference.textContent = "Зөрүү: " + formatMoney(diff) + " өр илүү нэмэгдсэн";
-    } else if (diff < 0) {
-        difference.textContent = "Зөрүү: " + formatMoney(Math.abs(diff)) + " төлөлт илүү";
-    } else if (added === 0 && paid === 0) {
-        difference.textContent = "Энэ хугацаанд хөдөлгөөн алга";
-    } else {
-        difference.textContent = "Өр ба төлөлт тэнцүү";
-    }
-}
 
 async function renderReport() {
     /*
@@ -14722,9 +14483,7 @@ async function renderReport() {
             : '<div class="report-empty">Үлдэгдэлтэй авлага алга 👌</div>';
     }
 
-    renderReportMovementChart(activity);
-
-    /*
+/*
      * Сүүлийн хөдөлгөөн = архивын түүхийг ч харуулна.
      */
     const recentBox = document.getElementById("reportRecentActivity");
