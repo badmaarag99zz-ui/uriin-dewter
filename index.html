@@ -2827,6 +2827,71 @@ header h1 {
     }
 }
 
+
+/* =========================================================
+   HEADER V2 — LOGO / USER PHONE / NOTIFICATION
+========================================================= */
+.ledger-header-v2{
+    display:grid !important;
+    grid-template-columns:44px minmax(0,1fr) 44px !important;
+    align-items:center !important;
+    gap:8px !important;
+}
+.ledger-brand-v2{
+    min-width:0;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    gap:10px !important;
+}
+.brand-logo-img{
+    width:46px;
+    height:46px;
+    border-radius:13px;
+    object-fit:cover;
+    flex:0 0 46px;
+    box-shadow:0 4px 12px rgba(37,42,52,.12);
+}
+.brand-center-copy{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+    justify-content:center;
+    line-height:1.12;
+}
+.ledger-brand-v2 .brand-center-copy strong{
+    font-size:20px !important;
+    font-weight:800 !important;
+    letter-spacing:-.35px;
+    color:#252A34;
+    white-space:nowrap;
+}
+.ledger-brand-v2 .brand-center-copy small{
+    margin-top:4px;
+    font-size:12px !important;
+    font-weight:600;
+    color:#7A8491 !important;
+    white-space:nowrap;
+}
+.notification-btn{
+    font-size:19px !important;
+}
+@media (max-width:380px){
+    .brand-logo-img{
+        width:40px;
+        height:40px;
+        flex-basis:40px;
+        border-radius:11px;
+    }
+    .ledger-brand-v2 .brand-center-copy strong{
+        font-size:18px !important;
+    }
+    .ledger-brand-v2 .brand-center-copy small{
+        font-size:11px !important;
+    }
+}
+
 </style>
 
 </head>
@@ -2989,16 +3054,21 @@ header h1 {
 <div id="appContent" style="display:none;">
 
 <header class="ledger-header">
-    <div class="ledger-header-inner">
+    <div class="ledger-header-inner ledger-header-v2">
         <button id="helpTopBtn" class="icon-btn" type="button" onclick="toggleTopMenu()" aria-label="Цэс">☰</button>
-        <div class="ledger-brand">
-            <div class="brand-mark">Ө</div>
-            <div>
+
+        <div class="ledger-brand ledger-brand-v2">
+            <img src="./uriin-dewter-logo.png" class="brand-logo-img" alt="Өрийн дэвтэр">
+            <div class="brand-center-copy">
                 <strong>Өрийн дэвтэр</strong>
-                <small>Өр, төлөлтийн бүртгэл</small>
+                <small id="headerUserPhone">Нэвтэрсэн хэрэглэгч</small>
             </div>
         </div>
-        <button class="icon-btn" type="button" onclick="openDebtModal()" aria-label="Шинэ өр">＋</button>
+
+        <button id="notificationBtn" class="icon-btn notification-btn" type="button"
+            onclick="showNotifications()" aria-label="Мэдэгдэл">
+            <span aria-hidden="true">🔔</span>
+        </button>
     </div>
 </header>
 
@@ -11374,7 +11444,79 @@ function selectSubscriptionPlan(button) {
     await logoutUser();
 
 }
-        /* ==========================================
+        
+/* ==========================================
+   HEADER USER INFO + NOTIFICATION
+========================================== */
+function formatHeaderPhone(phone) {
+    let digits = String(phone || "").replace(/\D/g, "");
+
+    if (digits.startsWith("976") && digits.length >= 11) {
+        digits = digits.slice(-8);
+    }
+
+    if (digits.length === 8) {
+        return digits.slice(0, 4) + " " + digits.slice(4);
+    }
+
+    return digits || "Нэвтэрсэн хэрэглэгч";
+}
+
+async function updateHeaderUserPhone() {
+    const phoneElement = document.getElementById("headerUserPhone");
+    if (!phoneElement) return;
+
+    try {
+        const user = await getCurrentUser();
+
+        if (!user) {
+            phoneElement.textContent = "Нэвтэрсэн хэрэглэгч";
+            return;
+        }
+
+        let phone =
+            user.phone ||
+            (user.user_metadata && user.user_metadata.phone) ||
+            "";
+
+        if (!phone && user.id) {
+            const { data } = await supabaseClient
+                .from("profiles")
+                .select("phone")
+                .eq("id", user.id)
+                .maybeSingle();
+
+            phone = data && data.phone ? data.phone : "";
+        }
+
+        phoneElement.textContent = formatHeaderPhone(phone);
+
+    } catch (error) {
+        console.error("Header phone error:", error);
+    }
+}
+
+function showNotifications() {
+    appAlert("🔔 Одоогоор шинэ мэдэгдэл алга.");
+}
+
+/* Update whenever the app becomes visible after login/offline login. */
+const headerAppContent = document.getElementById("appContent");
+
+if (headerAppContent) {
+    const headerObserver = new MutationObserver(function () {
+        if (headerAppContent.style.display !== "none") {
+            updateHeaderUserPhone();
+        }
+    });
+
+    headerObserver.observe(headerAppContent, {
+        attributes: true,
+        attributeFilter: ["style", "class"]
+    });
+}
+
+/* ==========================================
    TOP MENU → BODY
 ========================================== */
 
