@@ -6004,6 +6004,7 @@ const supabaseClient =
 ========================================== */
 
 let debts = [];
+let reportDebts = [];
 
 let editingDebtId = null;
 
@@ -14084,8 +14085,57 @@ function isInReportPeriod(value) {
     return d >= from;
 }
 
-function renderReport() {
-    const source = Array.isArray(debts) ? debts : [];
+async function renderReport() {
+    /*
+     * ЖАГСААЛТ = зөвхөн идэвхтэй debts
+     * ТАЙЛАНГИЙН ТҮҮХ = идэвхтэй + архивлагдсан debts
+     */
+    const user = await getCurrentUser();
+
+    if (user && navigator.onLine) {
+        try {
+            const { data, error } =
+                await supabaseClient
+                    .from("debts")
+                    .select("*")
+                    .eq("user_id", user.id)
+                    .order("created_at", { ascending: false });
+
+            if (!error) {
+                reportDebts = (data || []).map(row => ({
+                    id: row.id,
+                    name: row.name || "",
+                    phone: row.phone || "",
+                    amount: Number(row.amount || 0),
+                    paid: Number(row.paid || 0),
+                    dueDate: row.due_date || "",
+                    createdAt: row.created_at || "",
+                    archivedAt: row.archived_at || "",
+                    additions: Array.isArray(row.additions) ? row.additions : [],
+                    payments: Array.isArray(row.payments) ? row.payments : []
+                }));
+            } else {
+                console.error("Тайлангийн архив унших алдаа:", error);
+            }
+        } catch (error) {
+            console.error("Тайлангийн архив унших алдаа:", error);
+        }
+    }
+
+    /*
+     * Online үед reportDebts бүх түүхийг агуулна.
+     * Offline үед одоогийн local active debts-ээр түр тайлан харуулна.
+     */
+    const allHistory =
+        Array.isArray(reportDebts) && reportDebts.length
+            ? reportDebts
+            : (Array.isArray(debts) ? debts : []);
+
+    const activeSource =
+        allHistory.filter(function(debt) {
+            return !debt.archivedAt;
+        });
+
     const today = new Date();
     today.setHours(0,0,0,0);
 
@@ -14097,7 +14147,11 @@ function renderReport() {
     let periodAdded = 0, periodPaid = 0;
     const activity = [];
 
-    source.forEach(function(debt) {
+    /*
+     * ДЭЭД ТООНУУД + ХУГАЦААНЫ ТӨЛӨВ:
+     * зөвхөн одоо идэвхтэй байгаа бүртгэлүүд.
+     */
+    activeSource.forEach(function(debt) {
         const amount = Number(debt.amount || 0);
         const paid = Number(debt.paid || 0);
         const remaining = Math.max(0, amount - paid);
@@ -14125,7 +14179,14 @@ function renderReport() {
                 normalAmount += remaining;
             }
         }
+    });
 
+    /*
+     * ХӨДӨЛГӨӨН + ТҮҮХ:
+     * архивлагдсан бүртгэлийг ОРУУЛНА.
+     * Ингэснээр хүн архивлагдсан ч хуучин өр/төлөлт тайлангаас алга болохгүй.
+     */
+    allHistory.forEach(function(debt) {
         const additions = Array.isArray(debt.additions) ? debt.additions : [];
         additions.forEach(function(item) {
             const value = Number(item.amount || 0);
@@ -14134,7 +14195,8 @@ function renderReport() {
                 type: "add",
                 name: debt.name || "Нэргүй",
                 amount: value,
-                date: item.createdAt || debt.createdAt || ""
+                date: item.createdAt || debt.createdAt || "",
+                archived: Boolean(debt.archivedAt)
             });
         });
 
@@ -14146,7 +14208,8 @@ function renderReport() {
                 type: "paid",
                 name: debt.name || "Нэргүй",
                 amount: value,
-                date: item.createdAt || ""
+                date: item.createdAt || "",
+                archived: Boolean(debt.archivedAt)
             });
         });
     });
@@ -14180,9 +14243,12 @@ function renderReport() {
     if (addedBar) addedBar.style.width = Math.round(periodAdded / maxFlow * 100) + "%";
     if (paidBar) paidBar.style.width = Math.round(periodPaid / maxFlow * 100) + "%";
 
+    /*
+     * Анхаарах хүмүүс = зөвхөн идэвхтэй үлдэгдэлтэй хүмүүс.
+     */
     const topBox = document.getElementById("reportTopDebtors");
     if (topBox) {
-        const top = source
+        const top = activeSource
             .map(function(debt) {
                 return {
                     name: debt.name || "Нэргүй",
@@ -14205,6 +14271,9 @@ function renderReport() {
             : '<div class="report-empty">Үлдэгдэлтэй авлага алга 👌</div>';
     }
 
+    /*
+     * Сүүлийн хөдөлгөөн = архивын түүхийг ч харуулна.
+     */
     const recentBox = document.getElementById("reportRecentActivity");
     if (recentBox) {
         const recent = activity
@@ -14215,9 +14284,10 @@ function renderReport() {
         recentBox.innerHTML = recent.length
             ? recent.map(function(item) {
                 const isPaid = item.type === "paid";
+                const archiveText = item.archived ? ' · 📦 Архив' : '';
                 return '<div class="report-list-item">' +
                     '<div class="report-list-main"><b>' + (isPaid ? '💰 ' : '➕ ') + escapeHtml(item.name) + '</b>' +
-                    '<small>' + (isPaid ? 'Төлөлт' : 'Өр нэмсэн') + ' · ' + escapeHtml(reportDate(item.date)) + '</small></div>' +
+                    '<small>' + (isPaid ? 'Төлөлт' : 'Өр нэмсэн') + ' · ' + escapeHtml(reportDate(item.date)) + archiveText + '</small></div>' +
                     '<div class="report-list-amount ' + (isPaid ? 'paid' : '') + '">' +
                     (isPaid ? '− ' : '+ ') + reportMoney(item.amount) + '</div>' +
                 '</div>';
