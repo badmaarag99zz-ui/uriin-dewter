@@ -8017,16 +8017,14 @@ function showDebts() {
 
 
         if (sort === "name-az") {
-                    return String(a.name || "").localeCompare(
-                        String(b.name || ""),
-                        ["mn", "en"],
-                        { sensitivity: "base" }
-                    );
-                }
-);
-                }
+            return String(a.name || "").localeCompare(
+                String(b.name || ""),
+                ["mn", "en"],
+                { sensitivity: "base" }
+            );
+        }
 
-                if (sort === "highest") {
+        if (sort === "highest") {
 
             return (
                 remainingB -
