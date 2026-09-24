@@ -2667,231 +2667,270 @@ header h1 {
 
 
 /* =========================================================
-   ӨРИЙН ДЭВТЭР — 5 TAB MOBILE APP LAYOUT
+   ӨРИЙН ДЭВТЭР — PAPER / NOTEBOOK IDENTITY
+   Deliberately avoids mobile-banking visual language.
 ========================================================= */
 #appContent{
     min-height:100vh;
-    background:#f5f7f4;
-    padding-bottom:82px;
+    padding-bottom:78px;
+    color:#292c28;
+    background:#f3f0e8;
+    background-image:
+        linear-gradient(rgba(91,102,91,.045) 1px,transparent 1px);
+    background-size:100% 30px;
 }
-.mobile-app-header{
+
+.notebook-header{
     position:sticky!important;
     top:0;
     z-index:70;
-    background:#ffffff!important;
-    border-bottom:1px solid #e5ebe6!important;
+    background:rgba(249,247,240,.96)!important;
+    border-bottom:1px solid #ded9cb!important;
     box-shadow:none!important;
 }
-.mobile-header-inner{
-    max-width:760px;
-    min-height:72px;
+.notebook-header-inner{
+    width:min(100%,760px);
+    min-height:66px;
     margin:auto;
-    padding:10px 14px;
+    padding:8px 14px;
     display:grid;
-    grid-template-columns:44px 1fr 44px;
+    grid-template-columns:42px 1fr 42px;
     align-items:center;
     gap:10px;
 }
-#helpTopBtn,.notification-btn{
-    width:42px!important;
-    height:42px!important;
-    border-radius:13px!important;
-    border:1px solid #dfe7e1!important;
-    background:#f8faf8!important;
-    color:#2d4938!important;
+#helpTopBtn,.header-add{
+    width:40px!important;height:40px!important;
+    border:1px solid #d9d5ca!important;
+    border-radius:10px!important;
+    background:#fffdf7!important;
+    color:#3f4941!important;
     box-shadow:none!important;
+    cursor:pointer;
     display:grid!important;
     place-items:center!important;
-    cursor:pointer;
 }
-#helpTopBtn{font-size:25px!important}
-.notification-btn{font-size:17px}
-.mobile-brand{
-    min-width:0;
-    text-align:center;
+#helpTopBtn{font-size:19px!important}
+.header-add{font-size:23px}
+.notebook-brand{
+    justify-self:center;
     display:flex;
-    flex-direction:column;
     align-items:center;
+    gap:8px;
 }
-.mobile-brand strong{
-    color:#17452b;
-    font-size:17px;
-    font-weight:850;
-    letter-spacing:.35px;
+.notebook-mini{font-size:24px}
+.notebook-brand div{display:flex;flex-direction:column}
+.notebook-brand strong{
+    color:#29372d;
+    font-size:16px;
+    line-height:1.05;
 }
-.mobile-brand span{
-    max-width:250px;
-    margin-top:3px;
-    color:#7c8a81;
+.notebook-brand small{
+    margin-top:4px;
+    color:#918e83;
     font-size:9px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
 }
 
-.mobile-app-main{
-    width:100%;
-    max-width:760px;
+.paper-main{
+    width:min(100%,760px);
     margin:auto;
-    padding:20px 14px 24px;
+    padding:22px 14px 28px;
 }
 .app-view{display:none}
-.app-view.active{display:block;animation:viewIn .18s ease}
-@keyframes viewIn{
-    from{opacity:.4;transform:translateY(3px)}
-    to{opacity:1;transform:none}
-}
+.app-view.active{display:block;animation:paperIn .16s ease}
+@keyframes paperIn{from{opacity:.45}to{opacity:1}}
 
-.home-title{margin:2px 2px 14px}
-.home-title span,.view-heading span{
-    color:#7d8d83;
-    font-size:10px;
+.paper-date-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    gap:14px;
+    margin:0 3px 15px;
+}
+.paper-kicker,.section-caption span{
+    color:#999487;
+    font-size:9px;
     font-weight:800;
-    letter-spacing:1.15px;
+    letter-spacing:1.35px;
 }
-.home-title h1,.view-heading h2{
+.paper-date-row h1{
     margin:4px 0 0;
-    color:#173b27;
-    font-size:22px;
-    letter-spacing:-.45px;
+    color:#2e3931;
+    font-family:Georgia,"Times New Roman",serif;
+    font-size:25px;
+    font-weight:700;
+}
+.text-link{
+    border:0;
+    background:none;
+    color:#6d796f;
+    font-size:10px;
+    cursor:pointer;
+    padding:5px 0;
 }
 
-.overview-card{
+.notebook-sheet{
     position:relative;
     overflow:hidden;
-    cursor:pointer;
-    min-height:260px;
-    padding:24px;
-    border-radius:24px;
-    color:#fff;
+    padding:26px 23px 19px 38px;
+    border:1px solid #ded9cc;
+    border-radius:5px 14px 14px 5px;
     background:
-        radial-gradient(circle at 92% 10%,rgba(255,255,255,.13),transparent 25%),
-        linear-gradient(145deg,#208553,#12643d);
-    box-shadow:0 16px 34px rgba(18,100,61,.19);
+        repeating-linear-gradient(
+            to bottom,
+            #fffef9 0,
+            #fffef9 31px,
+            #e9e7df 32px
+        );
+    box-shadow:5px 7px 0 #e5e0d4,0 12px 26px rgba(70,65,51,.08);
 }
-.overview-card:before{
+.notebook-sheet:before{
     content:"";
     position:absolute;
-    left:14px;
-    top:0;
-    bottom:0;
-    border-left:1px dashed rgba(255,255,255,.18);
+    left:22px;top:0;bottom:0;
+    border-left:1px solid #e5aaa0;
 }
-.overview-head{
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:15px;
+.sheet-margin{
+    position:absolute;
+    left:8px;top:14px;bottom:14px;
+    width:8px;
+    background:
+        radial-gradient(circle,#b8b3a8 2px,transparent 2.5px)
+        center top/8px 27px repeat-y;
+}
+.sheet-title{
+    min-height:72px;
     position:relative;
     z-index:2;
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
 }
-.overview-label{
+.sheet-title span{
     display:block;
-    color:rgba(255,255,255,.70);
+    color:#77766f;
     font-size:11px;
-    font-weight:750;
-    letter-spacing:1px;
 }
-.overview-head strong{
+.sheet-title strong{
     display:block;
-    margin-top:9px;
+    margin-top:8px;
+    color:#29372e;
+    font-family:Georgia,"Times New Roman",serif;
     font-size:34px;
     line-height:1;
-    font-weight:900;
-    letter-spacing:-1px;
+    letter-spacing:-.8px;
 }
-.overview-money{
-    width:48px;height:48px;
-    display:grid;place-items:center;
-    border-radius:15px;
-    background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.12);
-    font-size:22px;font-weight:850;
+.pencil-mark{
+    color:#7b827b!important;
+    font-size:25px!important;
+    transform:rotate(-8deg);
 }
-.overview-grid{
+.sheet-rule{
+    height:1px;
+    margin:8px 0 16px;
+    border-top:1px dashed #d3d0c7;
+}
+.sheet-stats{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:8px;
     position:relative;
     z-index:2;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:9px;
-    margin-top:28px;
 }
-.overview-stat{
-    padding:12px 13px;
-    border-radius:14px;
-    background:rgba(255,255,255,.10);
-    border:1px solid rgba(255,255,255,.10);
+.sheet-stats>div{
+    padding:10px 8px;
+    border-right:1px solid #e1ded5;
 }
-.overview-stat.people{grid-column:1/-1}
-.overview-stat span{
+.sheet-stats>div:last-child{border-right:0}
+.sheet-stats span{
     display:block;
-    color:rgba(255,255,255,.67);
-    font-size:10px;
+    color:#8c8980;
+    font-size:9px;
     margin-bottom:5px;
 }
-.overview-stat b{font-size:15px}
-.overview-hint{
-    position:relative;
-    z-index:2;
-    margin-top:14px;
-    text-align:right;
-    color:rgba(255,255,255,.70);
-    font-size:10px;
+.sheet-stats b{
+    color:#343c36;
+    font-size:14px;
 }
-.overview-hint b{font-size:15px}
+.sheet-open{
+    width:100%;
+    margin-top:17px;
+    padding:10px 0 4px;
+    border:0;
+    border-top:1px dashed #d3d0c7;
+    background:transparent;
+    color:#657068;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:10px;
+    cursor:pointer;
+}
+.sheet-open span{font-size:17px}
 
-.home-quick{
+.section-caption{margin:23px 3px 9px}
+.paper-actions{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:13px;
-}
-.home-quick button{
-    min-width:0;
-    padding:14px 13px;
-    border:1px solid #e0e8e2;
-    border-radius:17px;
-    background:#fff;
-    display:grid;
-    grid-template-columns:36px minmax(0,1fr) auto;
-    align-items:center;
     gap:9px;
+}
+.paper-actions button{
+    min-width:0;
+    padding:13px;
+    border:1px solid #dedacf;
+    border-radius:11px;
+    background:#fffdf8;
+    color:#414942;
+    display:flex;
+    align-items:center;
+    gap:10px;
     text-align:left;
     cursor:pointer;
-    color:#254032;
 }
-.home-quick button>span{
-    width:36px;height:36px;
+.action-symbol{
+    width:35px;height:35px;
+    flex:0 0 35px;
     display:grid;place-items:center;
-    border-radius:11px;
-    background:#edf6f0;
-    color:#167044;
+    border-radius:8px;
+    background:#eeece4;
+    color:#4f5d53;
     font-size:18px;
 }
-.home-quick button div{min-width:0}
-.home-quick button strong{
-    display:block;
-    font-size:12px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
+.paper-actions strong{display:block;font-size:12px}
+.paper-actions small{display:block;margin-top:3px;color:#99958a;font-size:9px}
+.notebook-tip{
+    margin-top:10px;
+    padding:11px 13px;
+    border:1px dashed #d7d1c4;
+    border-radius:10px;
+    background:rgba(255,253,247,.58);
+    display:flex;
+    gap:9px;
+    align-items:flex-start;
 }
-.home-quick button small{
-    display:block;
-    margin-top:3px;
-    color:#89958d;
-    font-size:9px;
+.notebook-tip p{
+    margin:0;
+    color:#827f75;
+    font-size:10px;
+    line-height:1.45;
 }
-.home-quick button>b{color:#92a098}
 
-.view-heading{margin:2px 2px 14px}
-.debt-box#debtListBox{
+.paper-add-btn{
+    border:1px solid #d7d2c6;
+    border-radius:9px;
+    background:#fffdf8;
+    color:#4c574f;
+    padding:8px 10px;
+    font-size:10px;
+    font-weight:700;
+    cursor:pointer;
+}
+.paper-list#debtListBox{
     display:block!important;
     padding:15px!important;
-    border-radius:19px!important;
-    background:#fff!important;
-    border:1px solid #e0e8e2!important;
-    box-shadow:0 8px 24px rgba(29,64,40,.055)!important;
+    border:1px solid #ddd8cc!important;
+    border-radius:11px!important;
+    background:#fffef9!important;
+    box-shadow:4px 5px 0 #e6e1d6!important;
 }
 #listView .tools{
     display:grid!important;
@@ -2900,124 +2939,154 @@ header h1 {
     margin-bottom:13px!important;
 }
 #listView .tools input,#listView .tools select{
-    min-height:43px;
     width:100%;
-    background:#f8faf8!important;
-    border:1px solid #dfe7e1!important;
-    border-radius:12px!important;
+    min-height:42px;
+    border:1px solid #ddd9ce!important;
+    border-radius:8px!important;
+    background:#faf9f4!important;
+    color:#454a45!important;
 }
 #debtListBox .debt-card{
-    background:#fff!important;
-    border:1px solid #e2e9e3!important;
-    border-left:3px solid #83b394!important;
-    border-radius:14px!important;
+    padding:14px 12px 14px 17px!important;
+    border:0!important;
+    border-bottom:1px dashed #d8d4ca!important;
+    border-radius:0!important;
+    background:transparent!important;
     box-shadow:none!important;
-    padding:14px 15px!important;
 }
-#debtListBox .person-name{color:#193a26!important}
+#debtListBox .debt-card:last-child{border-bottom:0!important}
+#debtListBox .debt-card:hover{
+    transform:none!important;
+    background:#faf8f1!important;
+    box-shadow:none!important;
+}
+#debtListBox .person-name{
+    color:#303a33!important;
+    font-family:Georgia,"Times New Roman",serif!important;
+    font-weight:700!important;
+}
+#debtListBox .person-phone{color:#8f8b81!important}
 #debtListBox .debt-total{
     padding:0!important;
     background:transparent!important;
-    color:#a7680c!important;
+    color:#7d5731!important;
+    font-family:Georgia,"Times New Roman",serif!important;
+    font-weight:700!important;
 }
-#debtListBox .debt-total.done{color:#177447!important}
+#debtListBox .debt-total.done{color:#5e7764!important}
 
-.placeholder-view{
+.empty-paper{
     min-height:55vh;
-    padding:60px 24px;
+    padding:65px 25px;
     text-align:center;
-    border:1px solid #e0e8e2;
-    border-radius:22px;
-    background:#fff;
+    border:1px solid #ded9cc;
+    border-radius:10px;
+    background:
+        repeating-linear-gradient(to bottom,#fffef9 0,#fffef9 31px,#ece9e1 32px);
+    box-shadow:4px 5px 0 #e5e0d5;
 }
-.placeholder-icon{
-    width:58px;height:58px;
-    margin:0 auto 14px;
-    display:grid;place-items:center;
-    border-radius:18px;
-    background:#edf6f0;
-    color:#176f43;
-    font-size:26px;
+.empty-paper>span{font-size:30px;color:#777d78}
+.empty-paper h2{
+    margin:10px 0 5px;
+    font-family:Georgia,"Times New Roman",serif;
+    color:#343d36;
 }
-.placeholder-view h2{margin:0;color:#173a27}
-.placeholder-view p{
-    max-width:320px;
-    margin:8px auto 0;
-    color:#7e8b83;
-    font-size:13px;
-    line-height:1.5;
-}
+.empty-paper p{max-width:330px;margin:0 auto;color:#807e76;font-size:12px}
+.empty-paper small{display:block;margin-top:8px;color:#aaa69b}
 
-.bottom-app-nav{
+.paper-tabs{
     position:fixed;
     z-index:80;
     left:50%;
     bottom:0;
     transform:translateX(-50%);
     width:min(100%,760px);
-    height:72px;
-    padding:7px 8px calc(7px + env(safe-area-inset-bottom));
-    background:rgba(255,255,255,.97);
-    border:1px solid #e0e7e1;
-    border-bottom:0;
-    border-radius:20px 20px 0 0;
-    box-shadow:0 -8px 26px rgba(30,62,39,.08);
+    height:68px;
+    padding:5px 6px calc(5px + env(safe-area-inset-bottom));
     display:grid;
     grid-template-columns:repeat(5,1fr);
-    align-items:end;
+    background:#fffdf8;
+    border:1px solid #ded9cd;
+    border-bottom:0;
+    border-radius:13px 13px 0 0;
+    box-shadow:0 -5px 18px rgba(65,59,45,.06);
 }
-.nav-item,.nav-add{
+.paper-tab{
     border:0;
     background:transparent;
-    color:#87938b;
-    cursor:pointer;
-    min-width:0;
-    height:55px;
+    color:#979388;
     display:flex;
     flex-direction:column;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     gap:3px;
+    cursor:pointer;
 }
-.nav-item span{font-size:20px;line-height:1}
-.nav-item small,.nav-add small{font-size:9px;font-weight:700}
-.nav-item.active{color:#176f43}
-.nav-add{
-    position:relative;
-    color:#176f43;
+.paper-tab span{font-size:18px}
+.paper-tab small{font-size:9px;font-weight:650}
+.paper-tab.active{
+    color:#3f5847;
+    background:#f0eee6;
+    border-radius:9px;
 }
-.nav-add>span{
-    width:48px;height:48px;
-    margin-top:-27px;
+.write-tab{color:#665f53}
+.write-tab span{
+    width:32px;height:32px;
     display:grid;place-items:center;
-    border-radius:16px;
-    background:linear-gradient(145deg,#208553,#12643d);
-    color:#fff;
-    border:4px solid #f5f7f4;
-    box-shadow:0 8px 18px rgba(18,100,61,.23);
-    font-size:25px;
+    border:1px solid #cfc9bc;
+    border-radius:50%;
+    background:#f8f5ed;
+    font-size:16px;
 }
-.nav-add small{margin-top:1px}
 
 .floating-add-btn{display:none!important}
 
-.debt-modal,#detailModal{z-index:100!important}
+.debt-modal,#detailModal{
+    background:rgba(48,46,39,.48)!important;
+    backdrop-filter:blur(4px)!important;
+}
+.debt-modal-box,.detail-box{
+    border:1px solid #ded9cd!important;
+    border-radius:15px!important;
+    background:#fffef9!important;
+    box-shadow:0 25px 60px rgba(52,47,36,.22)!important;
+}
+.debt-modal-header h2{
+    font-family:Georgia,"Times New Roman",serif;
+    color:#343d36!important;
+}
+.modal-close,.detail-close{background:#f1eee6!important;color:#77756e!important}
+.debt-form input{
+    border-color:#ddd9ce!important;
+    border-radius:8px!important;
+    background:#faf9f4!important;
+}
+.debt-form input:focus{
+    border-color:#aaa79d!important;
+    box-shadow:0 0 0 3px rgba(110,110,100,.07)!important;
+}
+.modal-save-btn{
+    border-radius:9px!important;
+    background:#3f5847!important;
+    box-shadow:none!important;
+}
 
 @media(max-width:600px){
-    .mobile-header-inner{min-height:66px;padding:8px 12px}
-    #helpTopBtn,.notification-btn{width:39px!important;height:39px!important}
-    .mobile-brand strong{font-size:15px}
-    .mobile-brand span{font-size:8px;max-width:205px}
-    .mobile-app-main{padding:16px 12px 22px}
-    .home-title h1,.view-heading h2{font-size:20px}
-    .overview-card{min-height:245px;padding:20px;border-radius:21px}
-    .overview-head strong{font-size:29px}
-    .overview-grid{margin-top:23px}
-    .home-quick{grid-template-columns:1fr}
-    .home-quick button{padding:12px}
+    .notebook-header-inner{min-height:62px;padding:7px 11px}
+    #helpTopBtn,.header-add{width:37px!important;height:37px!important}
+    .notebook-brand strong{font-size:14px}
+    .notebook-brand small{font-size:8px}
+    .notebook-mini{font-size:21px}
+    .paper-main{padding:17px 11px 23px}
+    .paper-date-row h1{font-size:22px}
+    .notebook-sheet{padding:22px 17px 17px 34px}
+    .sheet-title strong{font-size:29px}
+    .sheet-stats{gap:2px}
+    .sheet-stats b{font-size:12px}
+    .paper-actions{grid-template-columns:1fr}
     #listView .tools{grid-template-columns:1fr!important}
-    .debt-modal{align-items:flex-end!important;padding:9px!important}
-    .debt-modal-box{border-radius:22px 22px 12px 12px!important;max-height:92vh!important}
+    .debt-modal{align-items:flex-end!important;padding:8px!important}
+    .debt-modal-box{max-height:92vh!important;border-radius:15px 15px 8px 8px!important}
 }
 
 </style>
@@ -3181,85 +3250,99 @@ header h1 {
 
 <div id="appContent" style="display:none;">
 
-<header class="mobile-app-header">
-    <div class="mobile-header-inner">
-        <button id="helpTopBtn" type="button" onclick="toggleTopMenu()" aria-label="Цэс">⋮</button>
+<header class="notebook-header">
+    <div class="notebook-header-inner">
+        <button id="helpTopBtn" type="button" onclick="toggleTopMenu()" aria-label="Цэс">☰</button>
 
-        <div class="mobile-brand">
-            <strong>ӨРИЙН ДЭВТЭР</strong>
-            <span>/Нэвтэрсэн бүртгэлээ хялбархан хяна/</span>
+        <div class="notebook-brand">
+            <span class="notebook-mini">📒</span>
+            <div>
+                <strong>Өрийн дэвтэр</strong>
+                <small>Өдөр тутмын бүртгэл</small>
+            </div>
         </div>
 
-        <button type="button" class="notification-btn" onclick="appAlert('Мэдэгдлийн хэсгийг дараагийн алхамд холбоно.')">
-            <span>🔔</span>
-        </button>
+        <button class="header-add" type="button" onclick="openDebtModal()" aria-label="Өр нэмэх">＋</button>
     </div>
 </header>
 
-<main class="mobile-app-main">
+<main class="paper-main">
 
     <section id="homeView" class="app-view active">
-        <div class="home-title">
-            <span>ЕРӨНХИЙ МЭДЭЭЛЭЛ</span>
-            <h1>Таны өрийн тойм</h1>
+        <div class="paper-date-row">
+            <div>
+                <span class="paper-kicker">ТОЙМ</span>
+                <h1>Миний дэвтэр</h1>
+            </div>
+            <button type="button" class="text-link" onclick="showAppView('listView')">Бүгдийг харах →</button>
         </div>
 
-        <div class="overview-card" id="remainingCard">
-            <div class="overview-head">
+        <div class="notebook-sheet">
+            <div class="sheet-margin"></div>
+
+            <div class="sheet-title">
                 <div>
-                    <span class="overview-label">НИЙТ ҮЛДЭГДЭЛ</span>
+                    <span>Үлдэгдэл өр</span>
                     <strong id="totalRemaining">0 ₮</strong>
                 </div>
-                <div class="overview-money">₮</div>
+                <span class="pencil-mark">✎</span>
             </div>
 
-            <div class="overview-grid">
-                <div class="overview-stat">
+            <div class="sheet-rule"></div>
+
+            <div class="sheet-stats">
+                <div>
                     <span>Нийт өр</span>
                     <b id="totalDebt">0 ₮</b>
                 </div>
-
-                <div class="overview-stat">
+                <div>
                     <span>Төлсөн</span>
                     <b id="totalPaid">0 ₮</b>
                 </div>
-
-                <div class="overview-stat people">
-                    <span>Нийт бүртгэлтэй хүмүүс</span>
+                <div>
+                    <span>Хүмүүс</span>
                     <b id="totalPeople">0</b>
                 </div>
             </div>
 
-            <div class="overview-hint">Жагсаалтыг харах <b>›</b></div>
+            <button id="remainingCard" class="sheet-open" type="button">
+                Өртэй хүмүүсийн жагсаалтыг нээх <span>→</span>
+            </button>
         </div>
 
-        <div class="home-quick">
-            <button type="button" onclick="showAppView('listView')">
-                <span>☷</span>
-                <div><strong>Өрийн жагсаалт</strong><small>Харилцагчдаа харах</small></div>
-                <b>›</b>
-            </button>
+        <div class="section-caption">
+            <span>ХУРДАН ҮЙЛДЭЛ</span>
+        </div>
 
+        <div class="paper-actions">
             <button type="button" onclick="openDebtModal()">
-                <span>＋</span>
-                <div><strong>Шинэ өр бүртгэх</strong><small>Өр хурдан нэмэх</small></div>
-                <b>›</b>
+                <span class="action-symbol">＋</span>
+                <div><strong>Өр бичих</strong><small>Шинэ бүртгэл нэмэх</small></div>
             </button>
+            <button type="button" onclick="showAppView('listView')">
+                <span class="action-symbol">☷</span>
+                <div><strong>Жагсаалт</strong><small>Өртэй хүмүүсээ харах</small></div>
+            </button>
+        </div>
+
+        <div class="notebook-tip">
+            <span>💡</span>
+            <p>Үлдэгдэл өр дээр дарж харилцагчдын жагсаалтыг хурдан нээж болно.</p>
         </div>
     </section>
 
     <section id="listView" class="app-view">
-        <div class="view-heading">
+        <div class="paper-date-row">
             <div>
-                <span>ЖАГСААЛТ</span>
-                <h2>Өртэй хүмүүс</h2>
+                <span class="paper-kicker">БҮРТГЭЛ</span>
+                <h1>Өртэй хүмүүс</h1>
             </div>
+            <button type="button" class="paper-add-btn" onclick="openDebtModal()">＋ Өр бичих</button>
         </div>
 
-        <div class="debt-box" id="debtListBox">
+        <div class="debt-box paper-list" id="debtListBox">
             <div class="tools">
                 <input id="search" type="text" placeholder="Нэр эсвэл утсаар хайх...">
-
                 <select id="sort">
                     <option value="newest">Шинээр бүртгэгдсэн</option>
                     <option value="oldest">Хуучнаар бүртгэгдсэн</option>
@@ -3268,43 +3351,44 @@ header h1 {
                     <option value="due">Төлөх хугацаа</option>
                 </select>
             </div>
-
             <div id="list"></div>
         </div>
     </section>
 
-    <section id="reportView" class="app-view placeholder-view">
-        <div class="placeholder-icon">▥</div>
-        <h2>Тайлан</h2>
-        <p>Тайлангийн хэсгийг дараагийн алхамд бодит мэдээлэлтэй холбоно.</p>
+    <section id="reportView" class="app-view">
+        <div class="empty-paper">
+            <span>▤</span>
+            <h2>Тайлан</h2>
+            <p>Энд орлого биш, өрийн хөдөлгөөн ба төлөлтийн тайлан байрлана.</p>
+            <small>Дараагийн алхамд холбоно.</small>
+        </div>
     </section>
 
-    <section id="settingsView" class="app-view placeholder-view">
-        <div class="placeholder-icon">⚙</div>
-        <h2>Тохиргоо</h2>
-        <p>Тохиргооны хэсгийг дараагийн алхамд холбоно.</p>
+    <section id="settingsView" class="app-view">
+        <div class="empty-paper">
+            <span>⚙</span>
+            <h2>Тохиргоо</h2>
+            <p>Бүртгэл, апп болон бусад тохиргоонууд энд байрлана.</p>
+            <small>Дараагийн алхамд холбоно.</small>
+        </div>
     </section>
 
 </main>
 
-<nav class="bottom-app-nav">
-    <button type="button" class="nav-item active" data-view="homeView" onclick="showAppView('homeView', this)">
+<nav class="paper-tabs">
+    <button class="paper-tab active" data-view="homeView" type="button" onclick="showAppView('homeView',this)">
         <span>⌂</span><small>Нүүр</small>
     </button>
-
-    <button type="button" class="nav-item" data-view="listView" onclick="showAppView('listView', this)">
+    <button class="paper-tab" data-view="listView" type="button" onclick="showAppView('listView',this)">
         <span>☷</span><small>Жагсаалт</small>
     </button>
-
-    <button type="button" class="nav-add" onclick="openDebtModal()" aria-label="Өр нэмэх">
-        <span>＋</span><small>Өр нэмэх</small>
+    <button class="paper-tab write-tab" type="button" onclick="openDebtModal()">
+        <span>✎</span><small>Өр бичих</small>
     </button>
-
-    <button type="button" class="nav-item" data-view="reportView" onclick="showAppView('reportView', this)">
-        <span>▥</span><small>Тайлан</small>
+    <button class="paper-tab" data-view="reportView" type="button" onclick="showAppView('reportView',this)">
+        <span>▤</span><small>Тайлан</small>
     </button>
-
-    <button type="button" class="nav-item" data-view="settingsView" onclick="showAppView('settingsView', this)">
+    <button class="paper-tab" data-view="settingsView" type="button" onclick="showAppView('settingsView',this)">
         <span>⚙</span><small>Тохиргоо</small>
     </button>
 </nav>
@@ -3319,21 +3403,16 @@ header h1 {
             </div>
             <button type="button" class="modal-close" onclick="closeDebtModal()">✕</button>
         </div>
-
         <div class="debt-form">
             <label>Хүний нэр</label>
             <input id="personName" type="text" placeholder="Жишээ: Бат">
-
             <label>Утасны дугаар</label>
             <input id="personPhone" type="tel" placeholder="Жишээ: 99112233">
-
             <label>Өрийн дүн</label>
             <input id="debtAmount" type="number" placeholder="Жишээ: 150000">
-
             <label>Төлөх хугацаа</label>
             <input id="dueDate" type="date">
-
-            <button type="button" class="modal-save-btn" id="addButton">💾 Өр бүртгэх</button>
+            <button type="button" class="modal-save-btn" id="addButton">Өр бүртгэх</button>
         </div>
     </div>
 </div>
@@ -11559,29 +11638,25 @@ if (topMenuElement) {
 
 
 // ==========================================
-// 5 TAB APP NAVIGATION
+// PAPER APP NAVIGATION
 // ==========================================
 function showAppView(viewId, buttonElement = null) {
     document.querySelectorAll(".app-view").forEach(function(view) {
         view.classList.remove("active");
     });
 
-    const targetView = document.getElementById(viewId);
-    if (targetView) {
-        targetView.classList.add("active");
-    }
+    const target = document.getElementById(viewId);
+    if (target) target.classList.add("active");
 
-    document.querySelectorAll(".bottom-app-nav .nav-item").forEach(function(btn) {
+    document.querySelectorAll(".paper-tab[data-view]").forEach(function(btn) {
         btn.classList.remove("active");
     });
 
-    const navButton =
+    const nav =
         buttonElement ||
-        document.querySelector('.bottom-app-nav .nav-item[data-view="' + viewId + '"]');
+        document.querySelector('.paper-tab[data-view="' + viewId + '"]');
 
-    if (navButton) {
-        navButton.classList.add("active");
-    }
+    if (nav) nav.classList.add("active");
 
     window.scrollTo({ top: 0, behavior: "smooth" });
 }
