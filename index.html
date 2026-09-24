@@ -5522,13 +5522,13 @@ body{
 /* Баруун тийш дараагийн tab: хуудас баруун ирмэгээс зүүн тийш эргэнэ. */
 .ledger-view.ledger-paper-flip-forward{
     transform-origin:left center;
-    animation:ledgerRealFlipForward .52s cubic-bezier(.58,.02,.25,1) forwards;
+    animation:ledgerRealFlipForward .68s cubic-bezier(.22,.61,.36,1) forwards;
 }
 
 /* Буцах tab: эсрэг талаасаа эргэнэ. */
 .ledger-view.ledger-paper-flip-back{
     transform-origin:right center;
-    animation:ledgerRealFlipBack .52s cubic-bezier(.58,.02,.25,1) forwards;
+    animation:ledgerRealFlipBack .68s cubic-bezier(.22,.61,.36,1) forwards;
 }
 
 .ledger-view.ledger-paper-front::after{
@@ -5544,7 +5544,7 @@ body{
         rgba(255,255,255,0) 55%,
         rgba(20,30,40,.08) 100%
     );
-    animation:ledgerPaperShade .52s ease-in-out forwards;
+    animation:ledgerPaperShade .68s ease-in-out forwards;
 }
 
 .ledger-paper-flip-back::after{
@@ -5558,14 +5558,14 @@ body{
         box-shadow:0 0 0 rgba(37,42,52,0);
     }
     45%{
-        transform:rotateY(-72deg) translateZ(5px);
+        transform:rotateY(-58deg) translateZ(3px);
         filter:brightness(.94);
-        box-shadow:18px 0 28px rgba(37,42,52,.16);
+        box-shadow:12px 0 22px rgba(37,42,52,.12);
     }
     100%{
         transform:rotateY(-178deg) translateZ(0);
-        filter:brightness(.82);
-        box-shadow:30px 0 38px rgba(37,42,52,.18);
+        filter:brightness(.90);
+        box-shadow:20px 0 30px rgba(37,42,52,.14);
     }
 }
 
@@ -5576,21 +5576,21 @@ body{
         box-shadow:0 0 0 rgba(37,42,52,0);
     }
     45%{
-        transform:rotateY(72deg) translateZ(5px);
+        transform:rotateY(58deg) translateZ(3px);
         filter:brightness(.94);
-        box-shadow:-18px 0 28px rgba(37,42,52,.16);
+        box-shadow:-12px 0 22px rgba(37,42,52,.12);
     }
     100%{
         transform:rotateY(178deg) translateZ(0);
-        filter:brightness(.82);
-        box-shadow:-30px 0 38px rgba(37,42,52,.18);
+        filter:brightness(.90);
+        box-shadow:-20px 0 30px rgba(37,42,52,.14);
     }
 }
 
 @keyframes ledgerPaperShade{
     0%{opacity:0}
-    38%{opacity:.45}
-    70%{opacity:.72}
+    38%{opacity:.30}
+    70%{opacity:.48}
     100%{opacity:.18}
 }
 
@@ -15254,7 +15254,7 @@ function showLedgerView(viewId, buttonElement = null) {
         forward ? "ledger-paper-flip-forward" : "ledger-paper-flip-back"
     );
 
-    window.setTimeout(finish, 520);
+    window.setTimeout(finish, 680);
 }
 
 </script>
