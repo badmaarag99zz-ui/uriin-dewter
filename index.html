@@ -3019,6 +3019,62 @@ header h1 {
     letter-spacing:.01em;
 }
 
+
+/* ===== HOME HERO REFINED ===== */
+.brand-message{
+    text-align:center !important;
+}
+.brand-message > div{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+.brand-message .home-today-date{
+    order:0;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:auto;
+    margin:0 0 14px !important;
+    padding:7px 13px;
+    border:1px solid #E2E7EC;
+    border-radius:999px;
+    background:#FFFFFF;
+    box-shadow:0 3px 10px rgba(37,42,52,.05);
+    color:#6F7A86;
+    font-size:12px !important;
+    font-weight:750;
+    letter-spacing:.02em;
+}
+.brand-message h1{
+    order:1;
+    width:100%;
+    max-width:560px !important;
+    margin:0 !important;
+    text-align:center;
+}
+.brand-subtitle{
+    order:2;
+    margin-top:9px;
+    width:100%;
+    text-align:center;
+    color:#52677D;
+    font-size:16px;
+    line-height:1.25;
+    font-weight:800;
+    letter-spacing:-.15px;
+}
+@media(max-width:380px){
+    .brand-subtitle{
+        font-size:14.5px;
+    }
+    .brand-message .home-today-date{
+        font-size:11.5px !important;
+        padding:6px 11px;
+        margin-bottom:12px !important;
+    }
+}
+
 </style>
 
 </head>
@@ -3204,9 +3260,9 @@ header h1 {
 <section id="homeView" class="ledger-view active">
     <div class="page-intro brand-message">
         <div>
-            <span class="eyebrow">Таны туслах — Өрийн дэвтэр.</span>
-            <h1>Өр бүртгэлээ ухаалгаар хөтөл.</h1>
             <div id="homeTodayDate" class="home-today-date"></div>
+            <h1>Өр бүртгэлээ ухаалгаар хөтлө.</h1>
+            <div class="brand-subtitle">Таны туслах — Өрийн дэвтэр</div>
         </div>
     </div>
 
