@@ -4767,6 +4767,37 @@ body{
     box-shadow:0 5px 12px rgba(36,122,74,.28) !important;
 }
 
+
+/* ===== DEBT CARD DUE-DATE SOFT STATUS COLORS ===== */
+/* Emoji болон одоогийн бүтэц хэвээр */
+
+#customersView #list > .debt-card.due-normal{
+    background:#F1F8F3 !important;
+    border-color:#CFE4D5 !important;
+}
+
+#customersView #list > .debt-card.due-soon{
+    background:#FFF9E8 !important;
+    border-color:#EADDAE !important;
+}
+
+#customersView #list > .debt-card.due-overdue{
+    background:#FFF1F1 !important;
+    border-color:#E8CACA !important;
+}
+
+/* Хугацаа хэтэрсэн текстийг card-тай зохицсон зөөлөн улаан */
+#customersView .debt-card.due-overdue .debt-due.overdue{
+    color:#B75A5A !important;
+}
+
+/* Өр дууссан card-ыг айхтар улаан/шар болгохгүй */
+#customersView #list > .debt-card.due-normal .debt-total.done,
+#customersView #list > .debt-card.due-soon .debt-total.done,
+#customersView #list > .debt-card.due-overdue .debt-total.done{
+    color:#4F8A67 !important;
+}
+
 </style>
 
 </head>
@@ -7922,6 +7953,7 @@ function showDebts() {
 
 
                 let dueClass = "";
+                let cardStatusClass = "due-normal";
 
                 let dueText =
                     debt.dueDate
@@ -7958,9 +7990,18 @@ function showDebts() {
                         );
 
 
+                    const diffDays =
+                        Math.ceil(
+                            (due - today) /
+                            (1000 * 60 * 60 * 24)
+                        );
+
                     if (
                         due < today
                     ) {
+
+                        cardStatusClass =
+                            "due-overdue";
 
                         dueClass =
                             "overdue";
@@ -7972,6 +8013,13 @@ function showDebts() {
                                     debt.dueDate
                                 )
                             } — Хугацаа хэтэрсэн`;
+
+                    } else if (
+                        diffDays <= 3
+                    ) {
+
+                        cardStatusClass =
+                            "due-soon";
 
                     }
 
@@ -7999,7 +8047,7 @@ function showDebts() {
                 return `
 
                     <div
-                        class="debt-card"
+                        class="debt-card ${cardStatusClass}"
                         onclick="openDetailModal('${safeId}')"
                     >
 
