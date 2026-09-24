@@ -5043,31 +5043,28 @@ body{
 }
 
 
-/* ===== MOBILE SEARCH + SORT BALANCE FIX ===== */
-/* 2 баганыг хүчээр шахахгүй — жижиг дэлгэц дээр дээр/доор байрлуулна */
-@media(max-width:520px){
+/* ===== SEARCH + SHORT SORT LABEL ===== */
+#customersView .tools{
+    grid-template-columns:minmax(0,1.45fr) minmax(125px,.75fr) !important;
+}
+
+#customersView #search{
+    font-size:15px !important;
+    min-height:48px !important;
+    padding-left:14px !important;
+    padding-right:12px !important;
+}
+
+#customersView #sort{
+    font-size:15px !important;
+    min-height:48px !important;
+    padding-left:12px !important;
+    padding-right:28px !important;
+}
+
+@media(max-width:430px){
     #customersView .tools{
-        grid-template-columns:1fr !important;
-        gap:8px !important;
-    }
-
-    #customersView #search,
-    #customersView #sort{
-        width:100% !important;
-        min-width:0 !important;
-        min-height:48px !important;
-    }
-
-    #customersView #search{
-        font-size:15px !important;
-        padding-left:15px !important;
-        padding-right:15px !important;
-    }
-
-    #customersView #sort{
-        font-size:15px !important;
-        padding-left:15px !important;
-        padding-right:34px !important;
+        grid-template-columns:minmax(0,1.45fr) minmax(125px,.75fr) !important;
     }
 }
 
@@ -5290,9 +5287,9 @@ body{
 <section id="customersView" class="ledger-view">
     <div class="debt-box ledger-list" id="debtListBox">
         <div class="tools">
-            <input id="search" type="text" placeholder="Нэр эсвэл утсаар хайх...">
+            <input id="search" type="text" placeholder="🔍 Нэр эсвэл утсаар хайх...">
             <select id="sort">
-                <option value="newest">Шинээр бүртгэгдсэн</option>
+                <option value="newest">↕ Эрэмбэлэх</option>
                 <option value="oldest">Хуучнаар бүртгэгдсэн</option>
                 <option value="highest">Өр ихээс бага</option>
                 <option value="lowest">Өр багаас их</option>
