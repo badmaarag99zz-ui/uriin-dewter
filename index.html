@@ -7906,6 +7906,22 @@ async function checkLoginOnLoad() {
 
              await syncOfflineDebts();
 
+             /*
+              * Refresh үед Тайлан tab HTML дээр active хэвээр байж болно.
+              * Энэ үед хэрэглэгч 7/30 товч дараагүй тул renderReport()
+              * автоматаар дуудагдахгүй байсан.
+              * Data/sync бүрэн дууссаны ДАРАА active Тайланг нэг удаа render хийнэ.
+              */
+             const activeLedgerView =
+                 document.querySelector(".ledger-view.active");
+
+             if (
+                 activeLedgerView &&
+                 activeLedgerView.id === "historyView"
+             ) {
+                 await renderReport();
+             }
+
 return;
             }
 
