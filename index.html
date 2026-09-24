@@ -3675,6 +3675,82 @@ body{
     }
 }
 
+
+/* ===== PEOPLE STAT CARD V2 ===== */
+.summary-side > div:nth-child(3){
+    grid-column:1 / -1 !important;
+    width:190px !important;
+    min-height:118px !important;
+    margin:12px auto 10px !important;
+    padding:16px 14px !important;
+    border:1px solid #D8E2EA !important;
+    border-radius:18px !important;
+    background:linear-gradient(145deg,#F7FAFC,#EAF1F5) !important;
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+    justify-content:center !important;
+    text-align:center !important;
+    box-shadow:0 6px 16px rgba(82,103,125,.07) !important;
+}
+
+/* Clean line-style people icon — no emoji */
+.summary-side > div:nth-child(3)::before{
+    content:"♙";
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:32px;
+    height:32px;
+    margin-bottom:5px;
+    border:1px solid #C9D6E0;
+    border-radius:50%;
+    color:#52677D;
+    font-size:19px;
+    font-weight:800;
+    background:rgba(255,255,255,.65);
+}
+
+/* Number first visually */
+.summary-side > div:nth-child(3) > b{
+    order:1 !important;
+    margin:0 !important;
+    font-size:30px !important;
+    line-height:1 !important;
+    font-weight:900 !important;
+    color:#344F68 !important;
+}
+.summary-side > div:nth-child(3) > span{
+    order:2 !important;
+    margin-top:7px !important;
+    font-size:14px !important;
+    line-height:1.15 !important;
+    font-weight:850 !important;
+    color:#52677D !important;
+}
+.summary-side > div:nth-child(3) > span::before{
+    content:none !important;
+}
+.summary-side > div:nth-child(3) > span::after{
+    content:"Авлагын бүртгэлтэй";
+    display:block;
+    margin-top:5px;
+    font-size:11px;
+    line-height:1.2;
+    font-weight:650;
+    color:#8A96A1;
+}
+
+@media(max-width:380px){
+    .summary-side > div:nth-child(3){
+        width:175px !important;
+        min-height:110px !important;
+    }
+    .summary-side > div:nth-child(3) > b{
+        font-size:28px !important;
+    }
+}
+
 </style>
 
 </head>
