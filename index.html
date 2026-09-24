@@ -14509,7 +14509,25 @@ async function exportReportExcel() {
     const money = v => Number(v || 0);
     const asDate = v => {
         if (!v) return null;
-        const d = new Date(v);
+
+        if (v instanceof Date) {
+            return Number.isNaN(v.getTime()) ? null : v;
+        }
+
+        const raw = String(v).trim();
+
+        // YYYY-MM-DD / YYYY.MM.DD-г local date байдлаар найдвартай уншина.
+        const simple = raw.match(/^(\d{4})[-.](\d{2})[-.](\d{2})$/);
+        if (simple) {
+            const d = new Date(
+                Number(simple[1]),
+                Number(simple[2]) - 1,
+                Number(simple[3])
+            );
+            return Number.isNaN(d.getTime()) ? null : d;
+        }
+
+        const d = new Date(raw);
         return Number.isNaN(d.getTime()) ? null : d;
     };
     const dateText = v => {
@@ -14555,8 +14573,12 @@ async function exportReportExcel() {
                 const z = asDate(x.createdAt); if (z) dates.push(z);
             });
         });
-        reportStart = dates.length
-            ? new Date(Math.min(...dates.map(d => d.getTime())))
+        const validTimes = dates
+            .map(d => d instanceof Date ? d.getTime() : NaN)
+            .filter(t => Number.isFinite(t));
+
+        reportStart = validTimes.length
+            ? new Date(Math.min(...validTimes))
             : new Date();
     } else {
         reportStart = new Date();
@@ -14690,19 +14712,33 @@ async function exportReportExcel() {
         ["Үлдэгдэл авлага", activeRemaining, "Хугацаа хэтэрсэн дүн", overdueAmount],
         ["Хугацаа хэтэрсэн хүн", overdueCount, "", ""]
     ];
+
     summary.forEach((row,i) => {
         const r = 5+i;
-        ws.getCell(r,1).value=row[0]; ws.getCell(r,2).value=row[1];
-        ws.getCell(r,3).value=row[2]; ws.getCell(r,4).value=row[3];
-        ws.mergeCells(r,4,r,5);
-        ws.mergeCells(r,2,r,2);
-        styleRange(r,1,r,5,{});
+
+        // A:B = зүүн нэр, C:D = зүүн утга, E:F = баруун нэр, G:H = баруун утга
+        ws.mergeCells(r,1,r,2);
+        ws.mergeCells(r,3,r,4);
+        ws.mergeCells(r,5,r,6);
+        ws.mergeCells(r,7,r,8);
+
+        ws.getCell(r,1).value = row[0];
+        ws.getCell(r,3).value = row[1];
+        ws.getCell(r,5).value = row[2];
+        ws.getCell(r,7).value = row[3];
+
+        styleRange(r,1,r,8,{});
+
         ws.getCell(r,1).font={name:"Arial",bold:true,color:{argb:textColor}};
-        ws.getCell(r,3).font={name:"Arial",bold:true,color:{argb:textColor}};
+        ws.getCell(r,5).font={name:"Arial",bold:true,color:{argb:textColor}};
+
+        ws.getCell(r,3).alignment={vertical:"middle",horizontal:"right"};
+        ws.getCell(r,7).alignment={vertical:"middle",horizontal:"right"};
     });
+
     [6,7].forEach(r => {
-        ws.getCell(r,2).numFmt=moneyFmt;
-        ws.getCell(r,4).numFmt=moneyFmt;
+        ws.getCell(r,3).numFmt=moneyFmt;
+        ws.getCell(r,7).numFmt=moneyFmt;
     });
 
     // Customer table
@@ -14769,14 +14805,14 @@ async function exportReportExcel() {
 
     /* Тайлангийн харагдацыг цэгцлэх */
     [4,10,moveTitleRow].forEach(r => ws.getRow(r).height = 24);
-    [5,6,7,8].forEach(r => ws.getRow(r).height = 23);
+    [5,6,7,8].forEach(r => ws.getRow(r).height = 26);
     ws.getRow(11).height = 25;
     ws.getRow(moveHeaderRow).height = 25;
 
     /* Мөнгөн дүнг баруун, тоо/төлөвийг төвд */
     for (let r = 5; r <= 8; r++) {
-        ws.getCell(r,2).alignment = {vertical:"middle",horizontal:"right"};
-        ws.getCell(r,4).alignment = {vertical:"middle",horizontal:"right"};
+        ws.getCell(r,3).alignment = {vertical:"middle",horizontal:"right"};
+        ws.getCell(r,7).alignment = {vertical:"middle",horizontal:"right"};
     }
     for (let r = 12; r < 12 + source.length; r++) {
         [1,7,8,9,10].forEach(c => {
