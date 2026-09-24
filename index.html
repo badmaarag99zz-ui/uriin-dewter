@@ -3009,6 +3009,16 @@ header h1 {
     }
 }
 
+
+/* ===== HOME DASHBOARD V2 ===== */
+.home-today-date{
+    margin-top:10px;
+    font-size:13px;
+    font-weight:700;
+    color:#7A8491;
+    letter-spacing:.01em;
+}
+
 </style>
 
 </head>
@@ -3196,19 +3206,20 @@ header h1 {
         <div>
             <span class="eyebrow">Таны туслах — Өрийн дэвтэр.</span>
             <h1>Өр бүртгэлээ ухаалгаар хөтөл.</h1>
+            <div id="homeTodayDate" class="home-today-date"></div>
         </div>
     </div>
 
     <div class="summary-strip">
         <div class="summary-primary">
-            <span>Үлдэгдэл өр</span>
+            <span>Үлдэгдэл авлага</span>
             <strong id="totalRemaining">0 ₮</strong>
             <small>Одоогоор төлөгдөөгүй нийт дүн</small>
         </div>
         <div class="summary-side">
-            <div><span>Нийт өр</span><b id="totalDebt">0 ₮</b></div>
+            <div><span>Нийт авлага</span><b id="totalDebt">0 ₮</b></div>
             <div><span>Төлсөн</span><b id="totalPaid">0 ₮</b></div>
-            <div><span>Харилцагч</span><b id="totalPeople">0</b></div>
+            <div><span>Нийт хүмүүс</span><b id="totalPeople">0</b></div>
         </div>
     </div>
 </section>
@@ -9069,7 +9080,7 @@ function openDetailModal(id) {
     <div class="detail-stat">
 
         <div class="detail-stat-label">
-            Нийт өр
+            Нийт авлага
         </div>
 
         <div class="detail-stat-value">
@@ -9130,7 +9141,7 @@ function openDetailModal(id) {
 
     <div class="detail-balance-label">
 
-        Үлдэгдэл өр
+        Үлдэгдэл авлага
 
         <span class="click-arrow">
             ▼
@@ -11836,6 +11847,33 @@ function showLedgerView(viewId, buttonElement = null) {
 
     setTimeout(loadPhone, 500);
     setTimeout(loadPhone, 1500);
+})();
+</script>
+
+
+<script>
+/* ===== LIVE HOME DATE ===== */
+(function () {
+    const el = document.getElementById("homeTodayDate");
+    if (!el) return;
+
+    function renderHomeDate() {
+        const now = new Date();
+        const weekdays = [
+            "Ням", "Даваа", "Мягмар", "Лхагва",
+            "Пүрэв", "Баасан", "Бямба"
+        ];
+
+        const yyyy = now.getFullYear();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+
+        el.textContent =
+            yyyy + "." + mm + "." + dd + " · " + weekdays[now.getDay()];
+    }
+
+    renderHomeDate();
+    setInterval(renderHomeDate, 60000);
 })();
 </script>
 
