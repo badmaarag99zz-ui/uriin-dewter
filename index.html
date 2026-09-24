@@ -5357,6 +5357,65 @@ body{
     100%{transform:scale(1);opacity:1}
 }
 
+
+/* ===== REPORT PERIOD FEEDBACK V2 — MORE OBVIOUS ===== */
+#historyView .report-filter{
+    background:#E7EDF2;
+    padding:5px;
+    border-radius:14px;
+    gap:5px !important;
+}
+#historyView .report-filter button{
+    min-height:46px !important;
+    border:none !important;
+    background:transparent !important;
+    color:#7A8792 !important;
+    box-shadow:none !important;
+    transform:none !important;
+    font-size:14px !important;
+    transition:all .18s ease !important;
+}
+#historyView .report-filter button.active{
+    background:#52677D !important;
+    color:#FFF !important;
+    box-shadow:0 6px 16px rgba(82,103,125,.28) !important;
+    transform:scale(1.035) !important;
+}
+#historyView .report-filter button.active::before{
+    content:"✓ ";
+    font-weight:900;
+}
+#historyView .report-period-banner{
+    margin-top:2px;
+    padding:13px 14px !important;
+    background:#52677D !important;
+    border-color:#52677D !important;
+    box-shadow:0 7px 18px rgba(82,103,125,.18);
+}
+#historyView .report-period-banner span{
+    color:#EAF0F5 !important;
+    font-size:12px !important;
+}
+#historyView .report-period-banner strong{
+    color:#FFF !important;
+    font-size:16px !important;
+}
+#historyView .report-section.report-refresh-flash{
+    animation:reportSectionRefresh .55s ease;
+}
+@keyframes reportSectionRefresh{
+    0%{
+        transform:scale(.985);
+        box-shadow:0 0 0 3px rgba(82,103,125,.28);
+        background:#EEF3F7;
+    }
+    100%{
+        transform:scale(1);
+        box-shadow:none;
+        background:#FFF;
+    }
+}
+
 </style>
 
 </head>
@@ -5651,7 +5710,7 @@ body{
             </div>
         </div>
 
-        <div class="report-section">
+        <div class="report-section" id="reportMovementSection">
             <div class="report-section-title">
                 <h3>↕ Сонгосон хугацааны хөдөлгөөн</h3>
                 <small id="reportPeriodLabel">Сүүлийн 30 хоног</small>
@@ -14405,6 +14464,15 @@ function setReportPeriod(days, button) {
         banner.classList.remove("period-flash");
         void banner.offsetWidth;
         banner.classList.add("period-flash");
+    }
+
+    const movementSection =
+        document.getElementById("reportMovementSection");
+
+    if (movementSection) {
+        movementSection.classList.remove("report-refresh-flash");
+        void movementSection.offsetWidth;
+        movementSection.classList.add("report-refresh-flash");
     }
 
     renderReport();
