@@ -4798,6 +4798,84 @@ body{
     color:#4F8A67 !important;
 }
 
+
+/* ===== DEBT CARDS — CONTENT POLISH ===== */
+
+/* Card-ыг арай намхан, цэгцтэй болгоно */
+#customersView #list > .debt-card{
+    padding:14px 16px !important;
+    min-height:0 !important;
+}
+
+/* Дээд мөр: нэр + үлдэгдэл */
+#customersView .debt-top{
+    align-items:flex-start !important;
+    gap:12px !important;
+}
+
+/* Нэр */
+#customersView .debt-name{
+    font-size:17px !important;
+    line-height:1.2 !important;
+    font-weight:850 !important;
+    color:#2F4050 !important;
+}
+
+/* Утас */
+#customersView .debt-phone{
+    margin-top:5px !important;
+    font-size:13px !important;
+    line-height:1.2 !important;
+    color:#73808B !important;
+}
+
+/* Үлдэгдэл өр — баруун талд цэвэрхэн */
+#customersView .debt-total{
+    flex-shrink:0 !important;
+    max-width:54% !important;
+    font-size:17px !important;
+    line-height:1.15 !important;
+    font-weight:900 !important;
+    letter-spacing:-.35px !important;
+    text-align:right !important;
+    white-space:nowrap !important;
+}
+
+/* Хугацаа */
+#customersView .debt-due{
+    margin-top:10px !important;
+    padding-top:9px !important;
+    border-top:1px solid rgba(82,103,125,.10) !important;
+    font-size:12.5px !important;
+    line-height:1.25 !important;
+    color:#73808B !important;
+}
+
+/* Emoji-нууд хэвээр, гэхдээ тексттэйгээ илүү цэгцтэй */
+#customersView .debt-name,
+#customersView .debt-phone,
+#customersView .debt-due{
+    letter-spacing:-.05px !important;
+}
+
+@media(max-width:430px){
+    #customersView #list > .debt-card{
+        padding:13px 14px !important;
+    }
+    #customersView .debt-name{
+        font-size:16px !important;
+    }
+    #customersView .debt-total{
+        font-size:15.5px !important;
+        max-width:57% !important;
+    }
+    #customersView .debt-due{
+        margin-top:9px !important;
+        padding-top:8px !important;
+        font-size:12px !important;
+    }
+}
+
 </style>
 
 </head>
