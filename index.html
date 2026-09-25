@@ -5826,6 +5826,21 @@ body{
     }
 
 }
+    /* =========================
+   PROFILE EDIT MODAL
+========================= */
+
+.profile-edit-modal {
+    max-width: 430px;
+}
+
+.profile-edit-subtitle {
+    margin: 5px 0 0;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+}
 </style>
 
 </head>
@@ -6290,7 +6305,83 @@ body{
     </div>
 
 </section>
+<!-- =========================
+     PROFILE EDIT MODAL
+========================= -->
 
+<div
+    id="profileEditModal"
+    class="modal"
+    onclick="closeProfileEditModalOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modal-header">
+
+            <div>
+                <h2>Профайл засах</h2>
+                <p class="profile-edit-subtitle">
+                    Өөрийн мэдээллээ шинэчилнэ үү
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeProfileEditModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="profileFullNameInput">
+                Нэр
+            </label>
+
+            <input
+                type="text"
+                id="profileFullNameInput"
+                placeholder="Жишээ: Бадмаараг"
+                maxlength="80"
+            >
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label for="profileShopNameInput">
+                Дэлгүүрийн нэр
+            </label>
+
+            <input
+                type="text"
+                id="profileShopNameInput"
+                placeholder="Жишээ: Миний дэлгүүр"
+                maxlength="100"
+            >
+
+        </div>
+
+
+        <button
+            type="button"
+            id="saveProfileButton"
+            class="save-btn"
+            onclick="saveProfileInfo()"
+        >
+            Хадгалах
+        </button>
+
+    </div>
+</div>
 </main>
 
 <nav class="ledger-nav">
@@ -15989,6 +16080,287 @@ async function previewProfileImage(event) {
 
         // Нэг зургийг дахин сонгох боломжтой болгоно
         event.target.value = "";
+
+    }
+
+}
+        // ==========================================
+// PROFILE EDIT
+// ==========================================
+
+async function openProfileEditModal() {
+
+    const modal =
+        document.getElementById(
+            "profileEditModal"
+        );
+
+    const nameInput =
+        document.getElementById(
+            "profileFullNameInput"
+        );
+
+    const shopInput =
+        document.getElementById(
+            "profileShopNameInput"
+        );
+
+
+    if (
+        !modal ||
+        !nameInput ||
+        !shopInput
+    ) {
+        return;
+    }
+
+
+    try {
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+        if (userError) {
+            throw userError;
+        }
+
+        if (!user) {
+            return;
+        }
+
+
+        const {
+            data: profile,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select(
+                "full_name, shop_name"
+            )
+            .eq(
+                "id",
+                user.id
+            )
+            .single();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        nameInput.value =
+            profile?.full_name || "";
+
+
+        shopInput.value =
+            profile?.shop_name || "";
+
+
+        modal.style.display =
+            "flex";
+
+
+        setTimeout(function() {
+
+            nameInput.focus();
+
+        }, 100);
+
+
+    } catch (error) {
+
+        console.error(
+            "Profile edit open error:",
+            error
+        );
+
+        alert(
+            "Профайлын мэдээлэл авахад алдаа гарлаа."
+        );
+
+    }
+
+}
+
+
+function closeProfileEditModal() {
+
+    const modal =
+        document.getElementById(
+            "profileEditModal"
+        );
+
+
+    if (modal) {
+
+        modal.style.display =
+            "none";
+
+    }
+
+}
+
+
+function closeProfileEditModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id ===
+            "profileEditModal"
+    ) {
+
+        closeProfileEditModal();
+
+    }
+
+}
+
+
+async function saveProfileInfo() {
+
+    const nameInput =
+        document.getElementById(
+            "profileFullNameInput"
+        );
+
+    const shopInput =
+        document.getElementById(
+            "profileShopNameInput"
+        );
+
+    const saveButton =
+        document.getElementById(
+            "saveProfileButton"
+        );
+
+
+    if (
+        !nameInput ||
+        !shopInput
+    ) {
+        return;
+    }
+
+
+    const fullName =
+        nameInput.value.trim();
+
+
+    const shopName =
+        shopInput.value.trim();
+
+
+    if (!fullName) {
+
+        alert(
+            "Нэрээ оруулна уу."
+        );
+
+        nameInput.focus();
+
+        return;
+    }
+
+
+    try {
+
+        if (saveButton) {
+
+            saveButton.disabled =
+                true;
+
+            saveButton.textContent =
+                "Хадгалж байна...";
+
+        }
+
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+        if (userError) {
+            throw userError;
+        }
+
+
+        if (!user) {
+
+            throw new Error(
+                "Нэвтэрсэн хэрэглэгч олдсонгүй."
+            );
+
+        }
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .update({
+
+                full_name:
+                    fullName,
+
+                shop_name:
+                    shopName || null
+
+            })
+            .eq(
+                "id",
+                user.id
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        closeProfileEditModal();
+
+
+        // Profile card-аа
+        // database-аас дахин шинэчилнэ
+
+        await loadSettingsProfile();
+
+
+        console.log(
+            "Profile мэдээлэл хадгалагдлаа."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Profile save error:",
+            error
+        );
+
+
+        alert(
+            "Профайл хадгалах үед алдаа гарлаа."
+        );
+
+
+    } finally {
+
+        if (saveButton) {
+
+            saveButton.disabled =
+                false;
+
+            saveButton.textContent =
+                "Хадгалах";
+
+        }
 
     }
 
