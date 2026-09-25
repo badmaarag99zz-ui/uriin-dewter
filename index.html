@@ -6416,7 +6416,7 @@ body{
             <button
                 type="button"
                 class="settings-item"
-                onclick="openProfileEditModal()"
+             onclick="openProfileInfoModal()"
             >
 
                 <span class="settings-item-icon">
@@ -6446,6 +6446,61 @@ body{
     </div>
 
 </section>
+    <!-- =========================
+     PROFILE INFO MODAL
+========================= -->
+
+<div
+    id="profileInfoModal"
+    class="modal"
+    onclick="closeProfileInfoModalOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modal-header">
+
+            <div>
+                <h2>Профайлын мэдээлэл</h2>
+                <p class="profile-edit-subtitle">
+                    Таны бүртгэлийн мэдээлэл
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeProfileInfoModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="form-group">
+            <label>Нэр</label>
+            <div id="profileInfoName">—</div>
+        </div>
+
+        <div class="form-group">
+            <label>Дэлгүүрийн нэр</label>
+            <div id="profileInfoShopName">—</div>
+        </div>
+
+        <div class="form-group">
+            <label>Утасны дугаар</label>
+            <div id="profileInfoPhone">—</div>
+        </div>
+
+        <div class="form-group">
+            <label>Бүртгүүлсэн огноо</label>
+            <div id="profileInfoCreatedAt">—</div>
+        </div>
+
+    </div>
+</div>
 <!-- =========================
      PROFILE EDIT MODAL
 ========================= -->
@@ -16228,7 +16283,33 @@ async function previewProfileImage(event) {
         // ==========================================
 // PROFILE EDIT
 // ==========================================
+async function openProfileInfoModal() {
 
+    const modal = document.getElementById("profileInfoModal");
+
+    if (!modal) return;
+
+    modal.style.display = "flex";
+}
+
+
+function closeProfileInfoModal() {
+
+    const modal = document.getElementById("profileInfoModal");
+
+    if (!modal) return;
+
+    modal.style.display = "none";
+}
+
+
+function closeProfileInfoModalOutside(event) {
+
+    if (event.target.id === "profileInfoModal") {
+        closeProfileInfoModal();
+    }
+
+}
 async function openProfileEditModal() {
 
     const modal =
