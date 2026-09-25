@@ -15698,7 +15698,84 @@ async function loadSettingsProfile() {
 
         }
 
+// =========================
+// PROFILE ЗУРАГ АЧААЛАХ
+// =========================
 
+if (profile?.avatar_path) {
+
+    try {
+
+        const {
+            data: avatarBlob,
+            error: avatarError
+        } = await supabaseClient
+            .storage
+            .from("avatars")
+            .download(
+                profile.avatar_path
+            );
+
+
+        if (avatarError) {
+            throw avatarError;
+        }
+
+
+        const avatar =
+            document.getElementById(
+                "settingsAvatar"
+            );
+
+        const image =
+            document.getElementById(
+                "settingsAvatarImage"
+            );
+
+
+        if (
+            avatar &&
+            image &&
+            avatarBlob
+        ) {
+
+            const avatarUrl =
+                URL.createObjectURL(
+                    avatarBlob
+                );
+
+
+            image.onload =
+                function() {
+
+                    URL.revokeObjectURL(
+                        avatarUrl
+                    );
+
+                };
+
+
+            image.src =
+                avatarUrl;
+
+
+            avatar.classList.add(
+                "has-image"
+            );
+
+        }
+
+
+    } catch (avatarError) {
+
+        console.error(
+            "Profile зураг ачаалах алдаа:",
+            avatarError
+        );
+
+    }
+
+}
         console.log(
             "Settings profile loaded:",
             profile
@@ -15718,7 +15795,7 @@ async function loadSettingsProfile() {
 // PROFILE IMAGE PREVIEW
 // ==========================================
 
-function previewProfileImage(event) {
+async function previewProfileImage(event) {
 
     const file = event.target.files[0];
 
@@ -15727,10 +15804,21 @@ function previewProfileImage(event) {
     }
 
 
-    // Зөвхөн зураг мөн эсэх
-    if (!file.type.startsWith("image/")) {
+    // =========================
+    // ЗУРГИЙН ТӨРӨЛ
+    // =========================
 
-        alert("Зураг сонгоно уу.");
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+
+        alert(
+            "JPG, PNG эсвэл WEBP зураг сонгоно уу."
+        );
 
         event.target.value = "";
 
@@ -15738,10 +15826,15 @@ function previewProfileImage(event) {
     }
 
 
-    // 5 MB-аас их эсэх
+    // =========================
+    // ХЭМЖЭЭ - 5 MB
+    // =========================
+
     if (file.size > 5 * 1024 * 1024) {
 
-        alert("Зургийн хэмжээ 5 MB-аас бага байх ёстой.");
+        alert(
+            "Зургийн хэмжээ 5 MB-аас бага байх ёстой."
+        );
 
         event.target.value = "";
 
@@ -15753,7 +15846,6 @@ function previewProfileImage(event) {
         document.getElementById(
             "settingsAvatar"
         );
-
 
     const image =
         document.getElementById(
@@ -15771,9 +15863,12 @@ function previewProfileImage(event) {
     }
 
 
+    // =========================
+    // ЭХЛЭЭД PREVIEW
+    // =========================
+
     const reader =
         new FileReader();
-
 
     reader.onload = function(e) {
 
@@ -15786,17 +15881,116 @@ function previewProfileImage(event) {
 
     };
 
+    reader.readAsDataURL(file);
 
-    reader.onerror = function() {
 
-        alert(
-            "Зургийг унших үед алдаа гарлаа."
+    try {
+
+        // =========================
+        // USER АВАХ
+        // =========================
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+        if (userError) {
+            throw userError;
+        }
+
+        if (!user) {
+            throw new Error(
+                "Нэвтэрсэн хэрэглэгч олдсонгүй."
+            );
+        }
+
+
+        // =========================
+        // FILE PATH
+        // =========================
+        //
+        // avatars/
+        //    USER_ID/
+        //       profile.jpg
+        //
+
+        const filePath =
+            user.id + "/profile.jpg";
+
+
+        // =========================
+        // STORAGE-Д UPLOAD
+        // =========================
+
+        const {
+            error: uploadError
+        } = await supabaseClient
+            .storage
+            .from("avatars")
+            .upload(
+                filePath,
+                file,
+                {
+                    cacheControl: "3600",
+                    upsert: true,
+                    contentType: file.type
+                }
+            );
+
+
+        if (uploadError) {
+            throw uploadError;
+        }
+
+
+        // =========================
+        // PROFILES TABLE
+        // avatar_path ХАДГАЛАХ
+        // =========================
+
+        const {
+            error: profileError
+        } = await supabaseClient
+            .from("profiles")
+            .update({
+                avatar_path: filePath
+            })
+            .eq(
+                "id",
+                user.id
+            );
+
+
+        if (profileError) {
+            throw profileError;
+        }
+
+
+        console.log(
+            "Profile зураг хадгалагдлаа:",
+            filePath
         );
 
-    };
 
+    } catch (error) {
 
-    reader.readAsDataURL(file);
+        console.error(
+            "Profile зураг хадгалах алдаа:",
+            error
+        );
+
+        alert(
+            "Зургийг хадгалах үед алдаа гарлаа."
+        );
+
+    } finally {
+
+        // Нэг зургийг дахин сонгох боломжтой болгоно
+        event.target.value = "";
+
+    }
 
 }
 // ==========================================
