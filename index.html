@@ -6712,7 +6712,28 @@ body{
 
         </div>
 
+<div class="form-group">
 
+    <label>
+        Бүртгэлтэй утас
+    </label>
+
+    <div class="profile-edit-action-row">
+
+        <span id="profileEditPhone">
+            —
+        </span>
+
+        <button
+            type="button"
+            class="profile-edit-action-btn"
+        >
+            Солих
+        </button>
+
+    </div>
+
+</div>
         <button
             type="button"
             id="saveProfileButton"
@@ -16585,7 +16606,40 @@ async function openProfileEditModal() {
 
         shopInput.value =
             profile?.shop_name || "";
+const phoneElement =
+    document.getElementById(
+        "profileEditPhone"
+    );
 
+if (phoneElement) {
+
+    let phone =
+        String(
+            profile?.phone ||
+            user.phone ||
+            ""
+        )
+        .replace(/\D/g, "");
+
+    if (phone.length > 8) {
+        phone = phone.slice(-8);
+    }
+
+    if (phone.length === 8) {
+
+        phoneElement.textContent =
+            phone.slice(0, 4) +
+            " " +
+            phone.slice(4);
+
+    } else {
+
+        phoneElement.textContent =
+            phone || "—";
+
+    }
+
+}
 
         modal.style.display =
             "flex";
