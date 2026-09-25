@@ -15518,7 +15518,202 @@ function setReportPeriod(days, button) {
 
     renderReport();
 }
+async function loadSettingsProfile() {
 
+    try {
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabaseClient.auth.getUser();
+
+        if (userError) {
+            throw userError;
+        }
+
+        if (!user) {
+            return;
+        }
+
+
+        // =========================
+        // PROFILE МЭДЭЭЛЭЛ АВАХ
+        // =========================
+
+        const {
+            data: profile,
+            error: profileError
+        } = await supabaseClient
+            .from("profiles")
+            .select(`
+                phone,
+                full_name,
+                shop_name,
+                plan,
+                subscription_expires_at,
+                avatar_path
+            `)
+            .eq("id", user.id)
+            .single();
+
+
+        if (profileError) {
+
+            console.error(
+                "Profile load error:",
+                profileError
+            );
+
+            return;
+        }
+
+
+        // =========================
+        // НЭР
+        // =========================
+
+        const nameElement =
+            document.getElementById(
+                "settingsProfileName"
+            );
+
+        if (nameElement) {
+
+            nameElement.textContent =
+                profile?.full_name?.trim()
+                    ? profile.full_name
+                    : "Таны нэр";
+
+        }
+
+
+        // =========================
+        // ДЭЛГҮҮРИЙН НЭР
+        // =========================
+
+        const shopElement =
+            document.getElementById(
+                "settingsShopName"
+            );
+
+        if (shopElement) {
+
+            shopElement.textContent =
+                profile?.shop_name?.trim()
+                    ? profile.shop_name
+                    : "Дэлгүүрийн нэр оруулаагүй";
+
+        }
+
+
+        // =========================
+        // УТАС
+        // =========================
+
+        const phoneElement =
+            document.getElementById(
+                "settingsPhone"
+            );
+
+        if (phoneElement) {
+
+            let phone =
+                String(
+                    profile?.phone ||
+                    user.phone ||
+                    ""
+                )
+                .replace(/\D/g, "");
+
+
+            // +976XXXXXXXX хэлбэртэй байвал
+            // сүүлийн 8 оронг авна
+
+            if (phone.length > 8) {
+                phone = phone.slice(-8);
+            }
+
+
+            if (phone.length === 8) {
+
+                phoneElement.textContent =
+                    "📱 " +
+                    phone.slice(0, 4) +
+                    " " +
+                    phone.slice(4);
+
+            } else {
+
+                phoneElement.textContent =
+                    phone
+                        ? "📱 " + phone
+                        : "📱 —";
+
+            }
+
+        }
+
+
+        // =========================
+        // PLAN
+        // =========================
+
+        const planBadge =
+            document.getElementById(
+                "settingsPlanBadge"
+            );
+
+        if (planBadge) {
+
+            const plan =
+                String(
+                    profile?.plan || "free"
+                )
+                .trim()
+                .toLowerCase();
+
+
+            if (
+                !plan ||
+                plan === "free"
+            ) {
+
+                planBadge.textContent =
+                    "FREE";
+
+                planBadge.classList.remove(
+                    "paid"
+                );
+
+            } else {
+
+                planBadge.textContent =
+                    plan.toUpperCase();
+
+                planBadge.classList.add(
+                    "paid"
+                );
+
+            }
+
+        }
+
+
+        console.log(
+            "Settings profile loaded:",
+            profile
+        );
+
+    } catch (error) {
+
+        console.error(
+            "loadSettingsProfile error:",
+            error
+        );
+
+    }
+
+}
 // ==========================================
 // MODERN LEDGER NAVIGATION
 // ==========================================
@@ -15532,7 +15727,9 @@ function showLedgerView(viewId, buttonElement = null) {
     if (viewId === "historyView") {
         renderReport();
     }
-
+if (viewId === "menuView") {
+    loadSettingsProfile();
+}
     document.querySelectorAll(".ledger-tab[data-view]").forEach(function(btn) {
         btn.classList.remove("active");
     });
