@@ -5988,6 +5988,42 @@ body{
 
     cursor: pointer;
 }
+    /* =========================
+   PROFILE INFO MODAL
+========================= */
+
+#profileInfoModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.48);
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+#profileInfoModal .profile-edit-modal {
+    width: 100%;
+    max-width: 430px;
+
+    max-height: 90vh;
+    overflow-y: auto;
+
+    padding: 22px;
+    border-radius: 22px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 25px 60px rgba(15, 23, 42, 0.22);
+}
 </style>
 
 </head>
