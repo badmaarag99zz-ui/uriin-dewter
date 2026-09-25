@@ -6200,12 +6200,12 @@ body{
             </button>
 
             <input
-                type="file"
-                id="profileImageInput"
-                accept="image/jpeg,image/png,image/webp"
-                hidden
-            >
-
+    type="file"
+    id="profileImageInput"
+    accept="image/jpeg,image/png,image/webp"
+    hidden
+    onchange="previewProfileImage(event)"
+>
             <div class="settings-profile-info">
 
                 <div class="settings-profile-name-row">
@@ -15714,117 +15714,91 @@ async function loadSettingsProfile() {
     }
 
 }
-   // ==========================================
-// PROFILE IMAGE - LOCAL PREVIEW
+// ==========================================
+// PROFILE IMAGE PREVIEW
 // ==========================================
 
-const profileImageInput =
-    document.getElementById("profileImageInput");
+function previewProfileImage(event) {
 
-if (profileImageInput) {
+    const file = event.target.files[0];
 
-    profileImageInput.addEventListener(
-        "change",
-        function(event) {
-
-            const file =
-                event.target.files?.[0];
-
-            if (!file) {
-                return;
-            }
+    if (!file) {
+        return;
+    }
 
 
-            // =========================
-            // ЗУРГИЙН ТӨРӨЛ ШАЛГАХ
-            // =========================
+    // Зөвхөн зураг мөн эсэх
+    if (!file.type.startsWith("image/")) {
 
-            const allowedTypes = [
-                "image/jpeg",
-                "image/png",
-                "image/webp"
-            ];
+        alert("Зураг сонгоно уу.");
 
-            if (!allowedTypes.includes(file.type)) {
+        event.target.value = "";
 
-                alert(
-                    "JPG, PNG эсвэл WEBP зураг сонгоно уу."
-                );
-
-                event.target.value = "";
-
-                return;
-            }
+        return;
+    }
 
 
-            // =========================
-            // ХЭМЖЭЭ ШАЛГАХ
-            // 5 MB
-            // =========================
+    // 5 MB-аас их эсэх
+    if (file.size > 5 * 1024 * 1024) {
 
-            const maxSize =
-                5 * 1024 * 1024;
+        alert("Зургийн хэмжээ 5 MB-аас бага байх ёстой.");
 
-            if (file.size > maxSize) {
+        event.target.value = "";
 
-                alert(
-                    "Зургийн хэмжээ 5 MB-аас бага байх ёстой."
-                );
-
-                event.target.value = "";
-
-                return;
-            }
+        return;
+    }
 
 
-            // =========================
-            // PREVIEW
-            // =========================
-
-            const imageElement =
-                document.getElementById(
-                    "settingsAvatarImage"
-                );
-
-            const avatarElement =
-                document.getElementById(
-                    "settingsAvatar"
-                );
-
-            if (
-                !imageElement ||
-                !avatarElement
-            ) {
-                return;
-            }
+    const avatar =
+        document.getElementById(
+            "settingsAvatar"
+        );
 
 
-            const imageUrl =
-                URL.createObjectURL(file);
+    const image =
+        document.getElementById(
+            "settingsAvatarImage"
+        );
 
 
-            imageElement.onload =
-                function() {
+    if (!avatar || !image) {
 
-                    URL.revokeObjectURL(
-                        imageUrl
-                    );
+        console.error(
+            "Profile avatar element олдсонгүй."
+        );
 
-                };
-
-
-            imageElement.src =
-                imageUrl;
+        return;
+    }
 
 
-            avatarElement.classList.add(
-                "has-image"
-            );
+    const reader =
+        new FileReader();
 
-        }
-    );
 
-}     
+    reader.onload = function(e) {
+
+        image.src =
+            e.target.result;
+
+        avatar.classList.add(
+            "has-image"
+        );
+
+    };
+
+
+    reader.onerror = function() {
+
+        alert(
+            "Зургийг унших үед алдаа гарлаа."
+        );
+
+    };
+
+
+    reader.readAsDataURL(file);
+
+}
 // ==========================================
 // MODERN LEDGER NAVIGATION
 // ==========================================
