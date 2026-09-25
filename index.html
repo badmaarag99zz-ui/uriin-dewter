@@ -16335,18 +16335,17 @@ async function openProfileInfoModal() {
 
         const { data: profile, error } = await supabaseClient
             .from("profiles")
-            .select("name, shop_name, phone, created_at")
+            .select("full_name, shop_name, phone, created_at")
             .eq("id", user.id)
             .maybeSingle();
 
         if (error) {
             console.error("Profile info error:", error);
         }
-
-        const name =
-            profile?.name ||
-            user.user_metadata?.name ||
-            "—";
+const name =
+    profile?.full_name?.trim()
+        ? profile.full_name
+        : "—";
 
         const shopName =
             profile?.shop_name ||
