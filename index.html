@@ -6771,11 +6771,12 @@ body{
         </span>
 
         <button
-            type="button"
-            class="profile-edit-action-btn"
-        >
-            Өөрчлөх
-        </button>
+    type="button"
+    class="profile-change-phone-btn"
+    onclick="openChangePhoneModal()"
+>
+    Өөрчлөх
+</button>
 
     </div>
 
@@ -6788,6 +6789,131 @@ body{
         >
             Хадгалах
         </button>
+
+    </div>
+</div>
+    <!-- =========================
+     CHANGE PHONE MODAL
+========================= -->
+
+<div
+    id="changePhoneModal"
+    class="modal"
+    onclick="closeChangePhoneModalOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modal-header">
+
+            <div>
+                <h2>Утасны дугаар өөрчлөх</h2>
+
+                <p
+                    class="profile-edit-subtitle"
+                    id="changePhoneSubtitle"
+                >
+                    Шинэ утасны дугаараа оруулна уу
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeChangePhoneModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <!-- ШИНЭ ДУГААР -->
+
+        <div id="changePhoneStepPhone">
+
+            <div class="form-group">
+
+                <label for="changePhoneInput">
+                    Шинэ утасны дугаар
+                </label>
+
+                <input
+                    type="tel"
+                    id="changePhoneInput"
+                    inputmode="numeric"
+                    maxlength="8"
+                    placeholder="Жишээ: 99112233"
+                >
+
+            </div>
+
+            <button
+                type="button"
+                class="save-btn"
+                id="sendChangePhoneOtpButton"
+                onclick="sendChangePhoneOtp()"
+            >
+                Код авах
+            </button>
+
+        </div>
+
+
+        <!-- OTP -->
+
+        <div
+            id="changePhoneStepOtp"
+            style="display:none;"
+        >
+
+            <div class="form-group">
+
+                <label for="changePhoneOtpInput">
+                    SMS баталгаажуулах код
+                </label>
+
+                <input
+                    type="text"
+                    id="changePhoneOtpInput"
+                    inputmode="numeric"
+                    maxlength="6"
+                    placeholder="6 оронтой код"
+                >
+
+            </div>
+
+            <button
+                type="button"
+                class="save-btn"
+                id="verifyChangePhoneOtpButton"
+                onclick="verifyChangePhoneOtp()"
+            >
+                Баталгаажуулах
+            </button>
+
+            <button
+                type="button"
+                class="profile-edit-action-btn"
+                style="margin-top:12px;"
+                onclick="backToChangePhoneStep()"
+            >
+                Дугаар засах
+            </button>
+
+        </div>
+
+
+        <p
+            id="changePhoneMessage"
+            style="
+                margin-top:14px;
+                text-align:center;
+                font-size:14px;
+            "
+        ></p>
 
     </div>
 </div>
@@ -16939,6 +17065,735 @@ if (viewId === "menuView") {
         });
     });
 })();
+    // ==========================================
+// CHANGE PHONE
+// ==========================================
+
+let pendingChangePhone = "";
+
+
+// ==========================================
+// MODAL НЭЭХ
+// ==========================================
+
+function openChangePhoneModal() {
+
+    const modal =
+        document.getElementById(
+            "changePhoneModal"
+        );
+
+    const phoneInput =
+        document.getElementById(
+            "changePhoneInput"
+        );
+
+    const otpInput =
+        document.getElementById(
+            "changePhoneOtpInput"
+        );
+
+    const phoneStep =
+        document.getElementById(
+            "changePhoneStepPhone"
+        );
+
+    const otpStep =
+        document.getElementById(
+            "changePhoneStepOtp"
+        );
+
+    const message =
+        document.getElementById(
+            "changePhoneMessage"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "changePhoneSubtitle"
+        );
+
+
+    pendingChangePhone = "";
+
+
+    if (phoneInput) {
+        phoneInput.value = "";
+    }
+
+    if (otpInput) {
+        otpInput.value = "";
+    }
+
+    if (message) {
+        message.textContent = "";
+    }
+
+    if (subtitle) {
+        subtitle.textContent =
+            "Шинэ утасны дугаараа оруулна уу";
+    }
+
+    if (phoneStep) {
+        phoneStep.style.display =
+            "block";
+    }
+
+    if (otpStep) {
+        otpStep.style.display =
+            "none";
+    }
+
+    if (modal) {
+
+        modal.style.display =
+            "flex";
+
+        setTimeout(function() {
+
+            if (phoneInput) {
+                phoneInput.focus();
+            }
+
+        }, 100);
+
+    }
+
+}
+
+
+// ==========================================
+// MODAL ХААХ
+// ==========================================
+
+function closeChangePhoneModal() {
+
+    const modal =
+        document.getElementById(
+            "changePhoneModal"
+        );
+
+    if (modal) {
+        modal.style.display =
+            "none";
+    }
+
+}
+
+
+function closeChangePhoneModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id ===
+            "changePhoneModal"
+    ) {
+
+        closeChangePhoneModal();
+
+    }
+
+}
+
+
+// ==========================================
+// ДУГААР ЗАСАХ АЛХАМ РУУ БУЦАХ
+// ==========================================
+
+function backToChangePhoneStep() {
+
+    const phoneStep =
+        document.getElementById(
+            "changePhoneStepPhone"
+        );
+
+    const otpStep =
+        document.getElementById(
+            "changePhoneStepOtp"
+        );
+
+    const message =
+        document.getElementById(
+            "changePhoneMessage"
+        );
+
+    const subtitle =
+        document.getElementById(
+            "changePhoneSubtitle"
+        );
+
+
+    if (phoneStep) {
+        phoneStep.style.display =
+            "block";
+    }
+
+    if (otpStep) {
+        otpStep.style.display =
+            "none";
+    }
+
+    if (message) {
+        message.textContent = "";
+    }
+
+    if (subtitle) {
+        subtitle.textContent =
+            "Шинэ утасны дугаараа оруулна уу";
+    }
+
+}
+
+
+// ==========================================
+// ACCESS TOKEN АВАХ
+// ==========================================
+
+async function getChangePhoneAccessToken() {
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (error) {
+        throw error;
+    }
+
+
+    const accessToken =
+        data?.session?.access_token;
+
+
+    if (!accessToken) {
+
+        throw new Error(
+            "Нэвтрэх эрх олдсонгүй."
+        );
+
+    }
+
+
+    return accessToken;
+
+}
+
+
+// ==========================================
+// OTP ИЛГЭЭХ
+// ==========================================
+
+async function sendChangePhoneOtp() {
+
+    const phoneInput =
+        document.getElementById(
+            "changePhoneInput"
+        );
+
+    const button =
+        document.getElementById(
+            "sendChangePhoneOtpButton"
+        );
+
+    const message =
+        document.getElementById(
+            "changePhoneMessage"
+        );
+
+
+    let newPhone =
+        String(
+            phoneInput?.value || ""
+        )
+        .replace(/\D/g, "")
+        .slice(-8);
+
+
+    if (newPhone.length !== 8) {
+
+        if (message) {
+
+            message.textContent =
+                "8 оронтой утасны дугаар оруулна уу.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        phoneInput?.focus();
+
+        return;
+
+    }
+
+
+    if (!navigator.onLine) {
+
+        if (message) {
+
+            message.textContent =
+                "Утасны дугаар өөрчлөхийн тулд интернетэд холбогдоно уу.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        return;
+
+    }
+
+
+    try {
+
+        if (button) {
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Код илгээж байна...";
+
+        }
+
+
+        if (message) {
+
+            message.textContent =
+                "SMS код илгээж байна...";
+
+            message.style.color =
+                "#6366f1";
+
+        }
+
+
+        const accessToken =
+            await getChangePhoneAccessToken();
+
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "apikey":
+                            SUPABASE_KEY,
+
+                        "Authorization":
+                            "Bearer " +
+                            accessToken,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            action:
+                                "send_change_phone_otp",
+
+                            new_phone:
+                                newPhone
+                        })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "SMS код илгээхэд алдаа гарлаа."
+            );
+
+        }
+
+
+        pendingChangePhone =
+            newPhone;
+
+
+        const phoneStep =
+            document.getElementById(
+                "changePhoneStepPhone"
+            );
+
+        const otpStep =
+            document.getElementById(
+                "changePhoneStepOtp"
+            );
+
+        const otpInput =
+            document.getElementById(
+                "changePhoneOtpInput"
+            );
+
+        const subtitle =
+            document.getElementById(
+                "changePhoneSubtitle"
+            );
+
+
+        if (phoneStep) {
+
+            phoneStep.style.display =
+                "none";
+
+        }
+
+
+        if (otpStep) {
+
+            otpStep.style.display =
+                "block";
+
+        }
+
+
+        if (subtitle) {
+
+            subtitle.textContent =
+                newPhone.slice(0, 4) +
+                " " +
+                newPhone.slice(4) +
+                " дугаар руу илгээсэн кодыг оруулна уу";
+
+        }
+
+
+        if (message) {
+
+            message.textContent =
+                "✅ SMS код илгээгдлээ.";
+
+            message.style.color =
+                "#16a34a";
+
+        }
+
+
+        if (otpInput) {
+
+            otpInput.value = "";
+
+            setTimeout(function() {
+
+                otpInput.focus();
+
+            }, 100);
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "Change phone OTP send error:",
+            error
+        );
+
+
+        if (message) {
+
+            message.textContent =
+                error.message ||
+                "SMS код илгээхэд алдаа гарлаа.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+
+    } finally {
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Код авах";
+
+        }
+
+    }
+
+}
+
+
+// ==========================================
+// OTP БАТАЛГААЖУУЛАХ
+// ==========================================
+
+async function verifyChangePhoneOtp() {
+
+    const otpInput =
+        document.getElementById(
+            "changePhoneOtpInput"
+        );
+
+    const button =
+        document.getElementById(
+            "verifyChangePhoneOtpButton"
+        );
+
+    const message =
+        document.getElementById(
+            "changePhoneMessage"
+        );
+
+
+    const otp =
+        String(
+            otpInput?.value || ""
+        )
+        .replace(/\D/g, "")
+        .slice(0, 6);
+
+
+    if (
+        !pendingChangePhone ||
+        pendingChangePhone.length !== 8
+    ) {
+
+        if (message) {
+
+            message.textContent =
+                "Шинэ утасны дугаар олдсонгүй. Дахин код авна уу.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        return;
+
+    }
+
+
+    if (otp.length !== 6) {
+
+        if (message) {
+
+            message.textContent =
+                "6 оронтой SMS код оруулна уу.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        otpInput?.focus();
+
+        return;
+
+    }
+
+
+    if (!navigator.onLine) {
+
+        if (message) {
+
+            message.textContent =
+                "Баталгаажуулахын тулд интернетэд холбогдоно уу.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+        return;
+
+    }
+
+
+    try {
+
+        if (button) {
+
+            button.disabled =
+                true;
+
+            button.textContent =
+                "Шалгаж байна...";
+
+        }
+
+
+        if (message) {
+
+            message.textContent =
+                "Код шалгаж байна...";
+
+            message.style.color =
+                "#6366f1";
+
+        }
+
+
+        const accessToken =
+            await getChangePhoneAccessToken();
+
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
+                {
+                    method: "POST",
+
+                    headers: {
+
+                        "apikey":
+                            SUPABASE_KEY,
+
+                        "Authorization":
+                            "Bearer " +
+                            accessToken,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            action:
+                                "verify_change_phone_otp",
+
+                            new_phone:
+                                pendingChangePhone,
+
+                            otp:
+                                otp
+                        })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Баталгаажуулахад алдаа гарлаа."
+            );
+
+        }
+
+
+        const changedPhone =
+            String(
+                result.phone ||
+                pendingChangePhone
+            )
+            .replace(/\D/g, "")
+            .slice(-8);
+
+
+        // PROFILE EDIT ДЭЭР ШУУД ШИНЭЧЛЭХ
+
+        const profilePhone =
+            document.getElementById(
+                "profileEditPhone"
+            );
+
+
+        if (
+            profilePhone &&
+            changedPhone.length === 8
+        ) {
+
+            profilePhone.textContent =
+                changedPhone.slice(0, 4) +
+                " " +
+                changedPhone.slice(4);
+
+        }
+
+
+        // SETTINGS PROFILE CARD ШИНЭЧЛЭХ
+
+        await loadSettingsProfile();
+
+
+        if (message) {
+
+            message.textContent =
+                "✅ Утасны дугаар амжилттай өөрчлөгдлөө.";
+
+            message.style.color =
+                "#16a34a";
+
+        }
+
+
+        pendingChangePhone = "";
+
+
+        setTimeout(function() {
+
+            closeChangePhoneModal();
+
+        }, 900);
+
+
+    } catch (error) {
+
+        console.error(
+            "Change phone verify error:",
+            error
+        );
+
+
+        if (message) {
+
+            message.textContent =
+                error.message ||
+                "Баталгаажуулахад алдаа гарлаа.";
+
+            message.style.color =
+                "#dc2626";
+
+        }
+
+
+    } finally {
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Баталгаажуулах";
+
+        }
+
+    }
+
+}
 </script>
 
 <script>
