@@ -15714,6 +15714,117 @@ async function loadSettingsProfile() {
     }
 
 }
+   // ==========================================
+// PROFILE IMAGE - LOCAL PREVIEW
+// ==========================================
+
+const profileImageInput =
+    document.getElementById("profileImageInput");
+
+if (profileImageInput) {
+
+    profileImageInput.addEventListener(
+        "change",
+        function(event) {
+
+            const file =
+                event.target.files?.[0];
+
+            if (!file) {
+                return;
+            }
+
+
+            // =========================
+            // ЗУРГИЙН ТӨРӨЛ ШАЛГАХ
+            // =========================
+
+            const allowedTypes = [
+                "image/jpeg",
+                "image/png",
+                "image/webp"
+            ];
+
+            if (!allowedTypes.includes(file.type)) {
+
+                alert(
+                    "JPG, PNG эсвэл WEBP зураг сонгоно уу."
+                );
+
+                event.target.value = "";
+
+                return;
+            }
+
+
+            // =========================
+            // ХЭМЖЭЭ ШАЛГАХ
+            // 5 MB
+            // =========================
+
+            const maxSize =
+                5 * 1024 * 1024;
+
+            if (file.size > maxSize) {
+
+                alert(
+                    "Зургийн хэмжээ 5 MB-аас бага байх ёстой."
+                );
+
+                event.target.value = "";
+
+                return;
+            }
+
+
+            // =========================
+            // PREVIEW
+            // =========================
+
+            const imageElement =
+                document.getElementById(
+                    "settingsAvatarImage"
+                );
+
+            const avatarElement =
+                document.getElementById(
+                    "settingsAvatar"
+                );
+
+            if (
+                !imageElement ||
+                !avatarElement
+            ) {
+                return;
+            }
+
+
+            const imageUrl =
+                URL.createObjectURL(file);
+
+
+            imageElement.onload =
+                function() {
+
+                    URL.revokeObjectURL(
+                        imageUrl
+                    );
+
+                };
+
+
+            imageElement.src =
+                imageUrl;
+
+
+            avatarElement.classList.add(
+                "has-image"
+            );
+
+        }
+    );
+
+}     
 // ==========================================
 // MODERN LEDGER NAVIGATION
 // ==========================================
