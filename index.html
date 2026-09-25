@@ -6050,6 +6050,70 @@ body{
     font-size: 18px;
     cursor: pointer;
 }
+    /* =========================
+   PROFILE INFO LIST
+========================= */
+
+#profileInfoModal .profile-info-list {
+    margin-top: 20px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#profileInfoModal .profile-info-row {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+
+    padding: 13px 14px;
+
+    background: #f8fafc;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+
+#profileInfoModal .profile-info-icon {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #eef3f8;
+    border-radius: 12px;
+
+    font-size: 18px;
+}
+
+#profileInfoModal .profile-info-text {
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+#profileInfoModal .profile-info-text small {
+    color: #94a3b8;
+
+    font-size: 11px;
+    font-weight: 700;
+}
+
+#profileInfoModal .profile-info-text strong {
+    color: #1e293b;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    word-break: break-word;
+}
 </style>
 
 </head>
@@ -6541,27 +6605,44 @@ body{
 
         </div>
 
-        <div class="form-group">
-            <label>Нэр</label>
-            <div id="profileInfoName">—</div>
-        </div>
+       <div class="profile-info-list">
 
-        <div class="form-group">
-            <label>Дэлгүүрийн нэр</label>
-            <div id="profileInfoShopName">—</div>
-        </div>
+    <div class="profile-info-row">
+        <span class="profile-info-icon">👤</span>
 
-        <div class="form-group">
-            <label>Утасны дугаар</label>
-            <div id="profileInfoPhone">—</div>
+        <div class="profile-info-text">
+            <small>Нэр</small>
+            <strong id="profileInfoName">—</strong>
         </div>
-
-        <div class="form-group">
-            <label>Бүртгүүлсэн огноо</label>
-            <div id="profileInfoCreatedAt">—</div>
-        </div>
-
     </div>
+
+    <div class="profile-info-row">
+        <span class="profile-info-icon">🏪</span>
+
+        <div class="profile-info-text">
+            <small>Дэлгүүрийн нэр</small>
+            <strong id="profileInfoShopName">—</strong>
+        </div>
+    </div>
+
+    <div class="profile-info-row">
+        <span class="profile-info-icon">📱</span>
+
+        <div class="profile-info-text">
+            <small>Утасны дугаар</small>
+            <strong id="profileInfoPhone">—</strong>
+        </div>
+    </div>
+
+    <div class="profile-info-row">
+        <span class="profile-info-icon">📅</span>
+
+        <div class="profile-info-text">
+            <small>Бүртгүүлсэн огноо</small>
+            <strong id="profileInfoCreatedAt">—</strong>
+        </div>
+    </div>
+
 </div>
 <!-- =========================
      PROFILE EDIT MODAL
