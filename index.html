@@ -16586,8 +16586,8 @@ async function openProfileEditModal() {
         } = await supabaseClient
             .from("profiles")
             .select(
-                "full_name, shop_name"
-            )
+    "full_name, shop_name, phone"
+)
             .eq(
                 "id",
                 user.id
