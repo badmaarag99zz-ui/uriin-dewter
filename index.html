@@ -7056,6 +7056,126 @@ body{
     </div>
 </div>
     <!-- =========================
+     NOTIFICATION SETTINGS MODAL
+========================= -->
+
+<div
+    id="notificationSettingsModal"
+    class="modal"
+    style="display:none;"
+    onclick="closeNotificationSettingsOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="modal-header">
+
+            <div>
+                <h2>Мэдэгдэл</h2>
+
+                <p class="profile-edit-subtitle">
+                    Өрийн хугацааны сануулгаа тохируулна уу
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeNotificationSettings()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="notification-setting-row">
+
+            <div>
+                <strong>Хугацаа дөхсөн өр</strong>
+                <small>
+                    Төлөх хугацаа дөхөхөд сануулах
+                </small>
+            </div>
+
+            <label class="notification-switch">
+
+                <input
+                    type="checkbox"
+                    id="dueSoonNotification"
+                    checked
+                >
+
+                <span class="notification-slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="notification-setting-row">
+
+            <div>
+                <strong>Хугацаа хэтэрсэн өр</strong>
+                <small>
+                    Хугацаа хэтэрсэн үед сануулах
+                </small>
+            </div>
+
+            <label class="notification-switch">
+
+                <input
+                    type="checkbox"
+                    id="overdueNotification"
+                    checked
+                >
+
+                <span class="notification-slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>
+                Хэд хоногийн өмнө сануулах
+            </label>
+
+            <select id="notificationDaysBefore">
+                <option value="1">1 хоногийн өмнө</option>
+                <option value="2">2 хоногийн өмнө</option>
+                <option value="3" selected>3 хоногийн өмнө</option>
+                <option value="5">5 хоногийн өмнө</option>
+                <option value="7">7 хоногийн өмнө</option>
+            </select>
+
+        </div>
+
+
+        <button
+            type="button"
+            class="save-btn"
+            onclick="saveNotificationSettings()"
+        >
+            Хадгалах
+        </button>
+
+        <p
+            id="notificationSettingsMessage"
+            style="
+                margin:12px 0 0;
+                text-align:center;
+                font-size:13px;
+            "
+        ></p>
+
+    </div>
+</div>
+    <!-- =========================
      PROFILE INFO MODAL
 ========================= -->
 
