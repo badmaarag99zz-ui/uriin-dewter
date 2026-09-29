@@ -16586,13 +16586,16 @@ function showNotifications() {
  const closePopup = function() {
 
     // Үзсэн төлөвийг хадгална
-    if (window.currentDebtNotificationKey) {
+   if (Array.isArray(window.currentDebtNotificationIds)) {
 
-        localStorage.setItem(
-            "seenDebtNotificationKey",
-            window.currentDebtNotificationKey
-        );
-    }
+    localStorage.setItem(
+        "seenDebtNotificationIds",
+        JSON.stringify(
+            window.currentDebtNotificationIds
+        )
+    );
+
+}
 
     // Badge арилгана
     const badge =
@@ -19859,9 +19862,12 @@ const badge =
 
 
 if (badge) {
+// ==========================================
+// ҮЗЭЭГҮЙ МЭДЭГДЛИЙГ ТООЛОХ
+// ==========================================
 
-    // Одоогийн мэдэгдлүүдийн төлөв
-  const currentNotificationKey = [
+const currentNotificationIds = [
+
     ...overdueDebts.map(debt =>
         `overdue:${debt.id}:${debt.dueDate}:${Number(debt.remaining)}`
     ),
@@ -19869,44 +19875,60 @@ if (badge) {
     ...dueSoonDebts.map(debt =>
         `dueSoon:${debt.id}:${debt.dueDate}:${Number(debt.remaining)}`
     )
-]
-    .sort()
-    .join("|");
+
+].sort();
 
 
-    // Хамгийн сүүлд үзсэн төлөв
-    const seenNotificationKey =
-        localStorage.getItem(
-            "seenDebtNotificationKey"
-        ) || "";
+// Өмнө үзсэн мэдэгдлүүд
+let seenNotificationIds = [];
 
+try {
 
-    const total =
-        window.debtNotifications.total;
+    seenNotificationIds =
+        JSON.parse(
+            localStorage.getItem(
+                "seenDebtNotificationIds"
+            ) || "[]"
+        );
 
-
-    // Шинэ өөрчлөлт байгаа үед л badge харуулна
-    if (
-        total > 0 &&
-        currentNotificationKey !== seenNotificationKey
-    ) {
-
-        badge.textContent =
-            total > 99 ? "99+" : total;
-
-        badge.style.display = "flex";
-
-    } else {
-
-        badge.style.display = "none";
-
+    if (!Array.isArray(seenNotificationIds)) {
+        seenNotificationIds = [];
     }
 
+} catch (error) {
 
-    // Popup хаах үед ашиглана
-    window.currentDebtNotificationKey =
-        currentNotificationKey;
+    seenNotificationIds = [];
+
 }
+
+
+// Зөвхөн үзээгүй мэдэгдлүүд
+const unseenNotificationIds =
+    currentNotificationIds.filter(
+        id => !seenNotificationIds.includes(id)
+    );
+
+
+// Badge
+if (unseenNotificationIds.length > 0) {
+
+    badge.textContent =
+        unseenNotificationIds.length > 99
+            ? "99+"
+            : unseenNotificationIds.length;
+
+    badge.style.display = "flex";
+
+} else {
+
+    badge.style.display = "none";
+
+}
+
+
+// Popup хаах үед хадгалахад ашиглана
+window.currentDebtNotificationIds =
+    currentNotificationIds;
 }
 </script>
 
