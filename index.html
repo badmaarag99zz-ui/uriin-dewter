@@ -6768,8 +6768,80 @@ body{
         </div>
 
     </div>
-
 </section>
+    <!-- =========================
+     CHANGE PASSWORD MODAL
+========================= -->
+
+<div
+    id="changePasswordModal"
+    class="modal"
+    style="display:none;"
+    onclick="closeChangePasswordModalOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+    >
+        <div class="modal-header">
+
+            <div>
+                <h2>Нууц үг өөрчлөх</h2>
+                <p class="profile-edit-subtitle">
+                    Шинэ нууц үгээ оруулна уу
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeChangePasswordModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="form-group">
+            <label>Шинэ нууц үг</label>
+
+            <input
+                type="password"
+                id="changePasswordNew"
+                placeholder="Хамгийн багадаа 6 тэмдэгт"
+            >
+        </div>
+
+        <div class="form-group">
+            <label>Нууц үг давтах</label>
+
+            <input
+                type="password"
+                id="changePasswordConfirm"
+                placeholder="Шинэ нууц үгээ дахин оруулна уу"
+            >
+        </div>
+
+        <button
+            type="button"
+            class="save-btn"
+            id="changePasswordButton"
+            onclick="changeLoggedInPassword()"
+        >
+            Нууц үг өөрчлөх
+        </button>
+
+        <p
+            id="changePasswordMessage"
+            style="
+                margin:14px 0 0;
+                text-align:center;
+                font-size:14px;
+            "
+        ></p>
+
+    </div>
+</div>
     <!-- =========================
      PROFILE INFO MODAL
 ========================= -->
@@ -18166,6 +18238,256 @@ document.addEventListener("change", function (event) {
         if (wrap) wrap.classList.toggle("has-date", Boolean(event.target.value));
     }
 });
+    // ==========================================
+// CHANGE PASSWORD
+// ==========================================
+
+function openChangePasswordModal() {
+
+    const modal =
+        document.getElementById(
+            "changePasswordModal"
+        );
+
+    const newPassword =
+        document.getElementById(
+            "changePasswordNew"
+        );
+
+    const confirmPassword =
+        document.getElementById(
+            "changePasswordConfirm"
+        );
+
+    const message =
+        document.getElementById(
+            "changePasswordMessage"
+        );
+
+
+    if (newPassword) {
+        newPassword.value = "";
+    }
+
+    if (confirmPassword) {
+        confirmPassword.value = "";
+    }
+
+    if (message) {
+        message.textContent = "";
+    }
+
+
+    if (modal) {
+
+        modal.style.display = "flex";
+
+        setTimeout(function () {
+
+            newPassword?.focus();
+
+        }, 100);
+
+    }
+
+}
+
+
+function closeChangePasswordModal() {
+
+    const modal =
+        document.getElementById(
+            "changePasswordModal"
+        );
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+
+
+function closeChangePasswordModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id ===
+            "changePasswordModal"
+    ) {
+
+        closeChangePasswordModal();
+
+    }
+
+}
+
+
+async function changeLoggedInPassword() {
+
+    const newPasswordInput =
+        document.getElementById(
+            "changePasswordNew"
+        );
+
+    const confirmPasswordInput =
+        document.getElementById(
+            "changePasswordConfirm"
+        );
+
+    const message =
+        document.getElementById(
+            "changePasswordMessage"
+        );
+
+    const button =
+        document.getElementById(
+            "changePasswordButton"
+        );
+
+
+    const newPassword =
+        newPasswordInput?.value || "";
+
+    const confirmPassword =
+        confirmPasswordInput?.value || "";
+
+
+    if (newPassword.length < 6) {
+
+        message.textContent =
+            "Нууц үг хамгийн багадаа 6 тэмдэгт байна.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+
+    }
+
+
+    if (
+        newPassword !==
+        confirmPassword
+    ) {
+
+        message.textContent =
+            "Нууц үгнүүд таарахгүй байна.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+
+    }
+
+
+    if (!navigator.onLine) {
+
+        message.textContent =
+            "Нууц үг өөрчлөхийн тулд интернетэд холбогдоно уу.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+
+    }
+
+
+    try {
+
+        button.disabled = true;
+
+        button.textContent =
+            "Өөрчилж байна...";
+
+
+        message.textContent =
+            "Нууц үг шинэчилж байна...";
+
+        message.style.color =
+            "#6366f1";
+
+
+        const {
+            data: { user },
+            error: userError
+        } =
+            await supabaseClient.auth.getUser();
+
+
+        if (userError) {
+            throw userError;
+        }
+
+
+        if (!user) {
+
+            throw new Error(
+                "Нэвтрэх эрх олдсонгүй. Дахин нэвтэрнэ үү."
+            );
+
+        }
+
+
+        const {
+            error
+        } =
+            await supabaseClient.auth.updateUser({
+                password:
+                    newPassword
+            });
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        message.textContent =
+            "✅ Нууц үг амжилттай өөрчлөгдлөө.";
+
+        message.style.color =
+            "#16a34a";
+
+
+        newPasswordInput.value = "";
+        confirmPasswordInput.value = "";
+
+
+        setTimeout(function () {
+
+            closeChangePasswordModal();
+
+        }, 1000);
+
+
+    } catch (error) {
+
+        console.error(
+            "Change password error:",
+            error
+        );
+
+
+        message.textContent =
+            error.message ||
+            "Нууц үг өөрчлөхөд алдаа гарлаа.";
+
+        message.style.color =
+            "#dc2626";
+
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            "Нууц үг өөрчлөх";
+
+    }
+
+}
 </script>
 
 </body>
