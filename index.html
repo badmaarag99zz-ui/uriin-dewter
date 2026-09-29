@@ -19610,7 +19610,7 @@ async function changeLoggedInPassword() {
 // NOTIFICATION SETTINGS
 // ==========================================
 
-function openNotificationSettings() {
+async function openNotificationSettings() {
 
     const modal =
         document.getElementById(
@@ -19632,14 +19632,19 @@ function openNotificationSettings() {
             "notificationDaysBefore"
         );
 
+    // Эхлээд local cache-аас харуулна
+    let settings = {};
 
-    const settings =
-        JSON.parse(
-            localStorage.getItem(
-                "notificationSettings"
-            ) || "{}"
-        );
-
+    try {
+        settings =
+            JSON.parse(
+                localStorage.getItem(
+                    "notificationSettings"
+                ) || "{}"
+            );
+    } catch (error) {
+        settings = {};
+    }
 
     dueSoon.checked =
         settings.dueSoon !== false;
@@ -19652,10 +19657,69 @@ function openNotificationSettings() {
             settings.daysBefore || 3
         );
 
-
     modal.style.display = "flex";
-}
 
+
+    // ==========================================
+    // SUPABASE-ААС ХАМГИЙН СҮҮЛИЙН ТОХИРГОО
+    // ==========================================
+
+    if (!navigator.onLine) {
+        return;
+    }
+
+    try {
+
+        const user =
+            await getCurrentUser();
+
+        if (!user) return;
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("profiles")
+                .select(
+                    "notification_days_before"
+                )
+                .eq("id", user.id)
+                .single();
+
+        if (error) {
+            throw error;
+        }
+
+        const serverDays =
+            Number(
+                data?.notification_days_before || 3
+            );
+
+        // Дэлгэц дээр шинэчилнэ
+        days.value =
+            String(serverDays);
+
+        // Local cache-аа шинэчилнэ
+        settings.daysBefore =
+            serverDays;
+
+        localStorage.setItem(
+            "notificationSettings",
+            JSON.stringify(settings)
+        );
+
+        // Мэдэгдлийг шинэ утгаар дахин тооцно
+        checkDebtNotifications();
+
+    } catch (error) {
+
+        console.error(
+            "Notification settings load error:",
+            error
+        );
+    }
+}
 
 function closeNotificationSettings() {
 
