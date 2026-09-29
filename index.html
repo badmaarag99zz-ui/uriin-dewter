@@ -6502,6 +6502,146 @@ body{
 #profileEditModal .form-group {
     margin-bottom: 15px;
 }
+    /* =========================
+   NOTIFICATION SETTINGS
+========================= */
+
+#notificationSettingsModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.48);
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+#notificationSettingsModal .profile-edit-modal {
+    width: 100%;
+    max-width: 380px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    padding: 24px;
+
+    background: #ffffff;
+    border-radius: 20px;
+
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22);
+}
+
+.notification-setting-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 15px 0;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+.notification-setting-row strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    font-size: 14px;
+    color: #334155;
+}
+
+.notification-setting-row small {
+    display: block;
+
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+
+/* SWITCH */
+
+.notification-switch {
+    position: relative;
+
+    width: 46px;
+    height: 26px;
+
+    flex-shrink: 0;
+}
+
+.notification-switch input {
+    width: 0;
+    height: 0;
+
+    opacity: 0;
+}
+
+.notification-slider {
+    position: absolute;
+    inset: 0;
+
+    cursor: pointer;
+
+    background: #cbd5e1;
+    border-radius: 999px;
+
+    transition: 0.2s;
+}
+
+.notification-slider::before {
+    content: "";
+
+    position: absolute;
+
+    width: 20px;
+    height: 20px;
+
+    left: 3px;
+    top: 3px;
+
+    background: #ffffff;
+    border-radius: 50%;
+
+    box-shadow: 0 2px 5px rgba(0,0,0,0.18);
+
+    transition: 0.2s;
+}
+
+.notification-switch input:checked + .notification-slider {
+    background: #6366f1;
+}
+
+.notification-switch input:checked + .notification-slider::before {
+    transform: translateX(20px);
+}
+
+
+/* DAYS SELECT */
+
+#notificationDaysBefore {
+    width: 100%;
+    height: 48px;
+
+    padding: 0 14px;
+    margin-top: 7px;
+
+    border: 1px solid #d7e0ea;
+    border-radius: 12px;
+
+    background: #f8fafc;
+
+    color: #334155;
+    font-size: 14px;
+
+    outline: none;
+}
 </style>
 
 </head>
@@ -18847,6 +18987,139 @@ async function changeLoggedInPassword() {
             "Нууц үг өөрчлөх";
 
     }
+
+}
+    // ==========================================
+// NOTIFICATION SETTINGS
+// ==========================================
+
+function openNotificationSettings() {
+
+    const modal =
+        document.getElementById(
+            "notificationSettingsModal"
+        );
+
+    const dueSoon =
+        document.getElementById(
+            "dueSoonNotification"
+        );
+
+    const overdue =
+        document.getElementById(
+            "overdueNotification"
+        );
+
+    const days =
+        document.getElementById(
+            "notificationDaysBefore"
+        );
+
+
+    const settings =
+        JSON.parse(
+            localStorage.getItem(
+                "notificationSettings"
+            ) || "{}"
+        );
+
+
+    dueSoon.checked =
+        settings.dueSoon !== false;
+
+    overdue.checked =
+        settings.overdue !== false;
+
+    days.value =
+        String(
+            settings.daysBefore || 3
+        );
+
+
+    modal.style.display = "flex";
+}
+
+
+function closeNotificationSettings() {
+
+    const modal =
+        document.getElementById(
+            "notificationSettingsModal"
+        );
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+
+
+function closeNotificationSettingsOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id ===
+            "notificationSettingsModal"
+    ) {
+
+        closeNotificationSettings();
+
+    }
+
+}
+
+
+function saveNotificationSettings() {
+
+    const dueSoon =
+        document.getElementById(
+            "dueSoonNotification"
+        ).checked;
+
+    const overdue =
+        document.getElementById(
+            "overdueNotification"
+        ).checked;
+
+    const daysBefore =
+        Number(
+            document.getElementById(
+                "notificationDaysBefore"
+            ).value
+        );
+
+
+    const settings = {
+        dueSoon,
+        overdue,
+        daysBefore
+    };
+
+
+    localStorage.setItem(
+        "notificationSettings",
+        JSON.stringify(settings)
+    );
+
+
+    const message =
+        document.getElementById(
+            "notificationSettingsMessage"
+        );
+
+
+    message.textContent =
+        "✅ Тохиргоо хадгалагдлаа.";
+
+    message.style.color =
+        "#16a34a";
+
+
+    setTimeout(function () {
+
+        closeNotificationSettings();
+
+    }, 800);
 
 }
 </script>
