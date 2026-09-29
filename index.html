@@ -19686,7 +19686,7 @@ function closeNotificationSettingsOutside(event) {
 }
 
 
-function saveNotificationSettings() {
+async function saveNotificationSettings() {
 
     const dueSoon =
         document.getElementById(
@@ -19705,39 +19705,74 @@ function saveNotificationSettings() {
             ).value
         );
 
-
     const settings = {
         dueSoon,
         overdue,
         daysBefore
     };
 
-
-    localStorage.setItem(
-        "notificationSettings",
-        JSON.stringify(settings)
-    );
-
-
     const message =
         document.getElementById(
             "notificationSettingsMessage"
         );
 
+    try {
 
-    message.textContent =
-        "✅ Тохиргоо хадгалагдлаа.";
+        const user =
+            await getCurrentUser();
 
-    message.style.color =
-        "#16a34a";
+        if (!user) {
+            message.textContent =
+                "❌ Хэрэглэгчийн мэдээлэл олдсонгүй.";
+            message.style.color = "#dc2626";
+            return;
+        }
 
+        const { error } =
+            await supabaseClient
+                .from("profiles")
+                .update({
+                    notification_days_before:
+                        daysBefore
+                })
+                .eq("id", user.id);
 
-    setTimeout(function () {
+        if (error) {
+            throw error;
+        }
 
-        closeNotificationSettings();
+        // Offline үед ашиглах local cache
+        localStorage.setItem(
+            "notificationSettings",
+            JSON.stringify(settings)
+        );
 
-    }, 800);
+        message.textContent =
+            "✅ Тохиргоо хадгалагдлаа.";
 
+        message.style.color =
+            "#16a34a";
+
+        // Мэдэгдлээ шинэ тохиргоогоор дахин тооцно
+        checkDebtNotifications();
+
+        setTimeout(function () {
+            closeNotificationSettings();
+        }, 800);
+
+    } catch (error) {
+
+        console.error(
+            "Notification settings save error:",
+            error
+        );
+
+        message.textContent =
+            "❌ Тохиргоо хадгалахад алдаа гарлаа.";
+
+        message.style.color =
+            "#dc2626";
+    }
 }
     // ==========================================
 // DEBT NOTIFICATION CHECK
