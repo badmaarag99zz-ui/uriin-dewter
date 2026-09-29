@@ -6713,6 +6713,37 @@ body{
 
     cursor: pointer;
 }
+    .notification-btn {
+    position: relative;
+}
+
+.notification-badge {
+    position: absolute;
+
+    top: -5px;
+    right: -5px;
+
+    min-width: 18px;
+    height: 18px;
+
+    padding: 0 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #ef4444;
+    color: #ffffff;
+
+    border: 2px solid #ffffff;
+    border-radius: 999px;
+
+    font-size: 10px;
+    font-weight: 800;
+    line-height: 1;
+
+    box-sizing: border-box;
+}
 </style>
 
 </head>
@@ -6886,10 +6917,20 @@ body{
             </div>
         </div>
 
-        <button id="notificationBtn" class="icon-btn notification-btn" type="button"
-            onclick="showNotifications()" aria-label="Мэдэгдэл">
-            <span aria-hidden="true">🔔</span>
-        </button>
+      <button id="notificationBtn" class="icon-btn notification-btn" type="button"
+    onclick="showNotifications()" aria-label="Мэдэгдэл">
+
+    <span aria-hidden="true">🔔</span>
+
+    <span
+        id="notificationBadge"
+        class="notification-badge"
+        style="display:none;"
+    >
+        0
+    </span>
+
+</button>
     </div>
 </header>
 
@@ -19312,7 +19353,31 @@ function checkDebtNotifications() {
         "🔔 Өрийн мэдэгдэл:",
         window.debtNotifications
     );
+const badge =
+    document.getElementById(
+        "notificationBadge"
+    );
 
+if (badge) {
+
+    const total =
+        window.debtNotifications.total;
+
+    if (total > 0) {
+
+        badge.textContent =
+            total > 99 ? "99+" : total;
+
+        badge.style.display =
+            "flex";
+
+    } else {
+
+        badge.style.display =
+            "none";
+
+    }
+}
 }
 </script>
 
