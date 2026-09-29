@@ -6744,6 +6744,144 @@ body{
 
     box-sizing: border-box;
 }
+    /* =========================
+   NOTIFICATION CENTER
+========================= */
+
+.notification-center-popup {
+    position: relative;
+    width: min(390px, calc(100vw - 32px));
+    max-height: 80vh;
+    overflow: hidden;
+}
+
+.notification-center-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: none;
+    border-radius: 11px;
+
+    background: #f1f5f9;
+    color: #94a3b8;
+
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.notification-center-list {
+    width: 100%;
+    max-height: 48vh;
+    overflow-y: auto;
+
+    margin-top: 14px;
+    padding-right: 2px;
+}
+
+.notification-popup-section {
+    margin-bottom: 16px;
+}
+
+.notification-popup-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 8px;
+    padding: 8px 10px;
+
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 800;
+}
+
+/* Хугацаа хэтэрсэн */
+.notification-popup-heading.overdue {
+    background: #fef2f2;
+    color: #dc2626;
+}
+
+/* Хугацаа дөхсөн */
+.notification-popup-heading.due-soon {
+    background: #fffbeb;
+    color: #d97706;
+}
+
+.notification-popup-heading b {
+    min-width: 22px;
+    height: 22px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0 6px;
+
+    background: #ffffff;
+    border-radius: 999px;
+
+    font-size: 11px;
+}
+
+.notification-debt-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 12px 4px;
+
+    border-bottom: 1px solid #eef2f7;
+}
+
+.notification-debt-main {
+    min-width: 0;
+    text-align: left;
+}
+
+.notification-debt-main strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #1e293b;
+
+    font-size: 14px;
+    font-weight: 800;
+}
+
+.notification-debt-main small {
+    display: block;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+    line-height: 1.4;
+}
+
+.notification-debt-amount {
+    flex-shrink: 0;
+
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.notification-center-ok {
+    width: 100%;
+    margin-top: 14px;
+}
 </style>
 
 </head>
@@ -16163,7 +16301,336 @@ async function updateHeaderUserPhone() {
 }
 
 function showNotifications() {
-    appAlert("🔔 Одоогоор шинэ мэдэгдэл алга.");
+
+    const notifications =
+        window.debtNotifications || {
+            overdue: [],
+            dueSoon: [],
+            total: 0
+        };
+
+    const overdue =
+        Array.isArray(notifications.overdue)
+            ? notifications.overdue
+            : [];
+
+    const dueSoon =
+        Array.isArray(notifications.dueSoon)
+            ? notifications.dueSoon
+            : [];
+
+
+    // Мэдэгдэл байхгүй
+    if (
+        overdue.length === 0 &&
+        dueSoon.length === 0
+    ) {
+
+        appAlert(
+            "🔔 Одоогоор шинэ мэдэгдэл алга.",
+            "Мэдэгдэл",
+            "🔔"
+        );
+
+        return;
+    }
+
+
+    const formatMoney = function(value) {
+
+        return Number(value || 0)
+            .toLocaleString("mn-MN") + " ₮";
+
+    };
+
+
+    const formatDueDate = function(value) {
+
+        if (!value) return "";
+
+        const parts =
+            String(value).split("-");
+
+        if (parts.length !== 3) {
+            return value;
+        }
+
+        return (
+            parts[0] + "." +
+            parts[1] + "." +
+            parts[2]
+        );
+
+    };
+
+
+    let html = "";
+
+
+    // ==========================================
+    // ХУГАЦАА ХЭТЭРСЭН
+    // ==========================================
+
+    if (overdue.length > 0) {
+
+        html += `
+            <div class="notification-popup-section">
+
+                <div class="notification-popup-heading overdue">
+
+                    <span>
+                        Хугацаа хэтэрсэн
+                    </span>
+
+                    <b>
+                        ${overdue.length}
+                    </b>
+
+                </div>
+        `;
+
+
+        overdue.forEach(function(debt) {
+
+            const lateDays =
+                Math.abs(
+                    Number(debt.diffDays || 0)
+                );
+
+            html += `
+                <div class="notification-debt-item">
+
+                    <div class="notification-debt-main">
+
+                        <strong>
+                            ${escapeNotificationHtml(
+                                debt.name || "Нэргүй"
+                            )}
+                        </strong>
+
+                        <small>
+                            ${lateDays} хоног хэтэрсэн
+                            •
+                            ${formatDueDate(
+                                debt.dueDate
+                            )}
+                        </small>
+
+                    </div>
+
+                    <div class="notification-debt-amount">
+                        ${formatMoney(
+                            debt.remaining
+                        )}
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+
+        html += `</div>`;
+
+    }
+
+
+    // ==========================================
+    // ХУГАЦАА ДӨХСӨН
+    // ==========================================
+
+    if (dueSoon.length > 0) {
+
+        html += `
+            <div class="notification-popup-section">
+
+                <div class="notification-popup-heading due-soon">
+
+                    <span>
+                        Хугацаа дөхсөн
+                    </span>
+
+                    <b>
+                        ${dueSoon.length}
+                    </b>
+
+                </div>
+        `;
+
+
+        dueSoon.forEach(function(debt) {
+
+            let dayText = "";
+
+            if (debt.diffDays === 0) {
+
+                dayText =
+                    "Өнөөдөр төлөх";
+
+            } else if (debt.diffDays === 1) {
+
+                dayText =
+                    "Маргааш төлөх";
+
+            } else {
+
+                dayText =
+                    debt.diffDays +
+                    " хоногийн дараа";
+
+            }
+
+
+            html += `
+                <div class="notification-debt-item">
+
+                    <div class="notification-debt-main">
+
+                        <strong>
+                            ${escapeNotificationHtml(
+                                debt.name || "Нэргүй"
+                            )}
+                        </strong>
+
+                        <small>
+                            ${dayText}
+                            •
+                            ${formatDueDate(
+                                debt.dueDate
+                            )}
+                        </small>
+
+                    </div>
+
+                    <div class="notification-debt-amount">
+                        ${formatMoney(
+                            debt.remaining
+                        )}
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+
+        html += `</div>`;
+
+    }
+
+
+    // ==========================================
+    // POPUP
+    // ==========================================
+
+    const overlay =
+        document.createElement("div");
+
+    overlay.className =
+        "app-popup-overlay notification-center-overlay";
+
+
+    overlay.innerHTML = `
+
+        <div class="app-popup notification-center-popup">
+
+            <button
+                type="button"
+                class="notification-center-close"
+                aria-label="Хаах"
+            >
+                ✕
+            </button>
+
+            <div class="app-popup-icon">
+                🔔
+            </div>
+
+            <div class="app-popup-title">
+                Мэдэгдэл
+            </div>
+
+            <div class="notification-center-list">
+                ${html}
+            </div>
+
+            <button
+                type="button"
+                class="app-popup-primary notification-center-ok"
+            >
+                Ойлголоо
+            </button>
+
+        </div>
+    `;
+
+
+    document.body.appendChild(
+        overlay
+    );
+
+
+    const closePopup = function() {
+
+        if (
+            typeof removePopup ===
+            "function"
+        ) {
+
+            removePopup(overlay);
+
+        } else {
+
+            overlay.remove();
+
+        }
+
+    };
+
+
+    overlay
+        .querySelector(
+            ".notification-center-close"
+        )
+        .addEventListener(
+            "click",
+            closePopup
+        );
+
+
+    overlay
+        .querySelector(
+            ".notification-center-ok"
+        )
+        .addEventListener(
+            "click",
+            closePopup
+        );
+
+
+    overlay.addEventListener(
+        "click",
+        function(event) {
+
+            if (event.target === overlay) {
+                closePopup();
+            }
+
+        }
+    );
+
+}
+
+
+function escapeNotificationHtml(value) {
+
+    return String(value || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
 }
 
 /* Update whenever the app becomes visible after login/offline login. */
