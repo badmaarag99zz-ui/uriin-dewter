@@ -16050,19 +16050,32 @@ async function handlePasswordReset() {
     await sendPasswordReset();
 
 }   
-     document
-    .getElementById("remainingCard")
-    .addEventListener("click", function () {
+    const remainingCard =
+    document.getElementById("remainingCard");
 
-        const debtList = document.getElementById("debtListBox");
+if (remainingCard) {
 
-        if (debtList.style.display === "none" || debtList.style.display === "") {
-            debtList.style.display = "block";
-        } else {
-            debtList.style.display = "none";
+    remainingCard.addEventListener(
+        "click",
+        function () {
+
+            const debtList =
+                document.getElementById("debtListBox");
+
+            if (!debtList) return;
+
+            if (
+                debtList.style.display === "none" ||
+                debtList.style.display === ""
+            ) {
+                debtList.style.display = "block";
+            } else {
+                debtList.style.display = "none";
+            }
+
         }
-
-    });   
+    );
+}
         function toggleHelpItem(id) {
 
     const item = document.getElementById(id);
