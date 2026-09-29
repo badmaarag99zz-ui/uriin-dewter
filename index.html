@@ -16583,26 +16583,40 @@ function showNotifications() {
     );
 
 
-  const closePopup = function() {
+ const closePopup = function() {
 
-    // Зөвхөн хонхны улаан тоог арилгана
+    // Үзсэн төлөвийг хадгална
+    if (window.currentDebtNotificationKey) {
+
+        localStorage.setItem(
+            "seenDebtNotificationKey",
+            window.currentDebtNotificationKey
+        );
+    }
+
+    // Badge арилгана
     const badge =
-        document.getElementById("notificationBadge");
+        document.getElementById(
+            "notificationBadge"
+        );
 
     if (badge) {
         badge.style.display = "none";
-        badge.textContent = "0";
     }
+
 
     // Popup хаана
     if (
         typeof removePopup === "function"
     ) {
-        removePopup(overlay);
-    } else {
-        overlay.remove();
-    }
 
+        removePopup(overlay);
+
+    } else {
+
+        overlay.remove();
+
+    }
 };
 
     overlay
@@ -19842,25 +19856,57 @@ const badge =
         "notificationBadge"
     );
 
+const badge =
+    document.getElementById("notificationBadge");
+
 if (badge) {
+
+    // Одоогийн мэдэгдлүүдийн төлөв
+    const currentNotificationKey = [
+        ...overdueDebts.map(debt =>
+            `overdue:${debt.id}:${debt.dueDate}:${debt.remaining}`
+        ),
+
+        ...dueSoonDebts.map(debt =>
+            `dueSoon:${debt.id}:${debt.dueDate}:${debt.remaining}:${debt.diffDays}`
+        )
+    ]
+        .sort()
+        .join("|");
+
+
+    // Хамгийн сүүлд үзсэн төлөв
+    const seenNotificationKey =
+        localStorage.getItem(
+            "seenDebtNotificationKey"
+        ) || "";
+
 
     const total =
         window.debtNotifications.total;
 
-    if (total > 0) {
+
+    // Шинэ өөрчлөлт байгаа үед л badge харуулна
+    if (
+        total > 0 &&
+        currentNotificationKey !== seenNotificationKey
+    ) {
 
         badge.textContent =
             total > 99 ? "99+" : total;
 
-        badge.style.display =
-            "flex";
+        badge.style.display = "flex";
 
     } else {
 
-        badge.style.display =
-            "none";
+        badge.style.display = "none";
 
     }
+
+
+    // Popup хаах үед ашиглана
+    window.currentDebtNotificationKey =
+        currentNotificationKey;
 }
 }
 </script>
