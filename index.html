@@ -9970,10 +9970,14 @@ async function checkLoginOnLoad() {
                     .getElementById("appContent")
                     .style.display = "block";
 
-             await syncOfflineDebts();
+           await syncOfflineDebts();
 
-             /*
-              * Refresh үед Тайлан tab HTML дээр active хэвээр байж болно.
+// Өрийн мэдээллийг ачаалж,
+// notification-ийг refresh бүрт шинэчилнэ
+await loadDebts();
+
+/*
+ * Refresh үед Тайлан tab HTML дээр active хэвээр байж болно.
               * Энэ үед хэрэглэгч 7/30 товч дараагүй тул renderReport()
               * автоматаар дуудагдахгүй байсан.
               * Data/sync бүрэн дууссаны ДАРАА active Тайланг нэг удаа render хийнэ.
