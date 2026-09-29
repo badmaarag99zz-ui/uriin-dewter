@@ -6290,6 +6290,143 @@ body{
     min-height: 18px;
     margin-bottom: 0;
 }
+    /* =========================
+   CHANGE PASSWORD MODAL
+========================= */
+
+#changePasswordModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(15, 23, 42, 0.48);
+
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+}
+
+#changePasswordModal .profile-edit-modal {
+    width: 100%;
+    max-width: 360px;
+    max-height: 90vh;
+    overflow-y: auto;
+
+    padding: 24px;
+
+    background: #ffffff;
+    border-radius: 20px;
+
+    box-shadow:
+        0 24px 60px rgba(15, 23, 42, 0.22);
+}
+
+#changePasswordModal .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+#changePasswordModal .modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+#changePasswordModal .profile-edit-subtitle {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+#changePasswordModal .modal-close {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #f1f5f9;
+    color: #94a3b8;
+
+    font-size: 18px;
+    cursor: pointer;
+}
+
+#changePasswordModal .form-group {
+    margin-bottom: 16px;
+}
+
+#changePasswordModal .form-group label {
+    display: block;
+    margin-bottom: 7px;
+
+    font-size: 13px;
+    font-weight: 700;
+    color: #475569;
+}
+
+#changePasswordModal input {
+    width: 100%;
+    height: 48px;
+
+    padding: 0 14px;
+
+    border: 1px solid #d7e0ea;
+    border-radius: 12px;
+
+    outline: none;
+    background: #f8fafc;
+
+    font-size: 14px;
+    color: #1e293b;
+
+    box-sizing: border-box;
+}
+
+#changePasswordModal input:focus {
+    border-color: #6366f1;
+    background: #ffffff;
+
+    box-shadow:
+        0 0 0 3px rgba(99, 102, 241, 0.10);
+}
+
+#changePasswordModal .save-btn {
+    width: 100%;
+    min-height: 46px;
+
+    border: none;
+    border-radius: 12px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6366f1,
+            #4f46e5
+        );
+
+    color: #ffffff;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+#changePasswordModal .save-btn:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
 </style>
 
 </head>
