@@ -16583,23 +16583,47 @@ function showNotifications() {
     );
 
 
-    const closePopup = function() {
+   const closePopup = function() {
 
-        if (
-            typeof removePopup ===
-            "function"
-        ) {
+    // Мэдэгдлийг үзсэн гэж тэмдэглэнэ
+    const badge =
+        document.getElementById("notificationBadge");
 
-            removePopup(overlay);
+    if (badge) {
+        badge.style.display = "none";
+        badge.textContent = "0";
+    }
 
-        } else {
+    // Одоогийн мэдэгдлийн төлөвийг хадгална
+    const notifications =
+        window.debtNotifications || {
+            overdue: [],
+            dueSoon: []
+        };
 
-            overlay.remove();
+    const seenIds = [
+        ...(notifications.overdue || []),
+        ...(notifications.dueSoon || [])
+    ]
+        .map(item => String(item.id))
+        .sort();
 
-        }
+    localStorage.setItem(
+        "seenDebtNotifications",
+        JSON.stringify(seenIds)
+    );
 
-    };
+    // Popup хаана
+    if (
+        typeof removePopup ===
+        "function"
+    ) {
+        removePopup(overlay);
+    } else {
+        overlay.remove();
+    }
 
+};
 
     overlay
         .querySelector(
