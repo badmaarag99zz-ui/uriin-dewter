@@ -11998,8 +11998,7 @@ if (subscription.plan === "paid") {
                     Number(
                         subscription.freeCustomerCount || 0
                     ) + 1;
-
-                subscription.freeCustomerLimit = 15;
+subscription.freeCustomerLimit = FREE_CUSTOMER_LIMIT;
 
                 let currentPhone = "";
 
