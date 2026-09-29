@@ -8259,6 +8259,9 @@ const supabaseClient =
    GLOBAL
 ========================================== */
 
+// Free эрхээр бүртгэх харилцагчийн дээд хэмжээ
+const FREE_CUSTOMER_LIMIT = 7;
+
 let debts = [];
 let reportDebts = [];
 
@@ -9354,7 +9357,7 @@ try {
                     subscription.freeCustomerCount || 0
                 ) <
                 Number(
-                    subscription.freeCustomerLimit || 15
+                  subscription.freeCustomerLimit || FREE_CUSTOMER_LIMIT
                 );
         }
 
@@ -9633,7 +9636,7 @@ async function checkSubscription(userId) {
                 freeCustomerCount:
                     freeCustomerCount,
 
-                freeCustomerLimit: 15
+             freeCustomerLimit: FREE_CUSTOMER_LIMIT
 
             };
 
@@ -9676,10 +9679,10 @@ async function checkSubscription(userId) {
                 freeCustomerCount:
                     freeCustomerCount,
 
-                freeCustomerLimit: 15,
+               freeCustomerLimit: FREE_CUSTOMER_LIMIT
 
                 canAddCustomer:
-                    freeCustomerCount < 15
+                   freeCustomerCount < FREE_CUSTOMER_LIMIT
 
             };
 
@@ -9705,7 +9708,7 @@ async function checkSubscription(userId) {
         freeCustomerCount:
             freeCustomerCount,
 
-        freeCustomerLimit: 15
+      freeCustomerLimit: FREE_CUSTOMER_LIMIT
 
     };
 
@@ -9751,7 +9754,7 @@ async function checkSubscription(userId) {
         freeCustomerCount:
             freeCustomerCount,
 
-        freeCustomerLimit: 15,
+      freeCustomerLimit: FREE_CUSTOMER_LIMIT
 
         canAddCustomer: false
 
@@ -9787,7 +9790,7 @@ async function checkSubscription(userId) {
                 freeCustomerCount:
                     freeCustomerCount,
 
-                freeCustomerLimit: 15
+                freeCustomerLimit: FREE_CUSTOMER_LIMIT
 
             };
 
@@ -9839,7 +9842,7 @@ async function checkSubscription(userId) {
     freeCustomerCount:
         freeCustomerCount,
 
-    freeCustomerLimit: 15,
+   freeCustomerLimit: FREE_CUSTOMER_LIMIT
 
     /*
         Зөвхөн идэвхтэй paid хэрэглэгч
@@ -11727,7 +11730,7 @@ function showFreeCustomerLimitModal() {
     }
 
     appAlert(
-        "Үнэгүй эрхээр 15 харилцагч бүртгэх боломжтой. Цааш шинэ харилцагч нэмэхийн тулд эрхээ сунгана уу."
+       `Үнэгүй эрхээр ${FREE_CUSTOMER_LIMIT} харилцагч бүртгэх боломжтой. Цааш шинэ харилцагч нэмэхийн тулд эрхээ сунгана уу.`
     );
 }
 
@@ -11849,7 +11852,7 @@ async function addDebt() {
 if (
     subscription.plan === "free" &&
     Number(subscription.freeCustomerCount || 0) >=
-        Number(subscription.freeCustomerLimit || 15)
+   subscription.freeCustomerLimit || FREE_CUSTOMER_LIMIT
 ) {
 
     console.log(
