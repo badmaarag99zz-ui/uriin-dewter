@@ -10458,14 +10458,14 @@ return;
 
         try {
 
-            debts =
-                JSON.parse(cached);
+           debts = JSON.parse(cached);
 
-            showDebts();
+showDebts();
+checkDebtNotifications();
 
-            console.log(
-                "Offline data loaded."
-            );
+console.log(
+    "Offline data loaded."
+);
 
         } catch (error) {
 
@@ -10475,8 +10475,8 @@ return;
             );
 
             debts = [];
-
-            showDebts();
+showDebts();
+checkDebtNotifications();
 
         }
 
