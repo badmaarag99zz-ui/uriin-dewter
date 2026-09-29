@@ -10243,15 +10243,15 @@ async function loadDebts() {
 
                     }));
 
-                localStorage.setItem(
-                    cacheKey,
-                    JSON.stringify(debts)
-                );
+              localStorage.setItem(
+    cacheKey,
+    JSON.stringify(debts)
+);
 
-                showDebts();
+showDebts();
+checkDebtNotifications();
 
-                return;
-
+return;
             }
 
             console.log(
@@ -19191,6 +19191,127 @@ function saveNotificationSettings() {
         closeNotificationSettings();
 
     }, 800);
+
+}
+    // ==========================================
+// DEBT NOTIFICATION CHECK
+// ==========================================
+
+function checkDebtNotifications() {
+
+    if (!Array.isArray(debts)) return;
+
+    const settings =
+        JSON.parse(
+            localStorage.getItem(
+                "notificationSettings"
+            ) || "{}"
+        );
+
+    const dueSoonEnabled =
+        settings.dueSoon !== false;
+
+    const overdueEnabled =
+        settings.overdue !== false;
+
+    const daysBefore =
+        Number(settings.daysBefore || 3);
+
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+
+    const dueSoonDebts = [];
+    const overdueDebts = [];
+
+
+    debts.forEach(function(debt) {
+
+        const remaining =
+            Math.max(
+                0,
+                Number(debt.amount || 0) -
+                Number(debt.paid || 0)
+            );
+
+        if (
+            remaining <= 0 ||
+            !debt.dueDate
+        ) {
+            return;
+        }
+
+
+        const due =
+            new Date(
+                debt.dueDate + "T00:00:00"
+            );
+
+        if (
+            Number.isNaN(
+                due.getTime()
+            )
+        ) {
+            return;
+        }
+
+
+        const diffDays =
+            Math.round(
+                (due - today) /
+                86400000
+            );
+
+
+        // Хугацаа хэтэрсэн
+        if (
+            overdueEnabled &&
+            diffDays < 0
+        ) {
+
+            overdueDebts.push({
+                ...debt,
+                remaining,
+                diffDays
+            });
+
+            return;
+        }
+
+
+        // Хугацаа дөхсөн
+        if (
+            dueSoonEnabled &&
+            diffDays >= 0 &&
+            diffDays <= daysBefore
+        ) {
+
+            dueSoonDebts.push({
+                ...debt,
+                remaining,
+                diffDays
+            });
+
+        }
+
+    });
+
+
+    // Аппын бусад хэсэг ашиглах боломжтой болгоно
+    window.debtNotifications = {
+        overdue: overdueDebts,
+        dueSoon: dueSoonDebts,
+        total:
+            overdueDebts.length +
+            dueSoonDebts.length
+    };
+
+
+    console.log(
+        "🔔 Өрийн мэдэгдэл:",
+        window.debtNotifications
+    );
 
 }
 </script>
