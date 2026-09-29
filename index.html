@@ -11846,12 +11846,15 @@ async function addDebt() {
 
 /*
     FREE:
-    15 хүн хүрсэн бол шинэ хүн нэмэхгүй.
+    FREE_CUSTOMER_LIMIT хүрсэн бол шинэ хүн нэмэхгүй.
 */
 if (
     subscription.plan === "free" &&
     Number(subscription.freeCustomerCount || 0) >=
-   subscription.freeCustomerLimit || FREE_CUSTOMER_LIMIT
+    Number(
+        subscription.freeCustomerLimit ||
+        FREE_CUSTOMER_LIMIT
+    )
 ) {
 
     console.log(
