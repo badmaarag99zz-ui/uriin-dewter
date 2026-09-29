@@ -19861,17 +19861,17 @@ const badge =
 if (badge) {
 
     // Одоогийн мэдэгдлүүдийн төлөв
-    const currentNotificationKey = [
-        ...overdueDebts.map(debt =>
-            `overdue:${debt.id}:${debt.dueDate}:${debt.remaining}`
-        ),
+  const currentNotificationKey = [
+    ...overdueDebts.map(debt =>
+        `overdue:${debt.id}:${debt.dueDate}:${Number(debt.remaining)}`
+    ),
 
-        ...dueSoonDebts.map(debt =>
-            `dueSoon:${debt.id}:${debt.dueDate}:${debt.remaining}:${debt.diffDays}`
-        )
-    ]
-        .sort()
-        .join("|");
+    ...dueSoonDebts.map(debt =>
+        `dueSoon:${debt.id}:${debt.dueDate}:${Number(debt.remaining)}`
+    )
+]
+    .sort()
+    .join("|");
 
 
     // Хамгийн сүүлд үзсэн төлөв
