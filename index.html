@@ -16583,9 +16583,9 @@ function showNotifications() {
     );
 
 
-   const closePopup = function() {
+  const closePopup = function() {
 
-    // Мэдэгдлийг үзсэн гэж тэмдэглэнэ
+    // Зөвхөн хонхны улаан тоог арилгана
     const badge =
         document.getElementById("notificationBadge");
 
@@ -16594,29 +16594,9 @@ function showNotifications() {
         badge.textContent = "0";
     }
 
-    // Одоогийн мэдэгдлийн төлөвийг хадгална
-    const notifications =
-        window.debtNotifications || {
-            overdue: [],
-            dueSoon: []
-        };
-
-    const seenIds = [
-        ...(notifications.overdue || []),
-        ...(notifications.dueSoon || [])
-    ]
-        .map(item => String(item.id))
-        .sort();
-
-    localStorage.setItem(
-        "seenDebtNotifications",
-        JSON.stringify(seenIds)
-    );
-
     // Popup хаана
     if (
-        typeof removePopup ===
-        "function"
+        typeof removePopup === "function"
     ) {
         removePopup(overlay);
     } else {
