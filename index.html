@@ -9587,8 +9587,8 @@ async function checkSubscription(userId) {
             await supabaseClient
                 .from("profiles")
                 .select(
-                    "phone, plan, subscription_expires_at, free_customer_count"
-                )
+    "phone, plan, subscription_expires_at, free_customer_count, customer_limit"
+)
                 .eq("id", userId)
                 .single();
 
@@ -9618,7 +9618,19 @@ async function checkSubscription(userId) {
             Number(
                 data.free_customer_count || 0
             );
+const customCustomerLimit =
+    data.customer_limit === null ||
+    data.customer_limit === undefined
+        ? FREE_CUSTOMER_LIMIT
+        : Number(data.customer_limit);
 
+const isUnlimited =
+    customCustomerLimit === -1;
+
+const customerLimit =
+    isUnlimited
+        ? -1
+        : customCustomerLimit;
 
         /* ==========================================
            FREE PLAN
@@ -9638,7 +9650,8 @@ async function checkSubscription(userId) {
                 freeCustomerCount:
                     freeCustomerCount,
 
-             freeCustomerLimit: FREE_CUSTOMER_LIMIT,
+             freeCustomerLimit: customerLimit,
+isUnlimited: isUnlimited,
 
             };
 
@@ -9681,10 +9694,13 @@ async function checkSubscription(userId) {
                 freeCustomerCount:
                     freeCustomerCount,
 
-             freeCustomerLimit: FREE_CUSTOMER_LIMIT,
+          freeCustomerLimit: customerLimit,
+
+isUnlimited: isUnlimited,
 
 canAddCustomer:
-    freeCustomerCount < FREE_CUSTOMER_LIMIT
+    isUnlimited ||
+    freeCustomerCount < customerLimit
 
             };
 
@@ -11852,6 +11868,7 @@ async function addDebt() {
 */
 if (
     subscription.plan === "free" &&
+    !subscription.isUnlimited &&
     Number(subscription.freeCustomerCount || 0) >=
     Number(
         subscription.freeCustomerLimit ||
