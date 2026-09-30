@@ -8164,7 +8164,114 @@ body{
 
             </div>
 
+<!-- ===============================
+     НЭМЭЛТ АСУУЛТУУД
+================================ -->
 
+<div class="faq-section">
+
+    <div class="faq-section-title">
+        🔐 Аюулгүй байдал
+    </div>
+
+    <div class="faq-item">
+        <button
+            type="button"
+            class="faq-question"
+            onclick="toggleFaqItem(this)"
+        >
+            <span>Харилцагч устгавал буцааж сэргээж болох уу?</span>
+            <span class="faq-arrow">＋</span>
+        </button>
+
+        <div class="faq-answer">
+            Харилцагчийг устгасны дараа тухайн мэдээллийг
+            апп дотроос шууд буцаан сэргээх боломжгүй.
+            Тиймээс устгахын өмнө нэр, төлбөр, төлөлт болон
+            үлдэгдлийн мэдээллээ сайтар шалгаарай.
+        </div>
+    </div>
+
+
+    <div class="faq-item">
+        <button
+            type="button"
+            class="faq-question"
+            onclick="toggleFaqItem(this)"
+        >
+            <span>Миний мэдээллийг өөр хэрэглэгч харах боломжтой юу?</span>
+            <span class="faq-arrow">＋</span>
+        </button>
+
+        <div class="faq-answer">
+            Үгүй. Хэрэглэгч бүр өөрийн бүртгэлээр нэвтэрч,
+            зөвхөн өөрийн бүртгэлд хамаарах харилцагчийн
+            мэдээлэлтэй ажиллахаар систем тохируулагдсан.
+            Нууц үгээ бусдад дамжуулахгүй байхыг зөвлөж байна.
+        </div>
+    </div>
+
+</div>
+
+
+<!-- FAQ SUPPORT -->
+
+<div
+    style="
+        margin-top:22px;
+        padding:18px;
+        border-radius:16px;
+        background:#f8fafc;
+        text-align:center;
+    "
+>
+    <div style="font-size:24px; margin-bottom:8px;">
+        💬
+    </div>
+
+    <strong
+        style="
+            display:block;
+            margin-bottom:5px;
+            color:#334155;
+            font-size:15px;
+        "
+    >
+        Хариултаа олсонгүй юу?
+    </strong>
+
+    <div
+        style="
+            margin-bottom:14px;
+            color:#64748b;
+            font-size:13px;
+            line-height:1.6;
+        "
+    >
+        Асуулт, санал эсвэл илэрсэн асуудлаа
+        бидэнд шууд илгээгээрэй.
+    </div>
+
+    <button
+        type="button"
+        onclick="openFeedbackFromFaq()"
+        style="
+            width:100%;
+            min-height:46px;
+            border:0;
+            border-radius:12px;
+            background:#52677d;
+            color:#ffffff;
+            font-family:inherit;
+            font-size:14px;
+            font-weight:700;
+            cursor:pointer;
+        "
+    >
+        Санал хүсэлт илгээх
+    </button>
+</div>
+            
             <!-- EMPTY SEARCH RESULT -->
 
             <div
@@ -21998,6 +22105,19 @@ function filterFaqItems() {
                 : "none";
 
     }
+
+}
+    function openFeedbackFromFaq() {
+
+    closeFaqModal();
+
+    setTimeout(function () {
+
+        if (typeof openFeedbackModal === "function") {
+            openFeedbackModal();
+        }
+
+    }, 150);
 
 }
 </script>
