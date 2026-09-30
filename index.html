@@ -20861,10 +20861,20 @@ function openAboutAppModal() {
     const modal =
         document.getElementById("aboutAppModal");
 
-    if (modal) {
-        modal.style.display = "flex";
+    if (!modal) {
+        return;
     }
 
+    /* Нээлттэй байвал хаана */
+    if (modal.style.display === "flex") {
+
+        modal.style.display = "none";
+        return;
+
+    }
+
+    /* Хаалттай байвал нээнэ */
+    modal.style.display = "flex";
 }
 
 
