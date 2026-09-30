@@ -10106,7 +10106,13 @@ body{
             <label>Утасны дугаар</label>
             <input id="personPhone" type="tel" inputmode="numeric" maxlength="8" pattern="[0-9]{8}" placeholder="Жишээ: 99112233">
             <label>Өрийн дүн</label>
-            <input id="debtAmount" type="number" placeholder="Жишээ: 150000">
+           <input
+    id="debtAmount"
+    type="text"
+    inputmode="numeric"
+    placeholder="Жишээ: 150,000"
+    autocomplete="off"
+>
             <label>Төлөх хугацаа</label>
             <div class="due-date-simple-wrap">
                 <input id="dueDate" type="date">
@@ -13956,12 +13962,12 @@ async function addDebt() {
             .value
             .trim();
 
-    const amount =
-        Number(
-            document
-                .getElementById("debtAmount")
-                .value
-        );
+   const amount =
+    parseMoneyInput(
+        document
+            .getElementById("debtAmount")
+            .value
+    );
 
     const dueDate =
         document
@@ -14513,8 +14519,10 @@ function editDebt(id) {
             debt.phone;
 
     document.getElementById("debtAmount")
-        .value =
-            debt.amount;
+    .value =
+        formatMoneyInput(
+            debt.amount
+        );
 
     document.getElementById("dueDate")
         .value =
@@ -14567,11 +14575,10 @@ async function updateDebt() {
             .trim();
 
     const amount =
-        Number(
-            document.getElementById("debtAmount")
-                .value
-        );
-
+    parseMoneyInput(
+        document.getElementById("debtAmount")
+            .value
+    );
     const dueDate =
         document.getElementById("dueDate")
             .value;
@@ -22980,6 +22987,55 @@ function renderTodayOverview() {
 
             })
             .join("");
+
+}
+    /* ==========================================
+   MONEY INPUT FORMAT
+========================================== */
+
+function formatMoneyInput(value) {
+
+    const digits =
+        String(value || "")
+            .replace(/[^\d]/g, "");
+
+    if (!digits) {
+        return "";
+    }
+
+    return Number(digits)
+        .toLocaleString("en-US");
+}
+
+
+function parseMoneyInput(value) {
+
+    return Number(
+        String(value || "")
+            .replace(/[^\d]/g, "")
+    ) || 0;
+
+}
+
+
+/* Шинэ өрийн дүн */
+
+const debtAmountInput =
+    document.getElementById("debtAmount");
+
+if (debtAmountInput) {
+
+    debtAmountInput.addEventListener(
+        "input",
+        function() {
+
+            this.value =
+                formatMoneyInput(
+                    this.value
+                );
+
+        }
+    );
 
 }
 </script>
