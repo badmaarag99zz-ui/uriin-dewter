@@ -22916,14 +22916,15 @@ function renderTodayOverview() {
                     );
 
 
-                const time =
-                    date.toLocaleTimeString(
-                        "mn-MN",
-                        {
-                            hour: "2-digit",
-                            minute: "2-digit"
-                        }
-                    );
+              const time =
+    date.toLocaleTimeString(
+        "mn-MN",
+        {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false
+        }
+    );
 
 
                 const isPaid =
