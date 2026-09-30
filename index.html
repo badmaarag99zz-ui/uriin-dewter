@@ -19655,19 +19655,40 @@ async function openNotificationSettings() {
             "notificationDaysBefore"
         );
 
-    // Эхлээд local cache-аас харуулна
+    if (
+        !modal ||
+        !dueSoon ||
+        !overdue ||
+        !days
+    ) {
+        console.error(
+            "Notification settings elements not found."
+        );
+        return;
+    }
+
+
+    /* ==========================================
+       1. LOCAL CACHE-ААС ШУУД ХАРУУЛНА
+    ========================================== */
+
     let settings = {};
 
     try {
+
         settings =
             JSON.parse(
                 localStorage.getItem(
                     "notificationSettings"
                 ) || "{}"
             );
+
     } catch (error) {
+
         settings = {};
+
     }
+
 
     dueSoon.checked =
         settings.dueSoon !== false;
@@ -19680,23 +19701,32 @@ async function openNotificationSettings() {
             settings.daysBefore || 3
         );
 
+
     modal.style.display = "flex";
 
 
-    // ==========================================
-    // SUPABASE-ААС ХАМГИЙН СҮҮЛИЙН ТОХИРГОО
-    // ==========================================
+    /* ==========================================
+       2. OFFLINE БОЛ LOCAL-ООР ҮЛДЭНЭ
+    ========================================== */
 
     if (!navigator.onLine) {
         return;
     }
+
+
+    /* ==========================================
+       3. SUPABASE-ААС ACCOUNT ТОХИРГОО УНШИНА
+    ========================================== */
 
     try {
 
         const user =
             await getCurrentUser();
 
-        if (!user) return;
+        if (!user) {
+            return;
+        }
+
 
         const {
             data,
@@ -19705,35 +19735,67 @@ async function openNotificationSettings() {
             await supabaseClient
                 .from("profiles")
                 .select(
-                    "notification_days_before"
+                    "notification_due_soon, notification_overdue, notification_days_before"
                 )
                 .eq("id", user.id)
                 .single();
+
 
         if (error) {
             throw error;
         }
 
-        const serverDays =
-            Number(
-                data?.notification_days_before || 3
+
+        const serverSettings = {
+
+            dueSoon:
+                data?.notification_due_soon !== false,
+
+            overdue:
+                data?.notification_overdue !== false,
+
+            daysBefore:
+                Number(
+                    data?.notification_days_before || 3
+                )
+
+        };
+
+
+        /* ==========================================
+           4. ДЭЛГЭЦИЙГ SERVER УТГААР ШИНЭЧИЛНЭ
+        ========================================== */
+
+        dueSoon.checked =
+            serverSettings.dueSoon;
+
+        overdue.checked =
+            serverSettings.overdue;
+
+        days.value =
+            String(
+                serverSettings.daysBefore
             );
 
-        // Дэлгэц дээр шинэчилнэ
-        days.value =
-            String(serverDays);
 
-        // Local cache-аа шинэчилнэ
-        settings.daysBefore =
-            serverDays;
+        /* ==========================================
+           5. LOCAL CACHE-ИЙГ SERVER-ТЭЙ ИЖИЛ БОЛГОНО
+        ========================================== */
 
         localStorage.setItem(
             "notificationSettings",
-            JSON.stringify(settings)
+            JSON.stringify(
+                serverSettings
+            )
         );
 
-        // Мэдэгдлийг шинэ утгаар дахин тооцно
+
+        /* ==========================================
+           6. МЭДЭГДЛИЙГ ШИНЭЭР ТООЦНО
+        ========================================== */
+
         checkDebtNotifications();
+
 
     } catch (error) {
 
@@ -19741,9 +19803,10 @@ async function openNotificationSettings() {
             "Notification settings load error:",
             error
         );
-    }
-}
 
+    }
+
+}
 function closeNotificationSettings() {
 
     const modal =
@@ -19775,22 +19838,53 @@ function closeNotificationSettingsOutside(event) {
 
 async function saveNotificationSettings() {
 
-    const dueSoon =
+    const dueSoonInput =
         document.getElementById(
             "dueSoonNotification"
-        ).checked;
+        );
 
-    const overdue =
+    const overdueInput =
         document.getElementById(
             "overdueNotification"
-        ).checked;
+        );
+
+    const daysInput =
+        document.getElementById(
+            "notificationDaysBefore"
+        );
+
+    const message =
+        document.getElementById(
+            "notificationSettingsMessage"
+        );
+
+
+    if (
+        !dueSoonInput ||
+        !overdueInput ||
+        !daysInput ||
+        !message
+    ) {
+
+        console.error(
+            "Notification settings elements not found."
+        );
+
+        return;
+    }
+
+
+    const dueSoon =
+        dueSoonInput.checked;
+
+    const overdue =
+        overdueInput.checked;
 
     const daysBefore =
         Number(
-            document.getElementById(
-                "notificationDaysBefore"
-            ).value
+            daysInput.value
         );
+
 
     const settings = {
         dueSoon,
@@ -19798,41 +19892,110 @@ async function saveNotificationSettings() {
         daysBefore
     };
 
-    const message =
-        document.getElementById(
-            "notificationSettingsMessage"
+
+    /* ==========================================
+       VALIDATION
+    ========================================== */
+
+    if (
+        !Number.isFinite(daysBefore) ||
+        daysBefore < 1 ||
+        daysBefore > 7
+    ) {
+
+        message.textContent =
+            "❌ Сануулах хоногийн тохиргоо буруу байна.";
+
+        message.style.color =
+            "#dc2626";
+
+        return;
+    }
+
+
+    /* ==========================================
+       OFFLINE
+    ========================================== */
+
+    if (!navigator.onLine) {
+
+        localStorage.setItem(
+            "notificationSettings",
+            JSON.stringify(settings)
         );
+
+        checkDebtNotifications();
+
+        message.textContent =
+            "📱 Тохиргоо энэ төхөөрөмж дээр хадгалагдлаа. Интернеттэй үед дахин хадгална уу.";
+
+        message.style.color =
+            "#d97706";
+
+        return;
+    }
+
+
+    /* ==========================================
+       ONLINE → SUPABASE
+    ========================================== */
 
     try {
 
         const user =
             await getCurrentUser();
 
+
         if (!user) {
+
             message.textContent =
                 "❌ Хэрэглэгчийн мэдээлэл олдсонгүй.";
-            message.style.color = "#dc2626";
+
+            message.style.color =
+                "#dc2626";
+
             return;
+
         }
 
-        const { error } =
+
+        const {
+            error
+        } =
             await supabaseClient
                 .from("profiles")
                 .update({
+
+                    notification_due_soon:
+                        dueSoon,
+
+                    notification_overdue:
+                        overdue,
+
                     notification_days_before:
                         daysBefore
+
                 })
                 .eq("id", user.id);
+
 
         if (error) {
             throw error;
         }
 
-        // Offline үед ашиглах local cache
+
+        /* ==========================================
+           SUPABASE АМЖИЛТТАЙ → LOCAL CACHE
+        ========================================== */
+
         localStorage.setItem(
             "notificationSettings",
             JSON.stringify(settings)
         );
+
+
+        checkDebtNotifications();
+
 
         message.textContent =
             "✅ Тохиргоо хадгалагдлаа.";
@@ -19840,12 +20003,13 @@ async function saveNotificationSettings() {
         message.style.color =
             "#16a34a";
 
-        // Мэдэгдлээ шинэ тохиргоогоор дахин тооцно
-        checkDebtNotifications();
 
         setTimeout(function () {
+
             closeNotificationSettings();
+
         }, 800);
+
 
     } catch (error) {
 
@@ -19854,12 +20018,15 @@ async function saveNotificationSettings() {
             error
         );
 
+
         message.textContent =
             "❌ Тохиргоо хадгалахад алдаа гарлаа.";
 
         message.style.color =
             "#dc2626";
+
     }
+
 }
     // ==========================================
 // DEBT NOTIFICATION CHECK
