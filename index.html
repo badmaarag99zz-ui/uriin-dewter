@@ -8101,7 +8101,305 @@ body{
         font-size: 10.5px !important;
     }
 }
-   
+   /* ==================================================
+   FINAL AUTH + VERIFY MODAL DESIGN
+================================================== */
+
+/* REGISTER + FORGOT */
+#registerModal .debt-modal-box,
+#forgotPasswordModal .debt-modal-box {
+    width: calc(100% - 28px) !important;
+    max-width: 380px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+
+    padding: 24px !important;
+
+    background: #ffffff !important;
+    border: 1px solid #eef2f7 !important;
+    border-radius: 20px !important;
+
+    box-shadow:
+        0 24px 60px rgba(15,23,42,.18),
+        0 4px 12px rgba(15,23,42,.05) !important;
+}
+
+
+/* REGISTER + FORGOT HEADER */
+#registerModal .debt-modal-header,
+#forgotPasswordModal .debt-modal-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+
+    margin-bottom: 22px !important;
+}
+
+
+/* CHANGE PHONE */
+#changePhoneModal .profile-edit-modal {
+    width: calc(100% - 28px) !important;
+    max-width: 380px !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+
+    padding: 24px !important;
+
+    background: #ffffff !important;
+    border: 1px solid #eef2f7 !important;
+    border-radius: 20px !important;
+
+    box-shadow:
+        0 24px 60px rgba(15,23,42,.18),
+        0 4px 12px rgba(15,23,42,.05) !important;
+}
+
+
+/* CHANGE PHONE HEADER */
+#changePhoneModal .modal-header {
+    display: flex !important;
+    align-items: flex-start !important;
+    justify-content: space-between !important;
+    gap: 16px !important;
+
+    margin-bottom: 22px !important;
+}
+
+
+/* TITLES */
+#registerModal h2,
+#forgotPasswordModal h2,
+#changePhoneModal h2 {
+    margin: 0 !important;
+
+    color: #1e293b !important;
+
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+    font-weight: 800 !important;
+}
+
+
+/* SUBTITLES */
+#registerModal .debt-modal-header p,
+#forgotPasswordModal .debt-modal-header p,
+#changePhoneModal .profile-edit-subtitle {
+    margin: 5px 0 0 !important;
+
+    color: #94a3b8 !important;
+
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+}
+
+
+/* CLOSE BUTTON */
+#registerModal .modal-close,
+#forgotPasswordModal .modal-close,
+#changePhoneModal .modal-close {
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+    border-radius: 12px !important;
+
+    background: #f1f5f9 !important;
+    color: #94a3b8 !important;
+
+    font-size: 18px !important;
+    cursor: pointer !important;
+}
+
+
+/* LABELS */
+#registerModal label,
+#forgotPasswordModal label,
+#changePhoneModal label {
+    display: block !important;
+
+    margin: 14px 0 7px !important;
+
+    color: #475569 !important;
+
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+
+/* INPUTS */
+#registerModal input,
+#forgotPasswordModal input,
+#changePhoneModal input {
+    width: 100% !important;
+    height: 48px !important;
+
+    padding: 0 14px !important;
+
+    border: 1px solid #d7e0ea !important;
+    border-radius: 12px !important;
+
+    outline: none !important;
+    background: #f8fafc !important;
+
+    color: #1e293b !important;
+    font-size: 14px !important;
+
+    box-sizing: border-box !important;
+}
+
+
+/* INPUT FOCUS */
+#registerModal input:focus,
+#forgotPasswordModal input:focus,
+#changePhoneModal input:focus {
+    background: #ffffff !important;
+    border-color: #64748b !important;
+
+    box-shadow:
+        0 0 0 3px rgba(100,116,139,.10) !important;
+}
+
+
+/* MAIN BUTTONS */
+#registerModal .modal-save-btn,
+#forgotPasswordModal .modal-save-btn,
+#changePhoneModal .save-btn {
+    width: 100% !important;
+    min-height: 48px !important;
+
+    margin-top: 18px !important;
+    padding: 12px 15px !important;
+
+    border: none !important;
+    border-radius: 12px !important;
+
+    background: #526a80 !important;
+    color: #ffffff !important;
+
+    font-size: 13px !important;
+    font-weight: 800 !important;
+
+    box-shadow:
+        0 5px 12px rgba(51,65,85,.12) !important;
+
+    cursor: pointer !important;
+}
+
+
+/* VERIFY SCREEN */
+#registerStepOtp,
+#forgotStepOtp,
+#changePhoneStepOtp {
+    text-align: center !important;
+}
+
+
+/* VERIFY PHONE ICON */
+#registerStepOtp > div:first-child,
+#forgotStepOtp > div:first-child {
+    padding-top: 2px !important;
+}
+
+
+/* VERIFY INSTRUCTION */
+#registerVerifyInstruction,
+#passwordResetVerifyInstruction,
+#changePhoneVerifyInstruction {
+    margin: 12px 0 14px !important;
+    padding: 13px 14px !important;
+
+    background: #f8fafc !important;
+
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+
+    color: #64748b !important;
+
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+
+    text-align: center !important;
+}
+
+
+/* VERIFY STATUS */
+#registerVerifyStatus,
+#passwordResetVerifyStatus,
+#changePhoneVerifyStatus {
+    margin-top: 12px !important;
+    padding: 11px 12px !important;
+
+    background: #f1f5f9 !important;
+
+    border-radius: 12px !important;
+
+    color: #64748b !important;
+
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+
+    text-align: center !important;
+}
+
+
+/* BACK / EDIT BUTTON */
+#changePhoneModal .profile-edit-action-btn {
+    width: 100% !important;
+
+    margin-top: 10px !important;
+    padding: 11px 14px !important;
+
+    border: none !important;
+    border-radius: 11px !important;
+
+    background: #f1f5f9 !important;
+    color: #52677d !important;
+
+    font-size: 12px !important;
+    font-weight: 800 !important;
+
+    cursor: pointer !important;
+}
+
+
+/* MESSAGE */
+#registerMessage,
+#forgotMessage,
+#changePhoneMessage {
+    margin-top: 12px !important;
+
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+
+    text-align: center !important;
+}
+
+
+/* MOBILE */
+@media (max-width: 480px) {
+
+    #registerModal .debt-modal-box,
+    #forgotPasswordModal .debt-modal-box,
+    #changePhoneModal .profile-edit-modal {
+        width: calc(100% - 24px) !important;
+        padding: 20px !important;
+        border-radius: 18px !important;
+    }
+
+    #registerModal h2,
+    #forgotPasswordModal h2,
+    #changePhoneModal h2 {
+        font-size: 19px !important;
+    }
+}
 </style>
 
 </head>
@@ -11701,305 +11999,7 @@ body{
         font-size: 19px !important;
     }
 }
-    /* ==================================================
-   FINAL AUTH + VERIFY MODAL DESIGN
-================================================== */
-
-/* REGISTER + FORGOT */
-#registerModal .debt-modal-box,
-#forgotPasswordModal .debt-modal-box {
-    width: calc(100% - 28px) !important;
-    max-width: 380px !important;
-    max-height: 90vh !important;
-    overflow-y: auto !important;
-
-    padding: 24px !important;
-
-    background: #ffffff !important;
-    border: 1px solid #eef2f7 !important;
-    border-radius: 20px !important;
-
-    box-shadow:
-        0 24px 60px rgba(15,23,42,.18),
-        0 4px 12px rgba(15,23,42,.05) !important;
-}
-
-
-/* REGISTER + FORGOT HEADER */
-#registerModal .debt-modal-header,
-#forgotPasswordModal .debt-modal-header {
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: space-between !important;
-    gap: 16px !important;
-
-    margin-bottom: 22px !important;
-}
-
-
-/* CHANGE PHONE */
-#changePhoneModal .profile-edit-modal {
-    width: calc(100% - 28px) !important;
-    max-width: 380px !important;
-    max-height: 90vh !important;
-    overflow-y: auto !important;
-
-    padding: 24px !important;
-
-    background: #ffffff !important;
-    border: 1px solid #eef2f7 !important;
-    border-radius: 20px !important;
-
-    box-shadow:
-        0 24px 60px rgba(15,23,42,.18),
-        0 4px 12px rgba(15,23,42,.05) !important;
-}
-
-
-/* CHANGE PHONE HEADER */
-#changePhoneModal .modal-header {
-    display: flex !important;
-    align-items: flex-start !important;
-    justify-content: space-between !important;
-    gap: 16px !important;
-
-    margin-bottom: 22px !important;
-}
-
-
-/* TITLES */
-#registerModal h2,
-#forgotPasswordModal h2,
-#changePhoneModal h2 {
-    margin: 0 !important;
-
-    color: #1e293b !important;
-
-    font-size: 20px !important;
-    line-height: 1.25 !important;
-    font-weight: 800 !important;
-}
-
-
-/* SUBTITLES */
-#registerModal .debt-modal-header p,
-#forgotPasswordModal .debt-modal-header p,
-#changePhoneModal .profile-edit-subtitle {
-    margin: 5px 0 0 !important;
-
-    color: #94a3b8 !important;
-
-    font-size: 12px !important;
-    line-height: 1.45 !important;
-}
-
-
-/* CLOSE BUTTON */
-#registerModal .modal-close,
-#forgotPasswordModal .modal-close,
-#changePhoneModal .modal-close {
-    width: 34px !important;
-    height: 34px !important;
-    min-width: 34px !important;
-
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-
-    padding: 0 !important;
-
-    border: none !important;
-    border-radius: 12px !important;
-
-    background: #f1f5f9 !important;
-    color: #94a3b8 !important;
-
-    font-size: 18px !important;
-    cursor: pointer !important;
-}
-
-
-/* LABELS */
-#registerModal label,
-#forgotPasswordModal label,
-#changePhoneModal label {
-    display: block !important;
-
-    margin: 14px 0 7px !important;
-
-    color: #475569 !important;
-
-    font-size: 13px !important;
-    font-weight: 700 !important;
-}
-
-
-/* INPUTS */
-#registerModal input,
-#forgotPasswordModal input,
-#changePhoneModal input {
-    width: 100% !important;
-    height: 48px !important;
-
-    padding: 0 14px !important;
-
-    border: 1px solid #d7e0ea !important;
-    border-radius: 12px !important;
-
-    outline: none !important;
-    background: #f8fafc !important;
-
-    color: #1e293b !important;
-    font-size: 14px !important;
-
-    box-sizing: border-box !important;
-}
-
-
-/* INPUT FOCUS */
-#registerModal input:focus,
-#forgotPasswordModal input:focus,
-#changePhoneModal input:focus {
-    background: #ffffff !important;
-    border-color: #64748b !important;
-
-    box-shadow:
-        0 0 0 3px rgba(100,116,139,.10) !important;
-}
-
-
-/* MAIN BUTTONS */
-#registerModal .modal-save-btn,
-#forgotPasswordModal .modal-save-btn,
-#changePhoneModal .save-btn {
-    width: 100% !important;
-    min-height: 48px !important;
-
-    margin-top: 18px !important;
-    padding: 12px 15px !important;
-
-    border: none !important;
-    border-radius: 12px !important;
-
-    background: #526a80 !important;
-    color: #ffffff !important;
-
-    font-size: 13px !important;
-    font-weight: 800 !important;
-
-    box-shadow:
-        0 5px 12px rgba(51,65,85,.12) !important;
-
-    cursor: pointer !important;
-}
-
-
-/* VERIFY SCREEN */
-#registerStepOtp,
-#forgotStepOtp,
-#changePhoneStepOtp {
-    text-align: center !important;
-}
-
-
-/* VERIFY PHONE ICON */
-#registerStepOtp > div:first-child,
-#forgotStepOtp > div:first-child {
-    padding-top: 2px !important;
-}
-
-
-/* VERIFY INSTRUCTION */
-#registerVerifyInstruction,
-#passwordResetVerifyInstruction,
-#changePhoneVerifyInstruction {
-    margin: 12px 0 14px !important;
-    padding: 13px 14px !important;
-
-    background: #f8fafc !important;
-
-    border: 1px solid #e2e8f0 !important;
-    border-radius: 12px !important;
-
-    color: #64748b !important;
-
-    font-size: 13px !important;
-    line-height: 1.55 !important;
-
-    text-align: center !important;
-}
-
-
-/* VERIFY STATUS */
-#registerVerifyStatus,
-#passwordResetVerifyStatus,
-#changePhoneVerifyStatus {
-    margin-top: 12px !important;
-    padding: 11px 12px !important;
-
-    background: #f1f5f9 !important;
-
-    border-radius: 12px !important;
-
-    color: #64748b !important;
-
-    font-size: 12px !important;
-    line-height: 1.45 !important;
-
-    text-align: center !important;
-}
-
-
-/* BACK / EDIT BUTTON */
-#changePhoneModal .profile-edit-action-btn {
-    width: 100% !important;
-
-    margin-top: 10px !important;
-    padding: 11px 14px !important;
-
-    border: none !important;
-    border-radius: 11px !important;
-
-    background: #f1f5f9 !important;
-    color: #52677d !important;
-
-    font-size: 12px !important;
-    font-weight: 800 !important;
-
-    cursor: pointer !important;
-}
-
-
-/* MESSAGE */
-#registerMessage,
-#forgotMessage,
-#changePhoneMessage {
-    margin-top: 12px !important;
-
-    font-size: 12px !important;
-    line-height: 1.45 !important;
-
-    text-align: center !important;
-}
-
-
-/* MOBILE */
-@media (max-width: 480px) {
-
-    #registerModal .debt-modal-box,
-    #forgotPasswordModal .debt-modal-box,
-    #changePhoneModal .profile-edit-modal {
-        width: calc(100% - 24px) !important;
-        padding: 20px !important;
-        border-radius: 18px !important;
-    }
-
-    #registerModal h2,
-    #forgotPasswordModal h2,
-    #changePhoneModal h2 {
-        font-size: 19px !important;
-    }
-}
+   
 </style>
 
 
