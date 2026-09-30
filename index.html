@@ -13604,13 +13604,14 @@ function closeDebtModalOutside(event) {
                         ${String(message)}
                     </div>
 
-                    <input
-                        type="number"
-                        class="app-popup-input"
-                        placeholder="Жишээ: 50000"
-                        value="${defaultValue}"
-                        inputmode="numeric"
-                    >
+                   <input
+    type="text"
+    class="app-popup-input"
+    placeholder="Жишээ: 50,000"
+    value="${formatMoneyInput(defaultValue)}"
+    inputmode="numeric"
+    autocomplete="off"
+>
 
                     <div class="app-popup-buttons">
 
@@ -13646,10 +13647,17 @@ function closeDebtModalOutside(event) {
                     ".app-popup-cancel"
                 );
 
-            const submit =
-                overlay.querySelector(
-                    ".app-popup-primary"
-                );
+           input.addEventListener(
+    "input",
+    function () {
+
+        this.value =
+            formatMoneyInput(
+                this.value
+            );
+
+    }
+);
 
 
             function close(value) {
@@ -14730,8 +14738,8 @@ async function payDebt(id) {
     if (amountText === null) return;
 
 
-    const paymentAmount =
-        Number(amountText);
+   const paymentAmount =
+    parseMoneyInput(amountText);
 
 
     if (
@@ -14894,8 +14902,8 @@ async function addMoreDebt(id) {
     if (amountText === null) return;
 
 
-    const amount =
-        Number(amountText);
+   const amount =
+    parseMoneyInput(amountText);
 
 
     if (
