@@ -21185,98 +21185,27 @@ if (installAppBtn) {
         async function() {
 
             if (!deferredInstallPrompt) {
-
-                return;
-
-            }
-
-          if (installAppBtn) {
-
-    const isStandalone =
-        window.matchMedia("(display-mode: standalone)").matches ||
-        window.navigator.standalone === true;
-
-    const isMobile =
-        /Android|iPhone|iPad|iPod/i.test(
-            navigator.userAgent
-        );
-
-    const isIOS =
-        /iPhone|iPad|iPod/i.test(
-            navigator.userAgent
-        );
-
-    /* Апп дотроос нээсэн бол install товч хэрэггүй */
-    if (isStandalone) {
-
-        installAppBtn.style.display = "none";
-
-    } else if (isMobile) {
-
-        /* Утасны browser дээр товчийг харуулна */
-        installAppBtn.style.display = "block";
-
-    }
-
-
-    installAppBtn.addEventListener(
-        "click",
-        async function() {
-
-            /* =====================================
-               NATIVE INSTALL PROMPT БЭЛЭН
-            ===================================== */
-
-            if (deferredInstallPrompt) {
-
-                deferredInstallPrompt.prompt();
-
-                const result =
-                    await deferredInstallPrompt.userChoice;
-
-                console.log(
-                    "Install result:",
-                    result.outcome
-                );
-
-                deferredInstallPrompt = null;
-
-                if (result.outcome === "accepted") {
-
-                    installAppBtn.style.display = "none";
-                }
-
                 return;
             }
 
+            deferredInstallPrompt.prompt();
 
-            /* =====================================
-               IPHONE / IPAD
-            ===================================== */
+            const result =
+                await deferredInstallPrompt.userChoice;
 
-            if (isIOS) {
-
-                alert(
-                    "Апп суулгахын тулд Safari-ийн Share товчийг дараад “Add to Home Screen” сонгоно уу."
-                );
-
-                return;
-            }
-
-
-            /* =====================================
-               ANDROID / CHROME FALLBACK
-            ===================================== */
-
-            alert(
-                "Апп суулгахын тулд Chrome-ийн ⋮ цэсийг нээгээд “Install and create shortcut” → “Install” сонгоно уу."
+            console.log(
+                "Install result:",
+                result.outcome
             );
 
+            deferredInstallPrompt = null;
+
+            installAppBtn.style.display =
+                "none";
         }
     );
 
 }
-
 
 window.addEventListener(
     "appinstalled",
