@@ -15488,58 +15488,174 @@ function closeFeedback() {
 }
 
 
-async function submitFeedback() {
+async function sendFeedback() {
 
-    const feedbackInput = document.getElementById("feedbackText");
-    const feedback = feedbackInput.value.trim();
+    const typeInput =
+        document.getElementById("feedbackType");
 
-    if (!feedback) {
-        alert("Санал хүсэлтээ бичнэ үү.");
+    const messageInput =
+        document.getElementById("feedbackMessage");
+
+    const statusMessage =
+        document.getElementById("feedbackStatusMessage");
+
+    const sendButton =
+        document.getElementById("sendFeedbackButton");
+
+
+    if (!messageInput) {
+        console.error("feedbackMessage not found");
         return;
     }
 
-    const user = await getCurrentUser();
+
+    const message =
+        messageInput.value.trim();
+
+    const type =
+        typeInput
+            ? typeInput.value
+            : "suggestion";
+
+
+    if (!message) {
+
+        if (statusMessage) {
+            statusMessage.textContent =
+                "Санал хүсэлтээ бичнэ үү.";
+
+            statusMessage.style.color =
+                "#dc2626";
+        }
+
+        return;
+    }
+
+
+    if (!navigator.onLine) {
+
+        if (statusMessage) {
+            statusMessage.textContent =
+                "Интернэт холболтоо шалгана уу.";
+
+            statusMessage.style.color =
+                "#dc2626";
+        }
+
+        return;
+    }
+
+
+    const user =
+        await getCurrentUser();
+
 
     if (!user) {
-    alert("🔐 Санал хүсэлт илгээхийн тулд эхлээд нэвтэрнэ үү.\n\nНэвтэрсний дараа санал хүсэлтээ илгээх боломжтой.");
-    return;
-}
+
+        if (statusMessage) {
+            statusMessage.textContent =
+                "Нэвтэрсний дараа санал хүсэлт илгээх боломжтой.";
+
+            statusMessage.style.color =
+                "#dc2626";
+        }
+
+        return;
+    }
+
+
+    const typeLabels = {
+        suggestion: "Санал",
+        bug: "Алдаа мэдээлэх",
+        improvement: "Сайжруулах хүсэлт",
+        other: "Бусад"
+    };
+
+
+    const finalMessage =
+        "[" +
+        (typeLabels[type] || "Санал") +
+        "] " +
+        message;
+
 
     try {
 
-        const { error } = await supabaseClient
-            .from("feedback")
-            .insert({
-                user_id: user.id,
-                message: feedback
-            });
-
-        if (error) {
-           console.error("Feedback error:", {
-    message: error.message,
-    details: error.details,
-    hint: error.hint,
-    code: error.code
-});
-            alert("❌ Санал хүсэлт илгээхийн тулд эхлээд нэвтэрнэ үү.");
-            return;
+        if (sendButton) {
+            sendButton.disabled = true;
+            sendButton.textContent = "Илгээж байна...";
         }
 
-        feedbackInput.value = "";
-        closeFeedback();
 
-        alert("✅ Санал хүсэлтийг амжилттай илгээлээ.\n\nБаярлалаа!");
+        const { error } =
+            await supabaseClient
+                .from("feedback")
+                .insert({
+                    user_id: user.id,
+                    message: finalMessage
+                });
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        messageInput.value = "";
+
+        if (typeInput) {
+            typeInput.value = "suggestion";
+        }
+
+
+        if (statusMessage) {
+
+            statusMessage.textContent =
+                "✓ Санал хүсэлтийг амжилттай илгээлээ.";
+
+            statusMessage.style.color =
+                "#16a34a";
+        }
+
+
+        setTimeout(function () {
+
+            closeFeedbackModal();
+
+            if (statusMessage) {
+                statusMessage.textContent = "";
+            }
+
+        }, 900);
+
 
     } catch (error) {
 
-        console.error("Feedback error:", error);
+        console.error(
+            "Feedback error:",
+            error
+        );
 
-        alert("❌Санал хүсэлт илгээхийн тулд эхлээд нэвтэрнэ үү.");
+        if (statusMessage) {
+
+            statusMessage.textContent =
+                "Илгээхэд алдаа гарлаа. Дахин оролдоно уу.";
+
+            statusMessage.style.color =
+                "#dc2626";
+        }
+
+
+    } finally {
+
+        if (sendButton) {
+            sendButton.disabled = false;
+            sendButton.textContent = "Илгээх";
+        }
 
     }
 
 }
-
 /* ==========================================
    EVENTS
 ========================================== */
