@@ -10337,6 +10337,111 @@ body{
         min-height:70px !important;
     }
 }
+    /* ===== FINAL HERO ART ===== */
+
+#homeView .final-home-hero{
+    min-height:235px !important;
+    position:relative !important;
+    overflow:hidden !important;
+
+    background:
+        radial-gradient(
+            circle at 70% 15%,
+            rgba(90,230,135,.18),
+            transparent 32%
+        ),
+        linear-gradient(
+            135deg,
+            #05613f 0%,
+            #087b49 55%,
+            #078d4f 100%
+        ) !important;
+}
+
+
+/* LEFT SIDE */
+
+#homeView .final-hero-copy{
+    position:relative !important;
+    z-index:5 !important;
+
+    width:57% !important;
+}
+
+#homeView .final-hero-title{
+    font-size:clamp(23px,5.5vw,31px) !important;
+    line-height:1.03 !important;
+    font-weight:950 !important;
+}
+
+#homeView .final-hero-subtitle{
+    margin-top:7px !important;
+    font-size:11px !important;
+}
+
+
+/* APPROVED RIGHT ART */
+
+#homeView .final-hero-art{
+    position:absolute !important;
+
+    z-index:3 !important;
+
+    right:-4px !important;
+    top:0 !important;
+
+    width:51% !important;
+    height:100% !important;
+
+    object-fit:cover !important;
+    object-position:center right !important;
+
+    pointer-events:none !important;
+}
+
+
+/* BALANCE CARD */
+
+#homeView .final-hero-balance{
+    z-index:8 !important;
+
+    left:14px !important;
+    bottom:14px !important;
+
+    width:61% !important;
+    min-height:72px !important;
+
+    border-radius:16px !important;
+
+    background:rgba(255,255,255,.98) !important;
+
+    box-shadow:
+        0 9px 20px rgba(0,50,32,.16) !important;
+}
+
+
+/* PHONE */
+
+@media(max-width:600px){
+
+    #homeView .final-home-hero{
+        min-height:235px !important;
+    }
+
+    #homeView .final-hero-copy{
+        width:58% !important;
+    }
+
+    #homeView .final-hero-art{
+        width:52% !important;
+        right:-5px !important;
+    }
+
+    #homeView .final-hero-balance{
+        width:62% !important;
+    }
+
+}
 </style>
 
 
@@ -10370,30 +10475,11 @@ body{
         </div>
 
 
-        <div class="final-hero-note">
-            Таны бизнесийн<br>
-            итгэлтэй туслах
-        </div>
-
-
-        <div class="final-coin final-coin-green">
-            ₮
-        </div>
-
-        <div class="final-coin final-coin-gold">
-            ₮
-        </div>
-
-
-        <div class="final-book">
-
-            <div class="final-book-symbol">
-                ₮
-            </div>
-
-            <div class="final-book-line"></div>
-
-        </div>
+      <img
+    src="./hero-illustration.png"
+    class="final-hero-art"
+    alt=""
+>
 
 
         <!-- MAIN REMAINING -->
