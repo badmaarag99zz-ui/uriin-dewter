@@ -8284,107 +8284,1574 @@ body{
 
 <main class="ledger-main">
 
-<section id="homeView" class="ledger-view active">
-   <div class="page-intro brand-message home-hero">
+<!-- =========================================================
+     HOME — FINAL GREEN DESIGN
+========================================================= -->
 
-    <div class="home-hero-content">
+<style>
+
+/* =========================================================
+   HOME ONLY
+========================================================= */
+
+#homeView{
+    width:100% !important;
+    max-width:760px !important;
+    margin:0 auto !important;
+    padding-bottom:20px !important;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+#homeView .final-home-hero{
+    position:relative !important;
+    overflow:hidden !important;
+
+    width:100% !important;
+    min-height:220px !important;
+
+    margin:0 0 12px !important;
+    padding:18px !important;
+
+    border-radius:22px !important;
+    border:0 !important;
+
+    background:
+        radial-gradient(
+            circle at 88% 18%,
+            rgba(88,232,138,.25),
+            transparent 28%
+        ),
+        radial-gradient(
+            circle at 18% 110%,
+            rgba(0,65,45,.55),
+            transparent 43%
+        ),
+        linear-gradient(
+            135deg,
+            #07563f 0%,
+            #087349 52%,
+            #0a8b52 100%
+        ) !important;
+
+    box-shadow:
+        0 14px 30px rgba(7,82,59,.18) !important;
+}
+
+
+/* background shapes */
+
+#homeView .final-home-hero::before{
+    content:"";
+    position:absolute;
+
+    width:260px;
+    height:260px;
+
+    right:-90px;
+    bottom:-150px;
+
+    border-radius:50%;
+
+    background:
+        rgba(102,232,150,.13);
+
+    pointer-events:none;
+}
+
+#homeView .final-home-hero::after{
+    content:"";
+    position:absolute;
+
+    width:200px;
+    height:100px;
+
+    left:-45px;
+    bottom:-50px;
+
+    border-radius:50%;
+
+    background:
+        rgba(0,52,39,.22);
+
+    transform:rotate(-8deg);
+
+    pointer-events:none;
+}
+
+
+/* =========================================================
+   HERO TOP TEXT
+========================================================= */
+
+#homeView .final-hero-copy{
+    position:relative;
+    z-index:4;
+
+    width:60%;
+}
+
+
+#homeView .final-home-hero .home-today-date{
+    display:inline-flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    width:max-content !important;
+
+    margin:0 0 12px !important;
+    padding:6px 11px !important;
+
+    border:
+        1px solid rgba(109,245,159,.70) !important;
+
+    border-radius:999px !important;
+
+    background:
+        rgba(0,55,39,.28) !important;
+
+    color:#ffffff !important;
+
+    font-size:11px !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+
+    box-shadow:none !important;
+}
+
+
+#homeView .final-hero-title{
+    margin:0 !important;
+
+    color:#ffffff !important;
+
+    font-size:
+        clamp(23px,5.6vw,32px) !important;
+
+    line-height:1.08 !important;
+
+    font-weight:900 !important;
+
+    letter-spacing:-.65px !important;
+}
+
+
+#homeView .final-hero-title span{
+    color:#67e88d !important;
+}
+
+
+#homeView .final-hero-subtitle{
+    margin-top:8px !important;
+
+    color:
+        rgba(255,255,255,.88) !important;
+
+    font-size:12.5px !important;
+    font-weight:650 !important;
+}
+
+
+/* =========================================================
+   RIGHT SIDE DECORATION
+========================================================= */
+
+#homeView .final-hero-note{
+    position:absolute;
+
+    z-index:4;
+
+    top:16px;
+    right:15px;
+
+    width:120px;
+
+    color:
+        rgba(255,255,255,.92);
+
+    text-align:center;
+
+    font-size:11px;
+    font-style:italic;
+    font-weight:650;
+
+    line-height:1.35;
+
+    transform:rotate(-4deg);
+}
+
+
+/* BOOK */
+
+#homeView .final-book{
+    position:absolute;
+
+    z-index:3;
+
+    right:25px;
+    bottom:16px;
+
+    width:82px;
+    height:105px;
+
+    border:
+        4px solid rgba(240,255,245,.93);
+
+    border-radius:
+        12px 18px 18px 12px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #25bb65,
+            #057d42
+        );
+
+    box-shadow:
+        0 15px 24px rgba(0,35,25,.30);
+
+    transform:
+        rotate(8deg);
+}
+
+
+#homeView .final-book::before{
+    content:"";
+
+    position:absolute;
+
+    left:9px;
+    top:0;
+    bottom:0;
+
+    width:5px;
+
+    border-left:
+        2px solid rgba(255,255,255,.45);
+
+    border-right:
+        2px solid rgba(255,255,255,.45);
+}
+
+
+#homeView .final-book-symbol{
+    position:absolute;
+
+    left:30px;
+    top:17px;
+
+    color:#ffffff;
+
+    font-size:38px;
+    line-height:1;
+    font-weight:900;
+}
+
+
+#homeView .final-book-line{
+    position:absolute;
+
+    left:29px;
+    top:68px;
+
+    width:34px;
+    height:4px;
+
+    border-radius:999px;
+
+    background:
+        rgba(255,255,255,.88);
+}
+
+
+/* COINS */
+
+#homeView .final-coin{
+    position:absolute;
+
+    z-index:2;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    font-weight:900;
+
+    box-shadow:
+        0 8px 15px rgba(0,40,25,.22);
+}
+
+
+#homeView .final-coin-green{
+    width:43px;
+    height:43px;
+
+    right:112px;
+    top:78px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #74eba0,
+            #15a65a
+        );
+
+    border:
+        3px solid rgba(190,255,213,.65);
+
+    color:#ffffff;
+
+    font-size:20px;
+}
+
+
+#homeView .final-coin-gold{
+    width:34px;
+    height:34px;
+
+    right:80px;
+    top:46px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #f8d967,
+            #ddb63b
+        );
+
+    border:
+        3px solid rgba(255,238,166,.85);
+
+    color:#876512;
+
+    font-size:15px;
+}
+
+
+/* =========================================================
+   HERO REMAINING BALANCE
+========================================================= */
+
+#homeView .final-hero-balance{
+    position:absolute;
+
+    z-index:5;
+
+    left:18px;
+    bottom:17px;
+
+    width:61%;
+    min-height:76px;
+
+    display:flex;
+    align-items:center;
+
+    gap:13px;
+
+    padding:12px 15px;
+
+    border-radius:17px;
+
+    background:
+        rgba(255,255,255,.97);
+
+    border:
+        1px solid rgba(220,236,228,.95);
+
+    box-shadow:
+        0 10px 22px rgba(0,50,35,.14);
+
+    cursor:pointer;
+}
+
+
+#homeView .final-balance-icon{
+    width:45px;
+    height:45px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    background:#dff6e9;
+
+    color:#07864a;
+
+    font-size:23px;
+    font-weight:900;
+}
+
+
+#homeView .final-balance-copy{
+    min-width:0;
+}
+
+
+#homeView .final-balance-label{
+    color:#416f65;
+
+    font-size:12px;
+    font-weight:850;
+}
+
+
+#homeView #totalRemaining{
+    display:block !important;
+
+    margin:3px 0 1px !important;
+
+    color:#173d4b !important;
+
+    font-size:
+        clamp(22px,5.2vw,31px) !important;
+
+    line-height:1 !important;
+
+    font-weight:900 !important;
+
+    letter-spacing:-.7px !important;
+
+    white-space:nowrap !important;
+}
+
+
+#homeView .final-balance-note{
+    color:#7a9298;
+
+    font-size:9.5px;
+    font-weight:650;
+}
+
+
+/* =========================================================
+   3 SUMMARY CARDS
+========================================================= */
+
+#homeView .final-summary-row{
+    display:grid !important;
+
+    grid-template-columns:
+        repeat(3,minmax(0,1fr)) !important;
+
+    gap:8px !important;
+
+    margin-bottom:9px !important;
+}
+
+
+#homeView .final-metric-card{
+    position:relative;
+
+    min-width:0;
+    min-height:92px;
+
+    padding:12px 10px 10px;
+
+    border-radius:17px;
+
+    border:1px solid #dce7eb;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 8px 20px rgba(53,80,70,.06);
+}
+
+
+/* BLUE */
+
+#homeView .final-metric-card.debt{
+    background:
+        linear-gradient(
+            135deg,
+            #eef7ff,
+            #e1f0ff
+        );
+}
+
+
+/* TEAL */
+
+#homeView .final-metric-card.remaining{
+    background:
+        linear-gradient(
+            135deg,
+            #e9f8f6,
+            #dcf4f0
+        );
+}
+
+
+/* GREEN */
+
+#homeView .final-metric-card.paid{
+    background:
+        linear-gradient(
+            135deg,
+            #eefaf2,
+            #e0f7e8
+        );
+}
+
+
+#homeView .final-metric-top{
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+}
+
+
+#homeView .final-metric-icon{
+    width:32px;
+    height:32px;
+
+    flex-shrink:0;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:50%;
+
+    font-size:16px;
+    font-weight:900;
+}
+
+
+#homeView .debt .final-metric-icon{
+    background:#d8ebff;
+    color:#1673c9;
+}
+
+
+#homeView .remaining .final-metric-icon{
+    background:#cef0ec;
+    color:#078a83;
+}
+
+
+#homeView .paid .final-metric-icon{
+    background:#cef2dc;
+    color:#0b9c50;
+}
+
+
+#homeView .final-metric-text{
+    min-width:0;
+}
+
+
+#homeView .final-metric-label{
+    color:#527080;
+
+    font-size:10.5px;
+    line-height:1.1;
+    font-weight:800;
+
+    white-space:nowrap;
+}
+
+
+#homeView .final-metric-value{
+    display:block;
+
+    margin-top:4px;
+
+    color:#173b53;
+
+    font-size:
+        clamp(12.5px,3.15vw,17px) !important;
+
+    line-height:1 !important;
+
+    font-weight:900 !important;
+
+    letter-spacing:-.4px;
+
+    white-space:nowrap;
+}
+
+
+/* colored values */
+
+#homeView #totalDebt{
+    color:#1d5f9e !important;
+}
+
+#homeView #totalRemainingMini{
+    color:#176f70 !important;
+}
+
+#homeView #totalPaid{
+    color:#087f48 !important;
+}
+
+
+/* progress line */
+
+#homeView .final-progress{
+    position:absolute;
+
+    left:10px;
+    right:10px;
+    bottom:10px;
+
+    height:4px;
+
+    border-radius:999px;
+
+    background:
+        rgba(80,120,120,.12);
+}
+
+
+#homeView .final-progress::after{
+    content:"";
+
+    display:block;
+
+    width:38%;
+    height:100%;
+
+    border-radius:inherit;
+}
+
+
+#homeView .debt .final-progress::after{
+    background:#65aef0;
+}
+
+#homeView .remaining .final-progress::after{
+    background:#43bcb3;
+}
+
+#homeView .paid .final-progress::after{
+    background:#57ce78;
+}
+
+
+/* =========================================================
+   PEOPLE
+========================================================= */
+
+#homeView .final-people-pill{
+    width:max-content;
+
+    margin:0 auto 13px;
+
+    padding:7px 15px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    gap:7px;
+
+    border-radius:999px;
+
+    background:#edf8f4;
+
+    border:
+        1px solid #cee7de;
+
+    color:#397466;
+
+    font-size:11px;
+    font-weight:800;
+
+    box-shadow:
+        0 5px 12px rgba(53,90,75,.05);
+}
+
+
+#homeView #totalPeople{
+    margin:0 !important;
+
+    color:#275f55 !important;
+
+    font-size:12px !important;
+    line-height:1 !important;
+
+    font-weight:900 !important;
+}
+
+
+/* =========================================================
+   TODAY CARD
+========================================================= */
+
+#homeView .today-overview{
+    width:100% !important;
+
+    margin:0 !important;
+    padding:16px !important;
+
+    border-radius:20px !important;
+
+    background:#ffffff !important;
+
+    border:
+        1px solid #dce7e3 !important;
+
+    box-shadow:
+        0 10px 26px rgba(46,76,64,.07) !important;
+}
+
+
+#homeView .today-overview-header{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+
+    gap:10px !important;
+
+    margin-bottom:12px !important;
+}
+
+
+#homeView .today-overview-title{
+    display:flex;
+    align-items:center;
+
+    gap:8px;
+}
+
+
+#homeView .today-title-bar{
+    width:5px;
+    height:27px;
+
+    flex-shrink:0;
+
+    border-radius:999px;
+
+    background:#16ad5c;
+}
+
+
+#homeView .today-overview-header h3{
+    margin:0 !important;
+
+    color:#193049 !important;
+
+    font-size:16px !important;
+    font-weight:900 !important;
+}
+
+
+#homeView .today-date-sub{
+    margin-top:2px;
+
+    color:#8295a4;
+
+    font-size:10.5px;
+    font-weight:650;
+}
+
+
+#homeView .today-count{
+    padding:6px 10px !important;
+
+    border-radius:999px !important;
+
+    background:#eef8f4 !important;
+
+    border:
+        1px solid #d1e8df !important;
+
+    color:#46766b !important;
+
+    font-size:10px !important;
+    font-weight:800 !important;
+}
+
+
+/* TODAY 2 CARDS */
+
+#homeView .today-stats{
+    display:grid !important;
+
+    grid-template-columns:
+        repeat(2,minmax(0,1fr)) !important;
+
+    gap:9px !important;
+}
+
+
+#homeView .today-stat{
+    min-width:0 !important;
+    min-height:62px !important;
+
+    padding:11px !important;
+
+    border-radius:14px !important;
+
+    display:flex !important;
+    align-items:center !important;
+
+    gap:9px !important;
+}
+
+
+#homeView .today-added{
+    background:#eef6fd !important;
+
+    border:
+        1px solid #dbe9f5 !important;
+}
+
+
+#homeView .today-paid{
+    background:#eaf8f1 !important;
+
+    border:
+        1px solid #d7ecdf !important;
+}
+
+
+#homeView .today-stat-icon{
+    width:32px !important;
+    height:32px !important;
+
+    flex-shrink:0 !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    border-radius:50% !important;
+
+    font-size:17px !important;
+    font-weight:900 !important;
+}
+
+
+#homeView .today-added .today-stat-icon{
+    background:#dbeeff !important;
+    color:#1474cf !important;
+}
+
+
+#homeView .today-paid .today-stat-icon{
+    background:#d1f3df !important;
+    color:#0b9d52 !important;
+}
+
+
+#homeView .today-stat span{
+    display:block !important;
+
+    color:#66808b !important;
+
+    font-size:10px !important;
+    font-weight:700 !important;
+}
+
+
+#homeView .today-stat strong{
+    display:block !important;
+
+    margin-top:3px !important;
+
+    color:#153d4b !important;
+
+    font-size:14px !important;
+    font-weight:900 !important;
+
+    white-space:nowrap !important;
+}
+
+
+/* ACTIVITY LIST */
+
+#homeView .today-activity-list{
+    margin-top:11px !important;
+
+    border-top:
+        1px solid #edf2ef !important;
+}
+
+
+#homeView .today-activity-item{
+    display:flex !important;
+
+    align-items:center !important;
+    justify-content:space-between !important;
+
+    gap:10px !important;
+
+    padding:11px 2px !important;
+
+    border-bottom:
+        1px solid #edf1f3 !important;
+}
+
+
+#homeView .today-activity-item:last-child{
+    border-bottom:0 !important;
+}
+
+
+#homeView .today-activity-name{
+    color:#1f3349 !important;
+
+    font-size:12px !important;
+    font-weight:850 !important;
+}
+
+
+#homeView .today-activity-time{
+    margin-top:2px !important;
+
+    color:#8396a5 !important;
+
+    font-size:9.5px !important;
+}
+
+
+#homeView .today-activity-amount{
+    font-size:12px !important;
+    font-weight:900 !important;
+}
+
+
+#homeView .today-activity-amount.add{
+    color:#1466ad !important;
+}
+
+
+#homeView .today-activity-amount.paid{
+    color:#078b49 !important;
+}
+
+
+#homeView .today-empty{
+    padding:15px 6px 3px !important;
+
+    color:#94a3b8 !important;
+
+    text-align:center !important;
+
+    font-size:10.5px !important;
+}
+
+
+#homeView .today-empty-icon{
+    display:inline !important;
+
+    margin-right:5px !important;
+
+    font-size:13px !important;
+}
+
+
+/* =========================================================
+   PHONE
+========================================================= */
+
+@media(max-width:600px){
+
+    #homeView .final-home-hero{
+        min-height:205px !important;
+
+        padding:
+            15px 14px !important;
+
+        border-radius:18px !important;
+    }
+
+
+    #homeView .final-hero-copy{
+        width:64% !important;
+    }
+
+
+    #homeView .final-hero-title{
+        font-size:
+            clamp(20px,5.6vw,27px) !important;
+    }
+
+
+    #homeView .final-hero-note{
+        right:8px;
+        top:13px;
+
+        width:105px;
+
+        font-size:9.5px;
+    }
+
+
+    #homeView .final-book{
+        right:16px;
+        bottom:15px;
+
+        width:67px;
+        height:88px;
+    }
+
+
+    #homeView .final-book-symbol{
+        left:23px;
+        top:15px;
+
+        font-size:31px;
+    }
+
+
+    #homeView .final-book-line{
+        left:23px;
+        top:57px;
+
+        width:28px;
+    }
+
+
+    #homeView .final-coin-green{
+        right:92px;
+        top:79px;
+
+        width:36px;
+        height:36px;
+
+        font-size:17px;
+    }
+
+
+    #homeView .final-coin-gold{
+        right:69px;
+        top:51px;
+
+        width:28px;
+        height:28px;
+
+        font-size:12px;
+    }
+
+
+    #homeView .final-hero-balance{
+        left:14px;
+        bottom:14px;
+
+        width:64%;
+        min-height:68px;
+
+        padding:10px 11px;
+
+        gap:9px;
+    }
+
+
+    #homeView .final-balance-icon{
+        width:38px;
+        height:38px;
+
+        font-size:19px;
+    }
+
+
+    #homeView #totalRemaining{
+        font-size:
+            clamp(20px,5.5vw,27px) !important;
+    }
+
+
+    #homeView .final-balance-label{
+        font-size:10.5px;
+    }
+
+
+    #homeView .final-balance-note{
+        font-size:8.5px;
+    }
+
+
+    #homeView .final-summary-row{
+        gap:6px !important;
+    }
+
+
+    #homeView .final-metric-card{
+        min-height:86px;
+
+        padding:
+            10px 7px 9px;
+    }
+
+
+    #homeView .final-metric-icon{
+        width:28px;
+        height:28px;
+
+        font-size:14px;
+    }
+
+
+    #homeView .final-metric-top{
+        gap:5px;
+    }
+
+
+    #homeView .final-metric-label{
+        font-size:8.5px;
+    }
+
+
+    #homeView .final-metric-value{
+        font-size:
+            clamp(10.5px,2.8vw,14px) !important;
+    }
+
+}
+
+
+/* VERY SMALL PHONE */
+
+@media(max-width:370px){
+
+    #homeView .final-metric-icon{
+        display:none;
+    }
+
+    #homeView .final-metric-value{
+        font-size:
+            11px !important;
+    }
+
+}
+
+</style>
+
+
+<section
+    id="homeView"
+    class="ledger-view active"
+>
+
+    <!-- =====================================================
+         GREEN HERO
+    ====================================================== -->
+
+    <div class="final-home-hero">
+
+        <div class="final-hero-copy">
+
+            <div
+                id="homeTodayDate"
+                class="home-today-date"
+            ></div>
+
+            <h1 class="final-hero-title">
+                Өр бүртгэлээ
+                <span>ухаалгаар</span>
+                хөтлө.
+            </h1>
+
+            <div class="final-hero-subtitle">
+                Таны туслах — Өрийн дэвтэр
+            </div>
+
+        </div>
+
+
+        <div class="final-hero-note">
+            Таны бизнесийн<br>
+            итгэлтэй туслах
+        </div>
+
+
+        <div class="final-coin final-coin-green">
+            ₮
+        </div>
+
+        <div class="final-coin final-coin-gold">
+            ₮
+        </div>
+
+
+        <div class="final-book">
+
+            <div class="final-book-symbol">
+                ₮
+            </div>
+
+            <div class="final-book-line"></div>
+
+        </div>
+
+
+        <!-- MAIN REMAINING -->
 
         <div
-            id="homeTodayDate"
-            class="home-today-date"
+            id="remainingCard"
+            class="final-hero-balance"
+        >
+
+            <div class="final-balance-icon">
+                ◔
+            </div>
+
+            <div class="final-balance-copy">
+
+                <div class="final-balance-label">
+                    Үлдэгдэл авлага
+                </div>
+
+                <strong id="totalRemaining">
+                    0 ₮
+                </strong>
+
+                <div class="final-balance-note">
+                    Одоогоор төлөгдөөгүй нийт дүн
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         3 SUMMARY CARDS
+    ====================================================== -->
+
+    <div class="final-summary-row">
+
+        <!-- TOTAL -->
+
+        <div class="final-metric-card debt">
+
+            <div class="final-metric-top">
+
+                <div class="final-metric-icon">
+                    ₮
+                </div>
+
+                <div class="final-metric-text">
+
+                    <div class="final-metric-label">
+                        Нийт авлага
+                    </div>
+
+                    <b
+                        id="totalDebt"
+                        class="final-metric-value"
+                    >
+                        0 ₮
+                    </b>
+
+                </div>
+
+            </div>
+
+            <div class="final-progress"></div>
+
+        </div>
+
+
+        <!-- REMAINING -->
+
+        <div class="final-metric-card remaining">
+
+            <div class="final-metric-top">
+
+                <div class="final-metric-icon">
+                    ◔
+                </div>
+
+                <div class="final-metric-text">
+
+                    <div class="final-metric-label">
+                        Үлдэгдэл авлага
+                    </div>
+
+                    <b
+                        id="totalRemainingMini"
+                        class="final-metric-value"
+                    >
+                        0 ₮
+                    </b>
+
+                </div>
+
+            </div>
+
+            <div class="final-progress"></div>
+
+        </div>
+
+
+        <!-- PAID -->
+
+        <div class="final-metric-card paid">
+
+            <div class="final-metric-top">
+
+                <div class="final-metric-icon">
+                    ✓
+                </div>
+
+                <div class="final-metric-text">
+
+                    <div class="final-metric-label">
+                        Төлсөн
+                    </div>
+
+                    <b
+                        id="totalPaid"
+                        class="final-metric-value"
+                    >
+                        0 ₮
+                    </b>
+
+                </div>
+
+            </div>
+
+            <div class="final-progress"></div>
+
+        </div>
+
+    </div>
+
+
+    <!-- PEOPLE -->
+
+    <div class="final-people-pill">
+
+        <span>👥 Нийт хүмүүс</span>
+
+        <b id="totalPeople">
+            0
+        </b>
+
+        <span>›</span>
+
+    </div>
+
+
+    <!-- =====================================================
+         TODAY
+    ====================================================== -->
+
+    <div
+        id="todayOverview"
+        class="today-overview"
+    >
+
+        <div class="today-overview-header">
+
+            <div class="today-overview-title">
+
+                <div class="today-title-bar"></div>
+
+                <div>
+
+                    <h3>
+                        Өнөөдрийн хөдөлгөөн
+                    </h3>
+
+                    <div
+                        id="todaySectionDate"
+                        class="today-date-sub"
+                    ></div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="todayActivityCount"
+                class="today-count"
+            >
+                0 үйлдэл
+            </div>
+
+        </div>
+
+
+        <div class="today-stats">
+
+            <div class="today-stat today-added">
+
+                <div class="today-stat-icon">
+                    ＋
+                </div>
+
+                <div>
+
+                    <span>
+                        Нэмэгдсэн авлага
+                    </span>
+
+                    <strong id="todayAdded">
+                        0 ₮
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="today-stat today-paid">
+
+                <div class="today-stat-icon">
+                    ✓
+                </div>
+
+                <div>
+
+                    <span>
+                        Орсон төлөлт
+                    </span>
+
+                    <strong id="todayPaid">
+                        0 ₮
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="todayActivityList"
+            class="today-activity-list"
         ></div>
 
-        <h1>
-            Өр бүртгэлээ
-            <span>ухаалгаар</span> хөтлө.
-        </h1>
-
-        <div class="brand-subtitle">
-            Таны туслах — Өрийн дэвтэр
-        </div>
-
     </div>
 
-    <div class="home-hero-decoration">
+</section>
 
-        <div class="hero-coin hero-coin-one">₮</div>
-        <div class="hero-coin hero-coin-two">₮</div>
 
-        <div class="hero-book">
-            <div class="hero-book-symbol">₮</div>
-            <div class="hero-book-line"></div>
-        </div>
+<script>
 
-    </div>
+/* =========================================================
+   HOME DISPLAY SYNC
+========================================================= */
 
-</div>
+(function () {
 
-    <div class="summary-strip summary-layout-final">
-        <div class="summary-top">
-            <div class="summary-mini">
-                <span>Нийт авлага</span>
-                <b id="totalDebt">0 ₮</b>
-            </div>
-            <div class="summary-mini">
-                <span>Төлсөн</span>
-                <b id="totalPaid">0 ₮</b>
-            </div>
-        </div>
+    /* HERO үлдэгдлийг доорх card руу хуулна */
 
-        <div class="summary-primary summary-remaining">
-            <span>Үлдэгдэл авлага</span>
-            <strong id="totalRemaining">0 ₮</strong>
-            <small>Одоогоор төлөгдөөгүй нийт дүн</small>
-        </div>
+    const remainingSource =
+        document.getElementById(
+            "totalRemaining"
+        );
 
-        <div class="summary-people-pill">
-            <span>Нийт хүмүүс</span>
-            <b id="totalPeople">0</b>
-        </div>
-    </div>
-    <!-- ==========================================
-     ӨНӨӨДРИЙН МЭДЭЭЛЭЛ
-========================================== -->
+    const remainingMini =
+        document.getElementById(
+            "totalRemainingMini"
+        );
 
-<div id="todayOverview" class="today-overview">
 
-    <div class="today-overview-header">
-        <div>
-            <span class="today-overview-eyebrow">ӨНӨӨДӨР</span>
-            <h3>Өнөөдрийн хөдөлгөөн</h3>
-        </div>
+    function syncRemaining() {
 
-        <div id="todayActivityCount" class="today-count">
-            0 үйлдэл
-        </div>
-    </div>
+        if (
+            !remainingSource ||
+            !remainingMini
+        ) {
+            return;
+        }
 
-    <div class="today-stats">
+        remainingMini.textContent =
+            remainingSource.textContent;
 
-        <div class="today-stat today-added">
-            <div class="today-stat-icon">＋</div>
+    }
 
-            <div>
-                <span>Нэмэгдсэн авлага</span>
-                <strong id="todayAdded">0 ₮</strong>
-            </div>
-        </div>
 
-        <div class="today-stat today-paid">
-            <div class="today-stat-icon">✓</div>
+    if (
+        remainingSource &&
+        remainingMini
+    ) {
 
-            <div>
-                <span>Орсон төлөлт</span>
-                <strong id="todayPaid">0 ₮</strong>
-            </div>
-        </div>
+        syncRemaining();
 
-    </div>
+        const remainingObserver =
+            new MutationObserver(
+                syncRemaining
+            );
 
-    <div id="todayActivityList" class="today-activity-list">
-    </div>
+        remainingObserver.observe(
+            remainingSource,
+            {
+                childList: true,
+                subtree: true,
+                characterData: true
+            }
+        );
 
-</div>
+    }
+
+
+    /* HERO дээрх огноог Today хэсэгт хуулна */
+
+    const homeDate =
+        document.getElementById(
+            "homeTodayDate"
+        );
+
+    const todayDate =
+        document.getElementById(
+            "todaySectionDate"
+        );
+
+
+    function syncTodayDate() {
+
+        if (
+            !homeDate ||
+            !todayDate
+        ) {
+            return;
+        }
+
+        todayDate.textContent =
+            homeDate.textContent;
+
+    }
+
+
+    if (
+        homeDate &&
+        todayDate
+    ) {
+
+        syncTodayDate();
+
+        const dateObserver =
+            new MutationObserver(
+                syncTodayDate
+            );
+
+        dateObserver.observe(
+            homeDate,
+            {
+                childList: true,
+                subtree: true,
+                characterData: true
+            }
+        );
+
+    }
+
+})();
+
+</script>
 </section>
 
 <section id="customersView" class="ledger-view">
