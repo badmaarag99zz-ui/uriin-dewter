@@ -10428,6 +10428,163 @@ body{
     }
 
 }
+    /* =========================================================
+   HERO — FINAL POLISH
+========================================================= */
+
+/* Баруун зураг зүүн талдаа зөөлөн уусна */
+#homeView .final-hero-art{
+    width:58% !important;
+    right:-2% !important;
+
+    -webkit-mask-image:
+        linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0,0,0,.35) 9%,
+            #000 22%,
+            #000 100%
+        ) !important;
+
+    mask-image:
+        linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0,0,0,.35) 9%,
+            #000 22%,
+            #000 100%
+        ) !important;
+}
+
+
+/* Үлдэгдэл авлага — товч биш, мэдээллийн panel */
+#homeView .final-hero-balance{
+    left:16px !important;
+    bottom:15px !important;
+
+    width:58% !important;
+    min-height:78px !important;
+
+    padding:12px 15px !important;
+    gap:12px !important;
+
+    display:flex !important;
+    align-items:center !important;
+
+    border-radius:18px !important;
+
+    background:
+        rgba(255,255,255,.97) !important;
+
+    border:
+        1px solid rgba(214,236,224,.95) !important;
+
+    box-shadow:
+        0 7px 16px rgba(0,58,36,.11) !important;
+
+    cursor:default !important;
+}
+
+
+/* Сум бүрэн байхгүй */
+#homeView .final-hero-balance::after{
+    content:none !important;
+    display:none !important;
+}
+
+
+/* Icon */
+#homeView .final-balance-icon{
+    width:43px !important;
+    height:43px !important;
+    min-width:43px !important;
+
+    border-radius:50% !important;
+
+    background:#e3f8ec !important;
+
+    font-size:0 !important;
+}
+
+
+/* Илүү цэвэр pie icon */
+#homeView .final-balance-icon::before{
+    content:"" !important;
+
+    width:19px !important;
+    height:19px !important;
+
+    display:block !important;
+
+    border-radius:50% !important;
+
+    background:
+        conic-gradient(
+            #0ca85d 0 74%,
+            #aee7c8 74% 100%
+        ) !important;
+}
+
+
+/* Text */
+#homeView .final-balance-copy{
+    min-width:0 !important;
+}
+
+#homeView .final-balance-label{
+    margin:0 0 2px !important;
+
+    font-size:11px !important;
+    line-height:1.15 !important;
+    font-weight:800 !important;
+
+    color:#54766a !important;
+}
+
+#homeView #totalRemaining{
+    margin:0 !important;
+
+    font-size:28px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
+
+    color:#103f35 !important;
+}
+
+#homeView .final-balance-note{
+    margin-top:4px !important;
+
+    font-size:9px !important;
+    line-height:1.15 !important;
+    font-weight:600 !important;
+
+    color:#82958e !important;
+}
+
+
+/* PHONE */
+@media(max-width:600px){
+
+    #homeView .final-hero-art{
+        width:59% !important;
+        right:-3% !important;
+    }
+
+    #homeView .final-hero-balance{
+        left:14px !important;
+        bottom:14px !important;
+
+        width:58% !important;
+        min-height:74px !important;
+
+        padding:11px 13px !important;
+    }
+
+    #homeView #totalRemaining{
+        font-size:26px !important;
+    }
+
+}
 </style>
 
 
