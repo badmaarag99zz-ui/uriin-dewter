@@ -11387,6 +11387,345 @@ body{
     background:#e9f8f0 !important;
     border-color:#a9ddc1 !important;
 }
+    /* ==================================================
+   AUTH / VERIFY MODAL UI POLISH
+   Register + Forgot Password + Change Phone
+================================================== */
+
+/* ---------- MODAL BOX ---------- */
+
+#registerModal .debt-modal-box,
+#forgotPasswordModal .debt-modal-box,
+#changePhoneModal .debt-modal-box {
+
+    width: min(92vw, 390px) !important;
+    max-width: 390px !important;
+
+    padding: 24px 20px 22px !important;
+
+    border-radius: 20px !important;
+    border: 1px solid rgba(226,232,240,.9) !important;
+
+    background: #ffffff !important;
+
+    box-shadow:
+        0 24px 60px rgba(15,23,42,.20),
+        0 4px 14px rgba(15,23,42,.08) !important;
+}
+
+
+/* ---------- MODAL HEADER ---------- */
+
+#registerModal .modal-header,
+#forgotPasswordModal .modal-header,
+#changePhoneModal .modal-header {
+
+    margin-bottom: 20px !important;
+}
+
+
+/* ---------- TITLE ---------- */
+
+#registerModal h2,
+#forgotPasswordModal h2,
+#changePhoneModal h2 {
+
+    margin: 0 !important;
+
+    font-size: 20px !important;
+    line-height: 1.25 !important;
+
+    font-weight: 850 !important;
+
+    color: #172033 !important;
+}
+
+
+/* ---------- SUBTITLE ---------- */
+
+#registerModal .modal-header p,
+#forgotPasswordModal .modal-header p,
+#changePhoneModal .modal-header p,
+#registerModal #registerSubtitle,
+#forgotPasswordModal #forgotSubtitle,
+#changePhoneModal #changePhoneSubtitle {
+
+    margin-top: 5px !important;
+    margin-bottom: 0 !important;
+
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+
+    color: #7c8aa0 !important;
+}
+
+
+/* ---------- CLOSE BUTTON ---------- */
+
+#registerModal .modal-close,
+#forgotPasswordModal .modal-close,
+#changePhoneModal .modal-close {
+
+    width: 34px !important;
+    height: 34px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    padding: 0 !important;
+
+    border: none !important;
+    border-radius: 50% !important;
+
+    background: #f1f5f9 !important;
+    color: #8492a6 !important;
+
+    font-size: 18px !important;
+    line-height: 1 !important;
+
+    transition: .18s ease !important;
+}
+
+
+#registerModal .modal-close:hover,
+#forgotPasswordModal .modal-close:hover,
+#changePhoneModal .modal-close:hover {
+
+    background: #e8eef5 !important;
+    color: #475569 !important;
+}
+
+
+/* ---------- LABEL ---------- */
+
+#registerModal label,
+#forgotPasswordModal label,
+#changePhoneModal label {
+
+    display: block !important;
+
+    margin-bottom: 7px !important;
+
+    font-size: 12px !important;
+    font-weight: 750 !important;
+
+    color: #334155 !important;
+}
+
+
+/* ---------- INPUT ---------- */
+
+#registerModal input,
+#forgotPasswordModal input,
+#changePhoneModal input {
+
+    width: 100% !important;
+    min-height: 46px !important;
+
+    padding: 0 14px !important;
+
+    border: 1px solid #dbe3ed !important;
+    border-radius: 12px !important;
+
+    background: #fbfcfe !important;
+
+    color: #172033 !important;
+
+    font-size: 14px !important;
+
+    outline: none !important;
+
+    transition:
+        border-color .18s ease,
+        box-shadow .18s ease,
+        background .18s ease !important;
+}
+
+
+#registerModal input:focus,
+#forgotPasswordModal input:focus,
+#changePhoneModal input:focus {
+
+    background: #ffffff !important;
+
+    border-color: #64748b !important;
+
+    box-shadow:
+        0 0 0 3px rgba(100,116,139,.12) !important;
+}
+
+
+/* ---------- INPUT SPACING ---------- */
+
+#registerModal .form-group,
+#forgotPasswordModal .form-group,
+#changePhoneModal .form-group {
+
+    margin-bottom: 15px !important;
+}
+
+
+/* ---------- PRIMARY BUTTONS ---------- */
+
+#registerModal .modal-save-btn,
+#forgotPasswordModal .modal-save-btn,
+#changePhoneModal .modal-save-btn,
+
+#registerModal .save-btn,
+#forgotPasswordModal .save-btn,
+#changePhoneModal .save-btn {
+
+    width: 100% !important;
+    min-height: 46px !important;
+
+    margin-top: 14px !important;
+    padding: 11px 16px !important;
+
+    border: none !important;
+    border-radius: 12px !important;
+
+    background: #536b82 !important;
+    color: #ffffff !important;
+
+    font-size: 13px !important;
+    font-weight: 800 !important;
+
+    box-shadow:
+        0 5px 12px rgba(51,65,85,.12) !important;
+
+    cursor: pointer !important;
+
+    transition:
+        transform .15s ease,
+        background .15s ease !important;
+}
+
+
+#registerModal .modal-save-btn:hover,
+#forgotPasswordModal .modal-save-btn:hover,
+#changePhoneModal .modal-save-btn:hover,
+
+#registerModal .save-btn:hover,
+#forgotPasswordModal .save-btn:hover,
+#changePhoneModal .save-btn:hover {
+
+    background: #455d74 !important;
+
+    transform: translateY(-1px) !important;
+}
+
+
+/* ---------- VERIFY.MN STEP ---------- */
+
+#registerStepOtp,
+#forgotStepOtp,
+#changePhoneStepOtp {
+
+    text-align: center !important;
+}
+
+
+/* ---------- VERIFY INSTRUCTION ---------- */
+
+#changePhoneVerifyInstruction {
+
+    margin-bottom: 14px !important;
+
+    padding: 14px 15px !important;
+
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 12px !important;
+
+    background: #f8fafc !important;
+
+    color: #334155 !important;
+
+    font-size: 13px !important;
+    line-height: 1.55 !important;
+}
+
+
+/* ---------- VERIFY STATUS ---------- */
+
+#registerVerifyStatus,
+#passwordResetVerifyStatus,
+#changePhoneVerifyStatus {
+
+    margin-top: 12px !important;
+    padding: 10px 12px !important;
+
+    border-radius: 10px !important;
+
+    background: #f1f5f9 !important;
+
+    color: #64748b !important;
+
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+}
+
+
+/* ---------- MESSAGE ---------- */
+
+#registerMessage,
+#forgotMessage,
+#changePhoneMessage {
+
+    margin-top: 12px !important;
+
+    font-size: 12px !important;
+    line-height: 1.45 !important;
+}
+
+
+/* ---------- BACK / SECONDARY BUTTON ---------- */
+
+#registerModal .profile-edit-action-btn,
+#forgotPasswordModal .profile-edit-action-btn,
+#changePhoneModal .profile-edit-action-btn {
+
+    width: 100% !important;
+
+    margin-top: 10px !important;
+    padding: 10px 14px !important;
+
+    border: none !important;
+    border-radius: 10px !important;
+
+    background: #f1f5f9 !important;
+    color: #475569 !important;
+
+    font-size: 12px !important;
+    font-weight: 700 !important;
+
+    cursor: pointer !important;
+}
+
+
+/* ---------- MOBILE ---------- */
+
+@media (max-width: 480px) {
+
+    #registerModal .debt-modal-box,
+    #forgotPasswordModal .debt-modal-box,
+    #changePhoneModal .debt-modal-box {
+
+        width: calc(100vw - 24px) !important;
+
+        padding: 22px 18px 20px !important;
+
+        border-radius: 18px !important;
+    }
+
+
+    #registerModal h2,
+    #forgotPasswordModal h2,
+    #changePhoneModal h2 {
+
+        font-size: 19px !important;
+    }
+}
 </style>
 
 
