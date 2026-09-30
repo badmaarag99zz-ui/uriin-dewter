@@ -7596,6 +7596,357 @@ body{
 
     </div>
 </div>
+    <!-- ==========================================
+     TERMS OF SERVICE MODAL
+========================================== -->
+
+<div
+    id="termsModal"
+    class="modal"
+    style="display:none;"
+    onclick="closeTermsModalOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+        style="
+            width:100%;
+            max-width:430px;
+            max-height:85vh;
+            overflow-y:auto;
+            padding:24px;
+            background:#ffffff;
+            border-radius:20px;
+            box-shadow:0 24px 60px rgba(15,23,42,0.22);
+        "
+    >
+
+        <div class="modal-header">
+            <div>
+                <h2>Үйлчилгээний нөхцөл</h2>
+                <p class="profile-edit-subtitle">
+                    Өрийн дэвтэр
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeTermsModal()"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div
+            style="
+                font-size:13px;
+                line-height:1.7;
+                color:#475569;
+            "
+        >
+
+            <p>
+                <strong>1. Үйлчилгээний зориулалт</strong><br>
+                “Өрийн дэвтэр” нь хэрэглэгч өөрийн
+                авлага, өр төлбөр болон түүнтэй холбоотой
+                бүртгэлийг цахим хэлбэрээр хөтлөхөд
+                зориулсан үйлчилгээ юм.
+            </p>
+
+            <p>
+                <strong>2. Хэрэглэгчийн бүртгэл</strong><br>
+                Хэрэглэгч өөрийн бүртгэлийн мэдээллийн
+                үнэн зөв байдал болон нэвтрэх мэдээллийн
+                нууцлалыг хамгаалах үүрэгтэй.
+            </p>
+
+            <p>
+                <strong>3. Оруулсан мэдээлэл</strong><br>
+                Хэрэглэгч аппд оруулсан харилцагч,
+                өр төлбөр болон бусад мэдээллийн
+                үнэн зөв байдлыг өөрөө хариуцна.
+            </p>
+
+            <p>
+                <strong>4. Үйлчилгээний эрх</strong><br>
+                Үнэгүй болон төлбөртэй эрхийн боломж,
+                хугацаа, хязгаар нь тухайн үед аппд
+                харуулсан нөхцөлийн дагуу хэрэгжинэ.
+            </p>
+
+            <p>
+                <strong>5. Төлбөр</strong><br>
+                Төлбөртэй багц сонгосон тохиолдолд
+                сонгосон багцын үнэ болон хугацааг
+                төлбөр хийхээс өмнө хэрэглэгчид
+                харуулна.
+            </p>
+
+            <p>
+                <strong>6. Үйлчилгээний тасалдал</strong><br>
+                Интернэт, сервер, гуравдагч талын
+                үйлчилгээ болон техникийн нөхцөлөөс
+                шалтгаалан үйлчилгээ түр хугацаанд
+                тасалдах боломжтой.
+            </p>
+
+            <p>
+                <strong>7. Хэрэглэгчийн үүрэг</strong><br>
+                Аппыг хууль бус зорилгоор ашиглах,
+                бусдын мэдээлэлд зөвшөөрөлгүй нэвтрэх,
+                үйлчилгээний хэвийн ажиллагаанд
+                санаатайгаар саад учруулахыг хориглоно.
+            </p>
+
+            <p>
+                <strong>8. Нөхцөлийн шинэчлэл</strong><br>
+                Үйлчилгээ хөгжихийн хэрээр энэхүү
+                нөхцөлд шаардлагатай өөрчлөлт орж болно.
+                Шинэчилсэн нөхцөлийг аппд нийтэлнэ.
+            </p>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ==========================================
+     PRIVACY POLICY MODAL
+========================================== -->
+
+<div
+    id="privacyModal"
+    class="modal"
+    style="display:none;"
+    onclick="closePrivacyModalOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+        style="
+            width:100%;
+            max-width:430px;
+            max-height:85vh;
+            overflow-y:auto;
+            padding:24px;
+            background:#ffffff;
+            border-radius:20px;
+            box-shadow:0 24px 60px rgba(15,23,42,0.22);
+        "
+    >
+
+        <div class="modal-header">
+            <div>
+                <h2>Нууцлалын бодлого</h2>
+                <p class="profile-edit-subtitle">
+                    Таны мэдээллийн хамгаалалт
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closePrivacyModal()"
+            >
+                ✕
+            </button>
+        </div>
+
+        <div
+            style="
+                font-size:13px;
+                line-height:1.7;
+                color:#475569;
+            "
+        >
+
+            <p>
+                <strong>1. Цуглуулах мэдээлэл</strong><br>
+                Үйлчилгээ ажиллахад шаардлагатай
+                хэрэглэгчийн бүртгэлийн мэдээлэл,
+                мөн хэрэглэгчийн өөрийн оруулсан
+                харилцагч болон өр төлбөрийн мэдээллийг
+                боловсруулж болно.
+            </p>
+
+            <p>
+                <strong>2. Мэдээллийг ашиглах зорилго</strong><br>
+                Мэдээллийг хэрэглэгчийн бүртгэлийг
+                ажиллуулах, өр төлбөрийн бүртгэлийг
+                хадгалах, синк хийх, үйлчилгээний
+                үндсэн боломжуудыг үзүүлэх зорилгоор
+                ашиглана.
+            </p>
+
+            <p>
+                <strong>3. Мэдээлэл хадгалалт</strong><br>
+                Үйлчилгээний зарим мэдээлэл серверт,
+                мөн offline ажиллагааг дэмжих зорилгоор
+                хэрэглэгчийн төхөөрөмж дээр түр
+                хадгалагдаж болно.
+            </p>
+
+            <p>
+                <strong>4. Нэвтрэх мэдээлэл</strong><br>
+                Хэрэглэгч өөрийн нууц үг болон
+                төхөөрөмжийн аюулгүй байдлыг хамгаалах
+                үүрэгтэй.
+            </p>
+
+            <p>
+                <strong>5. Гуравдагч талын үйлчилгээ</strong><br>
+                Аппын ажиллагаанд мэдээллийн сан,
+                баталгаажуулалт, төлбөр болон бусад
+                техникийн үйлчилгээ үзүүлэгч ашиглагдаж
+                болно. Тэдгээр үйлчилгээ нь өөрийн
+                аюулгүй байдал, нууцлалын нөхцөлтэй
+                байж болно.
+            </p>
+
+            <p>
+                <strong>6. Мэдээлэл хамгаалалт</strong><br>
+                Хэрэглэгчийн мэдээлэлд зөвшөөрөлгүй
+                хандах эрсдэлийг бууруулах зорилгоор
+                техникийн болон хандалтын хамгаалалтын
+                арга хэмжээ ашиглана.
+            </p>
+
+            <p>
+                <strong>7. Бодлогын шинэчлэл</strong><br>
+                Үйлчилгээний ажиллагаа өөрчлөгдөхөд
+                энэхүү нууцлалын бодлогыг шинэчилж
+                болно.
+            </p>
+
+        </div>
+
+    </div>
+</div>
+
+
+<!-- ==========================================
+     SUPPORT / CONTACT MODAL
+========================================== -->
+
+<div
+    id="supportModal"
+    class="modal"
+    style="display:none;"
+    onclick="closeSupportModalOutside(event)"
+>
+    <div
+        class="modal-content profile-edit-modal"
+        onclick="event.stopPropagation()"
+        style="
+            width:100%;
+            max-width:400px;
+            padding:24px;
+            background:#ffffff;
+            border-radius:20px;
+            box-shadow:0 24px 60px rgba(15,23,42,0.22);
+        "
+    >
+
+        <div class="modal-header">
+            <div>
+                <h2>Холбоо барих</h2>
+
+                <p class="profile-edit-subtitle">
+                    Тусламж, санал хүсэлт
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeSupportInfo()"
+            >
+                ✕
+            </button>
+        </div>
+
+
+        <div
+            style="
+                padding:18px;
+                background:#f8fafc;
+                border:1px solid #e2e8f0;
+                border-radius:15px;
+                text-align:center;
+            "
+        >
+
+            <div
+                style="
+                    font-size:30px;
+                    margin-bottom:10px;
+                "
+            >
+                💬
+            </div>
+
+            <strong
+                style="
+                    display:block;
+                    color:#1e293b;
+                    margin-bottom:7px;
+                "
+            >
+                Тусламж хэрэгтэй юу?
+            </strong>
+
+            <div
+                style="
+                    font-size:13px;
+                    line-height:1.6;
+                    color:#64748b;
+                "
+            >
+                Асуудал, санал хүсэлт болон
+                үйлчилгээтэй холбоотой асуултаа
+                бидэнд илгээнэ үү.
+            </div>
+
+        </div>
+
+
+        <div
+            style="
+                margin-top:14px;
+                padding:14px;
+                border:1px solid #e2e8f0;
+                border-radius:14px;
+                font-size:13px;
+                color:#475569;
+            "
+        >
+            📞 Утас:
+            <strong>
+                Тун удахгүй
+            </strong>
+        </div>
+
+
+        <div
+            style="
+                margin-top:8px;
+                padding:14px;
+                border:1px solid #e2e8f0;
+                border-radius:14px;
+                font-size:13px;
+                color:#475569;
+            "
+        >
+            ✉️ И-мэйл:
+            <strong>
+                Тун удахгүй
+            </strong>
+        </div>
+
+    </div>
+</div>
     <!-- =========================
      CHANGE PASSWORD MODAL
 ========================= -->
@@ -20485,6 +20836,118 @@ function closeAboutAppModalOutside(event) {
         event.target.id === "aboutAppModal"
     ) {
         closeAboutAppModal();
+    }
+
+}
+    // ==========================================
+// TERMS OF SERVICE
+// ==========================================
+
+function openTermsModal() {
+
+    const modal =
+        document.getElementById("termsModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+
+}
+
+function closeTermsModal() {
+
+    const modal =
+        document.getElementById("termsModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+
+function closeTermsModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id === "termsModal"
+    ) {
+        closeTermsModal();
+    }
+
+}
+
+
+// ==========================================
+// PRIVACY POLICY
+// ==========================================
+
+function openPrivacyModal() {
+
+    const modal =
+        document.getElementById("privacyModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+
+}
+
+function closePrivacyModal() {
+
+    const modal =
+        document.getElementById("privacyModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+
+function closePrivacyModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id === "privacyModal"
+    ) {
+        closePrivacyModal();
+    }
+
+}
+
+
+// ==========================================
+// SUPPORT / CONTACT
+// ==========================================
+
+function openSupportInfo() {
+
+    const modal =
+        document.getElementById("supportModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+
+}
+
+function closeSupportInfo() {
+
+    const modal =
+        document.getElementById("supportModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+
+function closeSupportModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id === "supportModal"
+    ) {
+        closeSupportInfo();
     }
 
 }
