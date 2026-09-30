@@ -6980,6 +6980,93 @@ body{
 
     cursor: pointer;
 }
+    /* ==========================================
+   FAQ
+========================================== */
+
+.faq-section {
+    margin-bottom: 22px;
+}
+
+.faq-section:last-child {
+    margin-bottom: 0;
+}
+
+.faq-section-title {
+    margin: 0 2px 9px;
+    font-size: 12px;
+    font-weight: 800;
+    color: #64748b;
+}
+
+.faq-item {
+    margin-bottom: 8px;
+    border: 1px solid #e5eaf0;
+    border-radius: 14px;
+    background: #ffffff;
+    overflow: hidden;
+}
+
+.faq-question {
+    width: 100%;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 13px 14px;
+    border: 0;
+    background: transparent;
+    color: #334155;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.45;
+    text-align: left;
+    cursor: pointer;
+}
+
+.faq-question:hover {
+    background: #f8fafc;
+}
+
+.faq-arrow {
+    flex: 0 0 auto;
+    color: #94a3b8;
+    font-size: 18px;
+    font-weight: 400;
+    transition: transform 0.2s ease;
+}
+
+.faq-answer {
+    display: none;
+    padding: 0 14px 14px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+.faq-item.open {
+    background: #f8fafc;
+    border-color: #dbe3ea;
+}
+
+.faq-item.open .faq-answer {
+    display: block;
+}
+
+.faq-item.open .faq-arrow {
+    transform: rotate(45deg);
+    color: #475569;
+}
+
+.faq-item-hidden {
+    display: none !important;
+}
+
+.faq-section-hidden {
+    display: none !important;
+}
 </style>
 
 </head>
@@ -7497,6 +7584,33 @@ body{
     </span>
 </button>
     <!-- ==========================================
+     FAQ
+========================================== -->
+
+<button
+    type="button"
+    class="settings-item"
+    onclick="openFaqModal()"
+>
+    <span class="settings-item-icon">
+        ❓
+    </span>
+
+    <span class="settings-item-content">
+        <strong>
+            Асуулт, хариулт
+        </strong>
+
+        <small>
+            Апп ашиглахтай холбоотой түгээмэл асуултууд
+        </small>
+    </span>
+
+    <span class="settings-item-arrow">
+        ›
+    </span>
+</button>
+    <!-- ==========================================
      FEEDBACK
 ========================================== -->
 
@@ -7564,6 +7678,514 @@ body{
     </span>
 </button>
 </section>
+    <!-- ==========================================
+     FAQ MODAL
+========================================== -->
+
+<div
+    id="faqModal"
+    style="
+        display:none;
+        position:fixed;
+        inset:0;
+        z-index:99999;
+        align-items:center;
+        justify-content:center;
+        padding:18px;
+        background:rgba(15,23,42,0.48);
+        backdrop-filter:blur(6px);
+        -webkit-backdrop-filter:blur(6px);
+    "
+    onclick="closeFaqModalOutside(event)"
+>
+    <div
+        onclick="event.stopPropagation()"
+        style="
+            width:100%;
+            max-width:460px;
+            max-height:88vh;
+            overflow:hidden;
+            display:flex;
+            flex-direction:column;
+            background:#ffffff;
+            border-radius:22px;
+            box-shadow:0 24px 60px rgba(15,23,42,0.22);
+        "
+    >
+
+        <!-- HEADER -->
+
+        <div
+            style="
+                display:flex;
+                align-items:flex-start;
+                justify-content:space-between;
+                gap:16px;
+                padding:22px 22px 16px;
+            "
+        >
+            <div>
+                <h2
+                    style="
+                        margin:0;
+                        font-size:20px;
+                        color:#1e293b;
+                    "
+                >
+                    Нийтлэг асуулт, хариулт
+                </h2>
+
+                <p
+                    style="
+                        margin:5px 0 0;
+                        font-size:12px;
+                        color:#94a3b8;
+                    "
+                >
+                    Танд хэрэгтэй мэдээллээ хурдан олоорой
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="closeFaqModal()"
+                style="
+                    flex:0 0 34px;
+                    width:34px;
+                    height:34px;
+                    padding:0;
+                    border:0;
+                    border-radius:12px;
+                    background:#f1f5f9;
+                    color:#94a3b8;
+                    font-size:18px;
+                    cursor:pointer;
+                "
+            >
+                ✕
+            </button>
+        </div>
+
+
+        <!-- SEARCH -->
+
+        <div style="padding:0 22px 14px;">
+
+            <div style="position:relative;">
+
+                <span
+                    style="
+                        position:absolute;
+                        left:14px;
+                        top:50%;
+                        transform:translateY(-50%);
+                        font-size:15px;
+                        pointer-events:none;
+                    "
+                >
+                    🔍
+                </span>
+
+                <input
+                    type="search"
+                    id="faqSearch"
+                    placeholder="Асуулт хайх..."
+                    oninput="filterFaqItems()"
+                    style="
+                        width:100%;
+                        height:46px;
+                        box-sizing:border-box;
+                        padding:0 14px 0 42px;
+                        border:1px solid #dbe3ea;
+                        border-radius:13px;
+                        background:#f8fafc;
+                        color:#334155;
+                        font-family:inherit;
+                        font-size:14px;
+                        outline:none;
+                    "
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div
+            id="faqContent"
+            style="
+                flex:1;
+                overflow-y:auto;
+                padding:0 22px 22px;
+            "
+        >
+
+            <!-- ===============================
+                 1. ЭХЛЭХ
+            ================================ -->
+
+            <div class="faq-section">
+
+                <div class="faq-section-title">
+                    🚀 Эхлэх
+                </div>
+
+                <div class="faq-item">
+                    <button
+                        type="button"
+                        class="faq-question"
+                        onclick="toggleFaqItem(this)"
+                    >
+                        <span>Өрийн дэвтэр гэж юу вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Өрийн дэвтэр нь харилцагчийн төлбөр,
+                        төлөлт болон үлдэгдлийг нэг дор бүртгэж,
+                        хянахад зориулсан цахим дэвтэр юм.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button
+                        type="button"
+                        class="faq-question"
+                        onclick="toggleFaqItem(this)"
+                    >
+                        <span>Шинэ харилцагч хэрхэн нэмэх вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Үндсэн дэлгэцийн нэмэх товчийг дарж,
+                        харилцагчийн нэр, утасны дугаар,
+                        төлбөрийн дүн болон шаардлагатай мэдээллийг
+                        оруулаад хадгална.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button
+                        type="button"
+                        class="faq-question"
+                        onclick="toggleFaqItem(this)"
+                    >
+                        <span>Харилцагчаа хэрхэн хайх вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Харилцагчийн жагсаалтын хайлтын хэсэгт
+                        нэр эсвэл утасны дугаарыг бичихэд тохирох
+                        харилцагчид автоматаар шүүгдэнэ.
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ===============================
+                 2. ТӨЛБӨР БА ТӨЛӨЛТ
+            ================================ -->
+
+            <div class="faq-section">
+
+                <div class="faq-section-title">
+                    💰 Төлбөр ба төлөлт
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Нэмэлт төлбөр хэрхэн бүртгэх вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Харилцагчийн дэлгэрэнгүй мэдээллийг нээгээд
+                        “Төлбөр нэмэх” үйлдлийг сонгоно.
+                        Нэмсэн дүн тухайн харилцагчийн нийт төлбөр
+                        болон үлдэгдэлд автоматаар нэмэгдэнэ.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Харилцагч мөнгө төлөхөд яах вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Харилцагчийн мэдээллээс “Төлөлт нэмэх”
+                        хэсгийг сонгон төлсөн мөнгөн дүнг оруулна.
+                        Үлдэгдэл автоматаар багасна.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Үлдэгдэл хэрхэн бодогддог вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Үлдэгдэл нь нийт бүртгэсэн төлбөрөөс
+                        төлсөн нийт дүнг хассанаар автоматаар
+                        тооцогдоно.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Хугацаа хэтэрсэн төлбөрийг яаж мэдэх вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Төлөх хугацаа өнгөрсөн бөгөөд үлдэгдэлтэй
+                        харилцагч хугацаа хэтэрсэн төлбөрт тооцогдоно.
+                        Мэдэгдлийн тохиргооноос хугацааны сануулгаа
+                        удирдах боломжтой.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Буруу оруулсан мэдээллээ засаж болох уу?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Болно. Харилцагчийн дэлгэрэнгүй мэдээллээс
+                        засах үйлдлийг ашиглан шаардлагатай мэдээллээ
+                        шинэчилж болно.
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ===============================
+                 3. ИНТЕРНЕТ БА МЭДЭЭЛЭЛ
+            ================================ -->
+
+            <div class="faq-section">
+
+                <div class="faq-section-title">
+                    ☁️ Интернет ба мэдээлэл
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Интернетгүй үед апп ажиллах уу?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Тийм. Өмнө хадгалсан мэдээллээ интернетгүй
+                        үед ашиглах боломжтой. Offline үед дэмжигдсэн
+                        өөрчлөлтүүд интернет дахин холбогдоход
+                        сервертэй синк хийгдэнэ.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Offline үед хийсэн мэдээлэл алга болох уу?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Offline үед хийсэн дэмжигдсэн үйлдлүүд
+                        төхөөрөмж дээр түр хадгалагдаж, интернет
+                        холбогдоход сервер рүү синк хийхээр
+                        зохион байгуулагдсан.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Өөр төхөөрөмжөөс нэвтэрч болох уу?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Болно. Ижил бүртгэлээр интернеттэй үед
+                        нэвтрэхэд серверт хадгалагдсан мэдээлэл
+                        тухайн төхөөрөмж дээр ачаалагдана.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Мэдээллээ нөөцөлж авч болох уу?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Болно. Аппын backup боломжийг ашиглан
+                        мэдээллийн нөөц файлаа татаж хадгалах
+                        боломжтой.
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ===============================
+                 4. ЭРХ
+            ================================ -->
+
+            <div class="faq-section">
+
+                <div class="faq-section-title">
+                    ⭐ Эрх ба ашиглалт
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Free эрхээр хэдэн харилцагч бүртгэх вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Free эрхээр нийт 7 хүртэл харилцагч
+                        бүртгэх боломжтой. Лимитэд хүрсний дараа
+                        шинээр харилцагч нэмэхийн тулд төлбөртэй
+                        эрх шаардлагатай.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Төлбөртэй эрх авбал юу өөрчлөгдөх вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Төлбөртэй эрх идэвхтэй үед Free эрхийн
+                        харилцагчийн хязгаарлалтгүйгээр аппыг
+                        ашиглах боломжтой.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Эрхийн хугацаа дуусвал мэдээлэл устах уу?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Эрхийн хугацаа дуусах нь хадгалсан
+                        харилцагчийн мэдээллийг автоматаар
+                        устгах үйлдэл биш. Харин төлбөртэй эрх
+                        шаарддаг үйлдэлд хязгаарлалт орж болно.
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- ===============================
+                 5. БҮРТГЭЛ БА ТОХИРГОО
+            ================================ -->
+
+            <div class="faq-section">
+
+                <div class="faq-section-title">
+                    ⚙️ Бүртгэл ба тохиргоо
+                </div>
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Нууц үгээ хэрхэн солих вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Тохиргоо хэсгийн нууц үгтэй холбоотой
+                        сонголтыг ашиглан нууц үгээ шинэчилж болно.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Мэдэгдлээ унтрааж болох уу?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Болно. Тохиргоо → Мэдэгдэл хэсгээс
+                        хугацаа дөхсөн болон хугацаа хэтэрсэн
+                        төлбөрийн сануулгыг тус тус тохируулж болно.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Санал хүсэлт хэрхэн илгээх вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Тохиргоо → Санал хүсэлт хэсгээс санал,
+                        илэрсэн алдаа эсвэл сайжруулах хүсэлтээ
+                        шууд илгээж болно.
+                    </div>
+                </div>
+
+
+                <div class="faq-item">
+                    <button type="button" class="faq-question" onclick="toggleFaqItem(this)">
+                        <span>Тусламж хэрэгтэй бол хаана хандах вэ?</span>
+                        <span class="faq-arrow">＋</span>
+                    </button>
+
+                    <div class="faq-answer">
+                        Аппын тухай хэсэгт байрлах холбоо барих
+                        мэдээллийг ашиглан тусламж авах боломжтой.
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- EMPTY SEARCH RESULT -->
+
+            <div
+                id="faqEmpty"
+                style="
+                    display:none;
+                    padding:35px 15px;
+                    text-align:center;
+                    color:#94a3b8;
+                    font-size:13px;
+                    line-height:1.6;
+                "
+            >
+                🔍<br><br>
+                Таны хайсан асуулт олдсонгүй.
+            </div>
+
+        </div>
+
+    </div>
+</div>
     <!-- ==========================================
      FEEDBACK MODAL
 ========================================== -->
@@ -21165,6 +21787,218 @@ function closeFeedbackModalOutside(event) {
     ) {
         closeFeedbackModal();
     }
+}
+    // ==========================================
+// FAQ
+// ==========================================
+
+function openFaqModal() {
+
+    const modal =
+        document.getElementById("faqModal");
+
+    const search =
+        document.getElementById("faqSearch");
+
+    if (!modal) {
+        console.error("faqModal not found");
+        return;
+    }
+
+    // Хайлтыг цэвэрлэнэ
+    if (search) {
+        search.value = "";
+    }
+
+    // Бүх асуултыг буцааж харуулна
+    document
+        .querySelectorAll("#faqModal .faq-item")
+        .forEach(function(item) {
+
+            item.classList.remove(
+                "faq-item-hidden",
+                "open"
+            );
+
+            const arrow =
+                item.querySelector(".faq-arrow");
+
+            if (arrow) {
+                arrow.textContent = "＋";
+            }
+
+        });
+
+
+    document
+        .querySelectorAll("#faqModal .faq-section")
+        .forEach(function(section) {
+
+            section.classList.remove(
+                "faq-section-hidden"
+            );
+
+        });
+
+
+    const empty =
+        document.getElementById("faqEmpty");
+
+    if (empty) {
+        empty.style.display = "none";
+    }
+
+
+    modal.style.display = "flex";
+}
+
+
+function closeFaqModal() {
+
+    const modal =
+        document.getElementById("faqModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+
+}
+
+
+function closeFaqModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id === "faqModal"
+    ) {
+        closeFaqModal();
+    }
+
+}
+
+
+function toggleFaqItem(button) {
+
+    if (!button) {
+        return;
+    }
+
+    const item =
+        button.closest(".faq-item");
+
+    if (!item) {
+        return;
+    }
+
+    const isOpen =
+        item.classList.contains("open");
+
+
+    // Нэг удаад нэг хариулт нээлттэй байна
+    document
+        .querySelectorAll("#faqModal .faq-item.open")
+        .forEach(function(openItem) {
+
+            openItem.classList.remove("open");
+
+            const arrow =
+                openItem.querySelector(".faq-arrow");
+
+            if (arrow) {
+                arrow.textContent = "＋";
+            }
+
+        });
+
+
+    if (!isOpen) {
+
+        item.classList.add("open");
+
+        const arrow =
+            item.querySelector(".faq-arrow");
+
+        if (arrow) {
+            arrow.textContent = "＋";
+        }
+
+    }
+
+}
+
+
+function filterFaqItems() {
+
+    const input =
+        document.getElementById("faqSearch");
+
+    const empty =
+        document.getElementById("faqEmpty");
+
+    if (!input) {
+        return;
+    }
+
+
+    const query =
+        input.value
+            .trim()
+            .toLocaleLowerCase();
+
+
+    let visibleCount = 0;
+
+
+    document
+        .querySelectorAll("#faqModal .faq-section")
+        .forEach(function(section) {
+
+            let sectionVisibleCount = 0;
+
+            section
+                .querySelectorAll(".faq-item")
+                .forEach(function(item) {
+
+                    const text =
+                        item.textContent
+                            .toLocaleLowerCase();
+
+                    const matches =
+                        !query ||
+                        text.includes(query);
+
+
+                    item.classList.toggle(
+                        "faq-item-hidden",
+                        !matches
+                    );
+
+
+                    if (matches) {
+                        visibleCount++;
+                        sectionVisibleCount++;
+                    }
+
+                });
+
+
+            section.classList.toggle(
+                "faq-section-hidden",
+                sectionVisibleCount === 0
+            );
+
+        });
+
+
+    if (empty) {
+
+        empty.style.display =
+            visibleCount === 0
+                ? "block"
+                : "none";
+
+    }
+
 }
 </script>
 
