@@ -8112,9 +8112,12 @@ body{
 
     <div class="login-card">
 
-        <div class="login-logo">
-            📒
-        </div>
+       <div class="login-logo">
+    <img
+        src="./uriin-dewter-logo.png"
+        alt="Өрийн дэвтэр"
+    >
+</div>
 
         <h1>Өрийн дэвтэр</h1>
 
@@ -10786,15 +10789,7 @@ body{
 
 
 /* 📒-г цэвэр ₮ logo болгоно */
-#loginScreen .login-logo::before{
-    content:"₮";
 
-    font-size:38px;
-    line-height:1;
-    font-weight:950;
-
-    color:#fff;
-}
 
 
 /* TITLE */
@@ -11024,6 +11019,34 @@ body{
         font-size:27px !important;
     }
 
+}
+    /* ===== LOGIN REAL APP LOGO ===== */
+
+#loginScreen .login-logo{
+    width:88px !important;
+    height:88px !important;
+
+    margin:0 auto 18px !important;
+    padding:0 !important;
+
+    background:none !important;
+    border-radius:24px !important;
+
+    box-shadow:
+        0 14px 30px rgba(5,150,105,.20) !important;
+
+    overflow:hidden !important;
+}
+
+#loginScreen .login-logo img{
+    display:block !important;
+
+    width:100% !important;
+    height:100% !important;
+
+    object-fit:cover !important;
+
+    border-radius:24px !important;
 }
 </style>
 
