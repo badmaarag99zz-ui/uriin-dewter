@@ -20904,6 +20904,16 @@ function closeAboutAppModalOutside(event) {
 // TERMS OF SERVICE
 // ==========================================
 
+// ==========================================
+// ABOUT SUB MODALS
+// Terms / Privacy / Support
+// ==========================================
+
+
+// ==========================================
+// TERMS OF SERVICE
+// ==========================================
+
 function openTermsModal() {
 
     const modal =
@@ -20912,8 +20922,8 @@ function openTermsModal() {
     if (modal) {
         modal.style.display = "flex";
     }
-
 }
+
 
 function closeTermsModal() {
 
@@ -20923,9 +20933,92 @@ function closeTermsModal() {
     if (modal) {
         modal.style.display = "none";
     }
-
 }
 
+
+function closeTermsModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id === "termsModal"
+    ) {
+        closeTermsModal();
+    }
+}
+
+
+// ==========================================
+// PRIVACY POLICY
+// ==========================================
+
+function openPrivacyModal() {
+
+    const modal =
+        document.getElementById("privacyModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}
+
+
+function closePrivacyModal() {
+
+    const modal =
+        document.getElementById("privacyModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+function closePrivacyModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id === "privacyModal"
+    ) {
+        closePrivacyModal();
+    }
+}
+
+
+// ==========================================
+// SUPPORT / CONTACT
+// ==========================================
+
+function openSupportInfo() {
+
+    const modal =
+        document.getElementById("supportModal");
+
+    if (modal) {
+        modal.style.display = "flex";
+    }
+}
+
+
+function closeSupportInfo() {
+
+    const modal =
+        document.getElementById("supportModal");
+
+    if (modal) {
+        modal.style.display = "none";
+    }
+}
+
+
+function closeSupportModalOutside(event) {
+
+    if (
+        event.target &&
+        event.target.id === "supportModal"
+    ) {
+        closeSupportInfo();
+    }
+}
 function closeTermsModalOutside(event) {
 
     if (
