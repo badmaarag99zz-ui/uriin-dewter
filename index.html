@@ -10373,16 +10373,34 @@ body{
 
     z-index:3 !important;
 
-    right:-4px !important;
+    right:-3% !important;
     top:0 !important;
 
-    width:51% !important;
+    width:59% !important;
     height:100% !important;
 
     object-fit:cover !important;
     object-position:center right !important;
 
     pointer-events:none !important;
+
+    -webkit-mask-image:
+        linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0,0,0,.45) 10%,
+            #000 23%,
+            #000 100%
+        ) !important;
+
+    mask-image:
+        linear-gradient(
+            to right,
+            transparent 0%,
+            rgba(0,0,0,.45) 10%,
+            #000 23%,
+            #000 100%
+        ) !important;
 }
 
 
