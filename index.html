@@ -21157,7 +21157,21 @@ const installAppBtn =
         "installAppBtn"
     );
 
+/* Утасны browser дээр install товчийг харуулах */
+const isMobileBrowser =
+    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
+const isInstalledApp =
+    window.matchMedia("(display-mode: standalone)").matches ||
+    window.navigator.standalone === true;
+
+if (
+    installAppBtn &&
+    isMobileBrowser &&
+    !isInstalledApp
+) {
+    installAppBtn.style.display = "block";
+}
 window.addEventListener(
     "beforeinstallprompt",
     function(event) {
