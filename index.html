@@ -15105,34 +15105,85 @@ function openRegisterVerifySms() {
 
 
     message.textContent =
-        "SMS-ээ илгээсний дараа баталгаажуулалт автоматаар шалгагдана.";
+        "SMS-ээ илгээсний дараа апп руу буцаж орно уу.";
 
     message.style.color =
         "#6366f1";
 
 
-    // SMS app нээх
-    window.location.href =
-        smsUri;
-
-
-    // Өмнөх polling байвал зогсоох
+    // Өмнөх polling байвал зогсооно
     stopRegisterVerifyPolling();
 
 
-    // Шууд нэг удаа шалгана
-    setTimeout(() => {
-        verifyRegisterOtp();
-    }, 1500);
+    // ==========================================
+    // 3 СЕКУНД ТУТАМ STATUS ШАЛГАХ
+    // ==========================================
 
-
-    // Дараа нь 3 секунд тутам шалгана
     registerVerifyPollTimer =
         setInterval(() => {
+
             verifyRegisterOtp();
+
         }, 3000);
+
+
+    // ==========================================
+    // SMS APP НЭЭХ
+    // ==========================================
+
+    window.location.href =
+        smsUri;
 }
 
+
+// ==========================================
+// SMS APP-ААС БУЦАЖ ИРЭХЭД ШУУД ШАЛГАХ
+// ==========================================
+
+document.addEventListener(
+    "visibilitychange",
+    function () {
+
+        if (
+            document.visibilityState === "visible" &&
+            window.pendingRegisterSessionId &&
+            window.pendingRegisterPhone
+        ) {
+
+            verifyRegisterOtp();
+
+            // Browser background үед interval
+            // pause болсон байж болох тул дахин асаана.
+            stopRegisterVerifyPolling();
+
+            registerVerifyPollTimer =
+                setInterval(() => {
+
+                    verifyRegisterOtp();
+
+                }, 3000);
+        }
+    }
+);
+
+
+// ==========================================
+// MOBILE BROWSER / PWA ДАХИН FOCUS АВАХАД
+// ==========================================
+
+window.addEventListener(
+    "focus",
+    function () {
+
+        if (
+            window.pendingRegisterSessionId &&
+            window.pendingRegisterPhone
+        ) {
+
+            verifyRegisterOtp();
+        }
+    }
+);
 
 // ==========================================
 // POLLING ЗОГСООХ
