@@ -9711,6 +9711,632 @@ body{
         height:27px !important;
     }
 }
+    /* =========================================================
+   HOME HERO — REFERENCE DESIGN FINAL
+========================================================= */
+
+#homeView .final-home-hero{
+    position:relative !important;
+    overflow:hidden !important;
+
+    width:100% !important;
+    min-height:228px !important;
+
+    margin:0 0 10px !important;
+    padding:15px 17px !important;
+
+    border-radius:20px !important;
+    border:1px solid rgba(255,255,255,.10) !important;
+
+    background:
+        radial-gradient(
+            circle at 88% 25%,
+            rgba(58,220,128,.20),
+            transparent 32%
+        ),
+        radial-gradient(
+            circle at 10% 100%,
+            rgba(0,48,31,.38),
+            transparent 45%
+        ),
+        linear-gradient(
+            135deg,
+            #05653f 0%,
+            #087d49 52%,
+            #079251 100%
+        ) !important;
+
+    box-shadow:
+        0 12px 26px rgba(0,80,50,.18) !important;
+}
+
+
+/* BACKGROUND LEAF FEEL */
+
+#homeView .final-home-hero::before{
+    content:"" !important;
+    position:absolute !important;
+
+    width:240px !important;
+    height:240px !important;
+
+    right:-62px !important;
+    bottom:-118px !important;
+
+    border-radius:42% 58% 65% 35% !important;
+
+    background:
+        radial-gradient(
+            ellipse at 28% 48%,
+            rgba(110,240,145,.16) 0 15%,
+            transparent 16%
+        ),
+        radial-gradient(
+            ellipse at 56% 32%,
+            rgba(80,220,125,.12) 0 13%,
+            transparent 14%
+        ),
+        radial-gradient(
+            ellipse at 70% 64%,
+            rgba(40,190,105,.15) 0 18%,
+            transparent 19%
+        ) !important;
+
+    transform:rotate(-18deg) !important;
+
+    pointer-events:none;
+}
+
+
+#homeView .final-home-hero::after{
+    content:"" !important;
+    position:absolute !important;
+
+    left:39% !important;
+    top:-65px !important;
+
+    width:170px !important;
+    height:240px !important;
+
+    background:
+        linear-gradient(
+            115deg,
+            transparent 0 43%,
+            rgba(100,230,140,.09) 44% 50%,
+            transparent 51%
+        ) !important;
+
+    transform:rotate(18deg) !important;
+
+    pointer-events:none;
+}
+
+
+/* =========================================================
+   LEFT COPY
+========================================================= */
+
+#homeView .final-hero-copy{
+    position:relative !important;
+    z-index:6 !important;
+
+    width:58% !important;
+}
+
+
+/* DATE */
+
+#homeView .final-home-hero .home-today-date{
+    display:inline-flex !important;
+    align-items:center !important;
+    gap:6px !important;
+
+    width:max-content !important;
+
+    margin:0 0 11px !important;
+    padding:5px 10px !important;
+
+    border-radius:999px !important;
+
+    border:
+        1px solid rgba(150,255,190,.38) !important;
+
+    background:
+        rgba(0,75,47,.46) !important;
+
+    color:#eafff0 !important;
+
+    font-size:10px !important;
+    font-weight:750 !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.12) !important;
+}
+
+#homeView .final-home-hero .home-today-date::before{
+    content:"▣";
+    color:#8ff3ae;
+    font-size:10px;
+}
+
+
+/* TITLE */
+
+#homeView .final-hero-title{
+    margin:0 !important;
+
+    color:#ffffff !important;
+
+    font-size:clamp(22px,5.3vw,29px) !important;
+    line-height:1.04 !important;
+
+    font-weight:950 !important;
+    letter-spacing:-.8px !important;
+
+    text-shadow:
+        0 2px 5px rgba(0,50,32,.20) !important;
+}
+
+#homeView .final-hero-title span{
+    color:#69e990 !important;
+}
+
+
+/* SUBTITLE */
+
+#homeView .final-hero-subtitle{
+    margin-top:6px !important;
+
+    color:rgba(240,255,245,.83) !important;
+
+    font-size:11px !important;
+    font-weight:600 !important;
+}
+
+
+/* =========================================================
+   HANDWRITTEN NOTE
+========================================================= */
+
+#homeView .final-hero-note{
+    position:absolute !important;
+
+    z-index:7 !important;
+
+    top:13px !important;
+    right:14px !important;
+
+    width:120px !important;
+
+    padding:0 !important;
+
+    background:transparent !important;
+    border:0 !important;
+    box-shadow:none !important;
+
+    color:rgba(255,255,255,.92) !important;
+
+    text-align:center !important;
+
+    font-family:
+        "Segoe Print",
+        "Comic Sans MS",
+        cursive !important;
+
+    font-size:9.5px !important;
+    line-height:1.25 !important;
+    font-weight:600 !important;
+    font-style:italic !important;
+
+    transform:rotate(-5deg) !important;
+
+    text-shadow:
+        0 1px 3px rgba(0,50,30,.28) !important;
+}
+
+#homeView .final-hero-note::after{
+    content:"" !important;
+
+    display:block !important;
+
+    width:55px !important;
+    height:7px !important;
+
+    margin:0 5px 0 auto !important;
+
+    border-bottom:
+        1px solid rgba(255,255,255,.70) !important;
+
+    border-radius:50% !important;
+
+    transform:rotate(-7deg) !important;
+}
+
+
+/* =========================================================
+   3D NOTEBOOK
+========================================================= */
+
+#homeView .final-book{
+    position:absolute !important;
+
+    z-index:5 !important;
+
+    right:22px !important;
+    bottom:19px !important;
+
+    width:78px !important;
+    height:99px !important;
+
+    border:
+        2px solid rgba(235,255,242,.96) !important;
+
+    border-radius:
+        10px 17px 17px 10px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            #18b75e 0%,
+            #07904d 55%,
+            #04723f 100%
+        ) !important;
+
+    box-shadow:
+        -6px 6px 0 #dff7e7,
+        -10px 10px 0 rgba(255,255,255,.55),
+        0 14px 26px rgba(0,48,30,.34) !important;
+
+    transform:
+        rotate(8deg) perspective(300px) rotateY(-5deg) !important;
+}
+
+
+/* white page behind / spine */
+
+#homeView .final-book::before{
+    content:"" !important;
+
+    position:absolute !important;
+
+    left:-8px !important;
+    top:7px !important;
+
+    width:10px !important;
+    height:82px !important;
+
+    border-radius:7px 0 0 7px !important;
+
+    border:
+        1px solid rgba(220,255,232,.95) !important;
+
+    background:
+        repeating-linear-gradient(
+            to bottom,
+            #eaffef 0 5px,
+            #0a8c4a 5px 8px
+        ) !important;
+
+    box-shadow:
+        -3px 0 0 rgba(220,255,230,.85) !important;
+}
+
+
+/* front gloss */
+
+#homeView .final-book::after{
+    content:"" !important;
+
+    position:absolute !important;
+    inset:5px !important;
+
+    border-radius:8px 13px 13px 8px !important;
+
+    background:
+        linear-gradient(
+            120deg,
+            rgba(255,255,255,.20),
+            transparent 38%
+        ) !important;
+
+    pointer-events:none;
+}
+
+
+#homeView .final-book-symbol{
+    left:28px !important;
+    top:18px !important;
+
+    color:white !important;
+
+    font-size:37px !important;
+    line-height:1 !important;
+    font-weight:950 !important;
+
+    text-shadow:
+        0 3px 7px rgba(0,60,35,.25) !important;
+}
+
+
+#homeView .final-book-line{
+    left:29px !important;
+    top:67px !important;
+
+    width:31px !important;
+    height:3px !important;
+
+    border-radius:999px !important;
+
+    background:#ffffff !important;
+
+    box-shadow:
+        0 8px 0 rgba(255,255,255,.50) !important;
+}
+
+
+/* =========================================================
+   FLOATING COINS
+========================================================= */
+
+#homeView .final-coin{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    border-radius:50% !important;
+
+    font-weight:950 !important;
+
+    box-shadow:
+        inset 0 2px 3px rgba(255,255,255,.45),
+        0 8px 17px rgba(0,45,28,.26) !important;
+}
+
+
+#homeView .final-coin-green{
+    z-index:6 !important;
+
+    right:105px !important;
+    top:72px !important;
+
+    width:39px !important;
+    height:39px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            #94f3b5,
+            #25bf69 58%,
+            #0b934e
+        ) !important;
+
+    border:
+        2px solid rgba(190,255,211,.92) !important;
+
+    color:#ffffff !important;
+
+    font-size:17px !important;
+
+    transform:rotate(-13deg) !important;
+}
+
+
+#homeView .final-coin-gold{
+    z-index:6 !important;
+
+    right:77px !important;
+    top:29px !important;
+
+    width:34px !important;
+    height:34px !important;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffe991,
+            #f4c94c 58%,
+            #dba52b
+        ) !important;
+
+    border:
+        2px solid #fff0aa !important;
+
+    color:#9a700b !important;
+
+    font-size:14px !important;
+
+    transform:rotate(7deg) !important;
+}
+
+
+/* =========================================================
+   MAIN BALANCE CARD
+========================================================= */
+
+#homeView .final-hero-balance{
+    position:absolute !important;
+
+    z-index:8 !important;
+
+    left:15px !important;
+    bottom:14px !important;
+
+    width:61% !important;
+    min-height:73px !important;
+
+    display:flex !important;
+    align-items:center !important;
+
+    gap:10px !important;
+
+    padding:10px 36px 10px 11px !important;
+
+    border-radius:15px !important;
+
+    background:#fbfdfc !important;
+
+    border:
+        1px solid rgba(220,238,227,.95) !important;
+
+    box-shadow:
+        0 8px 18px rgba(0,52,32,.15) !important;
+}
+
+
+/* arrow */
+
+#homeView .final-hero-balance::after{
+    content:"›" !important;
+
+    position:absolute !important;
+
+    right:14px !important;
+    top:50% !important;
+
+    transform:translateY(-50%) !important;
+
+    color:#267657 !important;
+
+    font-size:24px !important;
+    font-weight:800 !important;
+}
+
+
+/* PIE ICON */
+
+#homeView .final-balance-icon{
+    width:40px !important;
+    height:40px !important;
+
+    flex-shrink:0 !important;
+
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+
+    border-radius:50% !important;
+
+    background:#dff8e8 !important;
+
+    color:#08a45a !important;
+
+    font-size:21px !important;
+    font-weight:900 !important;
+}
+
+
+/* BALANCE TEXT */
+
+#homeView .final-balance-label{
+    margin-bottom:1px !important;
+
+    color:#497564 !important;
+
+    font-size:10px !important;
+    font-weight:750 !important;
+}
+
+
+#homeView #totalRemaining{
+    display:block !important;
+
+    margin:0 !important;
+
+    color:#123e37 !important;
+
+    font-size:clamp(25px,6.2vw,32px) !important;
+    line-height:1 !important;
+
+    font-weight:950 !important;
+
+    letter-spacing:-.8px !important;
+}
+
+
+#homeView .final-balance-note{
+    margin-top:3px !important;
+
+    color:#83988f !important;
+
+    font-size:8px !important;
+    font-weight:600 !important;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media(max-width:600px){
+
+    #homeView .final-home-hero{
+        min-height:228px !important;
+        padding:14px !important;
+    }
+
+    #homeView .final-hero-copy{
+        width:58% !important;
+    }
+
+    #homeView .final-hero-title{
+        font-size:clamp(21px,5.4vw,27px) !important;
+    }
+
+    #homeView .final-book{
+        right:17px !important;
+        bottom:17px !important;
+
+        width:72px !important;
+        height:94px !important;
+    }
+
+    #homeView .final-book-symbol{
+        left:26px !important;
+        top:17px !important;
+
+        font-size:34px !important;
+    }
+
+    #homeView .final-book-line{
+        left:26px !important;
+        top:63px !important;
+
+        width:28px !important;
+    }
+
+    #homeView .final-coin-green{
+        right:94px !important;
+        top:75px !important;
+
+        width:35px !important;
+        height:35px !important;
+    }
+
+    #homeView .final-coin-gold{
+        right:66px !important;
+        top:30px !important;
+
+        width:30px !important;
+        height:30px !important;
+    }
+
+    #homeView .final-hero-note{
+        right:7px !important;
+        top:11px !important;
+
+        width:108px !important;
+
+        font-size:8.5px !important;
+    }
+
+    #homeView .final-hero-balance{
+        left:14px !important;
+        bottom:13px !important;
+
+        width:62% !important;
+        min-height:70px !important;
+    }
+}
 </style>
 
 
@@ -9732,11 +10358,10 @@ body{
                 class="home-today-date"
             ></div>
 
-            <h1 class="final-hero-title">
-                Өр бүртгэлээ
-                <span>ухаалгаар</span>
-                хөтлө.
-            </h1>
+         <h1 class="final-hero-title">
+    Өр бүртгэлээ<br>
+    <span>ухаалгаар</span> хөтлө.
+</h1>
 
             <div class="final-hero-subtitle">
                 Таны туслах — Өрийн дэвтэр
