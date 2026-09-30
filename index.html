@@ -10161,7 +10161,7 @@ body{
     left:15px !important;
     bottom:14px !important;
 
-    width:61% !important;
+    width:56% !important;
     min-height:73px !important;
 
     display:flex !important;
@@ -10185,21 +10185,7 @@ body{
 
 /* arrow */
 
-#homeView .final-hero-balance::after{
-    content:"›" !important;
 
-    position:absolute !important;
-
-    right:14px !important;
-    top:50% !important;
-
-    transform:translateY(-50%) !important;
-
-    color:#267657 !important;
-
-    font-size:24px !important;
-    font-weight:800 !important;
-}
 
 
 /* PIE ICON */
@@ -10438,7 +10424,7 @@ body{
     }
 
     #homeView .final-hero-balance{
-        width:62% !important;
+        width:56% !important;
     }
 
 }
@@ -21205,32 +21191,7 @@ async function handlePasswordReset() {
     await sendPasswordReset();
 
 }   
-    const remainingCard =
-    document.getElementById("remainingCard");
-
-if (remainingCard) {
-
-    remainingCard.addEventListener(
-        "click",
-        function () {
-
-            const debtList =
-                document.getElementById("debtListBox");
-
-            if (!debtList) return;
-
-            if (
-                debtList.style.display === "none" ||
-                debtList.style.display === ""
-            ) {
-                debtList.style.display = "block";
-            } else {
-                debtList.style.display = "none";
-            }
-
-        }
-    );
-}
+   
         function toggleHelpItem(id) {
 
     const item = document.getElementById(id);
