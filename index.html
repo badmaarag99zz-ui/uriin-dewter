@@ -10603,6 +10603,27 @@ body{
     }
 
 }
+    /* ===== НИЙТ ХҮМҮҮС — TEXT BIGGER + NO ARROW ===== */
+
+#homeView .summary-people-pill{
+    font-size:14px !important;
+    font-weight:800 !important;
+    padding:8px 16px !important;
+    gap:6px !important;
+}
+
+#homeView .summary-people-pill span,
+#homeView .summary-people-pill b,
+#homeView #totalPeople{
+    font-size:14px !important;
+    font-weight:900 !important;
+}
+
+/* Баруун талын сумыг арилгана */
+#homeView .summary-people-pill::after{
+    display:none !important;
+    content:none !important;
+}
 </style>
 
 
