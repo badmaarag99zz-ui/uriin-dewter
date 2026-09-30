@@ -7650,77 +7650,179 @@ body{
         </div>
 
 
-        <div class="debt-form">
+       <div style="display:flex; flex-direction:column; gap:18px;">
 
-            <label>
-                Төрөл
-            </label>
+    <!-- TYPE -->
+    <div>
+        <label
+            for="feedbackType"
+            style="
+                display:block;
+                margin-bottom:8px;
+                font-size:13px;
+                font-weight:700;
+                color:#475569;
+            "
+        >
+            Саналын төрөл
+        </label>
 
-            <select id="feedbackType">
-                <option value="suggestion">
-                    💡 Санал
-                </option>
-
-                <option value="bug">
-                    🐞 Алдаа мэдээлэх
-                </option>
-
-                <option value="improvement">
-                    ✨ Сайжруулах хүсэлт
-                </option>
-
-                <option value="other">
-                    💬 Бусад
-                </option>
+        <div style="position:relative;">
+            <select
+                id="feedbackType"
+                style="
+                    width:100%;
+                    height:48px;
+                    padding:0 42px 0 14px;
+                    border:1px solid #dbe3ea;
+                    border-radius:12px;
+                    background:#f8fafc;
+                    color:#334155;
+                    font-size:14px;
+                    font-weight:600;
+                    font-family:inherit;
+                    outline:none;
+                    cursor:pointer;
+                    appearance:none;
+                    -webkit-appearance:none;
+                "
+            >
+                <option value="suggestion">💡 Санал</option>
+                <option value="bug">🐞 Алдаа мэдээлэх</option>
+                <option value="improvement">✨ Сайжруулах хүсэлт</option>
+                <option value="other">💬 Бусад</option>
             </select>
 
+            <span
+                style="
+                    position:absolute;
+                    right:15px;
+                    top:50%;
+                    transform:translateY(-50%);
+                    color:#94a3b8;
+                    font-size:13px;
+                    pointer-events:none;
+                "
+            >
+                ▼
+            </span>
+        </div>
+    </div>
 
-            <label>
+
+    <!-- MESSAGE -->
+    <div>
+        <div
+            style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:8px;
+            "
+        >
+            <label
+                for="feedbackMessage"
+                style="
+                    font-size:13px;
+                    font-weight:700;
+                    color:#475569;
+                "
+            >
                 Таны санал хүсэлт
             </label>
 
-            <textarea
-                id="feedbackMessage"
-                maxlength="1000"
-                placeholder="Энд бичнэ үү..."
+            <span
+                id="feedbackCharCount"
                 style="
-                    width:100%;
-                    min-height:140px;
-                    resize:vertical;
-                    padding:14px;
-                    border:1px solid #cbd5e1;
-                    border-radius:12px;
-                    box-sizing:border-box;
-                    font:inherit;
-                    line-height:1.5;
-                    outline:none;
+                    font-size:11px;
+                    color:#94a3b8;
                 "
-            ></textarea>
-
-
-            <div
-                id="feedbackStatusMessage"
-                style="
-                    min-height:18px;
-                    margin-top:6px;
-                    font-size:12px;
-                    text-align:center;
-                "
-            ></div>
-
-
-            <button
-                type="button"
-                class="modal-save-btn"
-                id="sendFeedbackButton"
-                onclick="sendFeedback()"
             >
-                Илгээх
-            </button>
-
+                0 / 1000
+            </span>
         </div>
 
+        <textarea
+            id="feedbackMessage"
+            maxlength="1000"
+            placeholder="Сайжруулах зүйл, асуудал эсвэл санал хүсэлтээ энд бичээрэй..."
+            oninput="document.getElementById('feedbackCharCount').textContent = this.value.length + ' / 1000'"
+            style="
+                display:block;
+                width:100%;
+                min-height:130px;
+                padding:14px 15px;
+                border:1px solid #dbe3ea;
+                border-radius:14px;
+                box-sizing:border-box;
+                resize:vertical;
+                background:#f8fafc;
+                color:#1e293b;
+                font:inherit;
+                font-size:14px;
+                line-height:1.6;
+                outline:none;
+            "
+        ></textarea>
     </div>
+
+
+    <!-- STATUS -->
+    <div
+        id="feedbackStatusMessage"
+        style="
+            min-height:18px;
+            margin-top:-7px;
+            font-size:12px;
+            text-align:center;
+        "
+    ></div>
+
+
+    <!-- SEND -->
+    <button
+        type="button"
+        id="sendFeedbackButton"
+        onclick="sendFeedback()"
+        style="
+            width:100%;
+            height:50px;
+            border:0;
+            border-radius:13px;
+            background:#52677d;
+            color:#ffffff;
+            font-family:inherit;
+            font-size:14px;
+            font-weight:800;
+            cursor:pointer;
+            box-shadow:0 7px 18px rgba(82,103,125,0.18);
+        "
+    >
+        Санал хүсэлт илгээх
+    </button>
+
+
+    <!-- NOTE -->
+    <div
+        style="
+            display:flex;
+            align-items:flex-start;
+            justify-content:center;
+            gap:6px;
+            margin-top:-5px;
+            color:#94a3b8;
+            font-size:11px;
+            line-height:1.5;
+            text-align:center;
+        "
+    >
+        <span>💬</span>
+        <span>
+            Таны санал үйлчилгээг сайжруулахад тусална.
+        </span>
+    </div>
+
+</div>
 </div>
     <!-- ==========================================
      ABOUT APP MODAL
