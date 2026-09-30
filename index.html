@@ -7611,6 +7611,33 @@ body{
     </span>
 </button>
     <!-- ==========================================
+     INVITE FRIEND
+========================================== -->
+
+<button
+    type="button"
+    class="settings-item"
+    onclick="inviteFriend()"
+>
+    <span class="settings-item-icon">
+        👥
+    </span>
+
+    <span class="settings-item-content">
+        <strong>
+            Найзаа урих
+        </strong>
+
+        <small>
+            Өрийн дэвтэр аппыг бусадтай хуваалцах
+        </small>
+    </span>
+
+    <span class="settings-item-arrow">
+        ›
+    </span>
+</button>
+    <!-- ==========================================
      FEEDBACK
 ========================================== -->
 
@@ -22118,6 +22145,80 @@ function filterFaqItems() {
         }
 
     }, 150);
+
+}
+    // ==========================================
+// INVITE FRIEND
+// ==========================================
+
+async function inviteFriend() {
+
+    const shareData = {
+
+        title: "Өрийн дэвтэр",
+
+        text:
+            "📒 Өрийн дэвтэр\n\n" +
+            "Харилцагчийн төлбөр, төлөлт, үлдэгдлээ " +
+            "хялбар бүртгэж, хянах апп.\n\n" +
+            "Та ч бас туршаад үзээрэй 👇",
+
+        url: "https://uriin-dewter.vercel.app/"
+
+    };
+
+
+    // Утасны share цонх
+    if (navigator.share) {
+
+        try {
+
+            await navigator.share(shareData);
+
+            return;
+
+        } catch (error) {
+
+            // Хэрэглэгч share цонхыг өөрөө хаасан
+            if (error.name === "AbortError") {
+                return;
+            }
+
+            console.error(
+                "Share error:",
+                error
+            );
+
+        }
+
+    }
+
+
+    // Share дэмждэггүй төхөөрөмж дээр линк хуулна
+    try {
+
+        await navigator.clipboard.writeText(
+            shareData.url
+        );
+
+        alert(
+            "✅ Аппын холбоос хуулагдлаа.\n\n" +
+            "Найздаа илгээгээрэй."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Copy link error:",
+            error
+        );
+
+        alert(
+            "📒 Өрийн дэвтэр\n\n" +
+            shareData.url
+        );
+
+    }
 
 }
 </script>
