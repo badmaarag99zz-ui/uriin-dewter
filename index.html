@@ -23672,6 +23672,11 @@ async function saveProfileInfo() {
 // MODERN LEDGER NAVIGATION
 // ==========================================
 function showLedgerView(viewId, buttonElement = null) {
+       closeAboutAppModal();
+
+    document.querySelectorAll(".ledger-view").forEach(function(view) {
+        view.classList.remove("active");
+    });
     document.querySelectorAll(".ledger-view").forEach(function(view) {
         view.classList.remove("active");
     });
