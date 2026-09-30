@@ -7067,6 +7067,270 @@ body{
 .faq-section-hidden {
     display: none !important;
 }
+    /* ==========================================
+   TODAY OVERVIEW
+========================================== */
+
+.today-overview {
+    width: 100%;
+    margin: 16px auto 0;
+    padding: 18px;
+
+    background: rgba(255,255,255,0.94);
+
+    border: 1px solid #dce4eb;
+    border-radius: 20px;
+
+    box-shadow:
+        0 10px 28px rgba(82,103,125,0.08);
+}
+
+.today-overview-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    margin-bottom: 15px;
+}
+
+.today-overview-eyebrow {
+    display: block;
+
+    margin-bottom: 3px;
+
+    font-size: 10px;
+    font-weight: 850;
+
+    letter-spacing: 1.2px;
+
+    color: #94a3b8;
+}
+
+.today-overview-header h3 {
+    margin: 0;
+
+    font-size: 17px;
+    font-weight: 850;
+
+    color: #334155;
+}
+
+.today-count {
+    padding: 6px 10px;
+
+    border-radius: 999px;
+
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    font-size: 11px;
+    font-weight: 750;
+
+    white-space: nowrap;
+}
+
+
+/* TODAY STATS */
+
+.today-stats {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 10px;
+}
+
+.today-stat {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    min-width: 0;
+
+    padding: 13px;
+
+    border-radius: 15px;
+}
+
+.today-added {
+    background: #f1f5f9;
+}
+
+.today-paid {
+    background: #ecfdf5;
+}
+
+.today-stat-icon {
+    width: 35px;
+    height: 35px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    font-size: 18px;
+    font-weight: 900;
+}
+
+.today-added .today-stat-icon {
+    background: #e2e8f0;
+    color: #52677d;
+}
+
+.today-paid .today-stat-icon {
+    background: #d1fae5;
+    color: #16835a;
+}
+
+.today-stat span {
+    display: block;
+
+    margin-bottom: 3px;
+
+    color: #7a8793;
+
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.today-stat strong {
+    display: block;
+
+    color: #334155;
+
+    font-size: 15px;
+    font-weight: 850;
+
+    white-space: nowrap;
+}
+
+
+/* ACTIVITY */
+
+.today-activity-list {
+    margin-top: 14px;
+
+    border-top:
+        1px solid #edf1f4;
+}
+
+.today-activity-item {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 12px;
+
+    padding: 12px 2px;
+
+    border-bottom:
+        1px solid #f1f4f6;
+}
+
+.today-activity-item:last-child {
+    border-bottom: 0;
+}
+
+.today-activity-left {
+    min-width: 0;
+}
+
+.today-activity-name {
+    overflow: hidden;
+
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 750;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.today-activity-time {
+    margin-top: 3px;
+
+    color: #94a3b8;
+
+    font-size: 10px;
+}
+
+.today-activity-amount {
+    flex-shrink: 0;
+
+    font-size: 13px;
+    font-weight: 850;
+}
+
+.today-activity-amount.add {
+    color: #52677d;
+}
+
+.today-activity-amount.paid {
+    color: #16835a;
+}
+
+
+/* EMPTY */
+
+.today-empty {
+    padding: 22px 10px 8px;
+
+    text-align: center;
+
+    color: #94a3b8;
+
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.today-empty-icon {
+    margin-bottom: 7px;
+
+    font-size: 24px;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 420px) {
+
+    .today-overview {
+        padding: 15px;
+        border-radius: 18px;
+    }
+
+    .today-stat {
+        padding: 11px 9px;
+        gap: 8px;
+    }
+
+    .today-stat-icon {
+        width: 31px;
+        height: 31px;
+
+        font-size: 16px;
+    }
+
+    .today-stat span {
+        font-size: 10px;
+    }
+
+    .today-stat strong {
+        font-size: 13px;
+    }
+
+}
 </style>
 
 </head>
@@ -7291,6 +7555,49 @@ body{
             <b id="totalPeople">0</b>
         </div>
     </div>
+    <!-- ==========================================
+     ӨНӨӨДРИЙН МЭДЭЭЛЭЛ
+========================================== -->
+
+<div id="todayOverview" class="today-overview">
+
+    <div class="today-overview-header">
+        <div>
+            <span class="today-overview-eyebrow">ӨНӨӨДӨР</span>
+            <h3>Өнөөдрийн хөдөлгөөн</h3>
+        </div>
+
+        <div id="todayActivityCount" class="today-count">
+            0 үйлдэл
+        </div>
+    </div>
+
+    <div class="today-stats">
+
+        <div class="today-stat today-added">
+            <div class="today-stat-icon">＋</div>
+
+            <div>
+                <span>Нэмэгдсэн авлага</span>
+                <strong id="todayAdded">0 ₮</strong>
+            </div>
+        </div>
+
+        <div class="today-stat today-paid">
+            <div class="today-stat-icon">✓</div>
+
+            <div>
+                <span>Орсон төлөлт</span>
+                <strong id="todayPaid">0 ₮</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <div id="todayActivityList" class="today-activity-list">
+    </div>
+
+</div>
 </section>
 
 <section id="customersView" class="ledger-view">
@@ -12533,7 +12840,7 @@ function showDebts() {
             );
 
     }
-
+renderTodayOverview();
 
     /*
      * ЖАГСААЛТ ХООСОН
@@ -22219,6 +22526,347 @@ async function inviteFriend() {
         );
 
     }
+
+}
+    /* ==========================================
+   TODAY OVERVIEW
+========================================== */
+
+function isTodayActivity(dateValue) {
+
+    if (!dateValue) {
+        return false;
+    }
+
+    const date =
+        new Date(dateValue);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return false;
+    }
+
+    const today =
+        new Date();
+
+    return (
+        date.getFullYear() ===
+            today.getFullYear() &&
+
+        date.getMonth() ===
+            today.getMonth() &&
+
+        date.getDate() ===
+            today.getDate()
+    );
+
+}
+
+
+function renderTodayOverview() {
+
+    const addedElement =
+        document.getElementById(
+            "todayAdded"
+        );
+
+    const paidElement =
+        document.getElementById(
+            "todayPaid"
+        );
+
+    const countElement =
+        document.getElementById(
+            "todayActivityCount"
+        );
+
+    const listElement =
+        document.getElementById(
+            "todayActivityList"
+        );
+
+
+    if (
+        !addedElement ||
+        !paidElement ||
+        !countElement ||
+        !listElement
+    ) {
+        return;
+    }
+
+
+    let todayAdded = 0;
+    let todayPaid = 0;
+
+    const activities = [];
+
+
+    (Array.isArray(debts)
+        ? debts
+        : []
+    ).forEach(function(debt) {
+
+
+        /* =========================
+           НЭМЭГДСЭН АВЛАГА
+        ========================= */
+
+        const additions =
+            Array.isArray(debt.additions)
+                ? debt.additions
+                : [];
+
+
+        additions.forEach(
+            function(addition) {
+
+                if (
+                    !isTodayActivity(
+                        addition.createdAt
+                    )
+                ) {
+                    return;
+                }
+
+
+                const amount =
+                    Number(
+                        addition.amount || 0
+                    );
+
+
+                todayAdded += amount;
+
+
+                activities.push({
+
+                    type: "add",
+
+                    name:
+                        debt.name ||
+                        "Нэргүй",
+
+                    amount: amount,
+
+                    createdAt:
+                        addition.createdAt
+
+                });
+
+            }
+        );
+
+
+        /* =========================
+           ТӨЛӨЛТ
+        ========================= */
+
+        const payments =
+            Array.isArray(debt.payments)
+                ? debt.payments
+                : [];
+
+
+        payments.forEach(
+            function(payment) {
+
+                if (
+                    !isTodayActivity(
+                        payment.createdAt
+                    )
+                ) {
+                    return;
+                }
+
+
+                const amount =
+                    Number(
+                        payment.amount || 0
+                    );
+
+
+                todayPaid += amount;
+
+
+                activities.push({
+
+                    type: "paid",
+
+                    name:
+                        debt.name ||
+                        "Нэргүй",
+
+                    amount: amount,
+
+                    createdAt:
+                        payment.createdAt
+
+                });
+
+            }
+        );
+
+    });
+
+
+    /* =========================
+       TOTAL
+    ========================= */
+
+    addedElement.textContent =
+        formatMoney(todayAdded);
+
+    paidElement.textContent =
+        formatMoney(todayPaid);
+
+
+    countElement.textContent =
+        activities.length +
+        " үйлдэл";
+
+
+    /* =========================
+       NEWEST FIRST
+    ========================= */
+
+    activities.sort(
+        function(a, b) {
+
+            return (
+                new Date(b.createdAt) -
+                new Date(a.createdAt)
+            );
+
+        }
+    );
+
+
+    /* =========================
+       EMPTY
+    ========================= */
+
+    if (
+        activities.length === 0
+    ) {
+
+        listElement.innerHTML = `
+
+            <div class="today-empty">
+
+                <div class="today-empty-icon">
+                    ✓
+                </div>
+
+                Өнөөдөр хөдөлгөөн
+                бүртгэгдээгүй байна.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =========================
+       LAST 5
+    ========================= */
+
+    listElement.innerHTML =
+        activities
+            .slice(0, 5)
+            .map(function(activity) {
+
+                const date =
+                    new Date(
+                        activity.createdAt
+                    );
+
+
+                const time =
+                    date.toLocaleTimeString(
+                        "mn-MN",
+                        {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        }
+                    );
+
+
+                const isPaid =
+                    activity.type ===
+                    "paid";
+
+
+                return `
+
+                    <div class="today-activity-item">
+
+                        <div class="today-activity-left">
+
+                            <div class="today-activity-name">
+
+                                ${
+                                    isPaid
+                                        ? "✓"
+                                        : "＋"
+                                }
+
+                                ${escapeHtml(
+                                    activity.name
+                                )}
+
+                            </div>
+
+                            <div class="today-activity-time">
+
+                                ${
+                                    isPaid
+                                        ? "Төлөлт"
+                                        : "Авлага нэмэгдсэн"
+                                }
+
+                                · ${time}
+
+                            </div>
+
+                        </div>
+
+
+                        <div
+                            class="
+                                today-activity-amount
+                                ${
+                                    isPaid
+                                        ? "paid"
+                                        : "add"
+                                }
+                            "
+                        >
+
+                            ${
+                                isPaid
+                                    ? "− "
+                                    : "＋ "
+                            }
+
+                            ${formatMoney(
+                                activity.amount
+                            )}
+
+                        </div>
+
+                    </div>
+
+                `;
+
+            })
+            .join("");
 
 }
 </script>
