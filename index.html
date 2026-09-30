@@ -6933,6 +6933,75 @@ body{
     line-height: 1;
     cursor: pointer;
 }
+    /* ==========================================
+   ABOUT / LEGAL / SUPPORT MODAL HEADERS
+========================================== */
+
+#aboutAppModal .modal-header,
+#termsModal .modal-header,
+#privacyModal .modal-header,
+#supportModal .modal-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+}
+
+#aboutAppModal .modal-header > div,
+#termsModal .modal-header > div,
+#privacyModal .modal-header > div,
+#supportModal .modal-header > div {
+    flex: 1;
+    min-width: 0;
+}
+
+#aboutAppModal .modal-header h2,
+#termsModal .modal-header h2,
+#privacyModal .modal-header h2,
+#supportModal .modal-header h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #1e293b;
+}
+
+#aboutAppModal .profile-edit-subtitle,
+#termsModal .profile-edit-subtitle,
+#privacyModal .profile-edit-subtitle,
+#supportModal .profile-edit-subtitle {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: #94a3b8;
+}
+
+#aboutAppModal .modal-close,
+#termsModal .modal-close,
+#privacyModal .modal-close,
+#supportModal .modal-close {
+    flex: 0 0 34px;
+
+    width: 34px;
+    height: 34px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #f1f5f9;
+    color: #94a3b8;
+
+    font-size: 18px;
+    line-height: 1;
+
+    cursor: pointer;
+}
 </style>
 
 </head>
@@ -20914,10 +20983,42 @@ function closeAboutAppModalOutside(event) {
 // TERMS OF SERVICE
 // ==========================================
 
+// ==========================================
+// ABOUT APP SUB MODAL NAVIGATION
+// ==========================================
+
+function hideAboutAppModal() {
+
+    const about =
+        document.getElementById("aboutAppModal");
+
+    if (about) {
+        about.style.display = "none";
+    }
+}
+
+
+function returnToAboutApp() {
+
+    const about =
+        document.getElementById("aboutAppModal");
+
+    if (about) {
+        about.style.display = "flex";
+    }
+}
+
+
+// ==========================================
+// TERMS OF SERVICE
+// ==========================================
+
 function openTermsModal() {
 
     const modal =
         document.getElementById("termsModal");
+
+    hideAboutAppModal();
 
     if (modal) {
         modal.style.display = "flex";
@@ -20933,6 +21034,8 @@ function closeTermsModal() {
     if (modal) {
         modal.style.display = "none";
     }
+
+    returnToAboutApp();
 }
 
 
@@ -20956,6 +21059,8 @@ function openPrivacyModal() {
     const modal =
         document.getElementById("privacyModal");
 
+    hideAboutAppModal();
+
     if (modal) {
         modal.style.display = "flex";
     }
@@ -20970,6 +21075,8 @@ function closePrivacyModal() {
     if (modal) {
         modal.style.display = "none";
     }
+
+    returnToAboutApp();
 }
 
 
@@ -20993,6 +21100,8 @@ function openSupportInfo() {
     const modal =
         document.getElementById("supportModal");
 
+    hideAboutAppModal();
+
     if (modal) {
         modal.style.display = "flex";
     }
@@ -21007,6 +21116,8 @@ function closeSupportInfo() {
     if (modal) {
         modal.style.display = "none";
     }
+
+    returnToAboutApp();
 }
 
 
@@ -21057,16 +21168,7 @@ function closePrivacyModal() {
 
 }
 
-function closePrivacyModalOutside(event) {
 
-    if (
-        event.target &&
-        event.target.id === "privacyModal"
-    ) {
-        closePrivacyModal();
-    }
-
-}
 
 
 // ==========================================
