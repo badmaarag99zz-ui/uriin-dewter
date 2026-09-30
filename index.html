@@ -14064,47 +14064,62 @@ body{
 
         <!-- OTP -->
 
-        <div
-            id="changePhoneStepOtp"
-            style="display:none;"
-        >
+       <div
+    id="changePhoneStepOtp"
+    style="display:none;"
+>
 
-            <div class="form-group">
+    <div
+        id="changePhoneVerifyInstruction"
+        style="
+            padding:14px;
+            background:#f8fafc;
+            border:1px solid #e2e8f0;
+            border-radius:12px;
+            font-size:14px;
+            line-height:1.6;
+            text-align:center;
+            margin-bottom:14px;
+        "
+    >
+        Шинэ утасны дугаараа SMS-ээр баталгаажуулна уу.
+    </div>
 
-                <label for="changePhoneOtpInput">
-                    SMS баталгаажуулах код
-                </label>
 
-                <input
-                    type="text"
-                    id="changePhoneOtpInput"
-                    inputmode="numeric"
-                    maxlength="6"
-                    placeholder="6 оронтой код"
-                >
+    <button
+        type="button"
+        class="save-btn"
+        id="verifyChangePhoneOtpButton"
+        onclick="openChangePhoneVerifySms()"
+    >
+        📩 SMS илгээж баталгаажуулах — 150₮
+    </button>
 
-            </div>
 
-            <button
-                type="button"
-                class="save-btn"
-                id="verifyChangePhoneOtpButton"
-                onclick="verifyChangePhoneOtp()"
-            >
-                Баталгаажуулах
-            </button>
+    <div
+        id="changePhoneVerifyStatus"
+        style="
+            display:none;
+            margin-top:14px;
+            text-align:center;
+            font-size:14px;
+            color:#6366f1;
+        "
+    >
+        ⏳ SMS баталгаажуулалтыг хүлээж байна...
+    </div>
 
-            <button
-                type="button"
-                class="profile-edit-action-btn"
-                style="margin-top:12px;"
-                onclick="backToChangePhoneStep()"
-            >
-                Дугаар засах
-            </button>
 
-        </div>
+    <button
+        type="button"
+        class="profile-edit-action-btn"
+        style="margin-top:12px;"
+        onclick="backToChangePhoneStep()"
+    >
+        Дугаар засах
+    </button>
 
+</div>
 
         <p
             id="changePhoneMessage"
@@ -14861,6 +14876,7 @@ function closeRegisterModalOutside(event) {
 
 let registerVerifyPollTimer = null;
 let passwordResetVerifyPollTimer = null;
+    let changePhoneVerifyPollTimer = null;
 async function registerUser() {
 
     const phone =
@@ -15198,6 +15214,10 @@ function openRegisterVerifySms() {
 // SMS APP-ААС БУЦАЖ ИРЭХЭД ШУУД ШАЛГАХ
 // ==========================================
 
+// ==========================================
+// SMS APP-ААС БУЦАЖ ИРЭХЭД ШУУД ШАЛГАХ
+// ==========================================
+
 document.addEventListener(
     "visibilitychange",
     function () {
@@ -15221,12 +15241,10 @@ document.addEventListener(
 
             verifyRegisterOtp();
 
-            // Background үед interval pause
-            // болсон байж болох тул дахин асаана.
             stopRegisterVerifyPolling();
 
             registerVerifyPollTimer =
-                setInterval(() => {
+                setInterval(function() {
 
                     verifyRegisterOtp();
 
@@ -15245,14 +15263,34 @@ document.addEventListener(
 
             verifyPasswordReset();
 
-            // Background үед interval pause
-            // болсон байж болох тул дахин асаана.
             stopPasswordResetVerifyPolling();
 
             passwordResetVerifyPollTimer =
-                setInterval(() => {
+                setInterval(function() {
 
                     verifyPasswordReset();
+
+                }, 3000);
+        }
+
+
+        // ==========================================
+        // CHANGE PHONE VERIFY
+        // ==========================================
+
+        if (
+            window.pendingChangePhoneSessionId &&
+            pendingChangePhone
+        ) {
+
+            verifyChangePhoneOtp();
+
+            stopChangePhoneVerifyPolling();
+
+            changePhoneVerifyPollTimer =
+                setInterval(function() {
+
+                    verifyChangePhoneOtp();
 
                 }, 3000);
         }
@@ -15285,6 +15323,16 @@ window.addEventListener(
         ) {
 
             verifyPasswordReset();
+        }
+
+
+        // CHANGE PHONE
+        if (
+            window.pendingChangePhoneSessionId &&
+            pendingChangePhone
+        ) {
+
+            verifyChangePhoneOtp();
         }
     }
 );
@@ -25511,6 +25559,83 @@ function openChangePhoneModal() {
 
 function closeChangePhoneModal() {
 
+    // Verify.mn polling зогсоох
+    stopChangePhoneVerifyPolling();
+
+
+    // Түр Verify.mn мэдээлэл цэвэрлэх
+    pendingChangePhone = "";
+
+    window.pendingChangePhoneSessionId =
+        null;
+
+    window.pendingChangePhoneSmsUri =
+        null;
+
+
+    // Алхмуудыг анхны төлөвт оруулах
+    const phoneStep =
+        document.getElementById(
+            "changePhoneStepPhone"
+        );
+
+    const verifyStep =
+        document.getElementById(
+            "changePhoneStepOtp"
+        );
+
+    if (phoneStep) {
+        phoneStep.style.display =
+            "block";
+    }
+
+    if (verifyStep) {
+        verifyStep.style.display =
+            "none";
+    }
+
+
+    // Verify status цэвэрлэх
+    const statusBox =
+        document.getElementById(
+            "changePhoneVerifyStatus"
+        );
+
+    if (statusBox) {
+
+        statusBox.style.display =
+            "none";
+
+        statusBox.textContent =
+            "⏳ SMS баталгаажуулалтыг хүлээж байна...";
+    }
+
+
+    // Message цэвэрлэх
+    const message =
+        document.getElementById(
+            "changePhoneMessage"
+        );
+
+    if (message) {
+        message.textContent = "";
+    }
+
+
+    // Subtitle буцаах
+    const subtitle =
+        document.getElementById(
+            "changePhoneSubtitle"
+        );
+
+    if (subtitle) {
+
+        subtitle.textContent =
+            "Шинэ утасны дугаараа оруулна уу";
+    }
+
+
+    // Modal хаах
     const modal =
         document.getElementById(
             "changePhoneModal"
@@ -25520,7 +25645,6 @@ function closeChangePhoneModal() {
         modal.style.display =
             "none";
     }
-
 }
 
 
@@ -25545,12 +25669,26 @@ function closeChangePhoneModalOutside(event) {
 
 function backToChangePhoneStep() {
 
+    // Verify.mn polling зогсоох
+    stopChangePhoneVerifyPolling();
+
+
+    // Одоогийн Verify.mn session-ийг frontend-ээс цэвэрлэх
+    pendingChangePhone = "";
+
+    window.pendingChangePhoneSessionId =
+        null;
+
+    window.pendingChangePhoneSmsUri =
+        null;
+
+
     const phoneStep =
         document.getElementById(
             "changePhoneStepPhone"
         );
 
-    const otpStep =
+    const verifyStep =
         document.getElementById(
             "changePhoneStepOtp"
         );
@@ -25565,28 +25703,45 @@ function backToChangePhoneStep() {
             "changePhoneSubtitle"
         );
 
+    const statusBox =
+        document.getElementById(
+            "changePhoneVerifyStatus"
+        );
+
 
     if (phoneStep) {
         phoneStep.style.display =
             "block";
     }
 
-    if (otpStep) {
-        otpStep.style.display =
+
+    if (verifyStep) {
+        verifyStep.style.display =
             "none";
     }
+
+
+    if (statusBox) {
+
+        statusBox.style.display =
+            "none";
+
+        statusBox.textContent =
+            "⏳ SMS баталгаажуулалтыг хүлээж байна...";
+    }
+
 
     if (message) {
         message.textContent = "";
     }
 
+
     if (subtitle) {
+
         subtitle.textContent =
             "Шинэ утасны дугаараа оруулна уу";
     }
-
 }
-
 
 // ==========================================
 // ACCESS TOKEN АВАХ
@@ -25646,7 +25801,7 @@ async function sendChangePhoneOtp() {
         );
 
 
-    let newPhone =
+    const newPhone =
         String(
             phoneInput?.value || ""
         )
@@ -25657,60 +25812,48 @@ async function sendChangePhoneOtp() {
     if (newPhone.length !== 8) {
 
         if (message) {
-
             message.textContent =
                 "8 оронтой утасны дугаар оруулна уу.";
 
             message.style.color =
                 "#dc2626";
-
         }
 
         phoneInput?.focus();
 
         return;
-
     }
 
 
     if (!navigator.onLine) {
 
         if (message) {
-
             message.textContent =
                 "Утасны дугаар өөрчлөхийн тулд интернетэд холбогдоно уу.";
 
             message.style.color =
                 "#dc2626";
-
         }
 
         return;
-
     }
 
 
     try {
 
         if (button) {
-
-            button.disabled =
-                true;
-
+            button.disabled = true;
             button.textContent =
-                "Код илгээж байна...";
-
+                "Баталгаажуулалт үүсгэж байна...";
         }
 
 
         if (message) {
-
             message.textContent =
-                "SMS код илгээж байна...";
+                "Verify.mn баталгаажуулалт үүсгэж байна...";
 
             message.style.color =
                 "#6366f1";
-
         }
 
 
@@ -25726,7 +25869,6 @@ async function sendChangePhoneOtp() {
                     method: "POST",
 
                     headers: {
-
                         "apikey":
                             SUPABASE_KEY,
 
@@ -25761,29 +25903,48 @@ async function sendChangePhoneOtp() {
 
             throw new Error(
                 result.message ||
-                "SMS код илгээхэд алдаа гарлаа."
+                "Баталгаажуулах хүсэлт үүсгэхэд алдаа гарлаа."
             );
-
         }
 
+
+        if (
+            !result.sessionId ||
+            !result.smsUri
+        ) {
+
+            throw new Error(
+                "Verify.mn баталгаажуулах мэдээлэл ирсэнгүй."
+            );
+        }
+
+
+        // ==========================================
+        // VERIFY.MN ТҮР МЭДЭЭЛЭЛ
+        // ==========================================
 
         pendingChangePhone =
             newPhone;
 
+        window.pendingChangePhoneSessionId =
+            result.sessionId;
+
+        window.pendingChangePhoneSmsUri =
+            result.smsUri;
+
+
+        // ==========================================
+        // VERIFY ДЭЛГЭЦ
+        // ==========================================
 
         const phoneStep =
             document.getElementById(
                 "changePhoneStepPhone"
             );
 
-        const otpStep =
+        const verifyStep =
             document.getElementById(
                 "changePhoneStepOtp"
-            );
-
-        const otpInput =
-            document.getElementById(
-                "changePhoneOtpInput"
             );
 
         const subtitle =
@@ -25791,20 +25952,26 @@ async function sendChangePhoneOtp() {
                 "changePhoneSubtitle"
             );
 
+        const instruction =
+            document.getElementById(
+                "changePhoneVerifyInstruction"
+            );
+
+        const statusBox =
+            document.getElementById(
+                "changePhoneVerifyStatus"
+            );
+
 
         if (phoneStep) {
-
             phoneStep.style.display =
                 "none";
-
         }
 
 
-        if (otpStep) {
-
-            otpStep.style.display =
+        if (verifyStep) {
+            verifyStep.style.display =
                 "block";
-
         }
 
 
@@ -25814,39 +25981,37 @@ async function sendChangePhoneOtp() {
                 newPhone.slice(0, 4) +
                 " " +
                 newPhone.slice(4) +
-                " дугаар руу илгээсэн кодыг оруулна уу";
+                " дугаараа баталгаажуулна уу";
+        }
 
+
+        if (instruction) {
+
+            instruction.textContent =
+                result.displayInstruction ||
+                "Доорх товчийг дарж SMS илгээн шинэ утасны дугаараа баталгаажуулна уу.";
+        }
+
+
+        if (statusBox) {
+
+            statusBox.style.display =
+                "none";
+
+            statusBox.textContent =
+                "⏳ SMS баталгаажуулалтыг хүлээж байна...";
         }
 
 
         if (message) {
-
-            message.textContent =
-                "✅ SMS код илгээгдлээ.";
-
-            message.style.color =
-                "#16a34a";
-
-        }
-
-
-        if (otpInput) {
-
-            otpInput.value = "";
-
-            setTimeout(function() {
-
-                otpInput.focus();
-
-            }, 100);
-
+            message.textContent = "";
         }
 
 
     } catch (error) {
 
         console.error(
-            "Change phone OTP send error:",
+            "Change phone Verify.mn send error:",
             error
         );
 
@@ -25855,11 +26020,10 @@ async function sendChangePhoneOtp() {
 
             message.textContent =
                 error.message ||
-                "SMS код илгээхэд алдаа гарлаа.";
+                "Баталгаажуулах хүсэлт үүсгэхэд алдаа гарлаа.";
 
             message.style.color =
                 "#dc2626";
-
         }
 
 
@@ -25872,123 +26036,82 @@ async function sendChangePhoneOtp() {
 
             button.textContent =
                 "Код авах";
-
         }
-
     }
-
 }
-
 
 // ==========================================
 // OTP БАТАЛГААЖУУЛАХ
 // ==========================================
 
+// ==========================================
+// CHANGE PHONE - VERIFY.MN STATUS ШАЛГАХ
+// ==========================================
+
 async function verifyChangePhoneOtp() {
-
-    const otpInput =
-        document.getElementById(
-            "changePhoneOtpInput"
-        );
-
-    const button =
-        document.getElementById(
-            "verifyChangePhoneOtpButton"
-        );
 
     const message =
         document.getElementById(
             "changePhoneMessage"
         );
 
+    const statusBox =
+        document.getElementById(
+            "changePhoneVerifyStatus"
+        );
 
-    const otp =
+
+    const newPhone =
         String(
-            otpInput?.value || ""
+            pendingChangePhone || ""
         )
         .replace(/\D/g, "")
-        .slice(0, 6);
+        .slice(-8);
+
+
+    const sessionId =
+        String(
+            window.pendingChangePhoneSessionId ||
+            ""
+        ).trim();
 
 
     if (
-        !pendingChangePhone ||
-        pendingChangePhone.length !== 8
+        newPhone.length !== 8 ||
+        !sessionId
     ) {
 
-        if (message) {
-
-            message.textContent =
-                "Шинэ утасны дугаар олдсонгүй. Дахин код авна уу.";
-
-            message.style.color =
-                "#dc2626";
-
-        }
-
-        return;
-
-    }
-
-
-    if (otp.length !== 6) {
+        stopChangePhoneVerifyPolling();
 
         if (message) {
 
             message.textContent =
-                "6 оронтой SMS код оруулна уу.";
+                "Баталгаажуулах мэдээлэл олдсонгүй. Дахин оролдоно уу.";
 
             message.style.color =
                 "#dc2626";
-
         }
 
-        otpInput?.focus();
-
         return;
-
     }
 
 
     if (!navigator.onLine) {
 
-        if (message) {
+        if (statusBox) {
 
-            message.textContent =
-                "Баталгаажуулахын тулд интернетэд холбогдоно уу.";
+            statusBox.style.display =
+                "block";
 
-            message.style.color =
-                "#dc2626";
-
+            statusBox.textContent =
+                "📡 Интернет холболт хүлээж байна...";
         }
 
         return;
-
     }
 
 
     try {
-
-        if (button) {
-
-            button.disabled =
-                true;
-
-            button.textContent =
-                "Шалгаж байна...";
-
-        }
-
-
-        if (message) {
-
-            message.textContent =
-                "Код шалгаж байна...";
-
-            message.style.color =
-                "#6366f1";
-
-        }
-
 
         const accessToken =
             await getChangePhoneAccessToken();
@@ -26016,14 +26139,15 @@ async function verifyChangePhoneOtp() {
 
                     body:
                         JSON.stringify({
+
                             action:
                                 "verify_change_phone_otp",
 
                             new_phone:
-                                pendingChangePhone,
+                                newPhone,
 
-                            otp:
-                                otp
+                            sessionId:
+                                sessionId
                         })
                 }
             );
@@ -26033,23 +26157,123 @@ async function verifyChangePhoneOtp() {
             await response.json();
 
 
+        // ==========================================
+        // VERIFY.MN - PENDING
+        // ==========================================
+
+        if (
+            result.status ===
+            "PENDING"
+        ) {
+
+            if (statusBox) {
+
+                statusBox.style.display =
+                    "block";
+
+                statusBox.textContent =
+                    "⏳ SMS баталгаажуулалтыг хүлээж байна...";
+            }
+
+            return;
+        }
+
+
+        // ==========================================
+        // VERIFY.MN - EXPIRED
+        // ==========================================
+
+        if (
+            result.status ===
+            "EXPIRED"
+        ) {
+
+            stopChangePhoneVerifyPolling();
+
+            if (statusBox) {
+
+                statusBox.style.display =
+                    "block";
+
+                statusBox.textContent =
+                    "⌛ Баталгаажуулах хугацаа дууссан.";
+            }
+
+
+            if (message) {
+
+                message.textContent =
+                    result.message ||
+                    "Баталгаажуулах хугацаа дууссан байна. Дахин оролдоно уу.";
+
+                message.style.color =
+                    "#dc2626";
+            }
+
+            return;
+        }
+
+
+        // ==========================================
+        // БУСАД АЛДАА
+        // ==========================================
+
         if (
             !response.ok ||
             !result.success
         ) {
 
-            throw new Error(
-                result.message ||
-                "Баталгаажуулахад алдаа гарлаа."
-            );
+            // Түр зуурын серверийн алдаанд polling-ийг
+            // шууд зогсоохгүй.
 
+            if (response.status >= 500) {
+
+                console.error(
+                    "Change phone Verify.mn temporary error:",
+                    result
+                );
+
+                return;
+            }
+
+
+            stopChangePhoneVerifyPolling();
+
+
+            if (message) {
+
+                message.textContent =
+                    result.message ||
+                    "Баталгаажуулахад алдаа гарлаа.";
+
+                message.style.color =
+                    "#dc2626";
+            }
+
+            return;
         }
+
+
+        // ==========================================
+        // VERIFIED + PHONE CHANGED
+        // ==========================================
+
+        if (
+            result.status !==
+            "VERIFIED"
+        ) {
+
+            return;
+        }
+
+
+        stopChangePhoneVerifyPolling();
 
 
         const changedPhone =
             String(
                 result.phone ||
-                pendingChangePhone
+                newPhone
             )
             .replace(/\D/g, "")
             .slice(-8);
@@ -26072,13 +26296,22 @@ async function verifyChangePhoneOtp() {
                 changedPhone.slice(0, 4) +
                 " " +
                 changedPhone.slice(4);
-
         }
 
 
         // SETTINGS PROFILE CARD ШИНЭЧЛЭХ
 
         await loadSettingsProfile();
+
+
+        if (statusBox) {
+
+            statusBox.style.display =
+                "block";
+
+            statusBox.textContent =
+                "✅ Утасны дугаар баталгаажлаа.";
+        }
 
 
         if (message) {
@@ -26088,11 +26321,17 @@ async function verifyChangePhoneOtp() {
 
             message.style.color =
                 "#16a34a";
-
         }
 
 
-        pendingChangePhone = "";
+        pendingChangePhone =
+            "";
+
+        window.pendingChangePhoneSessionId =
+            null;
+
+        window.pendingChangePhoneSmsUri =
+            null;
 
 
         setTimeout(function() {
@@ -26105,37 +26344,114 @@ async function verifyChangePhoneOtp() {
     } catch (error) {
 
         console.error(
-            "Change phone verify error:",
+            "Change phone Verify.mn check error:",
             error
         );
 
+        // Polling үргэлжилнэ.
+        // Түр network/server алдаанаас болж flow таслахгүй.
+    }
+}
+
+
+// ==========================================
+// CHANGE PHONE - SMS APP НЭЭХ
+// ==========================================
+
+function openChangePhoneVerifySms() {
+
+    const smsUri =
+        window.pendingChangePhoneSmsUri;
+
+    const message =
+        document.getElementById(
+            "changePhoneMessage"
+        );
+
+    const statusBox =
+        document.getElementById(
+            "changePhoneVerifyStatus"
+        );
+
+
+    if (!smsUri) {
 
         if (message) {
 
             message.textContent =
-                error.message ||
-                "Баталгаажуулахад алдаа гарлаа.";
+                "Баталгаажуулах SMS мэдээлэл олдсонгүй. Дахин оролдоно уу.";
 
             message.style.color =
                 "#dc2626";
-
         }
 
-
-    } finally {
-
-        if (button) {
-
-            button.disabled =
-                false;
-
-            button.textContent =
-                "Баталгаажуулах";
-
-        }
-
+        return;
     }
 
+
+    if (statusBox) {
+
+        statusBox.style.display =
+            "block";
+
+        statusBox.textContent =
+            "⏳ SMS баталгаажуулалтыг хүлээж байна...";
+    }
+
+
+    if (message) {
+
+        message.textContent =
+            "SMS-ээ илгээсний дараа апп руу буцаж орно уу.";
+
+        message.style.color =
+            "#6366f1";
+    }
+
+
+    stopChangePhoneVerifyPolling();
+
+
+    // Шууд нэг удаа шалгах
+    setTimeout(function() {
+
+        verifyChangePhoneOtp();
+
+    }, 1500);
+
+
+    // 3 секунд тутам шалгах
+    changePhoneVerifyPollTimer =
+        setInterval(function() {
+
+            verifyChangePhoneOtp();
+
+        }, 3000);
+
+
+    // SMS app нээх
+    window.location.href =
+        smsUri;
+}
+
+
+// ==========================================
+// CHANGE PHONE - POLLING ЗОГСООХ
+// ==========================================
+
+function stopChangePhoneVerifyPolling() {
+
+    if (
+        changePhoneVerifyPollTimer
+    ) {
+
+        clearInterval(
+            changePhoneVerifyPollTimer
+        );
+
+        changePhoneVerifyPollTimer =
+            null;
+    }
 }
 </script>
 
