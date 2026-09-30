@@ -10635,11 +10635,14 @@ body{
     font-size:16px !important;
     font-weight:950 !important;
 }
-    /* =========================================
-   ABOUT APP MODAL — SCREEN CENTER FIX
-========================================= */
+   /* =========================================================
+   ABOUT / TERMS / PRIVACY / SUPPORT — CENTER MODALS
+========================================================= */
 
-#aboutAppModal{
+#aboutAppModal,
+#termsModal,
+#privacyModal,
+#supportModal{
     position:fixed !important;
     inset:0 !important;
 
@@ -10651,23 +10654,55 @@ body{
     align-items:center !important;
     justify-content:center !important;
 
-    padding:20px !important;
+    padding:16px !important;
 
-    background:rgba(15,23,42,.35) !important;
+    background:rgba(15,23,42,.38) !important;
+
+    box-sizing:border-box !important;
 }
 
-#aboutAppModal .modal-content{
+
+/* Цагаан modal box */
+#aboutAppModal > .modal-content,
+#termsModal > .modal-content,
+#privacyModal > .modal-content,
+#supportModal > .modal-content{
     position:relative !important;
 
     width:100% !important;
-    max-width:400px !important;
+    max-width:430px !important;
 
-    max-height:90vh !important;
+    max-height:88vh !important;
     overflow-y:auto !important;
 
     margin:0 !important;
 
     transform:none !important;
+
+    border-radius:20px !important;
+
+    box-sizing:border-box !important;
+}
+
+
+/* Утас */
+@media(max-width:600px){
+
+    #aboutAppModal,
+    #termsModal,
+    #privacyModal,
+    #supportModal{
+        padding:14px !important;
+    }
+
+    #aboutAppModal > .modal-content,
+    #termsModal > .modal-content,
+    #privacyModal > .modal-content,
+    #supportModal > .modal-content{
+        max-width:400px !important;
+        max-height:90vh !important;
+    }
+
 }
 </style>
 
