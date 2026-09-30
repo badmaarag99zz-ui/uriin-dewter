@@ -7658,6 +7658,97 @@ body{
     color:
         #60786d !important;
 }
+    /* =========================================================
+   HOME SUMMARY — BLUE + GREEN + TEAL
+   Layout-д ОГТ хүрэхгүй
+========================================================= */
+
+/* Нийт авлага — цэнхэр */
+.summary-top .summary-mini:first-child {
+    background:
+        linear-gradient(
+            135deg,
+            #eef7ff 0%,
+            #e4f2ff 100%
+        ) !important;
+
+    border-color:#cfe4f5 !important;
+}
+
+.summary-top .summary-mini:first-child span {
+    color:#52708a !important;
+}
+
+.summary-top .summary-mini:first-child b,
+#totalDebt {
+    color:#24659a !important;
+}
+
+
+/* Төлсөн — ногоон */
+.summary-top .summary-mini:nth-child(2) {
+    background:
+        linear-gradient(
+            135deg,
+            #effbf5 0%,
+            #e2f7ec 100%
+        ) !important;
+
+    border-color:#ccebd9 !important;
+}
+
+.summary-top .summary-mini:nth-child(2) span {
+    color:#527566 !important;
+}
+
+.summary-top .summary-mini:nth-child(2) b,
+#totalPaid {
+    color:#16835a !important;
+}
+
+
+/* Үлдэгдэл авлага — TEAL / MINT
+   ШАР ӨНГӨ ОГТ БАЙХГҮЙ */
+.summary-remaining {
+    background:
+        linear-gradient(
+            135deg,
+            #edf9f7 0%,
+            #e6f5f5 48%,
+            #edf7fb 100%
+        ) !important;
+
+    border-color:#cce5e2 !important;
+
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.85) !important;
+}
+
+.summary-remaining > span {
+    color:#47736f !important;
+}
+
+.summary-remaining > strong,
+.summary-remaining #totalRemaining {
+    color:#245a63 !important;
+}
+
+.summary-remaining > small {
+    color:#718b8d !important;
+}
+
+
+/* Нийт хүмүүс — үлдэгдэлтэй нэг palette */
+.summary-people-pill {
+    background:#edf8f5 !important;
+    border-color:#cfe7df !important;
+}
+
+.summary-people-pill span,
+.summary-people-pill b,
+#totalPeople {
+    color:#477166 !important;
+}
 </style>
 
 </head>
