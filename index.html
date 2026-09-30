@@ -3520,11 +3520,16 @@ body{
     color:#52677D !important;
 }
 
-/* Date stays visually separate above the slogan */
+/* ===== HERO OVERLAP FIX ===== */
 .brand-message .home-today-date{
-    margin-top:-39px !important;
-    margin-bottom:18px !important;
+    margin-top:0 !important;
+    margin-bottom:14px !important;
     background:#F4F7F9 !important;
+}
+
+.brand-message{
+    position:relative !important;
+    z-index:1 !important;
 }
 
 /* Current summary-side contains 3 items.
