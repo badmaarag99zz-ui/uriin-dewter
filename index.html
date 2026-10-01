@@ -23976,8 +23976,213 @@ async function updateHeaderUserPhone() {
         console.error("Header phone error:", error);
     }
 }
+// ==========================================
+// SYSTEM NOTIFICATIONS
+// ==========================================
 
-function showNotifications() {
+window.systemNotifications = [];
+
+
+async function loadSystemNotifications() {
+
+    /*
+        Offline үед database руу хүсэлт
+        явуулахгүй.
+
+        Өрийн local notification хэвийн
+        ажилласаар байна.
+    */
+    if (!navigator.onLine) {
+
+        window.systemNotifications = [];
+
+        updateCombinedNotificationBadge();
+
+        return;
+    }
+
+
+    try {
+
+        const user =
+            await getCurrentUser();
+
+        if (!user || !user.id) {
+
+            window.systemNotifications = [];
+
+            updateCombinedNotificationBadge();
+
+            return;
+        }
+
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("notifications")
+                .select(
+                    "id, type, title, message, is_read, created_at"
+                )
+                .eq("user_id", user.id)
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                )
+                .limit(50);
+
+
+        if (error) {
+
+            console.error(
+                "System notification load error:",
+                error
+            );
+
+            return;
+        }
+
+
+        window.systemNotifications =
+            Array.isArray(data)
+                ? data
+                : [];
+
+
+        updateCombinedNotificationBadge();
+
+
+    } catch (error) {
+
+        console.error(
+            "System notification load failed:",
+            error
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// COMBINED NOTIFICATION BADGE
+// Debt + System
+// ==========================================
+
+function updateCombinedNotificationBadge() {
+
+    const badge =
+        document.getElementById(
+            "notificationBadge"
+        );
+
+    if (!badge) {
+        return;
+    }
+
+
+    // ==========================================
+    // UNSEEN DEBT NOTIFICATIONS
+    // ==========================================
+
+    const currentDebtIds =
+        Array.isArray(
+            window.currentDebtNotificationIds
+        )
+            ? window.currentDebtNotificationIds
+            : [];
+
+
+    let seenDebtIds = [];
+
+    try {
+
+        seenDebtIds =
+            JSON.parse(
+                localStorage.getItem(
+                    "seenDebtNotificationIds"
+                ) || "[]"
+            );
+
+        if (!Array.isArray(seenDebtIds)) {
+            seenDebtIds = [];
+        }
+
+    } catch (error) {
+
+        seenDebtIds = [];
+
+    }
+
+
+    const unseenDebtCount =
+        currentDebtIds.filter(
+            id =>
+                !seenDebtIds.includes(id)
+        ).length;
+
+
+    // ==========================================
+    // UNREAD SYSTEM NOTIFICATIONS
+    // ==========================================
+
+    const systemNotifications =
+        Array.isArray(
+            window.systemNotifications
+        )
+            ? window.systemNotifications
+            : [];
+
+
+    const unreadSystemCount =
+        systemNotifications.filter(
+            item =>
+                item &&
+                item.is_read !== true
+        ).length;
+
+
+    // ==========================================
+    // TOTAL
+    // ==========================================
+
+    const total =
+        unseenDebtCount +
+        unreadSystemCount;
+
+
+    if (total > 0) {
+
+        badge.textContent =
+            total > 99
+                ? "99+"
+                : String(total);
+
+        badge.style.display =
+            "flex";
+
+    } else {
+
+        badge.style.display =
+            "none";
+
+    }
+
+}
+async function showNotifications() {
+
+    // ==========================================
+    // SYSTEM NOTIFICATIONS ШИНЭЧЛЭХ
+    // ==========================================
+
+    if (navigator.onLine) {
+        await loadSystemNotifications();
+    }
+
 
     const notifications =
         window.debtNotifications || {
@@ -23996,9 +24201,18 @@ function showNotifications() {
             ? notifications.dueSoon
             : [];
 
+    const systemNotifications =
+        Array.isArray(window.systemNotifications)
+            ? window.systemNotifications
+            : [];
 
-    // Мэдэгдэл байхгүй
+
+    // ==========================================
+    // МЭДЭГДЭЛ БАЙХГҮЙ
+    // ==========================================
+
     if (
+        systemNotifications.length === 0 &&
         overdue.length === 0 &&
         dueSoon.length === 0
     ) {
@@ -24041,7 +24255,109 @@ function showNotifications() {
     };
 
 
+    const formatSystemDate = function(value) {
+
+        if (!value) return "";
+
+        const date =
+            new Date(value);
+
+        if (Number.isNaN(date.getTime())) {
+            return "";
+        }
+
+        return date.toLocaleString(
+            "mn-MN",
+            {
+                year: "numeric",
+                month: "2-digit",
+                day: "2-digit",
+                hour: "2-digit",
+                minute: "2-digit"
+            }
+        );
+
+    };
+
+
     let html = "";
+
+
+    // ==========================================
+    // SYSTEM NOTIFICATIONS
+    // ==========================================
+
+    if (systemNotifications.length > 0) {
+
+        html += `
+            <div class="notification-popup-section">
+
+                <div class="notification-popup-heading">
+                    <span>
+                        📢 Системийн мэдэгдэл
+                    </span>
+
+                    <b>
+                        ${systemNotifications.length}
+                    </b>
+                </div>
+        `;
+
+
+        systemNotifications.forEach(function(item) {
+
+            const icon =
+                item.type === "subscription_approved"
+                    ? "🎉"
+                    : item.type === "subscription_rejected"
+                        ? "⚠️"
+                        : "📢";
+
+            html += `
+                <div class="notification-debt-item">
+
+                    <div class="notification-debt-main">
+
+                        <strong>
+                            ${icon}
+                            ${escapeNotificationHtml(
+                                item.title || "Мэдэгдэл"
+                            )}
+                        </strong>
+
+                        <small style="
+                            display:block;
+                            margin-top:5px;
+                            line-height:1.5;
+                        ">
+                            ${escapeNotificationHtml(
+                                item.message || ""
+                            )}
+                        </small>
+
+                        <small style="
+                            display:block;
+                            margin-top:5px;
+                            color:#94a3b8;
+                        ">
+                            ${escapeNotificationHtml(
+                                formatSystemDate(
+                                    item.created_at
+                                )
+                            )}
+                        </small>
+
+                    </div>
+
+                </div>
+            `;
+
+        });
+
+
+        html += `</div>`;
+
+    }
 
 
     // ==========================================
@@ -24127,9 +24443,9 @@ function showNotifications() {
                         Хугацаа дөхсөн
                     </span>
 
-                  <b>
-    ${dueSoon.length} хүн
-</b>
+                    <b>
+                        ${dueSoon.length} хүн
+                    </b>
 
                 </div>
         `;
@@ -24231,67 +24547,142 @@ function showNotifications() {
                 ${html}
             </div>
 
-                   </div>
+        </div>
     `;
 
 
-    document.body.appendChild(
-        overlay
-    );
+    document.body.appendChild(overlay);
 
 
- const closePopup = function() {
+    // ==========================================
+    // SYSTEM NOTIFICATIONS → READ
+    // ==========================================
 
-    // Үзсэн төлөвийг хадгална
-   if (Array.isArray(window.currentDebtNotificationIds)) {
-
-    localStorage.setItem(
-        "seenDebtNotificationIds",
-        JSON.stringify(
-            window.currentDebtNotificationIds
-        )
-    );
-
-}
-
-    // Badge арилгана
-    const badge =
-        document.getElementById(
-            "notificationBadge"
-        );
-
-    if (badge) {
-        badge.style.display = "none";
-    }
+    const unreadSystemIds =
+        systemNotifications
+            .filter(
+                item =>
+                    item &&
+                    item.is_read !== true
+            )
+            .map(
+                item => item.id
+            );
 
 
-    // Popup хаана
     if (
-        typeof removePopup === "function"
+        navigator.onLine &&
+        unreadSystemIds.length > 0
     ) {
 
-        removePopup(overlay);
+        try {
 
-    } else {
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("notifications")
+                    .update({
+                        is_read: true
+                    })
+                    .in(
+                        "id",
+                        unreadSystemIds
+                    );
 
-        overlay.remove();
+
+            if (error) {
+
+                console.error(
+                    "Notification read update error:",
+                    error
+                );
+
+            } else {
+
+                window.systemNotifications =
+                    systemNotifications.map(
+                        function(item) {
+
+                            if (
+                                unreadSystemIds.includes(
+                                    item.id
+                                )
+                            ) {
+
+                                return {
+                                    ...item,
+                                    is_read: true
+                                };
+
+                            }
+
+                            return item;
+
+                        }
+                    );
+
+            }
+
+        } catch (error) {
+
+            console.error(
+                "Notification read update failed:",
+                error
+            );
+
+        }
 
     }
-};
+
+
+    const closePopup = function() {
+
+        // ==========================================
+        // ӨРИЙН МЭДЭГДЛҮҮДИЙГ ҮЗСЭНД ТООЦНО
+        // ==========================================
+
+        if (
+            Array.isArray(
+                window.currentDebtNotificationIds
+            )
+        ) {
+
+            localStorage.setItem(
+                "seenDebtNotificationIds",
+                JSON.stringify(
+                    window.currentDebtNotificationIds
+                )
+            );
+
+        }
+
+
+        updateCombinedNotificationBadge();
+
+
+        // ==========================================
+        // POPUP ХААХ
+        // ==========================================
+
+        if (
+            typeof removePopup === "function"
+        ) {
+
+            removePopup(overlay);
+
+        } else {
+
+            overlay.remove();
+
+        }
+
+    };
+
 
     overlay
         .querySelector(
             ".notification-center-close"
-        )
-        .addEventListener(
-            "click",
-            closePopup
-        );
-
-
-    overlay
-        .querySelector(
-            ".notification-center-ok"
         )
         .addEventListener(
             "click",
@@ -28018,7 +28409,7 @@ if (unseenNotificationIds.length > 0) {
 // Popup хаах үед хадгалахад ашиглана
 window.currentDebtNotificationIds =
     currentNotificationIds;
-
+updateCombinedNotificationBadge();
 } // if (badge)
 
 } // checkDebtNotifications
