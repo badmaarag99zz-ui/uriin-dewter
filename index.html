@@ -16699,46 +16699,119 @@ await checkLoginOnLoad();
 
 async function logoutUser() {
 
-    if (navigator.onLine) {
+    // ==========================================
+    // SUPABASE LOCAL SESSION CLEAR
+    // Online / Offline аль алинд нь
+    // ==========================================
 
-        try {
+    try {
 
-            await supabaseClient.auth.signOut();
+        await supabaseClient.auth.signOut({
+            scope: "local"
+        });
 
-        } catch (error) {
+    } catch (error) {
 
-            console.log(
-                "Online logout error:",
-                error
-            );
-
-        }
+        console.log(
+            "Supabase local logout error:",
+            error
+        );
 
     }
 
 
-    /* ==========================================
-       OFFLINE SESSION CLEAR
-    ========================================== */
+    // ==========================================
+    // CURRENT USER CACHE CLEAR
+    // ==========================================
 
     localStorage.removeItem(
         "uriin_dewter_offline_current"
     );
 
+    localStorage.removeItem(
+        "uriin_dewter_offline_auth"
+    );
+
+    localStorage.removeItem(
+        "uriin_dewter_subscription"
+    );
+
+
+    /*
+        user-specific cache-уудыг УСТГАХГҮЙ.
+
+        Жишээ:
+        uriin_dewter_offline_auth_11111111
+        uriin_dewter_subscription_11111111
+
+        Ингэснээр тухайн хэрэглэгч дараа нь
+        offline үед дахин нэвтэрч чадна.
+    */
+
+
+    // ==========================================
+    // CURRENT APP DATA RESET
+    // ==========================================
 
     debts = [];
 
+    window.debtNotifications = {
+        overdue: [],
+        dueSoon: [],
+        total: 0
+    };
+
+    window.currentDebtNotificationIds = [];
+
+    window.systemNotifications = [];
+
+
+    // ==========================================
+    // HEADER RESET
+    // ==========================================
+
+    const headerPhone =
+        document.getElementById(
+            "headerUserPhone"
+        );
+
+    if (headerPhone) {
+
+        headerPhone.textContent =
+            "Нэвтэрсэн хэрэглэгч";
+
+    }
+
+
+    // ==========================================
+    // NOTIFICATION BADGE RESET
+    // ==========================================
+
+    const badge =
+        document.getElementById(
+            "notificationBadge"
+        );
+
+    if (badge) {
+
+        badge.textContent = "";
+        badge.style.display = "none";
+
+    }
+
+
+    // ==========================================
+    // UI
+    // ==========================================
 
     document
         .getElementById("appContent")
-        .style.display =
-            "none";
+        .style.display = "none";
 
 
     document
         .getElementById("loginScreen")
-        .style.display =
-            "flex";
+        .style.display = "flex";
 
 }
 /* ==========================================
