@@ -23624,7 +23624,207 @@ window.addEventListener(
 
 </div>
 
+<!-- ==========================================
+     BANK TRANSFER INFO
+========================================== -->
 
+<div
+    id="subscriptionBankInfo"
+    style="
+        margin-top:16px;
+        padding:16px;
+        background:#f8fafc;
+        border:1px solid #e2e8f0;
+        border-radius:16px;
+    "
+>
+    <div
+        style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-bottom:14px;
+        "
+    >
+        <div
+            style="
+                width:40px;
+                height:40px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                border-radius:12px;
+                background:#ecfdf5;
+                font-size:20px;
+                flex-shrink:0;
+            "
+        >
+            🏦
+        </div>
+
+        <div>
+            <strong
+                style="
+                    display:block;
+                    color:#0f172a;
+                    font-size:14px;
+                "
+            >
+                Банкны шилжүүлэг
+            </strong>
+
+            <span
+                style="
+                    color:#64748b;
+                    font-size:12px;
+                "
+            >
+                Доорх дансанд төлбөрөө шилжүүлнэ үү
+            </span>
+        </div>
+    </div>
+
+
+    <!-- БАНК -->
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            padding:9px 0;
+            border-bottom:1px solid #e2e8f0;
+            font-size:13px;
+        "
+    >
+        <span style="color:#64748b;">
+            Банк
+        </span>
+
+        <strong style="color:#0f172a;">
+            ХААН Банк
+        </strong>
+    </div>
+
+
+    <!-- ДАНС ЭЗЭМШИГЧ -->
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            gap:12px;
+            padding:9px 0;
+            border-bottom:1px solid #e2e8f0;
+            font-size:13px;
+        "
+    >
+        <span style="color:#64748b;">
+            Данс эзэмшигч
+        </span>
+
+        <strong
+            id="subscriptionAccountName"
+            style="
+                color:#0f172a;
+                text-align:right;
+            "
+        >
+            YOUR_ACCOUNT_NAME
+        </strong>
+    </div>
+
+
+    <!-- ДАНСНЫ ДУГААР -->
+
+    <div
+        style="
+            padding:10px 0;
+            border-bottom:1px solid #e2e8f0;
+        "
+    >
+        <div
+            style="
+                color:#64748b;
+                font-size:12px;
+                margin-bottom:6px;
+            "
+        >
+            Дансны дугаар
+        </div>
+
+        <div
+            style="
+                display:flex;
+                align-items:center;
+                justify-content:space-between;
+                gap:10px;
+            "
+        >
+            <strong
+                id="subscriptionAccountNumber"
+                style="
+                    color:#0f172a;
+                    font-size:16px;
+                    letter-spacing:0.3px;
+                "
+            >
+                YOUR_KHAAN_ACCOUNT
+            </strong>
+
+            <button
+                type="button"
+                onclick="copySubscriptionAccount()"
+                style="
+                    border:0;
+                    padding:7px 10px;
+                    border-radius:9px;
+                    background:#e2e8f0;
+                    color:#334155;
+                    font-size:12px;
+                    font-weight:700;
+                    cursor:pointer;
+                    flex-shrink:0;
+                "
+            >
+                📋 Хуулах
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ТӨЛӨХ ДҮН -->
+
+    <div
+        style="
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            gap:12px;
+            padding:11px 0 3px;
+        "
+    >
+        <span
+            style="
+                color:#64748b;
+                font-size:13px;
+            "
+        >
+            Төлөх дүн
+        </span>
+
+        <strong
+            id="subscriptionTransferAmount"
+            style="
+                color:#15803d;
+                font-size:18px;
+            "
+        >
+            9,900₮
+        </strong>
+    </div>
+
+</div>
         <button
             type="button"
             id="paySubscriptionButton"
@@ -23836,7 +24036,23 @@ function selectSubscriptionPlan(button) {
         "Selected subscription:",
         selectedSubscriptionPlan
     );
+// ==========================================
+// БАНКНЫ ХЭСЭГ ДЭЭР ТӨЛӨХ ДҮН ШИНЭЧЛЭХ
+// ==========================================
 
+const transferAmount =
+    document.getElementById(
+        "subscriptionTransferAmount"
+    );
+
+if (transferAmount) {
+
+    transferAmount.textContent =
+        Number(
+            selectedSubscriptionPlan.price || 0
+        ).toLocaleString("mn-MN") + "₮";
+
+}
 }
  document
     .getElementById("paySubscriptionButton")
