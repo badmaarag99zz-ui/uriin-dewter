@@ -12028,6 +12028,28 @@ body{
         ›
     </span>
 </button>
+    <!-- ADMIN -->
+
+<button
+    type="button"
+    id="adminSettingsButton"
+    class="settings-menu-item"
+    style="display:none;"
+    onclick="openAdminPanel()"
+>
+    <span class="settings-menu-icon">
+        🛡️
+    </span>
+
+    <span class="settings-menu-text">
+        <strong>Админ удирдлага</strong>
+        <small>Хэрэглэгч болон төлбөрийн хүсэлтүүд</small>
+    </span>
+
+    <span class="settings-menu-arrow">
+        ›
+    </span>
+</button>
     <!-- ==========================================
      LOGOUT
 ========================================== -->
@@ -24446,14 +24468,15 @@ async function loadSettingsProfile() {
             error: profileError
         } = await supabaseClient
             .from("profiles")
-            .select(`
-                phone,
-                full_name,
-                shop_name,
-                plan,
-                subscription_expires_at,
-                avatar_path
-            `)
+           .select(`
+    phone,
+    full_name,
+    shop_name,
+    plan,
+    subscription_expires_at,
+    avatar_path,
+    role
+`)
             .eq("id", user.id)
             .single();
 
@@ -24467,7 +24490,28 @@ async function loadSettingsProfile() {
 
             return;
         }
+// =========================
+// ADMIN BUTTON
+// =========================
 
+const adminButton =
+    document.getElementById(
+        "adminSettingsButton"
+    );
+
+if (adminButton) {
+
+    if (profile?.role === "admin") {
+
+        adminButton.style.display = "";
+
+    } else {
+
+        adminButton.style.display = "none";
+
+    }
+
+}
 
         // =========================
         // НЭР
