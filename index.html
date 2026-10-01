@@ -246,6 +246,1373 @@ button {
     }
 
 }
+    /* ==========================================
+   INTRODUCTION MODAL
+========================================== */
+
+.introduction-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+
+    display: none;
+    align-items: center;
+    justify-content: center;
+
+    padding: 24px;
+
+    background: rgba(15, 23, 42, 0.58);
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.introduction-modal.show {
+    display: flex;
+}
+
+
+/* ==========================================
+   MODAL BOX
+========================================== */
+
+.introduction-modal-box {
+    width: 100%;
+    max-width: 960px;
+    height: min(90vh, 900px);
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    background: #ffffff;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.8);
+
+    border-radius: 28px;
+
+    box-shadow:
+        0 30px 90px rgba(15, 23, 42, 0.28);
+}
+
+
+/* ==========================================
+   HEADER
+========================================== */
+
+.introduction-header {
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 18px;
+
+    padding: 20px 24px;
+
+    border-bottom: 1px solid #e8edf3;
+
+    background:
+        rgba(255, 255, 255, 0.97);
+}
+
+.introduction-header-brand {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    min-width: 0;
+}
+
+.introduction-header-icon {
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 14px;
+
+    background: #eef2ff;
+
+    font-size: 21px;
+}
+
+.introduction-header h2 {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-size: 19px;
+    font-weight: 850;
+}
+
+.introduction-header p {
+    margin: 3px 0 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.introduction-close {
+    width: 40px;
+    height: 40px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #64748b;
+
+    font-size: 18px;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        transform 0.18s ease;
+}
+
+.introduction-close:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+
+    transform: rotate(4deg);
+}
+
+
+/* ==========================================
+   NAVIGATION
+========================================== */
+
+.introduction-nav {
+    flex-shrink: 0;
+
+    display: flex;
+
+    gap: 7px;
+
+    padding: 11px 24px;
+
+    overflow-x: auto;
+
+    background: #ffffff;
+
+    border-bottom: 1px solid #edf1f5;
+
+    scrollbar-width: none;
+}
+
+.introduction-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.introduction-nav button {
+    flex-shrink: 0;
+
+    border: 1px solid #e2e8f0;
+
+    border-radius: 999px;
+
+    padding: 8px 12px;
+
+    background: #ffffff;
+
+    color: #475569;
+
+    font-size: 11px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.18s ease,
+        color 0.18s ease,
+        border-color 0.18s ease;
+}
+
+.introduction-nav button:hover {
+    background: #eef2ff;
+
+    color: #4f46e5;
+
+    border-color: #c7d2fe;
+}
+
+
+/* ==========================================
+   SCROLL CONTENT
+========================================== */
+
+.introduction-content {
+    flex: 1;
+
+    min-height: 0;
+
+    overflow-y: auto;
+
+    scroll-behavior: smooth;
+
+    padding:
+        0
+        36px
+        40px;
+
+    color: #334155;
+
+    line-height: 1.75;
+
+    scrollbar-width: thin;
+}
+
+.introduction-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.introduction-content::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+
+    border-radius: 999px;
+}
+
+
+/* ==========================================
+   HERO
+========================================== */
+
+.introduction-hero {
+    position: relative;
+
+    overflow: hidden;
+
+    margin:
+        28px
+        0
+        38px;
+
+    padding:
+        42px
+        38px;
+
+    border-radius: 26px;
+
+    background:
+        linear-gradient(
+            135deg,
+            #4f46e5 0%,
+            #6366f1 52%,
+            #7c3aed 100%
+        );
+
+    color: #ffffff;
+
+    box-shadow:
+        0 18px 45px rgba(79, 70, 229, 0.22);
+}
+
+.introduction-hero::before {
+    content: "";
+
+    position: absolute;
+
+    width: 240px;
+    height: 240px;
+
+    top: -130px;
+    right: -80px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.10);
+}
+
+.introduction-hero::after {
+    content: "";
+
+    position: absolute;
+
+    width: 170px;
+    height: 170px;
+
+    bottom: -110px;
+    right: 130px;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255, 255, 255, 0.07);
+}
+
+.introduction-hero > * {
+    position: relative;
+    z-index: 2;
+}
+
+.introduction-hero-badge {
+    display: inline-flex;
+
+    margin-bottom: 15px;
+
+    padding: 6px 11px;
+
+    border:
+        1px solid rgba(255, 255, 255, 0.22);
+
+    border-radius: 999px;
+
+    background:
+        rgba(255, 255, 255, 0.12);
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.introduction-hero h1 {
+    max-width: 650px;
+
+    margin:
+        0
+        0
+        15px;
+
+    color: #ffffff;
+
+    font-size: 32px;
+    line-height: 1.2;
+
+    letter-spacing: -0.8px;
+}
+
+.introduction-hero p {
+    max-width: 680px;
+
+    margin: 0;
+
+    color:
+        rgba(255, 255, 255, 0.88);
+
+    font-size: 15px;
+    line-height: 1.75;
+}
+
+
+/* ==========================================
+   SECTIONS
+========================================== */
+
+.introduction-section {
+    scroll-margin-top: 20px;
+
+    padding:
+        12px
+        0
+        36px;
+
+    border-bottom: 1px solid #edf1f5;
+}
+
+.introduction-section:last-of-type {
+    border-bottom: 0;
+}
+
+.introduction-section-number {
+    display: inline-flex;
+
+    margin-bottom: 9px;
+
+    color: #6366f1;
+
+    font-size: 11px;
+    font-weight: 900;
+
+    letter-spacing: 1.3px;
+}
+
+.introduction-section h2 {
+    margin:
+        0
+        0
+        16px;
+
+    color: #0f172a;
+
+    font-size: 23px;
+    font-weight: 850;
+
+    letter-spacing: -0.4px;
+}
+
+.introduction-section > p {
+    margin:
+        0
+        0
+        14px;
+
+    color: #475569;
+
+    font-size: 14px;
+}
+
+
+/* ==========================================
+   HIGHLIGHT
+========================================== */
+
+.introduction-highlight {
+    margin:
+        22px
+        0;
+
+    padding: 20px;
+
+    border:
+        1px solid #c7d2fe;
+
+    border-radius: 18px;
+
+    background: #eef2ff;
+}
+
+.introduction-highlight strong {
+    display: block;
+
+    margin-bottom: 7px;
+
+    color: #4338ca;
+
+    font-size: 14px;
+}
+
+.introduction-highlight p {
+    margin: 0;
+
+    color: #475569;
+
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   NOTICE
+========================================== */
+
+.introduction-notice {
+    display: flex;
+
+    gap: 13px;
+
+    margin:
+        22px
+        0;
+
+    padding: 18px;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 18px;
+
+    background: #f8fafc;
+}
+
+.introduction-notice-icon {
+    flex-shrink: 0;
+
+    font-size: 20px;
+}
+
+.introduction-notice strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #0f172a;
+
+    font-size: 13px;
+}
+
+.introduction-notice p {
+    margin:
+        0
+        0
+        7px;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.introduction-notice p:last-child {
+    margin-bottom: 0;
+}
+
+
+/* ==========================================
+   TARGET USER CARDS
+========================================== */
+
+.introduction-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 12px;
+
+    margin-top: 20px;
+}
+
+.introduction-mini-card {
+    padding: 18px;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 17px;
+
+    background: #ffffff;
+}
+
+.introduction-mini-card > span {
+    display: block;
+
+    margin-bottom: 9px;
+
+    font-size: 23px;
+}
+
+.introduction-mini-card strong {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #0f172a;
+
+    font-size: 13px;
+}
+
+.introduction-mini-card p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   FEATURE LIST
+========================================== */
+
+.introduction-feature-list {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 11px;
+
+    margin-top: 20px;
+}
+
+.introduction-feature {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+
+    padding: 17px;
+
+    border:
+        1px solid #e5e7eb;
+
+    border-radius: 17px;
+
+    background: #ffffff;
+}
+
+.introduction-feature > span {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 11px;
+
+    background: #f1f5f9;
+
+    font-size: 17px;
+}
+
+.introduction-feature strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #0f172a;
+
+    font-size: 13px;
+}
+
+.introduction-feature p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+
+/* ==========================================
+   EXAMPLE
+========================================== */
+
+.introduction-example {
+    margin:
+        20px
+        0;
+
+    padding: 20px;
+
+    border-radius: 20px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid #e2e8f0;
+}
+
+.introduction-example-person {
+    display: inline-flex;
+
+    margin-bottom: 15px;
+
+    padding: 7px 11px;
+
+    border-radius: 999px;
+
+    background: #e0e7ff;
+
+    color: #4338ca;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.introduction-example-step {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 12px;
+}
+
+.introduction-example-step > span {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #6366f1;
+
+    color: #ffffff;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.introduction-example-step strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #0f172a;
+
+    font-size: 13px;
+}
+
+.introduction-example-step p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 12px;
+}
+
+.introduction-example-arrow {
+    margin:
+        6px
+        0
+        6px
+        13px;
+
+    color: #94a3b8;
+
+    font-size: 18px;
+}
+
+
+/* ==========================================
+   BENEFITS
+========================================== */
+
+.introduction-benefits {
+    display: grid;
+
+    grid-template-columns:
+        repeat(2, 1fr);
+
+    gap: 11px;
+
+    margin-top: 20px;
+}
+
+.introduction-benefit {
+    display: flex;
+
+    gap: 12px;
+
+    padding: 17px;
+
+    border-radius: 17px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid #e5e7eb;
+}
+
+.introduction-benefit > span {
+    font-size: 20px;
+}
+
+.introduction-benefit strong {
+    display: block;
+
+    margin-bottom: 4px;
+
+    color: #0f172a;
+
+    font-size: 13px;
+}
+
+.introduction-benefit p {
+    margin: 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   WARNINGS
+========================================== */
+
+.introduction-warning-list {
+    margin-top: 18px;
+}
+
+.introduction-warning-list > div {
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 13px;
+
+    padding: 13px 0;
+
+    border-bottom:
+        1px solid #edf1f5;
+}
+
+.introduction-warning-list > div:last-child {
+    border-bottom: 0;
+}
+
+.introduction-warning-list span {
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 9px;
+
+    background: #fff7ed;
+
+    color: #c2410c;
+
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.introduction-warning-list p {
+    margin: 3px 0 0;
+
+    color: #475569;
+
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   OFFLINE FLOW
+========================================== */
+
+.introduction-offline-flow {
+    display: flex;
+
+    align-items: stretch;
+
+    justify-content: space-between;
+
+    gap: 8px;
+
+    margin:
+        24px
+        0;
+
+    padding: 18px;
+
+    border-radius: 19px;
+
+    background: #f8fafc;
+
+    border:
+        1px solid #e2e8f0;
+}
+
+.introduction-offline-flow > div:not(.offline-arrow) {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 6px;
+
+    text-align: center;
+}
+
+.introduction-offline-flow span {
+    font-size: 22px;
+}
+
+.introduction-offline-flow strong {
+    color: #334155;
+
+    font-size: 10px;
+}
+
+.offline-arrow {
+    display: flex;
+
+    align-items: center;
+
+    color: #94a3b8;
+}
+
+
+/* ==========================================
+   FREE CARD
+========================================== */
+
+.introduction-free-card {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 20px;
+
+    margin:
+        20px
+        0;
+
+    padding: 20px;
+
+    border:
+        1px solid #bbf7d0;
+
+    border-radius: 19px;
+
+    background: #f0fdf4;
+}
+
+.introduction-free-card > div {
+    flex-shrink: 0;
+}
+
+.introduction-free-card span {
+    display: inline-flex;
+
+    margin-bottom: 6px;
+
+    padding: 4px 8px;
+
+    border-radius: 999px;
+
+    background: #16a34a;
+
+    color: #ffffff;
+
+    font-size: 9px;
+    font-weight: 900;
+}
+
+.introduction-free-card h3 {
+    margin: 0;
+
+    color: #166534;
+
+    font-size: 17px;
+}
+
+.introduction-free-card p {
+    max-width: 480px;
+
+    margin: 0;
+
+    color: #4b5563;
+
+    font-size: 12px;
+}
+
+
+/* ==========================================
+   PLANS
+========================================== */
+
+.introduction-plan-grid {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+
+    margin-top: 20px;
+}
+
+.introduction-plan-grid > div {
+    position: relative;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    padding: 17px 10px;
+
+    text-align: center;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 16px;
+
+    background: #ffffff;
+}
+
+.introduction-plan-grid span {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.introduction-plan-grid strong {
+    color: #0f172a;
+
+    font-size: 16px;
+}
+
+.introduction-plan-grid .recommended {
+    border-color: #86efac;
+
+    background: #f0fdf4;
+}
+
+.introduction-plan-grid .recommended small {
+    position: absolute;
+
+    top: -8px;
+    left: 50%;
+
+    transform: translateX(-50%);
+
+    padding: 3px 6px;
+
+    border-radius: 999px;
+
+    background: #16a34a;
+
+    color: #ffffff;
+
+    font-size: 7px;
+    font-weight: 900;
+
+    white-space: nowrap;
+}
+
+
+/* ==========================================
+   FAQ
+========================================== */
+
+.introduction-faq {
+    margin-bottom: 9px;
+
+    overflow: hidden;
+
+    border:
+        1px solid #e2e8f0;
+
+    border-radius: 15px;
+
+    background: #ffffff;
+}
+
+.introduction-faq summary {
+    position: relative;
+
+    padding:
+        15px
+        42px
+        15px
+        16px;
+
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 750;
+
+    cursor: pointer;
+
+    list-style: none;
+}
+
+.introduction-faq summary::-webkit-details-marker {
+    display: none;
+}
+
+.introduction-faq summary::after {
+    content: "+";
+
+    position: absolute;
+
+    top: 50%;
+    right: 16px;
+
+    transform: translateY(-50%);
+
+    color: #6366f1;
+
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.introduction-faq[open] summary::after {
+    content: "−";
+}
+
+.introduction-faq[open] summary {
+    background: #f8fafc;
+}
+
+.introduction-faq > p {
+    margin: 0;
+
+    padding:
+        0
+        16px
+        15px;
+
+    color: #64748b;
+
+    font-size: 12px;
+
+    line-height: 1.7;
+}
+
+
+/* ==========================================
+   FOOTER
+========================================== */
+
+.introduction-footer {
+    padding:
+        35px
+        20px
+        15px;
+
+    text-align: center;
+}
+
+.introduction-footer-logo {
+    margin-bottom: 8px;
+
+    font-size: 27px;
+}
+
+.introduction-footer strong {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #0f172a;
+
+    font-size: 15px;
+}
+
+.introduction-footer p {
+    max-width: 420px;
+
+    margin: auto;
+
+    color: #94a3b8;
+
+    font-size: 11px;
+}
+
+
+/* ==========================================
+   TABLET
+========================================== */
+
+@media (max-width: 800px) {
+
+    .introduction-modal {
+        padding: 14px;
+    }
+
+    .introduction-modal-box {
+        height: 94vh;
+
+        border-radius: 24px;
+    }
+
+    .introduction-content {
+        padding:
+            0
+            24px
+            32px;
+    }
+
+    .introduction-hero {
+        padding:
+            34px
+            28px;
+    }
+
+    .introduction-hero h1 {
+        font-size: 27px;
+    }
+
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .introduction-modal {
+        padding: 0;
+
+        align-items: stretch;
+    }
+
+    .introduction-modal-box {
+        height: 100vh;
+        max-height: none;
+
+        border-radius: 0;
+    }
+
+    .introduction-header {
+        padding:
+            14px
+            16px;
+    }
+
+    .introduction-header-icon {
+        width: 39px;
+        height: 39px;
+
+        border-radius: 12px;
+
+        font-size: 18px;
+    }
+
+    .introduction-header h2 {
+        font-size: 16px;
+    }
+
+    .introduction-header p {
+        font-size: 10px;
+    }
+
+    .introduction-close {
+        width: 36px;
+        height: 36px;
+
+        font-size: 16px;
+    }
+
+    .introduction-nav {
+        padding:
+            9px
+            14px;
+    }
+
+    .introduction-nav button {
+        padding:
+            7px
+            10px;
+
+        font-size: 10px;
+    }
+
+    .introduction-content {
+        padding:
+            0
+            16px
+            30px;
+    }
+
+    .introduction-hero {
+        margin:
+            18px
+            0
+            30px;
+
+        padding:
+            29px
+            21px;
+
+        border-radius: 21px;
+    }
+
+    .introduction-hero h1 {
+        font-size: 23px;
+
+        letter-spacing: -0.4px;
+    }
+
+    .introduction-hero p {
+        font-size: 13px;
+    }
+
+    .introduction-section {
+        padding-bottom: 29px;
+    }
+
+    .introduction-section h2 {
+        font-size: 20px;
+    }
+
+    .introduction-section > p {
+        font-size: 13px;
+    }
+
+    .introduction-grid,
+    .introduction-feature-list,
+    .introduction-benefits {
+        grid-template-columns: 1fr;
+    }
+
+    .introduction-free-card {
+        align-items: flex-start;
+        flex-direction: column;
+
+        gap: 12px;
+    }
+
+    .introduction-plan-grid {
+        grid-template-columns:
+            repeat(2, 1fr);
+
+        gap: 9px;
+    }
+
+    .introduction-offline-flow {
+        display: grid;
+
+        grid-template-columns:
+            1fr;
+
+        gap: 9px;
+    }
+
+    .offline-arrow {
+        justify-content: center;
+
+        transform: rotate(90deg);
+    }
+
+}
+
+
+/* ==========================================
+   VERY SMALL MOBILE
+========================================== */
+
+@media (max-width: 380px) {
+
+    .introduction-content {
+        padding:
+            0
+            13px
+            25px;
+    }
+
+    .introduction-hero {
+        padding:
+            25px
+            18px;
+    }
+
+    .introduction-hero h1 {
+        font-size: 21px;
+    }
+
+}
     /* LOGIN BACKGROUND DECORATION */
 
 #loginScreen::before {
@@ -8580,7 +9947,1281 @@ body{
     </div>
 
 </div>
+<!-- ==========================================
+     ТАНИЛЦУУЛГА MODAL
+========================================== -->
 
+<div
+    id="introductionModal"
+    class="introduction-modal"
+    aria-hidden="true"
+>
+    <div class="introduction-modal-box">
+
+        <!-- HEADER -->
+
+        <div class="introduction-header">
+
+            <div class="introduction-header-brand">
+
+                <div class="introduction-header-icon">
+                    📒
+                </div>
+
+                <div>
+                    <h2>Өрийн дэвтэр</h2>
+
+                    <p>
+                        Аппын дэлгэрэнгүй танилцуулга
+                    </p>
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="introduction-close"
+                onclick="closeIntroductionModal()"
+                aria-label="Танилцуулга хаах"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <div class="introduction-nav">
+
+            <button
+                type="button"
+                onclick="scrollIntroductionTo('introAbout')"
+            >
+                Танилцуулга
+            </button>
+
+            <button
+                type="button"
+                onclick="scrollIntroductionTo('introFeatures')"
+            >
+                Боломжууд
+            </button>
+
+            <button
+                type="button"
+                onclick="scrollIntroductionTo('introBenefits')"
+            >
+                Давуу тал
+            </button>
+
+            <button
+                type="button"
+                onclick="scrollIntroductionTo('introOffline')"
+            >
+                Offline
+            </button>
+
+            <button
+                type="button"
+                onclick="scrollIntroductionTo('introPlans')"
+            >
+                Эрхийн багц
+            </button>
+
+            <button
+                type="button"
+                onclick="scrollIntroductionTo('introFaq')"
+            >
+                FAQ
+            </button>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div
+            class="introduction-content"
+            id="introductionContent"
+        >
+
+
+            <!-- ======================================
+                 HERO
+            ======================================= -->
+
+            <section class="introduction-hero">
+
+                <div class="introduction-hero-badge">
+                    Цахим өрийн бүртгэл
+                </div>
+
+                <h1>
+                    Өрийн бүртгэлээ илүү хялбар,
+                    цэгцтэй удирдаарай.
+                </h1>
+
+                <p>
+                    “Өрийн дэвтэр” нь жижиг дэлгүүр,
+                    худалдаа эрхлэгчдийн өдөр тутмын
+                    өр, авлага болон төлөлтийн
+                    бүртгэлийг цахим хэлбэрээр
+                    хөтлөхөд зориулсан систем юм.
+                </p>
+
+            </section>
+
+
+            <!-- ======================================
+                 1. ӨРИЙН ДЭВТЭР ГЭЖ ЮУ ВЭ?
+            ======================================= -->
+
+            <section
+                class="introduction-section"
+                id="introAbout"
+            >
+
+                <div class="introduction-section-number">
+                    01
+                </div>
+
+                <h2>
+                    Өрийн дэвтэр гэж юу вэ?
+                </h2>
+
+                <p>
+                    Жижиг дэлгүүр болон худалдаа
+                    эрхлэгчид харилцагчдаа бараа,
+                    бүтээгдэхүүнээ дараа төлөх
+                    нөхцөлөөр өгөх үед өр төлбөрийн
+                    мэдээллийг цаасан дэвтэр дээр
+                    тэмдэглэн хөтлөх нь түгээмэл.
+                </p>
+
+                <p>
+                    Харилцагчийн нэр, утасны дугаар,
+                    авсан барааны үнийн дүн, төлсөн
+                    мөнгө болон үлдэгдлийг гараар
+                    бичиж хөтлөх нь энгийн мэт боловч
+                    бүртгэлийн тоо нэмэгдэх тусам
+                    мэдээллээ хайх, үлдэгдлийг
+                    тооцоолох, өмнөх төлөлтийг шалгах
+                    зэрэг өдөр тутмын ажил илүү
+                    төвөгтэй болдог.
+                </p>
+
+                <p>
+                    Мөн төлөлт хийснийг тэмдэглэхээ
+                    мартах, тооцоо зөрөх, өмнөх
+                    бүртгэлээ олоход хугацаа алдах,
+                    хуудас гэмтэх, дэвтэр үрэгдэх
+                    зэрэг асуудал гарах боломжтой.
+                </p>
+
+                <div class="introduction-highlight">
+
+                    <strong>
+                        “Өрийн дэвтэр”-ийн үндсэн зорилго
+                    </strong>
+
+                    <p>
+                        Цаасан дэвтэр дээр хийдэг
+                        өдөр тутмын өр төлбөрийн
+                        бүртгэлийг илүү хялбар,
+                        хурдан бөгөөд эмх цэгцтэй
+                        цахим хэлбэрээр хөтлөхөд
+                        туслах юм.
+                    </p>
+
+                </div>
+
+                <p>
+                    Харилцагч бүрийн мэдээллийг
+                    тусад нь бүртгэж, тухайн
+                    харилцагчийн нийт өр, хийсэн
+                    төлөлт, үлдэгдэл болон
+                    бүртгэлийн түүхийг нэг дороос
+                    харах боломжтой.
+                </p>
+
+                <p>
+                    Харилцагч дахин бараа өрөөр
+                    авах үед өмнөх бүртгэлийг
+                    шинээр бичих шаардлагагүй.
+                    Нэмэлт өр болгон бүртгэж,
+                    өмнөх үлдэгдэл дээр нэмж болно.
+                </p>
+
+                <p>
+                    Харин төлөлт хийх үед төлсөн
+                    дүнг бүртгэснээр үлдэгдэл
+                    шинэчлэгдэж, тухайн үйлдэл
+                    төлөлтийн түүхэнд хадгалагдана.
+                </p>
+
+                <div class="introduction-notice">
+
+                    <div class="introduction-notice-icon">
+                        ℹ️
+                    </div>
+
+                    <div>
+                        <strong>
+                            Чухал
+                        </strong>
+
+                        <p>
+                            “Өрийн дэвтэр” нь банк,
+                            банк бус санхүүгийн
+                            байгууллага, зээлийн апп
+                            эсвэл зээл олгох үйлчилгээ
+                            биш.
+                        </p>
+
+                        <p>
+                            Мөн харилцагчийн өрийг
+                            хэрэглэгчийн өмнөөс
+                            нэхэмжлэх, данснаас мөнгө
+                            татах эсвэл өр барагдуулах
+                            үйлчилгээ үзүүлэхгүй.
+                        </p>
+
+                        <p>
+                            Энэ нь таны өөрийн өр,
+                            авлагын мэдээллийг
+                            бүртгэж, хянахад зориулсан
+                            цахим хэрэгсэл юм.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 2. ХЭНД ЗОРИУЛСАН БЭ?
+            ======================================= -->
+
+            <section class="introduction-section">
+
+                <div class="introduction-section-number">
+                    02
+                </div>
+
+                <h2>
+                    Хэнд зориулсан бэ?
+                </h2>
+
+                <p>
+                    “Өрийн дэвтэр” нь үндсэндээ
+                    бараа бүтээгдэхүүнээ
+                    харилцагчдаа дараа төлөх
+                    нөхцөлөөр өгч, өр авлагын
+                    бүртгэл хөтөлдөг жижиг
+                    худалдаа эрхлэгчдэд зориулсан.
+                </p>
+
+                <div class="introduction-grid">
+
+                    <div class="introduction-mini-card">
+                        <span>🏪</span>
+                        <strong>Жижиг дэлгүүр</strong>
+                        <p>
+                            Өдөр тутмын харилцагчдын
+                            өр төлбөрийг бүртгэнэ.
+                        </p>
+                    </div>
+
+                    <div class="introduction-mini-card">
+                        <span>🛒</span>
+                        <strong>Хүнсний дэлгүүр</strong>
+                        <p>
+                            Байнгын харилцагчдын
+                            авлага, төлөлтийг хянана.
+                        </p>
+                    </div>
+
+                    <div class="introduction-mini-card">
+                        <span>👤</span>
+                        <strong>Хувиараа худалдаа эрхлэгч</strong>
+                        <p>
+                            Өөрийн авлагын бүртгэлээ
+                            нэг дор хөтөлнө.
+                        </p>
+                    </div>
+
+                    <div class="introduction-mini-card">
+                        <span>📒</span>
+                        <strong>Цаасан дэвтэр ашигладаг хүн</strong>
+                        <p>
+                            Одоогийн бүртгэлээ
+                            цахим хэлбэрт шилжүүлж
+                            болно.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 3. ҮНДСЭН БОЛОМЖУУД
+            ======================================= -->
+
+            <section
+                class="introduction-section"
+                id="introFeatures"
+            >
+
+                <div class="introduction-section-number">
+                    03
+                </div>
+
+                <h2>
+                    Үндсэн боломжууд
+                </h2>
+
+                <p>
+                    Өрийн бүртгэлийг өдөр тутам
+                    хөтлөхөд шаардлагатай үндсэн
+                    үйлдлүүдийг нэг дороос хийх
+                    боломжтой.
+                </p>
+
+
+                <div class="introduction-feature-list">
+
+                    <div class="introduction-feature">
+                        <span>👤</span>
+                        <div>
+                            <strong>
+                                Харилцагч бүртгэх
+                            </strong>
+                            <p>
+                                Харилцагчийн нэр,
+                                утасны дугаар, өрийн
+                                хэмжээ болон төлөх
+                                хугацааг бүртгэнэ.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>➕</span>
+                        <div>
+                            <strong>
+                                Нэмэлт өр бүртгэх
+                            </strong>
+                            <p>
+                                Өмнө бүртгэлтэй
+                                харилцагч дахин бараа
+                                өрөөр авбал нэмэлт өр
+                                болгон бүртгэж болно.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>💵</span>
+                        <div>
+                            <strong>
+                                Төлөлт бүртгэх
+                            </strong>
+                            <p>
+                                Хэсэгчилсэн болон
+                                бүтэн төлөлтийг
+                                бүртгэж, үлдэгдлийг
+                                шинэчилнэ.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>🕘</span>
+                        <div>
+                            <strong>
+                                Бүртгэлийн түүх
+                            </strong>
+                            <p>
+                                Өр нэмэгдсэн болон
+                                төлөлт хийгдсэн
+                                түүхийг харилцагч
+                                тус бүрээр харах
+                                боломжтой.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>🔎</span>
+                        <div>
+                            <strong>
+                                Хайлт
+                            </strong>
+                            <p>
+                                Харилцагчийг нэр
+                                болон утасны дугаараар
+                                хурдан хайж олно.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>↕️</span>
+                        <div>
+                            <strong>
+                                Эрэмбэлэлт
+                            </strong>
+                            <p>
+                                Бүртгэлүүдээ шинэ,
+                                хуучин, өрийн хэмжээ
+                                болон хугацаагаар
+                                эрэмбэлж харах
+                                боломжтой.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>📅</span>
+                        <div>
+                            <strong>
+                                Төлөх хугацаа
+                            </strong>
+                            <p>
+                                Харилцагчийн өрийг
+                                төлөх хугацаатай
+                                бүртгэж, хугацааны
+                                мэдээллийг хянаж
+                                болно.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>🔔</span>
+                        <div>
+                            <strong>
+                                Сануулга
+                            </strong>
+                            <p>
+                                Хугацаа дөхсөн болон
+                                хугацаа хэтэрсэн
+                                бүртгэлүүдийг ялгаж
+                                харахад тусална.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>📊</span>
+                        <div>
+                            <strong>
+                                Нэгдсэн мэдээлэл
+                            </strong>
+                            <p>
+                                Нийт харилцагч,
+                                нийт өр, төлөлт болон
+                                үлдэгдлийн мэдээллийг
+                                нэг дороос хянана.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-feature">
+                        <span>💾</span>
+                        <div>
+                            <strong>
+                                Нөөцлөлт
+                            </strong>
+                            <p>
+                                Өрийн бүртгэлийн
+                                мэдээллээ backup
+                                файл болгон хадгалах
+                                боломжтой.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 4. ХЭРХЭН АЖИЛЛАДАГ ВЭ?
+            ======================================= -->
+
+            <section class="introduction-section">
+
+                <div class="introduction-section-number">
+                    04
+                </div>
+
+                <h2>
+                    Хэрхэн ажилладаг вэ?
+                </h2>
+
+                <p>
+                    Жишээгээр тайлбарлая.
+                </p>
+
+
+                <div class="introduction-example">
+
+                    <div class="introduction-example-person">
+                        👤 Бат
+                    </div>
+
+                    <div class="introduction-example-step">
+
+                        <span>1</span>
+
+                        <div>
+                            <strong>
+                                80,000₮-ийн бараа өрөөр авлаа
+                            </strong>
+
+                            <p>
+                                Батыг харилцагчаар
+                                бүртгээд 80,000₮
+                                өр оруулна.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="introduction-example-arrow">
+                        ↓
+                    </div>
+
+
+                    <div class="introduction-example-step">
+
+                        <span>2</span>
+
+                        <div>
+                            <strong>
+                                30,000₮ төлөв
+                            </strong>
+
+                            <p>
+                                Төлөлт бүртгэсний
+                                дараа үлдэгдэл
+                                50,000₮ болно.
+                            </p>
+                        </div>
+
+                    </div>
+
+
+                    <div class="introduction-example-arrow">
+                        ↓
+                    </div>
+
+
+                    <div class="introduction-example-step">
+
+                        <span>3</span>
+
+                        <div>
+                            <strong>
+                                Дахин 20,000₮-ийн бараа авлаа
+                            </strong>
+
+                            <p>
+                                Нэмэлт өр бүртгэхэд
+                                үлдэгдэл 70,000₮
+                                болж шинэчлэгдэнэ.
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <p>
+                    Өр нэмэгдсэн болон төлөлт
+                    хийгдсэн үйлдлүүд тухайн
+                    харилцагчийн бүртгэлийн
+                    түүхэнд хадгалагдана.
+                </p>
+
+            </section>
+
+
+            <!-- ======================================
+                 5. ДАВУУ ТАЛ
+            ======================================= -->
+
+            <section
+                class="introduction-section"
+                id="introBenefits"
+            >
+
+                <div class="introduction-section-number">
+                    05
+                </div>
+
+                <h2>
+                    Давуу тал
+                </h2>
+
+
+                <div class="introduction-benefits">
+
+                    <div class="introduction-benefit">
+                        <span>⚡</span>
+                        <div>
+                            <strong>Хурдан</strong>
+                            <p>
+                                Цаасан дэвтрийн
+                                хуудсуудыг эргүүлж
+                                хайхын оронд нэр,
+                                утасны дугаараар
+                                хайж болно.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-benefit">
+                        <span>🧮</span>
+                        <div>
+                            <strong>
+                                Тооцооллыг хялбарчилна
+                            </strong>
+                            <p>
+                                Төлөлт болон нэмэлт
+                                өр бүртгэх үед
+                                үлдэгдлийг систем
+                                шинэчилнэ.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-benefit">
+                        <span>🗂️</span>
+                        <div>
+                            <strong>
+                                Эмх цэгцтэй
+                            </strong>
+                            <p>
+                                Харилцагч бүрийн
+                                мэдээлэл тусдаа
+                                хадгалагдаж,
+                                бүртгэлийн түүхийг
+                                харах боломжтой.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-benefit">
+                        <span>📱</span>
+                        <div>
+                            <strong>
+                                Гарын дор
+                            </strong>
+                            <p>
+                                Өр, авлагын
+                                мэдээллээ ашиглаж
+                                буй төхөөрөмжөөсөө
+                                хянах боломжтой.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-benefit">
+                        <span>📅</span>
+                        <div>
+                            <strong>
+                                Хугацааны хяналт
+                            </strong>
+                            <p>
+                                Төлөх хугацаатай
+                                бүртгэлүүдээ ялгаж
+                                харахад хялбар.
+                            </p>
+                        </div>
+                    </div>
+
+
+                    <div class="introduction-benefit">
+                        <span>📶</span>
+                        <div>
+                            <strong>
+                                Offline ажиллагаа
+                            </strong>
+                            <p>
+                                Интернэт түр
+                                тасарсан үед
+                                дэмжигдсэн үндсэн
+                                бүртгэлүүдээ
+                                үргэлжлүүлэн
+                                ашиглах боломжтой.
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 6. АНХААРАХ ЗҮЙЛС
+            ======================================= -->
+
+            <section class="introduction-section">
+
+                <div class="introduction-section-number">
+                    06
+                </div>
+
+                <h2>
+                    Анхаарах зүйлс ба хязгаарлалт
+                </h2>
+
+                <div class="introduction-warning-list">
+
+                    <div>
+                        <span>01</span>
+
+                        <p>
+                            “Өрийн дэвтэр” нь
+                            харилцагчийн өрийг
+                            төлүүлэх баталгаа
+                            өгөхгүй.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span>02</span>
+
+                        <p>
+                            Худалдаа эрхлэгч болон
+                            харилцагчийн хоорондын
+                            өр төлбөрийн харилцаанд
+                            систем өөрөө оролцохгүй.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span>03</span>
+
+                        <p>
+                            Зарим үйлдэл сервертэй
+                            холбогдох шаардлагатай
+                            тул интернет холболт
+                            шаарддаг.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span>04</span>
+
+                        <p>
+                            Хэрэглэгч өөрийн
+                            нэвтрэх мэдээлэл болон
+                            нууц үгийн нууцлалыг
+                            хамгаалах шаардлагатай.
+                        </p>
+                    </div>
+
+                    <div>
+                        <span>05</span>
+
+                        <p>
+                            Бүртгэж буй өр,
+                            төлөлтийн дүн болон
+                            харилцагчийн мэдээллийг
+                            зөв оруулах нь
+                            хэрэглэгчийн
+                            хариуцлага юм.
+                        </p>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 7. OFFLINE
+            ======================================= -->
+
+            <section
+                class="introduction-section"
+                id="introOffline"
+            >
+
+                <div class="introduction-section-number">
+                    07
+                </div>
+
+                <h2>
+                    Интернэтгүй үед хэрхэн ажиллах вэ?
+                </h2>
+
+                <p>
+                    Интернэт холболт тогтворгүй
+                    орчинд дэлгүүрийн өдөр тутмын
+                    бүртгэл бүрэн зогсох нь
+                    тохиромжгүй.
+                </p>
+
+                <p>
+                    Тиймээс өмнө нь тухайн
+                    төхөөрөмж дээр нэвтэрч
+                    ашиглаж байсан хэрэглэгч
+                    интернет түр тасарсан үед
+                    дэмжигдсэн үндсэн өрийн
+                    бүртгэлийн үйлдлүүдийг
+                    үргэлжлүүлэн ашиглах
+                    боломжтой.
+                </p>
+
+
+                <div class="introduction-offline-flow">
+
+                    <div>
+                        <span>📵</span>
+                        <strong>
+                            Интернет тасарна
+                        </strong>
+                    </div>
+
+                    <div class="offline-arrow">
+                        →
+                    </div>
+
+                    <div>
+                        <span>📒</span>
+                        <strong>
+                            Бүртгэлээ үргэлжлүүлнэ
+                        </strong>
+                    </div>
+
+                    <div class="offline-arrow">
+                        →
+                    </div>
+
+                    <div>
+                        <span>🌐</span>
+                        <strong>
+                            Интернет холбогдоно
+                        </strong>
+                    </div>
+
+                    <div class="offline-arrow">
+                        →
+                    </div>
+
+                    <div>
+                        <span>🔄</span>
+                        <strong>
+                            Мэдээлэл синк хийнэ
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="introduction-notice">
+
+                    <div class="introduction-notice-icon">
+                        ⚠️
+                    </div>
+
+                    <div>
+
+                        <strong>
+                            Интернет шаардлагатай үйлдлүүд
+                        </strong>
+
+                        <p>
+                            Шинэ хэрэглэгчийн бүртгэл,
+                            нууц үг сэргээх,
+                            серверээс мэдээлэл авах
+                            шаардлагатай зарим тохиргоо
+                            болон онлайн баталгаажуулалт
+                            шаарддаг үйлдлүүдэд
+                            интернет хэрэгтэй.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 8. FREE / ТӨЛБӨРТЭЙ
+            ======================================= -->
+
+            <section
+                class="introduction-section"
+                id="introPlans"
+            >
+
+                <div class="introduction-section-number">
+                    08
+                </div>
+
+                <h2>
+                    FREE болон төлбөртэй эрх
+                </h2>
+
+                <p>
+                    Шинээр бүртгүүлсэн хэрэглэгч
+                    эхлээд FREE эрхээр системийг
+                    ашиглаж үзэх боломжтой.
+                </p>
+
+
+                <div class="introduction-free-card">
+
+                    <div>
+                        <span>FREE</span>
+                        <h3>
+                            7 хүртэл харилцагч
+                        </h3>
+                    </div>
+
+                    <p>
+                        FREE эрхээр хамгийн ихдээ
+                        7 харилцагч бүртгэн
+                        системийн үндсэн
+                        боломжуудыг ашиглаж
+                        үзэх боломжтой.
+                    </p>
+
+                </div>
+
+
+                <p>
+                    Харилцагчийн хязгаарт хүрсний
+                    дараа шинэ харилцагч нэмэхийн
+                    тулд төлбөртэй эрх сонгож
+                    болно.
+                </p>
+
+
+                <div class="introduction-plan-grid">
+
+                    <div>
+                        <span>1 сар</span>
+                        <strong>9,900₮</strong>
+                    </div>
+
+                    <div>
+                        <span>3 сар</span>
+                        <strong>24,900₮</strong>
+                    </div>
+
+                    <div>
+                        <span>6 сар</span>
+                        <strong>44,900₮</strong>
+                    </div>
+
+                    <div class="recommended">
+                        <small>ХЭМНЭЛТТЭЙ</small>
+                        <span>1 жил</span>
+                        <strong>74,900₮</strong>
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ======================================
+                 9. АЮУЛГҮЙ БАЙДАЛ
+            ======================================= -->
+
+            <section class="introduction-section">
+
+                <div class="introduction-section-number">
+                    09
+                </div>
+
+                <h2>
+                    Мэдээллийн аюулгүй байдал
+                </h2>
+
+                <p>
+                    Хэрэглэгч бүр өөрийн
+                    бүртгэлээр нэвтэрч,
+                    өөрийн бүртгэлтэй холбоотой
+                    мэдээлэлд хандах зарчмаар
+                    систем ажиллана.
+                </p>
+
+                <p>
+                    Хэрэглэгчдийн мэдээллийн
+                    хандалтыг хооронд нь
+                    тусгаарлах хамгаалалтын
+                    тохиргоонууд ашиглагдана.
+                </p>
+
+                <p>
+                    Үүний зэрэгцээ хэрэглэгч
+                    өөрийн нууц үгийг бусдад
+                    дамжуулахгүй байх, хувийн
+                    төхөөрөмжөө хамгаалах,
+                    ашиглаж дууссаны дараа
+                    шаардлагатай тохиолдолд
+                    бүртгэлээс гарах зэрэг
+                    үндсэн аюулгүй ажиллагааг
+                    мөрдөх хэрэгтэй.
+                </p>
+
+            </section>
+
+
+            <!-- ======================================
+                 10. FAQ
+            ======================================= -->
+
+            <section
+                class="introduction-section"
+                id="introFaq"
+            >
+
+                <div class="introduction-section-number">
+                    10
+                </div>
+
+                <h2>
+                    Түгээмэл асуултууд
+                </h2>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Өрийн дэвтэр зээлийн апп уу?
+                    </summary>
+
+                    <p>
+                        Үгүй. “Өрийн дэвтэр” нь
+                        зээл олгох, мөнгө зээлүүлэх
+                        эсвэл санхүүгийн байгууллагын
+                        үйлчилгээ үзүүлэхгүй.
+                        Энэ нь өр, авлагын бүртгэл
+                        хөтлөхөд зориулсан систем.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        FREE эрхээр хэдэн харилцагч бүртгэж болох вэ?
+                    </summary>
+
+                    <p>
+                        FREE эрхээр 7 хүртэл
+                        харилцагч бүртгэх
+                        боломжтой.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        7 харилцагчийн хязгаарт хүрвэл яах вэ?
+                    </summary>
+
+                    <p>
+                        Шинэ харилцагч нэмэхийн
+                        тулд төлбөртэй эрхийн
+                        багцаас сонгож эрхээ
+                        сунгах боломжтой.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Интернэтгүй үед ажиллах уу?
+                    </summary>
+
+                    <p>
+                        Өмнө нь тухайн төхөөрөмж
+                        дээр нэвтэрч ашиглаж байсан
+                        тохиолдолд интернет түр
+                        тасарсан үед дэмжигдсэн
+                        үндсэн өрийн бүртгэлийн
+                        үйлдлүүдийг үргэлжлүүлэн
+                        ашиглах боломжтой.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Offline үед хийсэн бүртгэл яах вэ?
+                    </summary>
+
+                    <p>
+                        Offline үед хийсэн
+                        дэмжигдсэн өөрчлөлтүүд
+                        төхөөрөмж дээр түр
+                        хадгалагдаж, интернет
+                        дахин холбогдох үед
+                        сервертэй синк хийгдэнэ.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Нууц үгээ мартвал яах вэ?
+                    </summary>
+
+                    <p>
+                        Нэвтрэх хэсгийн
+                        “Нууц үг мартсан?”
+                        сонголтыг ашиглан
+                        нууц үг сэргээх
+                        үйлдлийг эхлүүлнэ.
+                        Энэ үйлдэлд интернет
+                        холболт шаардлагатай.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Харилцагч маань апп суулгах шаардлагатай юу?
+                    </summary>
+
+                    <p>
+                        Үгүй. Өрийн бүртгэлийг
+                        дэлгүүр эсвэл худалдаа
+                        эрхлэгч өөрийн
+                        “Өрийн дэвтэр”
+                        бүртгэлээр хөтөлнө.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Төлбөртэй эрхийг хэрхэн авах вэ?
+                    </summary>
+
+                    <p>
+                        Апп дотроос хүссэн
+                        хугацааны эрхийн багцаа
+                        сонгож, заасан дансанд
+                        төлбөрөө шилжүүлэн
+                        төлбөрийн хүсэлт
+                        илгээнэ.
+                    </p>
+
+                    <p>
+                        Төлбөр баталгаажсаны
+                        дараа сонгосон хугацаагаар
+                        эрх сунгагдана.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Бүртгэлээ засаж болох уу?
+                    </summary>
+
+                    <p>
+                        Тийм. Дэмжигдсэн
+                        бүртгэлийн мэдээллийг
+                        засах боломжтой.
+                    </p>
+
+                </details>
+
+
+                <details class="introduction-faq">
+
+                    <summary>
+                        Өмнөх төлөлт болон нэмэлт өрөө харж болох уу?
+                    </summary>
+
+                    <p>
+                        Болно. Харилцагчийн
+                        дэлгэрэнгүй мэдээллээс
+                        төлөлт болон нэмэлт
+                        өрийн түүхийг харах
+                        боломжтой.
+                    </p>
+
+                </details>
+
+            </section>
+
+
+            <!-- FOOTER -->
+
+            <div class="introduction-footer">
+
+                <div class="introduction-footer-logo">
+                    📒
+                </div>
+
+                <strong>
+                    Өрийн дэвтэр
+                </strong>
+
+                <p>
+                    Өр, авлагын бүртгэлийг
+                    илүү хялбар, цэгцтэй
+                    удирдахад зориулсан
+                    цахим хэрэгсэл.
+                </p>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+</div>
 
 <!-- =========================
      APP
@@ -31412,6 +34053,91 @@ async function loadAdminUserByPhone(
         `;
 
     }
+
+}
+    /* ==========================================
+   ТАНИЛЦУУЛГА MODAL
+========================================== */
+
+function openIntroductionModal() {
+
+    const modal =
+        document.getElementById(
+            "introductionModal"
+        );
+
+    const content =
+        document.getElementById(
+            "introductionContent"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.add("show");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "false"
+    );
+
+    // Нээх болгонд хамгийн дээрээс эхэлнэ
+    if (content) {
+        content.scrollTop = 0;
+    }
+
+    // Арын дэлгэц scroll хийхээс хамгаална
+    document.body.style.overflow =
+        "hidden";
+}
+
+
+/* ==========================================
+   ТАНИЛЦУУЛГА ХААХ
+========================================== */
+
+function closeIntroductionModal() {
+
+    const modal =
+        document.getElementById(
+            "introductionModal"
+        );
+
+    if (!modal) {
+        return;
+    }
+
+    modal.classList.remove("show");
+
+    modal.setAttribute(
+        "aria-hidden",
+        "true"
+    );
+
+    document.body.style.overflow = "";
+}
+
+
+/* ==========================================
+   ТАНИЛЦУУЛГЫН ХЭСЭГ РҮҮ ШИЛЖИХ
+========================================== */
+
+function scrollIntroductionTo(sectionId) {
+
+    const section =
+        document.getElementById(
+            sectionId
+        );
+
+    if (!section) {
+        return;
+    }
+
+    section.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+    });
 
 }
 </script>
