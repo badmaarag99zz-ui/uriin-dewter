@@ -16687,7 +16687,10 @@ showLedgerView("homeView");
         үүсгэнэ.
     */
 showLedgerView("homeView");
-    await checkLoginOnLoad();
+
+await checkLoginOnLoad();
+
+
 
 }
 /* ==========================================
@@ -17249,7 +17252,8 @@ async function checkLoginOnLoad() {
 // Өрийн мэдээллийг ачаалж,
 // notification-ийг refresh бүрт шинэчилнэ
 await loadDebts();
-
+// Системийн мэдэгдлийг ачаална
+await loadSystemNotifications();
 /*
  * Refresh үед Тайлан tab HTML дээр active хэвээр байж болно.
               * Энэ үед хэрэглэгч 7/30 товч дараагүй тул renderReport()
