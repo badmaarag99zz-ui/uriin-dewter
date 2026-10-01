@@ -8230,6 +8230,129 @@ body{
     }
 
 }
+    /* ==========================================
+   ADMIN USER SEARCH
+========================================== */
+
+.admin-user-search {
+    margin-bottom: 14px;
+}
+
+.admin-user-search-box {
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 0 15px;
+
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+
+    transition: .18s ease;
+}
+
+.admin-user-search-box:focus-within {
+    border-color: #087443;
+
+    box-shadow:
+        0 0 0 3px rgba(8,116,67,.08);
+}
+
+.admin-user-search-box span {
+    flex-shrink: 0;
+    font-size: 16px;
+}
+
+.admin-user-search-box input {
+    width: 100%;
+    height: 100%;
+
+    padding: 0;
+
+    border: 0;
+    outline: 0;
+    background: transparent;
+
+    color: #0f172a;
+    font-size: 14px;
+}
+
+.admin-user-search-box input::placeholder {
+    color: #94a3b8;
+}
+
+
+/* RESULT */
+
+.admin-user-search-result {
+    display: none;
+    margin-top: 10px;
+}
+
+.admin-user-result-card {
+    padding: 15px;
+
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+}
+
+.admin-user-result-top {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.admin-user-result-name {
+    font-size: 14px;
+    font-weight: 800;
+    color: #0f172a;
+}
+
+.admin-user-result-phone {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.admin-user-plan {
+    flex-shrink: 0;
+
+    padding: 5px 9px;
+    border-radius: 999px;
+
+    background: #eef7f2;
+    color: #087443;
+
+    font-size: 11px;
+    font-weight: 800;
+}
+
+.admin-user-result-info {
+    margin-top: 12px;
+    padding-top: 12px;
+
+    border-top: 1px solid #f1f5f9;
+
+    font-size: 12px;
+    line-height: 1.7;
+    color: #64748b;
+}
+
+.admin-user-not-found {
+    padding: 14px;
+
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+}
     </style>
 </head>
 
@@ -12357,7 +12480,32 @@ body{
 
         </div>
 
+<!-- ==========================================
+     USER SEARCH
+========================================== -->
 
+<div class="admin-user-search">
+
+    <div class="admin-user-search-box">
+        <span>🔍</span>
+
+        <input
+            type="tel"
+            id="adminUserSearchInput"
+            inputmode="numeric"
+            maxlength="8"
+            placeholder="Бүртгэлтэй утасны дугаар..."
+            autocomplete="off"
+            oninput="searchAdminUser()"
+        >
+    </div>
+
+    <div
+        id="adminUserSearchResult"
+        class="admin-user-search-result"
+    ></div>
+
+</div>
         <!-- SUMMARY -->
 
         <div class="admin-summary">
@@ -29670,6 +29818,284 @@ async function rejectAdminPayment(
         );
 
     });
+
+}
+    /* ==========================================
+   ADMIN — SEARCH USER BY PHONE
+========================================== */
+
+let adminUserSearchTimer = null;
+
+
+function searchAdminUser() {
+
+    clearTimeout(
+        adminUserSearchTimer
+    );
+
+    const input =
+        document.getElementById(
+            "adminUserSearchInput"
+        );
+
+    if (!input) {
+        return;
+    }
+
+
+    // Зөвхөн тоо
+    input.value =
+        input.value.replace(/\D/g, "");
+
+
+    const phone =
+        input.value.trim();
+
+
+    const resultBox =
+        document.getElementById(
+            "adminUserSearchResult"
+        );
+
+
+    if (!resultBox) {
+        return;
+    }
+
+
+    if (!phone) {
+
+        resultBox.style.display =
+            "none";
+
+        resultBox.innerHTML = "";
+
+        return;
+    }
+
+
+    // Хэт эрт database query хийхгүй
+    if (phone.length < 4) {
+
+        resultBox.style.display =
+            "none";
+
+        resultBox.innerHTML = "";
+
+        return;
+    }
+
+
+    adminUserSearchTimer =
+        setTimeout(
+            function() {
+
+                loadAdminUserByPhone(
+                    phone
+                );
+
+            },
+            300
+        );
+
+}
+
+
+/* ==========================================
+   LOAD USER
+========================================== */
+
+async function loadAdminUserByPhone(
+    phone
+) {
+
+    const resultBox =
+        document.getElementById(
+            "adminUserSearchResult"
+        );
+
+
+    if (!resultBox) {
+        return;
+    }
+
+
+    resultBox.style.display =
+        "block";
+
+    resultBox.innerHTML = `
+        <div class="admin-user-not-found">
+            ⏳ Хайж байна...
+        </div>
+    `;
+
+
+    try {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select(`
+                id,
+                phone,
+                full_name,
+                shop_name,
+                plan,
+                subscription_expires_at,
+                temporary_access_expires_at,
+                role
+            `)
+            .eq(
+                "phone",
+                phone
+            )
+            .maybeSingle();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        if (!data) {
+
+            resultBox.innerHTML = `
+                <div class="admin-user-not-found">
+                    Ийм утасны дугаартай хэрэглэгч олдсонгүй.
+                </div>
+            `;
+
+            return;
+        }
+
+
+        const name =
+            data.full_name ||
+            data.shop_name ||
+            "Нэр оруулаагүй";
+
+
+        const planText =
+            data.plan === "paid"
+                ? "PAID"
+                : "FREE";
+
+
+        let subscriptionText =
+            "—";
+
+
+        if (data.subscription_expires_at) {
+
+            subscriptionText =
+                new Date(
+                    data.subscription_expires_at
+                ).toLocaleString(
+                    "mn-MN"
+                );
+
+        }
+
+
+        let temporaryText =
+            "Байхгүй";
+
+
+        if (data.temporary_access_expires_at) {
+
+            const temporaryDate =
+                new Date(
+                    data.temporary_access_expires_at
+                );
+
+            if (
+                temporaryDate.getTime() >
+                Date.now()
+            ) {
+
+                temporaryText =
+                    temporaryDate.toLocaleString(
+                        "mn-MN"
+                    );
+
+            }
+
+        }
+
+
+        resultBox.innerHTML = `
+            <div class="admin-user-result-card">
+
+                <div class="admin-user-result-top">
+
+                    <div>
+                        <div class="admin-user-result-name">
+                            ${escapeAdminHtml(name)}
+                        </div>
+
+                        <div class="admin-user-result-phone">
+                            📱 ${escapeAdminHtml(data.phone || "—")}
+                        </div>
+                    </div>
+
+                    <span class="admin-user-plan">
+                        ${planText}
+                    </span>
+
+                </div>
+
+                <div class="admin-user-result-info">
+
+                    <div>
+                        🏪 Дэлгүүр:
+                        <strong>
+                            ${escapeAdminHtml(data.shop_name || "—")}
+                        </strong>
+                    </div>
+
+                    <div>
+                        📅 Эрх дуусах:
+                        <strong>
+                            ${escapeAdminHtml(subscriptionText)}
+                        </strong>
+                    </div>
+
+                    <div>
+                        ⏱ Түр эрх:
+                        <strong>
+                            ${escapeAdminHtml(temporaryText)}
+                        </strong>
+                    </div>
+
+                    <div>
+                        🛡️ Role:
+                        <strong>
+                            ${escapeAdminHtml(data.role || "user")}
+                        </strong>
+                    </div>
+
+                </div>
+
+            </div>
+        `;
+
+
+    } catch (error) {
+
+        console.error(
+            "Admin user search error:",
+            error
+        );
+
+        resultBox.innerHTML = `
+            <div class="admin-user-not-found">
+                Хэрэглэгч хайх үед алдаа гарлаа.
+            </div>
+        `;
+
+    }
 
 }
 </script>
