@@ -11762,7 +11762,11 @@ body{
 }
    
 
-/* ---------- MODAL HEADER ---------- */
+/* ==================================================
+   AUTH MODALS — FINAL MODERN DESIGN
+================================================== */
+
+/* ---------- HEADER ---------- */
 
 #registerModal .debt-modal-header,
 #forgotPasswordModal .debt-modal-header,
@@ -11770,10 +11774,10 @@ body{
 #forgotPasswordModal .modal-header,
 #changePhoneModal .modal-header {
 
-    margin-bottom: 16px !important;
-    padding-bottom: 15px !important;
+    margin-bottom: 18px !important;
+    padding-bottom: 16px !important;
 
-    border-bottom: 1px solid #eef2f6 !important;
+    border-bottom: 1px solid #edf3ef !important;
 }
 
 
@@ -11788,13 +11792,13 @@ body{
 #forgotPasswordModal #forgotSubtitle,
 #changePhoneModal #changePhoneSubtitle {
 
-    margin-top: 5px !important;
+    margin-top: 6px !important;
     margin-bottom: 0 !important;
 
-    font-size: 11.5px !important;
-    line-height: 1.45 !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
 
-    color: #84928b !important;
+    color: #7c8b83 !important;
 }
 
 
@@ -11806,6 +11810,7 @@ body{
 
     width: 34px !important;
     height: 34px !important;
+    min-width: 34px !important;
 
     display: flex !important;
     align-items: center !important;
@@ -11813,16 +11818,24 @@ body{
 
     padding: 0 !important;
 
-    border: none !important;
+    border: 1px solid #e5ede8 !important;
     border-radius: 50% !important;
 
-    background: #f1f5f9 !important;
-    color: #8492a6 !important;
+    background-color: #f8fbf9 !important;
+    background-image: none !important;
 
-    font-size: 18px !important;
+    color: #829188 !important;
+
+    font-size: 17px !important;
     line-height: 1 !important;
 
-    transition: .18s ease !important;
+    cursor: pointer !important;
+
+    transition:
+        background-color .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        transform .18s ease !important;
 }
 
 
@@ -11830,8 +11843,14 @@ body{
 #forgotPasswordModal .modal-close:hover,
 #changePhoneModal .modal-close:hover {
 
-    background: #e8eef5 !important;
-    color: #475569 !important;
+    background-color: #eef7f2 !important;
+    background-image: none !important;
+
+    border-color: #cfe3d8 !important;
+
+    color: #087443 !important;
+
+    transform: rotate(5deg) !important;
 }
 
 
@@ -11843,12 +11862,13 @@ body{
 
     display: block !important;
 
+    margin-top: 14px !important;
     margin-bottom: 7px !important;
 
     font-size: 12px !important;
     font-weight: 750 !important;
 
-    color: #334155 !important;
+    color: #3d5147 !important;
 }
 
 
@@ -11859,25 +11879,36 @@ body{
 #changePhoneModal input {
 
     width: 100% !important;
-    min-height: 46px !important;
+    min-height: 48px !important;
 
     padding: 0 14px !important;
 
-    border: 1px solid #dbe3ed !important;
-    border-radius: 12px !important;
+    border: 1px solid #dce7e1 !important;
+    border-radius: 13px !important;
 
-    background: #fbfcfe !important;
+    background-color: #f8fbf9 !important;
+    background-image: none !important;
 
-    color: #172033 !important;
+    color: #17251e !important;
 
     font-size: 14px !important;
 
     outline: none !important;
 
+    box-sizing: border-box !important;
+
     transition:
         border-color .18s ease,
         box-shadow .18s ease,
-        background .18s ease !important;
+        background-color .18s ease !important;
+}
+
+
+#registerModal input:hover,
+#forgotPasswordModal input:hover,
+#changePhoneModal input:hover {
+
+    border-color: #cbdcd3 !important;
 }
 
 
@@ -11885,12 +11916,20 @@ body{
 #forgotPasswordModal input:focus,
 #changePhoneModal input:focus {
 
-    background: #ffffff !important;
+    background-color: #ffffff !important;
 
-    border-color: #64748b !important;
+    border-color: #15915b !important;
 
     box-shadow:
-        0 0 0 3px rgba(100,116,139,.12) !important;
+        0 0 0 3px rgba(8,116,67,.10) !important;
+}
+
+
+#registerModal input::placeholder,
+#forgotPasswordModal input::placeholder,
+#changePhoneModal input::placeholder {
+
+    color: #a1ada7 !important;
 }
 
 
@@ -11900,7 +11939,7 @@ body{
 #forgotPasswordModal .form-group,
 #changePhoneModal .form-group {
 
-    margin-bottom: 15px !important;
+    margin-bottom: 14px !important;
 }
 
 
@@ -11915,31 +11954,35 @@ body{
 #changePhoneModal .save-btn {
 
     width: 100% !important;
-    min-height: 46px !important;
+    min-height: 48px !important;
 
-    margin-top: 14px !important;
-    padding: 11px 16px !important;
+    margin-top: 18px !important;
+    padding: 12px 16px !important;
 
     border: none !important;
-    border-radius: 12px !important;
+    border-radius: 13px !important;
 
     background-color: rgb(8, 116, 67) !important;
-background-image: none !important;
-color: #ffffff !important;
+    background-image: none !important;
+
+    color: #ffffff !important;
 
     font-size: 13px !important;
-    font-weight: 800 !important;
+    font-weight: 850 !important;
 
     box-shadow:
-        0 5px 12px rgba(51,65,85,.12) !important;
+        0 7px 16px rgba(8,116,67,.18) !important;
 
     cursor: pointer !important;
 
     transition:
         transform .15s ease,
-        background .15s ease !important;
+        background-color .15s ease,
+        box-shadow .15s ease !important;
 }
 
+
+/* ---------- PRIMARY BUTTON HOVER ---------- */
 
 #registerModal .modal-save-btn:hover,
 #forgotPasswordModal .modal-save-btn:hover,
@@ -11949,11 +11992,26 @@ color: #ffffff !important;
 #forgotPasswordModal .save-btn:hover,
 #changePhoneModal .save-btn:hover {
 
-    background: #455d74 !important;
+    background-color: rgb(6, 98, 56) !important;
+    background-image: none !important;
+
+    box-shadow:
+        0 9px 20px rgba(8,116,67,.23) !important;
 
     transform: translateY(-1px) !important;
 }
 
+
+/* ---------- DISABLED BUTTON ---------- */
+
+#registerModal button:disabled,
+#forgotPasswordModal button:disabled,
+#changePhoneModal button:disabled {
+
+    opacity: .62 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
 
 /* ---------- VERIFY.MN STEP ---------- */
 
