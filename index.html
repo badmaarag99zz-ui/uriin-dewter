@@ -12092,6 +12092,155 @@ body{
 </button>
 </section>
     <!-- ==========================================
+     ADMIN VIEW
+========================================== -->
+
+<section id="adminView" class="ledger-view">
+
+    <div style="
+        max-width:900px;
+        margin:0 auto;
+        padding:20px 16px 110px;
+    ">
+
+        <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            gap:12px;
+            margin-bottom:22px;
+        ">
+            <div>
+                <h2 style="margin:0;">
+                    🛡️ Админ удирдлага
+                </h2>
+
+                <p style="
+                    margin:5px 0 0;
+                    font-size:13px;
+                    color:#64748b;
+                ">
+                    Хэрэглэгч болон төлбөрийн хүсэлтүүд
+                </p>
+            </div>
+
+            <button
+                type="button"
+                onclick="showLedgerView('menuView')"
+                style="
+                    border:0;
+                    background:#f1f5f9;
+                    border-radius:12px;
+                    padding:10px 14px;
+                    cursor:pointer;
+                    font-weight:700;
+                "
+            >
+                ← Буцах
+            </button>
+        </div>
+
+
+        <!-- SUMMARY -->
+
+        <div style="
+            display:grid;
+            grid-template-columns:repeat(2,1fr);
+            gap:12px;
+            margin-bottom:22px;
+        ">
+
+            <div class="dashboard-card">
+                <div style="font-size:12px;color:#64748b;">
+                    Нийт хэрэглэгч
+                </div>
+
+                <strong
+                    id="adminTotalUsers"
+                    style="font-size:24px;"
+                >
+                    —
+                </strong>
+            </div>
+
+            <div class="dashboard-card">
+                <div style="font-size:12px;color:#64748b;">
+                    Хүлээгдэж буй хүсэлт
+                </div>
+
+                <strong
+                    id="adminPendingCount"
+                    style="font-size:24px;"
+                >
+                    —
+                </strong>
+            </div>
+
+        </div>
+
+
+        <!-- PAYMENT REQUESTS -->
+
+        <div class="dashboard-card">
+
+            <div style="
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:15px;
+            ">
+
+                <div>
+                    <strong>
+                        Төлбөрийн хүсэлтүүд
+                    </strong>
+
+                    <div style="
+                        margin-top:3px;
+                        font-size:12px;
+                        color:#64748b;
+                    ">
+                        Хүлээгдэж буй хүсэлтүүд
+                    </div>
+                </div>
+
+                <button
+                    type="button"
+                    onclick="loadAdminDashboard()"
+                    style="
+                        border:0;
+                        background:#eef7f2;
+                        color:#087443;
+                        padding:8px 12px;
+                        border-radius:10px;
+                        cursor:pointer;
+                        font-weight:750;
+                    "
+                >
+                    ↻ Шинэчлэх
+                </button>
+
+            </div>
+
+            <div id="adminPaymentRequests">
+
+                <div style="
+                    padding:25px 10px;
+                    text-align:center;
+                    color:#94a3b8;
+                    font-size:13px;
+                ">
+                    Уншиж байна...
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+    <!-- ==========================================
      FAQ MODAL
 ========================================== -->
 
@@ -28495,6 +28644,427 @@ if (debtAmountInput) {
  }
  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',polish); else polish();
 })();
+    /* ==========================================
+   ADMIN PANEL
+========================================== */
+
+async function openAdminPanel() {
+
+    try {
+
+        const {
+            data: { user },
+            error: userError
+        } = await supabaseClient.auth.getUser();
+
+
+        if (userError || !user) {
+            throw new Error(
+                "Нэвтэрсэн хэрэглэгч олдсонгүй."
+            );
+        }
+
+
+        // ADMIN ЭРХИЙГ ДАХИН ШАЛГАНА
+
+        const {
+            data: profile,
+            error: profileError
+        } = await supabaseClient
+            .from("profiles")
+            .select("role")
+            .eq("id", user.id)
+            .single();
+
+
+        if (profileError) {
+            throw profileError;
+        }
+
+
+        if (profile?.role !== "admin") {
+
+            await appAlert(
+                "Энэ хэсэгт нэвтрэх эрхгүй байна."
+            );
+
+            return;
+        }
+
+
+        showLedgerView("adminView");
+
+        await loadAdminDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Admin panel error:",
+            error
+        );
+
+        await appAlert(
+            "Админ хэсгийг нээх үед алдаа гарлаа."
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   LOAD ADMIN DASHBOARD
+========================================== */
+
+async function loadAdminDashboard() {
+
+    const requestBox =
+        document.getElementById(
+            "adminPaymentRequests"
+        );
+
+    try {
+
+        if (requestBox) {
+
+            requestBox.innerHTML = `
+                <div style="
+                    padding:25px 10px;
+                    text-align:center;
+                    color:#94a3b8;
+                    font-size:13px;
+                ">
+                    Уншиж байна...
+                </div>
+            `;
+
+        }
+
+
+        // =====================================
+        // USERS
+        // =====================================
+
+        const {
+            data: users,
+            error: usersError
+        } = await supabaseClient
+            .from("profiles")
+            .select(`
+                id,
+                phone,
+                full_name,
+                shop_name,
+                plan,
+                subscription_expires_at,
+                temporary_access_expires_at,
+                role
+            `)
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (usersError) {
+            throw usersError;
+        }
+
+
+        const totalUsers =
+            document.getElementById(
+                "adminTotalUsers"
+            );
+
+        if (totalUsers) {
+
+            totalUsers.textContent =
+                Array.isArray(users)
+                    ? users.length
+                    : 0;
+
+        }
+
+
+        // =====================================
+        // PENDING PAYMENT REQUESTS
+        // =====================================
+
+        const {
+            data: requests,
+            error: requestsError
+        } = await supabaseClient
+            .from("payment_requests")
+            .select(`
+                id,
+                user_id,
+                plan_months,
+                amount,
+                status,
+                created_at
+            `)
+            .eq(
+                "status",
+                "pending"
+            )
+            .order(
+                "created_at",
+                {
+                    ascending: false
+                }
+            );
+
+
+        if (requestsError) {
+            throw requestsError;
+        }
+
+
+        const pendingCount =
+            document.getElementById(
+                "adminPendingCount"
+            );
+
+        if (pendingCount) {
+
+            pendingCount.textContent =
+                Array.isArray(requests)
+                    ? requests.length
+                    : 0;
+
+        }
+
+
+        renderAdminPaymentRequests(
+            requests || [],
+            users || []
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Admin dashboard load error:",
+            error
+        );
+
+
+        if (requestBox) {
+
+            requestBox.innerHTML = `
+                <div style="
+                    padding:24px 10px;
+                    text-align:center;
+                    color:#dc2626;
+                    font-size:13px;
+                ">
+                    Мэдээлэл ачаалж чадсангүй.
+                </div>
+            `;
+
+        }
+
+    }
+
+}
+
+
+/* ==========================================
+   RENDER PAYMENT REQUESTS
+========================================== */
+
+function renderAdminPaymentRequests(
+    requests,
+    users
+) {
+
+    const box =
+        document.getElementById(
+            "adminPaymentRequests"
+        );
+
+
+    if (!box) {
+        return;
+    }
+
+
+    if (!requests.length) {
+
+        box.innerHTML = `
+            <div style="
+                padding:30px 10px;
+                text-align:center;
+                color:#94a3b8;
+                font-size:13px;
+            ">
+                Одоогоор хүлээгдэж буй
+                төлбөрийн хүсэлт алга.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    box.innerHTML =
+        requests.map(function(request) {
+
+            const user =
+                users.find(function(item) {
+                    return (
+                        item.id ===
+                        request.user_id
+                    );
+                });
+
+
+            const name =
+                user?.full_name ||
+                user?.shop_name ||
+                "Нэргүй хэрэглэгч";
+
+
+            const phone =
+                user?.phone || "—";
+
+
+            const amount =
+                Number(
+                    request.amount || 0
+                ).toLocaleString(
+                    "mn-MN"
+                );
+
+
+            const created =
+                request.created_at
+                    ? new Date(
+                        request.created_at
+                    ).toLocaleString(
+                        "mn-MN"
+                    )
+                    : "—";
+
+
+            return `
+                <div style="
+                    padding:15px 0;
+                    border-bottom:
+                        1px solid #eef2f6;
+                ">
+
+                    <div style="
+                        display:flex;
+                        justify-content:
+                            space-between;
+                        gap:12px;
+                    ">
+
+                        <div>
+
+                            <strong>
+                                ${escapeAdminHtml(name)}
+                            </strong>
+
+                            <div style="
+                                margin-top:4px;
+                                font-size:12px;
+                                color:#64748b;
+                            ">
+                                📱 ${escapeAdminHtml(phone)}
+                            </div>
+
+                        </div>
+
+
+                        <strong style="
+                            color:#087443;
+                            white-space:nowrap;
+                        ">
+                            ${amount} ₮
+                        </strong>
+
+                    </div>
+
+
+                    <div style="
+                        margin-top:10px;
+                        font-size:12px;
+                        color:#64748b;
+                    ">
+                        ${request.plan_months} сарын эрх
+                        • ${created}
+                    </div>
+
+
+                    <div style="
+                        display:flex;
+                        gap:8px;
+                        margin-top:13px;
+                    ">
+
+                        <button
+                            type="button"
+                            disabled
+                            style="
+                                flex:1;
+                                border:0;
+                                padding:10px;
+                                border-radius:10px;
+                                background:#087443;
+                                color:white;
+                                font-weight:750;
+                                opacity:.55;
+                            "
+                        >
+                            Зөвшөөрөх
+                        </button>
+
+                        <button
+                            type="button"
+                            disabled
+                            style="
+                                flex:1;
+                                border:1px solid #fecaca;
+                                padding:10px;
+                                border-radius:10px;
+                                background:#fff;
+                                color:#dc2626;
+                                font-weight:750;
+                                opacity:.55;
+                            "
+                        >
+                            Татгалзах
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
+
+
+/* ==========================================
+   ADMIN HTML ESCAPE
+========================================== */
+
+function escapeAdminHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
 </script>
 
 </body>
