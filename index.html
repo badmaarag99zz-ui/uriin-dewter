@@ -29276,6 +29276,61 @@ if (debtAmountInput) {
 }
 </script>
 
+
+<style id="auth-v3-final-polish">
+/* FINAL V3 — auth/profile visual consistency */
+#registerPhone,#forgotPhone,#changePhoneInput{
+  padding-left:46px !important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23647b92' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='7' y='2' width='10' height='20' rx='2'/%3E%3Cpath d='M11 18h2'/%3E%3C/svg%3E") !important;
+  background-repeat:no-repeat !important;background-position:15px center !important;background-size:19px 19px !important;
+}
+#registerPhone:focus,#forgotPhone:focus,#changePhoneInput:focus{background-color:#fff !important;}
+.auth-phone-example{margin:7px 0 0 !important;text-align:center !important;color:#718096 !important;font-size:11px !important;}
+.auth-sms-btn{display:flex !important;align-items:center !important;justify-content:center !important;gap:9px !important;}
+.auth-sms-btn svg,.auth-primary-icon{width:19px;height:19px;flex:0 0 auto;}
+.auth-fee-box{display:flex;align-items:center;gap:12px;padding:13px 15px;margin:14px 0 12px;border:1px solid #f5d66e;border-radius:13px;background:#fff9e8;color:#7c4a05;font-size:13px;line-height:1.45;text-align:left;}
+.auth-fee-box svg{width:28px;height:28px;flex:0 0 auto;color:#d99a00;}
+.auth-back-btn{width:100% !important;min-height:46px !important;margin-top:10px !important;border:0 !important;border-radius:12px !important;background:#f1f5f9 !important;color:#172033 !important;font-size:13px !important;font-weight:800 !important;cursor:pointer !important;}
+/* profile now follows green design system */
+#profileEditModal .profile-edit-modal{max-width:430px !important;border:1px solid #e4ece7 !important;border-radius:22px !important;box-shadow:0 24px 65px rgba(15,23,42,.22) !important;}
+#profileEditModal .modal-header h2{color:#0f1f18 !important;font-size:22px !important;}
+#profileEditModal .profile-edit-subtitle{color:#7c8b83 !important;}
+#profileEditModal .modal-close{border:1px solid #e5ede8 !important;border-radius:50% !important;background:#f8fbf9 !important;color:#647b70 !important;}
+#profileEditModal .form-group label{color:#3d5147 !important;}
+#profileEditModal .form-group input{min-height:48px !important;border-color:#dce7e1 !important;background:#f8fbf9 !important;}
+#profileEditModal .form-group input:focus{border-color:#15915b !important;box-shadow:0 0 0 3px rgba(8,116,67,.10) !important;}
+#profileEditModal .profile-edit-action-row{border-color:#dce7e1 !important;background:#f8fbf9 !important;}
+#profileEditModal .profile-change-phone-btn,#profileEditModal .profile-edit-action-btn{background:#eaf7f0 !important;color:#087443 !important;}
+#profileEditModal .save-btn{min-height:48px !important;border-radius:13px !important;background:#087443 !important;background-image:none !important;box-shadow:0 7px 16px rgba(8,116,67,.18) !important;color:#fff !important;}
+#profileEditModal .save-btn:hover{background:#066238 !important;}
+</style>
+<script id="auth-v3-final-dom">
+(function(){
+ const smsIcon=`<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8A2.5 2.5 0 0 1 17.5 16H10l-4.5 4v-4.25A2.5 2.5 0 0 1 4 13.5v-8Z" fill="currentColor"/><path d="M8 8h8M8 11.5h5" stroke="white" stroke-width="1.7" stroke-linecap="round"/></svg>`;
+ const shield=`<svg class="auth-primary-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2.8 19 6v5.1c0 4.5-2.8 8.3-7 10.1-4.2-1.8-7-5.6-7-10.1V6l7-3.2Z" fill="currentColor"/><path d="m9.2 12 1.8 1.8 3.8-4" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+ const coins=`<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><ellipse cx="12" cy="8" rx="8" ry="4" fill="currentColor" opacity=".9"/><path d="M4 8v5c0 2.2 3.6 4 8 4s8-1.8 8-4V8" fill="currentColor" opacity=".75"/><ellipse cx="21" cy="17" rx="7" ry="3.5" fill="currentColor"/><path d="M14 17v5c0 2 3.1 3.5 7 3.5s7-1.5 7-3.5v-5" fill="currentColor" opacity=".75"/></svg>`;
+ function polish(){
+   // Primary confirmation buttons: vector shield
+   ['#registerStepForm .modal-save-btn','#forgotStepPhone .modal-save-btn','#changePhoneStepPhone .save-btn'].forEach(sel=>{const b=document.querySelector(sel); if(b && !b.querySelector('svg')) b.innerHTML=shield+'<span>Баталгаажуулах</span>';});
+   // Forgot example directly below phone input
+   const fp=document.getElementById('forgotPhone'); if(fp && !fp.parentElement.querySelector('.auth-phone-example')){const d=document.createElement('div');d.className='auth-phone-example';d.textContent='Жишээ: 99112233';fp.insertAdjacentElement('afterend',d);}
+   // Change phone example below input (placeholder stays clean)
+   const cp=document.getElementById('changePhoneInput'); if(cp){cp.placeholder='8 оронтой дугаар'; if(!cp.parentElement.querySelector('.auth-phone-example')){const d=document.createElement('div');d.className='auth-phone-example';d.textContent='Жишээ: 99112233';cp.insertAdjacentElement('afterend',d);}}
+   // SMS buttons: remove emoji, use vector icon
+   const sms=[document.querySelector('#registerStepOtp #registerSendVerifySmsBtn'),document.querySelector('#forgotStepOtp .modal-save-btn'),document.getElementById('verifyChangePhoneOtpButton')];
+   sms.forEach(b=>{if(b){b.classList.add('auth-sms-btn');b.innerHTML=smsIcon+'<span>SMS илгээж баталгаажуулах — 150₮</span>';}});
+   // Forgot fee box if missing
+   const forgotBtn=document.querySelector('#forgotStepOtp .auth-sms-btn'); if(forgotBtn && !document.querySelector('#forgotStepOtp .auth-fee-box')){const d=document.createElement('div');d.className='auth-fee-box';d.innerHTML=coins+'<span>SMS илгээхэд таны операторын <strong>150₮</strong>-ийн төлбөртэй.</span>';forgotBtn.before(d);}
+   // Change phone fee box if missing
+   const changeBtn=document.querySelector('#changePhoneStepOtp .auth-sms-btn'); if(changeBtn && !document.querySelector('#changePhoneStepOtp .auth-fee-box')){const d=document.createElement('div');d.className='auth-fee-box';d.innerHTML=coins+'<span>SMS илгээхэд таны операторын <strong>150₮</strong>-ийн төлбөртэй.</span>';changeBtn.before(d);}
+   // Back buttons consistent; keep original onclick behavior
+   const fb=document.querySelector('#forgotStepOtp button[onclick="backToForgotPhone()"]'); if(fb){fb.className='auth-back-btn';fb.removeAttribute('style');fb.textContent='←  Буцах';}
+   const cb=document.querySelector('#changePhoneStepOtp button[onclick="backToChangePhoneStep()"]'); if(cb){cb.className='auth-back-btn';cb.removeAttribute('style');cb.textContent='←  Буцах';}
+ }
+ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',polish); else polish();
+})();
+</script>
+
 </body>
 
 </html>
