@@ -12028,25 +12028,32 @@ body{
         ›
     </span>
 </button>
-    <!-- ADMIN -->
+<!-- ==========================================
+     ADMIN
+========================================== -->
 
 <button
     type="button"
     id="adminSettingsButton"
-    class="settings-menu-item"
+    class="settings-item"
     style="display:none;"
     onclick="openAdminPanel()"
 >
-    <span class="settings-menu-icon">
+    <span class="settings-item-icon">
         🛡️
     </span>
 
-    <span class="settings-menu-text">
-        <strong>Админ удирдлага</strong>
-        <small>Хэрэглэгч болон төлбөрийн хүсэлтүүд</small>
+    <span class="settings-item-content">
+        <strong>
+            Админ удирдлага
+        </strong>
+
+        <small>
+            Хэрэглэгч болон төлбөрийн хүсэлтүүд
+        </small>
     </span>
 
-    <span class="settings-menu-arrow">
+    <span class="settings-item-arrow">
         ›
     </span>
 </button>
@@ -29194,11 +29201,11 @@ async function approveAdminPayment(
     button
 ) {
 
-    const confirmed =
-        await appConfirm(
-            "Энэ төлбөрийн хүсэлтийг зөвшөөрөх үү?"
-        );
-
+   const confirmed =
+    await adminPaymentConfirm(
+        "Энэ төлбөрийн хүсэлтийг зөвшөөрөх үү?",
+        "Зөвшөөрөх"
+    );
     if (!confirmed) {
         return;
     }
@@ -29268,11 +29275,11 @@ async function rejectAdminPayment(
     button
 ) {
 
-    const confirmed =
-        await appConfirm(
-            "Энэ төлбөрийн хүсэлтийг татгалзах уу?"
-        );
-
+   const confirmed =
+    await adminPaymentConfirm(
+        "Энэ төлбөрийн хүсэлтийг татгалзах уу?",
+        "Татгалзах"
+    );
     if (!confirmed) {
         return;
     }
@@ -29330,6 +29337,88 @@ async function rejectAdminPayment(
         button.textContent = oldText;
 
     }
+
+}
+    async function adminPaymentConfirm(
+    message,
+    actionText
+) {
+
+    return new Promise(function(resolve) {
+
+        const overlay =
+            document.createElement("div");
+
+        overlay.className =
+            "app-popup-overlay";
+
+        overlay.innerHTML = `
+            <div class="app-popup">
+
+                <div class="app-popup-icon">
+                    ⚠️
+                </div>
+
+                <div class="app-popup-title">
+                    Баталгаажуулах
+                </div>
+
+                <div class="app-popup-message">
+                    ${message}
+                </div>
+
+                <div class="app-popup-buttons">
+
+                    <button
+                        type="button"
+                        class="app-popup-btn app-popup-cancel"
+                    >
+                        Болих
+                    </button>
+
+                    <button
+                        type="button"
+                        class="app-popup-btn app-popup-primary"
+                    >
+                        ${actionText}
+                    </button>
+
+                </div>
+
+            </div>
+        `;
+
+        document.body.appendChild(overlay);
+
+        const cancel =
+            overlay.querySelector(
+                ".app-popup-cancel"
+            );
+
+        const confirm =
+            overlay.querySelector(
+                ".app-popup-primary"
+            );
+
+
+        cancel.onclick = function() {
+
+            removePopup(overlay);
+
+            resolve(false);
+
+        };
+
+
+        confirm.onclick = function() {
+
+            removePopup(overlay);
+
+            resolve(true);
+
+        };
+
+    });
 
 }
 </script>
