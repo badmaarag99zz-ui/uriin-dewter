@@ -18137,6 +18137,10 @@ function showRegisterModal() {
     }, 100);
 
 }
+    // Утасны keyboard-ийг хаана
+if (document.activeElement) {
+    document.activeElement.blur();
+}
 
 function closeRegisterModal() {
 
