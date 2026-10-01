@@ -29128,38 +29128,38 @@ function renderAdminPaymentRequests(
                     ">
 
                         <button
-                            type="button"
-                            disabled
-                            style="
-                                flex:1;
-                                border:0;
-                                padding:10px;
-                                border-radius:10px;
-                                background:#087443;
-                                color:white;
-                                font-weight:750;
-                                opacity:.55;
-                            "
-                        >
-                            Зөвшөөрөх
-                        </button>
+    type="button"
+    onclick="approveAdminPayment('${request.id}', this)"
+    style="
+        flex:1;
+        border:0;
+        padding:10px;
+        border-radius:10px;
+        background:#087443;
+        color:white;
+        font-weight:750;
+        cursor:pointer;
+    "
+>
+    Зөвшөөрөх
+</button>
 
-                        <button
-                            type="button"
-                            disabled
-                            style="
-                                flex:1;
-                                border:1px solid #fecaca;
-                                padding:10px;
-                                border-radius:10px;
-                                background:#fff;
-                                color:#dc2626;
-                                font-weight:750;
-                                opacity:.55;
-                            "
-                        >
-                            Татгалзах
-                        </button>
+                       <button
+    type="button"
+    onclick="rejectAdminPayment('${request.id}', this)"
+    style="
+        flex:1;
+        border:1px solid #fecaca;
+        padding:10px;
+        border-radius:10px;
+        background:#fff;
+        color:#dc2626;
+        font-weight:750;
+        cursor:pointer;
+    "
+>
+    Татгалзах
+</button>
 
                     </div>
 
@@ -29183,6 +29183,153 @@ function escapeAdminHtml(value) {
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;")
         .replace(/'/g, "&#039;");
+
+}
+    /* ==========================================
+   ADMIN — APPROVE PAYMENT
+========================================== */
+
+async function approveAdminPayment(
+    requestId,
+    button
+) {
+
+    const confirmed =
+        await appConfirm(
+            "Энэ төлбөрийн хүсэлтийг зөвшөөрөх үү?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const oldText =
+        button.textContent;
+
+    try {
+
+        button.disabled = true;
+        button.textContent =
+            "⏳ Баталж байна...";
+
+
+        const { error } =
+            await supabaseClient.rpc(
+                "approve_payment_request",
+                {
+                    p_request_id: requestId
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        await appAlert(
+            "Төлбөрийн хүсэлтийг зөвшөөрлөө. Хэрэглэгчийн эрх амжилттай сунгагдлаа."
+        );
+
+
+        await loadAdminDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Approve payment error:",
+            error
+        );
+
+        await appAlert(
+            "Хүсэлтийг зөвшөөрөх үед алдаа гарлаа."
+        );
+
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = oldText;
+
+    }
+
+}
+
+
+
+/* ==========================================
+   ADMIN — REJECT PAYMENT
+========================================== */
+
+async function rejectAdminPayment(
+    requestId,
+    button
+) {
+
+    const confirmed =
+        await appConfirm(
+            "Энэ төлбөрийн хүсэлтийг татгалзах уу?"
+        );
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const oldText =
+        button.textContent;
+
+    try {
+
+        button.disabled = true;
+        button.textContent =
+            "⏳ Татгалзаж байна...";
+
+
+        const { error } =
+            await supabaseClient.rpc(
+                "reject_payment_request",
+                {
+                    p_request_id: requestId,
+                    p_admin_note:
+                        "Админ хүсэлтийг татгалзсан"
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        await appAlert(
+            "Төлбөрийн хүсэлтийг татгалзлаа."
+        );
+
+
+        await loadAdminDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Reject payment error:",
+            error
+        );
+
+        await appAlert(
+            "Хүсэлтийг татгалзах үед алдаа гарлаа."
+        );
+
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = oldText;
+
+    }
 
 }
 </script>
