@@ -16379,9 +16379,11 @@ if (subscription.plan === "free") {
 
             showMessage("");
 
-            await loadDebts();
+showLedgerView("homeView");
 
-            return;
+await loadDebts();
+
+return;
 
 
         } catch (error) {
@@ -16557,7 +16559,7 @@ try {
 
 
         showMessage("");
-
+showLedgerView("homeView");
         console.log(
             "🟠 NETWORK FAILED -> OFFLINE LOGIN SUCCESS"
         );
@@ -16684,7 +16686,7 @@ try {
         uriin_dewter_subscription_PHONE
         үүсгэнэ.
     */
-
+showLedgerView("homeView");
     await checkLoginOnLoad();
 
 }
