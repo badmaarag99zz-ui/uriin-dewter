@@ -13937,13 +13937,7 @@ body{
                     Шинэ утасны дугаар
                 </label>
 
-                <input
-                    type="tel"
-                    id="changePhoneInput"
-                    inputmode="numeric"
-                    maxlength="8"
-                    placeholder="Жишээ: 99112233"
-                >
+                
 
             </div>
 
@@ -14063,7 +14057,7 @@ body{
             <label>Хүний нэр</label>
             <input id="personName" type="text" placeholder="Жишээ: Бат">
             <label>Утасны дугаар</label>
-            <input id="personPhone" type="tel" inputmode="numeric" maxlength="8" pattern="[0-9]{8}" placeholder="Жишээ: 99112233">
+           
             <label>Өрийн дүн</label>
            <input
     id="debtAmount"
@@ -14141,7 +14135,7 @@ body{
                     maxlength="8"
                 >
 
-                <div class="auth-phone-example">Жишээ: 99112233</div>
+               
 
                <button
     type="button"
@@ -14346,7 +14340,7 @@ body{
         inputmode="numeric"
     >
 
-    <div class="auth-phone-example">Жишээ: 99112233</div>
+   
 
     <label>
         Нууц үг
@@ -28434,9 +28428,9 @@ if (debtAmountInput) {
  function polish(){
    // Primary confirmation buttons use the single CSS shield icon.
    // Forgot example directly below phone input
-   const fp=document.getElementById('forgotPhone'); if(fp && !fp.parentElement.querySelector('.auth-phone-example')){const d=document.createElement('div');d.className='auth-phone-example';d.textContent='Жишээ: 99112233';fp.insertAdjacentElement('afterend',d);}
+ 
    // Change phone example below input (placeholder stays clean)
-   const cp=document.getElementById('changePhoneInput'); if(cp){cp.placeholder='8 оронтой дугаар'; if(!cp.parentElement.querySelector('.auth-phone-example')){const d=document.createElement('div');d.className='auth-phone-example';d.textContent='Жишээ: 99112233';cp.insertAdjacentElement('afterend',d);}}
+  
    // SMS buttons: remove emoji, use vector icon
    const sms=[document.querySelector('#registerStepOtp #registerSendVerifySmsBtn'),document.querySelector('#forgotStepOtp .modal-save-btn'),document.getElementById('verifyChangePhoneOtpButton')];
    sms.forEach(b=>{if(b){b.classList.add('auth-sms-btn');b.innerHTML=smsIcon+'<span>SMS илгээж баталгаажуулах — 150₮</span>';}});
