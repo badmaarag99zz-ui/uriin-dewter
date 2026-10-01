@@ -24141,25 +24141,82 @@ async function updateSubscriptionTransferNote() {
         const user =
             await getCurrentUser();
 
-        if (!user) {
+        if (!user || !user.id) {
+
             noteElement.textContent = "—";
             return;
+
         }
 
-        let phone =
-            String(
-                user.phone || ""
-            )
-            .replace(/\D/g, "");
 
-        // +976XXXXXXXX байвал
-        // сүүлийн 8 оронг авна
+        // ==========================================
+        // PROFILE-ООС УТАСНЫ ДУГААР АВАХ
+        // ==========================================
+
+        let phone = "";
+
+
+        if (navigator.onLine) {
+
+            const {
+                data: profile,
+                error
+            } = await supabaseClient
+                .from("profiles")
+                .select("phone")
+                .eq("id", user.id)
+                .single();
+
+
+            if (error) {
+                throw error;
+            }
+
+
+            phone =
+                String(
+                    profile?.phone ||
+                    user.phone ||
+                    ""
+                );
+
+        } else {
+
+            phone =
+                String(
+                    user.phone || ""
+                );
+
+        }
+
+
+        // Зөвхөн цифр үлдээнэ
+        phone =
+            phone.replace(/\D/g, "");
+
+
+        // +976XXXXXXXX байвал сүүлийн 8 орон
         if (phone.length > 8) {
-            phone = phone.slice(-8);
+
+            phone =
+                phone.slice(-8);
+
         }
+
+
+        // ==========================================
+        // ГҮЙЛГЭЭНИЙ УТГА
+        // ==========================================
 
         noteElement.textContent =
             phone || "—";
+
+
+        console.log(
+            "Payment transfer note:",
+            phone
+        );
+
 
     } catch (error) {
 
@@ -24169,6 +24226,7 @@ async function updateSubscriptionTransferNote() {
         );
 
         noteElement.textContent = "—";
+
     }
 
 }
