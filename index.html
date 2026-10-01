@@ -25601,7 +25601,145 @@ function setReportPeriod(days, button) {
 async function loadSettingsProfile() {
 
     try {
+// ==========================================
+// OFFLINE PROFILE
+// ==========================================
 
+if (!navigator.onLine) {
+
+    const currentRaw =
+        localStorage.getItem(
+            "uriin_dewter_offline_current"
+        );
+
+    if (!currentRaw) {
+        return;
+    }
+
+    try {
+
+        const current =
+            JSON.parse(currentRaw);
+
+        const cachedRaw =
+            localStorage.getItem(
+                "uriin_dewter_profile_" +
+                current.userId
+            );
+
+        const cachedProfile =
+            cachedRaw
+                ? JSON.parse(cachedRaw)
+                : {};
+
+
+        // НЭР
+        const nameElement =
+            document.getElementById(
+                "settingsProfileName"
+            );
+
+        if (nameElement) {
+
+            nameElement.textContent =
+                cachedProfile?.full_name?.trim()
+                    ? cachedProfile.full_name
+                    : "Таны нэр";
+
+        }
+
+
+        // ДЭЛГҮҮРИЙН НЭР
+        const shopElement =
+            document.getElementById(
+                "settingsShopName"
+            );
+
+        if (shopElement) {
+
+            shopElement.textContent =
+                cachedProfile?.shop_name?.trim()
+                    ? cachedProfile.shop_name
+                    : "Дэлгүүрийн нэр оруулаагүй";
+
+        }
+
+
+        // УТАС
+        const phoneElement =
+            document.getElementById(
+                "settingsPhone"
+            );
+
+        if (phoneElement) {
+
+            let phone =
+                String(
+                    cachedProfile.phone ||
+                    current.phone ||
+                    ""
+                )
+                .replace(/\D/g, "");
+
+            if (phone.length > 8) {
+                phone = phone.slice(-8);
+            }
+
+            if (phone.length === 8) {
+
+                phoneElement.textContent =
+                    "📱 " +
+                    phone.slice(0, 4) +
+                    " " +
+                    phone.slice(4);
+
+            } else {
+
+                phoneElement.textContent =
+                    phone
+                        ? "📱 " + phone
+                        : "📱 —";
+
+            }
+
+        }
+
+
+        // ADMIN BUTTON
+        const adminButton =
+            document.getElementById(
+                "adminSettingsButton"
+            );
+
+        if (adminButton) {
+
+            adminButton.style.display =
+                cachedProfile.role === "admin"
+                    ? ""
+                    : "none";
+
+        }
+
+
+        console.log(
+            "🔴 Offline settings profile loaded:",
+            current.userId
+        );
+
+        return;
+
+    } catch (offlineProfileError) {
+
+        console.error(
+            "Offline settings profile error:",
+            offlineProfileError
+        );
+
+        return;
+
+    }
+
+}
         const {
             data: { user },
             error: userError
@@ -25647,6 +25785,29 @@ async function loadSettingsProfile() {
 
             return;
         }
+        // =========================
+// PROFILE OFFLINE CACHE
+// =========================
+
+if (profile && user?.id) {
+
+    localStorage.setItem(
+        "uriin_dewter_profile_" + user.id,
+        JSON.stringify({
+            phone: profile.phone || "",
+            full_name: profile.full_name || "",
+            shop_name: profile.shop_name || "",
+            plan: profile.plan || "free",
+            subscription_expires_at:
+                profile.subscription_expires_at || null,
+            avatar_path:
+                profile.avatar_path || null,
+            role:
+                profile.role || null
+        })
+    );
+
+}
 // =========================
 // ADMIN BUTTON
 // =========================
