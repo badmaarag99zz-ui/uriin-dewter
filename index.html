@@ -184,6 +184,68 @@ button {
             #ecfdf5 100%
         );
 }
+    /* =========================
+   ТАНИЛЦУУЛГА ТОВЧ
+========================= */
+
+.intro-open-btn {
+    position: absolute;
+    top: 18px;
+    right: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 7px;
+
+    padding: 9px 14px;
+
+    border: 1px solid #dbe4ee;
+    border-radius: 12px;
+
+    background: rgba(255, 255, 255, 0.92);
+    color: #334155;
+
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+
+    transition:
+        transform 0.18s ease,
+        box-shadow 0.18s ease,
+        background 0.18s ease;
+
+    z-index: 10;
+}
+
+.intro-open-btn:hover {
+    background: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.10);
+}
+
+.intro-open-btn:active {
+    transform: translateY(0);
+}
+
+
+/* УТАС */
+
+@media (max-width: 600px) {
+
+    .intro-open-btn {
+        top: 12px;
+        right: 12px;
+
+        padding: 8px 11px;
+
+        font-size: 12px;
+        border-radius: 10px;
+    }
+
+}
     /* LOGIN BACKGROUND DECORATION */
 
 #loginScreen::before {
@@ -8363,7 +8425,16 @@ body{
 ========================= -->
 
 <div id="loginScreen">
+<!-- ТАНИЛЦУУЛГА ТОВЧ -->
 
+<button
+    type="button"
+    class="intro-open-btn"
+    onclick="openIntroductionModal()"
+>
+    <span>📖</span>
+    Танилцуулга
+</button>
     <div class="login-card">
 
       <div class="login-brand">
