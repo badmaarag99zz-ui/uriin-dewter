@@ -8101,11 +8101,6 @@ body{
         font-size: 10.5px !important;
     }
 }
-    #registerModal .modal-save-btn {
-    background: red !important;
-}
-
-
 
 #registerModal .debt-modal-box,
 #forgotPasswordModal .debt-modal-box,
@@ -12098,32 +12093,7 @@ body{
 
     cursor: pointer !important;
 }
-
-
-/* ---------- MOBILE ---------- */
-
-@media (max-width: 480px) {
-
-    #registerModal .debt-modal-box,
-    #forgotPasswordModal .debt-modal-box,
-    #changePhoneModal .debt-modal-box {
-
-        width: calc(100vw - 24px) !important;
-
-        padding: 22px 18px 20px !important;
-
-        border-radius: 18px !important;
-    }
-
-
-    #registerModal h2,
-    #forgotPasswordModal h2,
-    #changePhoneModal h2 {
-
-        font-size: 19px !important;
-    }
-}
-   
+ 
 </style>
 
 
@@ -15541,10 +15511,6 @@ function showRegisterModal() {
 
     document.getElementById("registerConfirmPassword")
         .value = "";
-
-    document.getElementById("registerOtp")
-        .value = "";
-
 
     // ==========================================
     // MESSAGE ЦЭВЭРЛЭХ
@@ -21616,9 +21582,6 @@ function showForgotPassword() {
         .classList.add("show");
 
     document.getElementById("forgotPhone")
-        .value = "";
-
-    document.getElementById("forgotOtp")
         .value = "";
 
     document.getElementById("forgotNewPassword")
