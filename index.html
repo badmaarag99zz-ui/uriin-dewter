@@ -7998,7 +7998,239 @@ body{
 
 
 </style>
+<style>
+    /* ==========================================
+   ADMIN PANEL
+========================================== */
 
+.admin-page {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px 16px 120px;
+}
+
+
+/* HEADER */
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 22px;
+}
+
+.admin-header-text h2 {
+    margin: 0;
+    font-size: 24px;
+    line-height: 1.25;
+    color: #0f172a;
+}
+
+.admin-header-text p {
+    margin: 5px 0 0;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.admin-back-btn {
+    flex-shrink: 0;
+    border: 0;
+    background: #f1f5f9;
+    color: #0f172a;
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+/* SUMMARY */
+
+.admin-summary {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.admin-stat-card {
+    min-height: 100px;
+    padding: 18px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .04);
+}
+
+.admin-stat-card span {
+    font-size: 13px;
+    line-height: 1.35;
+    color: #64748b;
+}
+
+.admin-stat-card strong {
+    flex-shrink: 0;
+    font-size: 28px;
+    color: #0f172a;
+}
+
+
+/* PAYMENT CARD */
+
+.admin-payment-card {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 18px;
+    padding: 18px;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .04);
+}
+
+.admin-payment-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding-bottom: 15px;
+    margin-bottom: 2px;
+
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.admin-payment-header strong {
+    display: block;
+    font-size: 16px;
+    color: #0f172a;
+}
+
+.admin-payment-header small {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.admin-refresh-btn {
+    flex-shrink: 0;
+
+    border: 0;
+    background: #eef7f2;
+    color: #087443;
+
+    padding: 9px 12px;
+    border-radius: 10px;
+
+    font-size: 13px;
+    font-weight: 750;
+    cursor: pointer;
+}
+
+.admin-loading {
+    padding: 30px 10px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+
+/* ==========================================
+   MOBILE
+========================================== */
+
+@media (max-width: 600px) {
+
+    .admin-page {
+        padding: 18px 14px 120px;
+    }
+
+    .admin-header {
+        align-items: flex-start;
+        margin-bottom: 18px;
+    }
+
+    .admin-header-text h2 {
+        font-size: 22px;
+    }
+
+    .admin-header-text p {
+        max-width: 230px;
+        font-size: 12px;
+    }
+
+    .admin-back-btn {
+        padding: 9px 11px;
+        font-size: 12px;
+    }
+
+
+    /* SUMMARY */
+
+    .admin-summary {
+        gap: 10px;
+        margin-bottom: 14px;
+    }
+
+    .admin-stat-card {
+        min-height: 92px;
+        padding: 15px 14px;
+        border-radius: 16px;
+    }
+
+    .admin-stat-card span {
+        max-width: 100px;
+        font-size: 12px;
+    }
+
+    .admin-stat-card strong {
+        font-size: 25px;
+    }
+
+
+    /* PAYMENT */
+
+    .admin-payment-card {
+        padding: 16px 14px;
+        border-radius: 16px;
+    }
+
+    .admin-payment-header {
+        margin-bottom: 0;
+    }
+
+    .admin-payment-header strong {
+        font-size: 15px;
+    }
+
+    .admin-refresh-btn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+
+
+    /* EACH GENERATED REQUEST */
+
+    #adminPaymentRequests > div {
+        padding: 16px 0 !important;
+    }
+
+    #adminPaymentRequests > div > div:first-child {
+        align-items: flex-start;
+    }
+
+    #adminPaymentRequests button {
+        min-height: 42px;
+    }
+
+}
+    </style>
 </head>
 
 <body>
@@ -12104,81 +12336,44 @@ body{
 
 <section id="adminView" class="ledger-view">
 
-    <div style="
-        max-width:900px;
-        margin:0 auto;
-        padding:20px 16px 110px;
-    ">
+    <div class="admin-page">
 
-        <div style="
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:12px;
-            margin-bottom:22px;
-        ">
-            <div>
-                <h2 style="margin:0;">
-                    🛡️ Админ удирдлага
-                </h2>
+        <!-- HEADER -->
 
-                <p style="
-                    margin:5px 0 0;
-                    font-size:13px;
-                    color:#64748b;
-                ">
-                    Хэрэглэгч болон төлбөрийн хүсэлтүүд
-                </p>
+        <div class="admin-header">
+
+            <div class="admin-header-text">
+                <h2>🛡️ Админ удирдлага</h2>
+                <p>Хэрэглэгч болон төлбөрийн хүсэлтүүд</p>
             </div>
 
             <button
                 type="button"
+                class="admin-back-btn"
                 onclick="showLedgerView('menuView')"
-                style="
-                    border:0;
-                    background:#f1f5f9;
-                    border-radius:12px;
-                    padding:10px 14px;
-                    cursor:pointer;
-                    font-weight:700;
-                "
             >
                 ← Буцах
             </button>
+
         </div>
 
 
         <!-- SUMMARY -->
 
-        <div style="
-            display:grid;
-            grid-template-columns:repeat(2,1fr);
-            gap:12px;
-            margin-bottom:22px;
-        ">
+        <div class="admin-summary">
 
-            <div class="dashboard-card">
-                <div style="font-size:12px;color:#64748b;">
-                    Нийт хэрэглэгч
-                </div>
+            <div class="admin-stat-card">
+                <span>Нийт хэрэглэгч</span>
 
-                <strong
-                    id="adminTotalUsers"
-                    style="font-size:24px;"
-                >
+                <strong id="adminTotalUsers">
                     —
                 </strong>
             </div>
 
-            <div class="dashboard-card">
-                <div style="font-size:12px;color:#64748b;">
-                    Хүлээгдэж буй хүсэлт
-                </div>
+            <div class="admin-stat-card">
+                <span>Хүлээгдэж буй хүсэлт</span>
 
-                <strong
-                    id="adminPendingCount"
-                    style="font-size:24px;"
-                >
+                <strong id="adminPendingCount">
                     —
                 </strong>
             </div>
@@ -12188,55 +12383,34 @@ body{
 
         <!-- PAYMENT REQUESTS -->
 
-        <div class="dashboard-card">
+        <div class="admin-payment-card">
 
-            <div style="
-                display:flex;
-                justify-content:space-between;
-                align-items:center;
-                margin-bottom:15px;
-            ">
+            <div class="admin-payment-header">
 
                 <div>
                     <strong>
                         Төлбөрийн хүсэлтүүд
                     </strong>
 
-                    <div style="
-                        margin-top:3px;
-                        font-size:12px;
-                        color:#64748b;
-                    ">
+                    <small>
                         Хүлээгдэж буй хүсэлтүүд
-                    </div>
+                    </small>
                 </div>
 
                 <button
                     type="button"
+                    class="admin-refresh-btn"
                     onclick="loadAdminDashboard()"
-                    style="
-                        border:0;
-                        background:#eef7f2;
-                        color:#087443;
-                        padding:8px 12px;
-                        border-radius:10px;
-                        cursor:pointer;
-                        font-weight:750;
-                    "
                 >
                     ↻ Шинэчлэх
                 </button>
 
             </div>
 
+
             <div id="adminPaymentRequests">
 
-                <div style="
-                    padding:25px 10px;
-                    text-align:center;
-                    color:#94a3b8;
-                    font-size:13px;
-                ">
+                <div class="admin-loading">
                     Уншиж байна...
                 </div>
 
@@ -12247,6 +12421,7 @@ body{
     </div>
 
 </section>
+
     <!-- ==========================================
      FAQ MODAL
 ========================================== -->
