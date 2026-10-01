@@ -9794,14 +9794,7 @@ body{
 <div id="loginScreen">
 <!-- ТАНИЛЦУУЛГА ТОВЧ -->
 
-<button
-    type="button"
-    class="intro-open-btn"
-    onclick="openIntroductionModal()"
->
-    <span>📖</span>
-    Танилцуулга
-</button>
+
     <div class="login-card">
 
       <div class="login-brand">
@@ -9883,42 +9876,96 @@ body{
             "
         ></div>
 
-      <div class="login-features">
+    <!-- ТАНИЛЦУУЛГА -->
 
-    <div class="login-features-heading">
-        <strong>Яагаад Өрийн дэвтэр гэж?</strong>
-        <span>Өдөр тутмын авлага, төлөлтөө илүү хялбар удирдаарай.</span>
-    </div>
+<div
+    style="
+        margin-top:20px;
+        padding-top:18px;
+        border-top:1px solid #e2e8f0;
+    "
+>
 
-    <div class="feature-item">
-        <div class="feature-icon">📒</div>
+    <button
+        type="button"
+        onclick="openIntroductionModal()"
+        style="
+            width:100%;
+            display:flex;
+            align-items:center;
+            gap:12px;
 
-        <div class="feature-text">
-            <strong>Цаасан дэвтрээс илүү хялбар</strong>
-            <span>Хайх, засах, төлөлт бүртгэхэд хурдан</span>
+            padding:14px 15px;
+
+            border:1px solid #bbf7d0;
+            border-radius:14px;
+
+            background:#f0fdf4;
+
+            cursor:pointer;
+            text-align:left;
+        "
+    >
+
+        <div
+            style="
+                width:40px;
+                height:40px;
+                flex-shrink:0;
+
+                display:flex;
+                align-items:center;
+                justify-content:center;
+
+                border-radius:12px;
+
+                background:#dcfce7;
+
+                font-size:19px;
+            "
+        >
+            📖
         </div>
-    </div>
 
-    <div class="feature-item">
-        <div class="feature-icon">📱</div>
+        <div style="flex:1;">
 
-        <div class="feature-text">
-            <strong>Үргэлж гарын дор</strong>
-            <span>Өр, авлагаа утаснаасаа хяна</span>
+            <strong
+                style="
+                    display:block;
+                    color:#166534;
+                    font-size:13px;
+                    margin-bottom:3px;
+                "
+            >
+                Өрийн дэвтэр гэж юу вэ?
+            </strong>
+
+            <span
+                style="
+                    display:block;
+                    color:#64748b;
+                    font-size:10px;
+                    line-height:1.4;
+                "
+            >
+                Аппын боломж, ашиглалт, эрхийн багц болон дэлгэрэнгүй мэдээлэл
+            </span>
+
         </div>
-    </div>
 
-    <div class="feature-item">
-        <div class="feature-icon">📶</div>
+        <span
+            style="
+                color:#16a34a;
+                font-size:18px;
+                font-weight:700;
+            "
+        >
+            ›
+        </span>
 
-        <div class="feature-text">
-            <strong>Интернэтгүй үед ч ажиллана</strong>
-            <span>Сүлжээ тасарсан ч бүртгэлээ үргэлжлүүлнэ</span>
-        </div>
-    </div>
+    </button>
 
 </div>
-
         
         <button
             id="installAppBtn"
