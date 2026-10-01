@@ -19158,12 +19158,17 @@ function closeDebtModalOutside(event) {
                     ".app-popup-input"
                 );
 
-            const cancel =
-                overlay.querySelector(
-                    ".app-popup-cancel"
-                );
+           const cancel =
+    overlay.querySelector(
+        ".app-popup-cancel"
+    );
 
-           input.addEventListener(
+const submit =
+    overlay.querySelector(
+        ".app-popup-primary"
+    );
+
+input.addEventListener(
     "input",
     function () {
 
