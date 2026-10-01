@@ -16750,8 +16750,8 @@ async function checkSubscription(userId) {
         } =
             await supabaseClient
                 .from("profiles")
-                .select(
-    "phone, plan, subscription_expires_at, free_customer_count, customer_limit"
+               .select(
+    "phone, plan, subscription_expires_at, temporary_access_expires_at, free_customer_count, customer_limit"
 )
                 .eq("id", userId)
                 .single();
@@ -16798,9 +16798,97 @@ const customerLimit =
 
         /* ==========================================
            FREE PLAN
-           15 ХАРИЛЦАГЧ ХҮРТЭЛ ҮНЭГҮЙ
+           7 ХАРИЛЦАГЧ ХҮРТЭЛ ҮНЭГҮЙ
         ========================================== */
+/* ==========================================
+   TEMPORARY ACCESS — 24 HOURS
+========================================== */
 
+if (data.temporary_access_expires_at) {
+
+    const temporaryExpiresAt =
+        new Date(
+            data.temporary_access_expires_at
+        );
+
+    const temporaryValid =
+        !isNaN(temporaryExpiresAt.getTime()) &&
+        temporaryExpiresAt.getTime() >
+        Date.now();
+
+
+    if (temporaryValid) {
+
+        const subscriptionData = {
+
+            userId: userId,
+
+            plan: "temporary",
+
+            expiresAt:
+                data.temporary_access_expires_at,
+
+            freeCustomerCount:
+                freeCustomerCount,
+
+            freeCustomerLimit:
+                customerLimit,
+
+            isUnlimited:
+                true
+
+        };
+
+
+        if (data.phone) {
+
+            localStorage.setItem(
+                "uriin_dewter_subscription_" +
+                data.phone,
+                JSON.stringify(
+                    subscriptionData
+                )
+            );
+
+        }
+
+
+        localStorage.setItem(
+            "uriin_dewter_subscription",
+            JSON.stringify(
+                subscriptionData
+            )
+        );
+
+
+        return {
+
+            valid: true,
+
+            reason: "temporary",
+
+            plan: "temporary",
+
+            expiresAt:
+                data.temporary_access_expires_at,
+
+            temporaryAccess: true,
+
+            freeCustomerCount:
+                freeCustomerCount,
+
+            freeCustomerLimit:
+                customerLimit,
+
+            isUnlimited: true,
+
+            canAddCustomer: true
+
+        };
+
+    }
+
+}
         if (plan === "free") {
 
             const subscriptionData = {
