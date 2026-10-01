@@ -29514,7 +29514,7 @@ async function rejectAdminPayment(
     }
 
 }
-    async function adminPaymentConfirm(
+  function adminPaymentConfirm(
     message,
     actionText
 ) {
@@ -29565,33 +29565,109 @@ async function rejectAdminPayment(
 
         document.body.appendChild(overlay);
 
-        const cancel =
+
+        const popup =
+            overlay.querySelector(
+                ".app-popup"
+            );
+
+        const cancelButton =
             overlay.querySelector(
                 ".app-popup-cancel"
             );
 
-        const confirm =
+        const confirmButton =
             overlay.querySelector(
                 ".app-popup-primary"
             );
 
 
-        cancel.onclick = function() {
-
-            removePopup(overlay);
-
-            resolve(false);
-
-        };
+        let finished = false;
 
 
-        confirm.onclick = function() {
+        function finish(result) {
 
-            removePopup(overlay);
+            if (finished) {
+                return;
+            }
 
-            resolve(true);
+            finished = true;
 
-        };
+            overlay.remove();
+
+            resolve(result);
+
+        }
+
+
+        cancelButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                finish(false);
+
+            }
+        );
+
+
+        confirmButton.addEventListener(
+            "click",
+            function(event) {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                finish(true);
+
+            }
+        );
+
+
+        overlay.addEventListener(
+            "click",
+            function(event) {
+
+                if (event.target === overlay) {
+                    finish(false);
+                }
+
+            }
+        );
+
+
+        popup.addEventListener(
+            "click",
+            function(event) {
+
+                event.stopPropagation();
+
+            }
+        );
+
+
+        document.addEventListener(
+            "keydown",
+            function escapeHandler(event) {
+
+                if (event.key === "Escape") {
+
+                    document.removeEventListener(
+                        "keydown",
+                        escapeHandler
+                    );
+
+                    finish(false);
+
+                }
+
+            },
+            {
+                once: true
+            }
+        );
 
     });
 
