@@ -17502,13 +17502,16 @@ body{
     placeholder="Жишээ: 99112233"
     autocomplete="off"
 >
-            <label>Өрийн дүн</label>
-           <input
-    id="debtAmount"
-    type="text"
-    inputmode="numeric"
-    placeholder="Жишээ: 150,000"
-    autocomplete="off"
+          <div id="debtAmountField">
+    <label>Өрийн дүн</label>
+    <input
+        id="debtAmount"
+        type="text"
+        inputmode="numeric"
+        placeholder="Жишээ: 150,000"
+        autocomplete="off"
+    >
+</div>
 >
             <label>Төлөх хугацаа</label>
             <div class="due-date-simple-wrap">
@@ -21311,7 +21314,8 @@ renderTodayOverview();
 function openDebtModal() {
 
     editingDebtId = null;
-
+document.getElementById("debtAmountField")
+    .style.display = "block";
     document.getElementById("debtModalTitle")
         .textContent =
             "Шинэ өр бүртгэх";
@@ -22612,11 +22616,8 @@ function editDebt(id) {
         .value =
             debt.phone;
 
-    document.getElementById("debtAmount")
-    .value =
-        formatMoneyInput(
-            debt.amount
-        );
+    document.getElementById("debtAmountField")
+    .style.display = "none";
 
     document.getElementById("dueDate")
         .value =
@@ -22668,11 +22669,7 @@ async function updateDebt() {
             .value
             .trim();
 
-    const amount =
-    parseMoneyInput(
-        document.getElementById("debtAmount")
-            .value
-    );
+    
     const dueDate =
         document.getElementById("dueDate")
             .value;
@@ -22688,15 +22685,7 @@ async function updateDebt() {
 
     }
 
-    if (!amount || amount <= 0) {
-
-        alert(
-            "Өрийн дүнгээ зөв оруулна уу."
-        );
-
-        return;
-
-    }
+ 
 
 
     /* OFFLINE EDIT */
@@ -22709,9 +22698,7 @@ async function updateDebt() {
         debt.phone =
             phone;
 
-        debt.amount =
-            amount;
-
+       
         debt.dueDate =
             dueDate || "";
 
@@ -22746,7 +22733,7 @@ async function updateDebt() {
 
                 phone,
 
-                amount,
+               
 
                 due_date:
                     dueDate ||
