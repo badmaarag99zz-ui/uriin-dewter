@@ -15299,6 +15299,46 @@ body{
         ›
     </span>
 </button>
+            <!-- ==========================================
+     DELETE ACCOUNT
+========================================== -->
+
+<button
+    type="button"
+    class="settings-item"
+    onclick="openDeleteAccountModal()"
+    style="
+        margin-top:12px;
+        color:#dc2626;
+    "
+>
+    <span
+        class="settings-item-icon"
+        style="
+            background:#fff1f2;
+            color:#dc2626;
+        "
+    >
+        🗑️
+    </span>
+
+    <span class="settings-item-content">
+        <strong style="color:#dc2626;">
+            Бүртгэл устгах
+        </strong>
+
+        <small>
+            Бүртгэл болон бүх мэдээллээ бүрмөсөн устгах
+        </small>
+    </span>
+
+    <span
+        class="settings-item-arrow"
+        style="color:#f87171;"
+    >
+        ›
+    </span>
+</button>
     <!-- ==========================================
      LOGOUT
 ========================================== -->
@@ -34321,7 +34361,515 @@ function scrollIntroductionTo(sectionId) {
     });
 
 }
-  
+  <!-- ==========================================
+     DELETE ACCOUNT MODAL
+========================================== -->
+
+<div
+    id="deleteAccountModal"
+    class="debt-modal"
+>
+    <div
+        class="debt-modal-box"
+        style="max-width:460px;"
+    >
+
+        <div class="debt-modal-header">
+
+            <div>
+                <h2 style="color:#dc2626;">
+                    🗑️ Бүртгэл устгах
+                </h2>
+
+                <p>
+                    Энэ үйлдлийг буцаах боломжгүй.
+                </p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeDeleteAccountModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div
+            style="
+                padding:16px;
+                border:1px solid #fecaca;
+                background:#fff1f2;
+                border-radius:16px;
+                margin-bottom:18px;
+                color:#991b1b;
+                font-size:13px;
+                line-height:1.6;
+            "
+        >
+            <strong>
+                ⚠️ Анхааруулга
+            </strong>
+
+            <div style="margin-top:7px;">
+                Бүртгэл устгаснаар таны өрийн бүртгэл,
+                төлөлтийн мэдээлэл, мэдэгдэл болон
+                профайлын мэдээлэл бүрмөсөн устна.
+            </div>
+        </div>
+
+        <div class="debt-form">
+
+            <label>
+                Баталгаажуулахын тулд
+                <strong>УСТГАХ</strong>
+                гэж бичнэ үү
+            </label>
+
+            <input
+                type="text"
+                id="deleteAccountConfirmInput"
+                placeholder="УСТГАХ"
+                autocomplete="off"
+            >
+
+            <div
+                id="deleteAccountMessage"
+                style="
+                    min-height:20px;
+                    margin-top:10px;
+                    font-size:13px;
+                    color:#dc2626;
+                "
+            ></div>
+
+            <button
+                type="button"
+                id="deleteAccountButton"
+                onclick="deleteMyAccount()"
+                style="
+                    width:100%;
+                    margin-top:14px;
+                    padding:14px;
+                    border:0;
+                    border-radius:15px;
+                    background:#dc2626;
+                    color:white;
+                    font-size:15px;
+                    font-weight:800;
+                    cursor:pointer;
+                "
+            >
+                Бүртгэлээ бүрмөсөн устгах
+            </button>
+
+            <button
+                type="button"
+                onclick="closeDeleteAccountModal()"
+                style="
+                    width:100%;
+                    margin-top:10px;
+                    padding:13px;
+                    border:1px solid #e2e8f0;
+                    border-radius:15px;
+                    background:white;
+                    color:#475569;
+                    font-weight:700;
+                    cursor:pointer;
+                "
+            >
+                Болих
+            </button>
+
+        </div>
+
+    </div>
+</div>
+    /* ==========================================
+   DELETE ACCOUNT
+========================================== */
+
+function openDeleteAccountModal() {
+
+    const modal =
+        document.getElementById(
+            "deleteAccountModal"
+        );
+
+    const input =
+        document.getElementById(
+            "deleteAccountConfirmInput"
+        );
+
+    const message =
+        document.getElementById(
+            "deleteAccountMessage"
+        );
+
+    if (input) {
+        input.value = "";
+    }
+
+    if (message) {
+        message.textContent = "";
+    }
+
+    if (modal) {
+        modal.classList.add("show");
+    }
+}
+
+
+function closeDeleteAccountModal() {
+
+    const modal =
+        document.getElementById(
+            "deleteAccountModal"
+        );
+
+    if (modal) {
+        modal.classList.remove("show");
+    }
+}
+
+
+async function deleteMyAccount() {
+
+    const input =
+        document.getElementById(
+            "deleteAccountConfirmInput"
+        );
+
+    const message =
+        document.getElementById(
+            "deleteAccountMessage"
+        );
+
+    const button =
+        document.getElementById(
+            "deleteAccountButton"
+        );
+
+
+    const confirmation =
+        String(input?.value || "")
+            .trim()
+            .toUpperCase();
+
+
+    if (confirmation !== "УСТГАХ") {
+
+        if (message) {
+            message.textContent =
+                "Баталгаажуулахын тулд УСТГАХ гэж бичнэ үү.";
+        }
+
+        input?.focus();
+
+        return;
+    }
+
+
+    if (!navigator.onLine) {
+
+        if (message) {
+            message.textContent =
+                "📡 Бүртгэл устгахын тулд интернетэд холбогдоно уу.";
+        }
+
+        return;
+    }
+
+
+    try {
+
+        if (button) {
+            button.disabled = true;
+            button.textContent =
+                "Бүртгэл устгаж байна...";
+        }
+
+        if (message) {
+            message.textContent =
+                "Бүртгэл болон мэдээллийг устгаж байна...";
+            message.style.color =
+                "#64748b";
+        }
+
+
+        // ==========================================
+        // SESSION
+        // ==========================================
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        const accessToken =
+            data?.session?.access_token;
+
+
+        if (!accessToken) {
+
+            throw new Error(
+                "Нэвтрэх эрх олдсонгүй. Дахин нэвтэрнэ үү."
+            );
+        }
+
+
+        const user =
+            data?.session?.user;
+
+        const deletedUserId =
+            String(user?.id || "");
+
+
+        /*
+            Одоогийн offline current-оос
+            утасны дугаарыг хадгалж авна.
+        */
+
+        let deletedPhone = "";
+
+        try {
+
+            const current =
+                JSON.parse(
+                    localStorage.getItem(
+                        "uriin_dewter_offline_current"
+                    ) || "{}"
+                );
+
+            deletedPhone =
+                String(
+                    current?.phone || ""
+                )
+                .replace(/\D/g, "")
+                .slice(-8);
+
+        } catch (error) {
+
+            console.log(
+                "Delete account phone cache read error:",
+                error
+            );
+        }
+
+
+        // ==========================================
+        // EDGE FUNCTION
+        // ==========================================
+
+        const response =
+            await fetch(
+                SUPABASE_URL +
+                "/functions/v1/hyper-api",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "apikey":
+                            SUPABASE_KEY,
+
+                        "Authorization":
+                            "Bearer " +
+                            accessToken,
+
+                        "Content-Type":
+                            "application/json"
+                    },
+
+                    body:
+                        JSON.stringify({
+                            action:
+                                "delete_account"
+                        })
+                }
+            );
+
+
+        let result = {};
+
+        try {
+            result =
+                await response.json();
+        } catch (_) {}
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "Бүртгэл устгахад алдаа гарлаа."
+            );
+        }
+
+
+        // ==========================================
+        // SUPABASE LOCAL SESSION
+        // ==========================================
+
+        try {
+
+            await supabaseClient.auth.signOut({
+                scope: "local"
+            });
+
+        } catch (error) {
+
+            console.log(
+                "Delete account local signout:",
+                error
+            );
+        }
+
+
+        // ==========================================
+        // USER-SPECIFIC LOCAL DATA
+        // ==========================================
+
+        if (deletedPhone) {
+
+            localStorage.removeItem(
+                "uriin_dewter_offline_auth_" +
+                deletedPhone
+            );
+
+            localStorage.removeItem(
+                "uriin_dewter_subscription_" +
+                deletedPhone
+            );
+        }
+
+
+        /*
+            User ID орсон localStorage key байвал
+            мөн цэвэрлэнэ.
+        */
+
+        if (deletedUserId) {
+
+            const keys =
+                Object.keys(localStorage);
+
+            for (const key of keys) {
+
+                if (
+                    key.includes(
+                        deletedUserId
+                    )
+                ) {
+                    localStorage.removeItem(
+                        key
+                    );
+                }
+            }
+        }
+
+
+        // ==========================================
+        // CURRENT CACHE
+        // ==========================================
+
+        localStorage.removeItem(
+            "uriin_dewter_offline_current"
+        );
+
+        localStorage.removeItem(
+            "uriin_dewter_offline_auth"
+        );
+
+        localStorage.removeItem(
+            "uriin_dewter_subscription"
+        );
+
+
+        // ==========================================
+        // APP MEMORY RESET
+        // ==========================================
+
+        debts = [];
+
+        window.debtNotifications = {
+            overdue: [],
+            dueSoon: [],
+            total: 0
+        };
+
+        window.currentDebtNotificationIds =
+            [];
+
+        window.systemNotifications =
+            [];
+
+
+        // ==========================================
+        // LOGIN SCREEN
+        // ==========================================
+
+        closeDeleteAccountModal();
+
+
+        document
+            .getElementById("appContent")
+            .style.display =
+                "none";
+
+
+        document
+            .getElementById("loginScreen")
+            .style.display =
+                "flex";
+
+
+        appAlert(
+            "Таны бүртгэл амжилттай устгагдлаа."
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Delete account error:",
+            error
+        );
+
+
+        if (message) {
+
+            message.textContent =
+                error?.message ||
+                "Бүртгэл устгахад алдаа гарлаа.";
+
+            message.style.color =
+                "#dc2626";
+        }
+
+
+    } finally {
+
+        if (button) {
+
+            button.disabled =
+                false;
+
+            button.textContent =
+                "Бүртгэлээ бүрмөсөн устгах";
+        }
+    }
+}
 </script>
 
 </body>
