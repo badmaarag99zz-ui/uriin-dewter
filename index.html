@@ -34422,20 +34422,15 @@ function scrollIntroductionTo(sectionId) {
 
         <div class="debt-form">
 
-            <label>
-                Баталгаажуулахын тулд
-                <strong>УСТГАХ</strong>
-                гэж бичнэ үү
-            </label>
-
-            <input
-                type="text"
-                id="deleteAccountConfirmInput"
-                placeholder="УСТГАХ"
-                autocomplete="off"
-            >
-
-            <div
+          <div
+    id="deleteAccountMessage"
+    style="
+        min-height:20px;
+        margin-top:4px;
+        font-size:13px;
+        color:#dc2626;
+    "
+></div>
                 id="deleteAccountMessage"
                 style="
                     min-height:20px;
@@ -34499,19 +34494,13 @@ function openDeleteAccountModal() {
             "deleteAccountModal"
         );
 
-    const input =
-        document.getElementById(
-            "deleteAccountConfirmInput"
-        );
-
+  
     const message =
         document.getElementById(
             "deleteAccountMessage"
         );
 
-    if (input) {
-        input.value = "";
-    }
+   
 
     if (message) {
         message.textContent = "";
@@ -34538,10 +34527,7 @@ function closeDeleteAccountModal() {
 
 async function deleteMyAccount() {
 
-    const input =
-        document.getElementById(
-            "deleteAccountConfirmInput"
-        );
+   
 
     const message =
         document.getElementById(
@@ -34554,23 +34540,7 @@ async function deleteMyAccount() {
         );
 
 
-    const confirmation =
-        String(input?.value || "")
-            .trim()
-            .toUpperCase();
-
-
-    if (confirmation !== "УСТГАХ") {
-
-        if (message) {
-            message.textContent =
-                "Баталгаажуулахын тулд УСТГАХ гэж бичнэ үү.";
-        }
-
-        input?.focus();
-
-        return;
-    }
+  
 
 
     if (!navigator.onLine) {
