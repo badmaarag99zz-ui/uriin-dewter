@@ -17234,7 +17234,7 @@ body{
                 type="text"
                 id="profileShopNameInput"
                 placeholder="Жишээ: Миний дэлгүүр"
-                maxlength="15"
+                maxlength="18"
             >
 
         </div>
@@ -35292,7 +35292,7 @@ if (debt.dueDate) {
 senderName =
     String(senderName || "Дэлгүүр")
         .trim()
-        .slice(0, 15);
+        .slice(0, 18);
 
 let message = "";
 
@@ -35318,15 +35318,6 @@ message =
     sender нэрийг богиносгоно.
 */
 
-
-
-
-document.getElementById(
-    "smsMessage"
-).value =
-    message;
-
-updateSmsCharacterCount();
 
     document.getElementById(
         "smsMessage"
