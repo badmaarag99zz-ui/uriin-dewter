@@ -17592,7 +17592,13 @@ body{
                 </div>
 
             </div>
-
+<button
+    type="button"
+    class="sms-buy-btn"
+    onclick="openSmsPurchaseModal()"
+>
+    ＋ SMS багц авах
+</button>
             <div
                 id="smsStatus"
                 class="sms-status"
@@ -17606,6 +17612,85 @@ body{
                 onclick="sendDebtSms()"
             >
                 📩 SMS илгээх
+            </button>
+
+        </div>
+
+    </div>
+</div>
+    <!-- ==========================================
+     SMS PURCHASE MODAL
+========================================== -->
+
+<div
+    id="smsPurchaseModal"
+    class="debt-modal"
+    onclick="closeSmsPurchaseModalOutside(event)"
+>
+    <div
+        class="debt-modal-box sms-purchase-modal-box"
+        onclick="event.stopPropagation()"
+    >
+
+        <div class="debt-modal-header">
+
+            <div>
+                <h2>📨 SMS багц авах</h2>
+                <p>Нэмэлт SMS багцаа сонгоно уу</p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeSmsPurchaseModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <div class="sms-purchase-content">
+
+            <button
+                type="button"
+                class="sms-package-card"
+                onclick="selectSmsPackage(50, 4900)"
+            >
+                <div>
+                    <strong>50 SMS</strong>
+                    <span>Нэмэлт SMS багц</span>
+                </div>
+
+                <b>4,900₮</b>
+            </button>
+
+
+            <button
+                type="button"
+                class="sms-package-card"
+                onclick="selectSmsPackage(100, 9900)"
+            >
+                <div>
+                    <strong>100 SMS</strong>
+                    <span>Нэмэлт SMS багц</span>
+                </div>
+
+                <b>9,900₮</b>
+            </button>
+
+
+            <button
+                type="button"
+                class="sms-package-card"
+                onclick="selectSmsPackage(200, 19900)"
+            >
+                <div>
+                    <strong>200 SMS</strong>
+                    <span>Нэмэлт SMS багц</span>
+                </div>
+
+                <b>19,900₮</b>
             </button>
 
         </div>
@@ -33524,6 +33609,118 @@ if (debtAmountInput) {
     }
 
 }
+    /* ==========================================
+   SMS PURCHASE
+========================================== */
+
+.sms-buy-btn {
+    width: 100%;
+    min-height: 46px;
+    margin: 0 0 16px;
+    padding: 11px 15px;
+
+    border: 1px solid #bfdbfe;
+    border-radius: 12px;
+
+    background: #eff6ff;
+    color: #2563eb;
+
+    font-size: 14px;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.sms-buy-btn:hover {
+    background: #dbeafe;
+}
+
+
+/* MODAL */
+
+#smsPurchaseModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(15, 23, 42, .45);
+    backdrop-filter: blur(3px);
+}
+
+.sms-purchase-modal-box {
+    width: 100%;
+    max-width: 460px;
+}
+
+.sms-purchase-content {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+/* PACKAGE */
+
+.sms-package-card {
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 16px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+
+    background: #ffffff;
+
+    text-align: left;
+    cursor: pointer;
+
+    transition:
+        border-color .15s ease,
+        background .15s ease,
+        transform .15s ease;
+}
+
+.sms-package-card:hover {
+    border-color: #2563eb;
+    background: #f8fbff;
+    transform: translateY(-1px);
+}
+
+.sms-package-card > div {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sms-package-card strong {
+    color: #0f172a;
+    font-size: 17px;
+    font-weight: 800;
+}
+
+.sms-package-card span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.sms-package-card b {
+    color: #2563eb;
+    font-size: 17px;
+    font-weight: 900;
+    white-space: nowrap;
+}
 </style>
 <script id="auth-v3-final-dom">
 (function(){
@@ -35817,6 +36014,82 @@ async function sendDebtSms() {
 
     }
 
+}
+        /* ==========================================
+   SMS PURCHASE MODAL
+========================================== */
+
+function openSmsPurchaseModal() {
+
+    const modal =
+        document.getElementById(
+            "smsPurchaseModal"
+        );
+
+    if (!modal) return;
+
+    modal.style.display = "flex";
+}
+
+
+function closeSmsPurchaseModal() {
+
+    const modal =
+        document.getElementById(
+            "smsPurchaseModal"
+        );
+
+    if (!modal) return;
+
+    modal.style.display = "none";
+}
+
+
+function closeSmsPurchaseModalOutside(event) {
+
+    if (
+        event.target.id ===
+        "smsPurchaseModal"
+    ) {
+        closeSmsPurchaseModal();
+    }
+}
+
+
+/* ==========================================
+   SELECT SMS PACKAGE
+========================================== */
+
+function selectSmsPackage(
+    smsCount,
+    amount
+) {
+
+    const allowedPackages = {
+        50: 4900,
+        100: 9900,
+        200: 19900
+    };
+
+    if (
+        allowedPackages[smsCount] !==
+        amount
+    ) {
+        appAlert(
+            "SMS багцын мэдээлэл буруу байна."
+        );
+        return;
+    }
+
+    console.log(
+        "SMS PACKAGE:",
+        smsCount,
+        amount
+    );
+
+    appAlert(
+        `${smsCount} SMS — ${amount.toLocaleString()}₮`
+    );
 }
 </script>
 
