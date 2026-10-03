@@ -37043,6 +37043,92 @@ async function rejectAdminSmsPurchase(
     }
 
 }
+        /* ==========================================
+   SMS PURCHASE — COPY ACCOUNT
+========================================== */
+
+async function copySmsPurchaseAccount() {
+
+    const accountNumber = "5001803761";
+
+    try {
+
+        await navigator.clipboard.writeText(
+            accountNumber
+        );
+
+        await appAlert(
+            "Дансны дугаар хуулагдлаа."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Copy account error:",
+            error
+        );
+
+        await appAlert(
+            "Дансны дугаар хуулж чадсангүй."
+        );
+
+    }
+
+}
+
+
+/* ==========================================
+   SMS PURCHASE — COPY TRANSFER NOTE
+========================================== */
+
+async function copySmsPurchaseTransferNote() {
+
+    const element =
+        document.getElementById(
+            "smsPurchaseTransferNote"
+        );
+
+
+    const transferNote =
+        String(
+            element?.textContent || ""
+        ).trim();
+
+
+    if (!transferNote || transferNote === "—") {
+
+        await appAlert(
+            "Гүйлгээний утга олдсонгүй."
+        );
+
+        return;
+    }
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            transferNote
+        );
+
+        await appAlert(
+            "Гүйлгээний утга хуулагдлаа."
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Copy transfer note error:",
+            error
+        );
+
+        await appAlert(
+            "Гүйлгээний утга хуулж чадсангүй."
+        );
+
+    }
+
+}
 </script>
 
 </body>
