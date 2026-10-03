@@ -35285,17 +35285,26 @@ if (debt.dueDate) {
     Үндсэн SMS
 */
 
+/* ==========================================
+   ҮНДСЭН SMS
+========================================== */
+
+senderName =
+    String(senderName || "Дэлгүүр")
+        .trim()
+        .slice(0, 15);
+
 let message = "";
 
 if (shortDueDate) {
 
     message =
-        `${senderName}: ${formatMoney(remaining)} төлбөрийн хугацаа ${shortDueDate}. Санууллаа, баярлалаа.`;
+        `Та "${senderName}"-т ${shortDueDate}-нд ${formatMoney(remaining)} төлбөртэй байна. Баярлалаа.`;
 
 } else {
 
     message =
-        `${senderName}: ${formatMoney(remaining)} төлбөрийн сануулга. Баярлалаа.`;
+        `Та "${senderName}"-т ${formatMoney(remaining)} төлбөртэй байна. Баярлалаа.`;
 
 }
 
@@ -35305,29 +35314,7 @@ if (shortDueDate) {
     sender нэрийг богиносгоно.
 */
 
-if (message.length > 70) {
 
-    const body =
-        shortDueDate
-            ? `${formatMoney(remaining)} төлбөрийн хугацаа ${shortDueDate}. Санууллаа, баярлалаа.`
-            : `${formatMoney(remaining)} төлбөрийн сануулга. Баярлалаа.`;
-
-    const availableSenderLength =
-        Math.max(
-            1,
-            70 - body.length - 2
-        );
-
-    senderName =
-        senderName.slice(
-            0,
-            availableSenderLength
-        );
-
-    message =
-        `${senderName}: ${body}`;
-
-}
 
 
 document.getElementById(
