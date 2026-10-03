@@ -35231,22 +35231,115 @@ async function openSmsModal(debtId) {
     updateSmsCharacterCount();
 
 
+   /* ==========================================
+   SMS BALANCE
+========================================== */
+
+document.getElementById(
+    "smsPlanBalance"
+).textContent = "…";
+
+document.getElementById(
+    "smsPurchasedBalance"
+).textContent = "…";
+
+
+try {
+
+    const {
+        data: {
+            user
+        }
+    } =
+        await supabaseClient.auth.getUser();
+
+
+    if (!user) {
+        throw new Error(
+            "Нэвтрээгүй хэрэглэгч."
+        );
+    }
+
+
+    const {
+        data: profile,
+        error: profileError
+    } =
+        await supabaseClient
+            .from("profiles")
+            .select(`
+                plan_sms_balance,
+                purchased_sms_balance,
+                subscription_expires_at
+            `)
+            .eq(
+                "id",
+                user.id
+            )
+            .single();
+
+
+    if (profileError) {
+        throw profileError;
+    }
+
+
     /*
-        Balance түр loading.
-        Дараагийн API алхамд бодитоор авна.
+        Хугацаа дууссан бол
+        багцын SMS = 0 гэж UI дээр харуулна.
     */
+
+    const subscriptionActive =
+        profile.subscription_expires_at &&
+        new Date(
+            profile.subscription_expires_at
+        ) > new Date();
+
+
+    const planBalance =
+        subscriptionActive
+            ? Number(
+                profile.plan_sms_balance || 0
+              )
+            : 0;
+
+
+    const purchasedBalance =
+        Number(
+            profile.purchased_sms_balance || 0
+        );
+
 
     document.getElementById(
         "smsPlanBalance"
     ).textContent =
-        "…";
+        planBalance;
 
 
     document.getElementById(
         "smsPurchasedBalance"
     ).textContent =
-        "…";
+        purchasedBalance;
 
+
+} catch (error) {
+
+    console.error(
+        "SMS balance load error:",
+        error
+    );
+
+
+    document.getElementById(
+        "smsPlanBalance"
+    ).textContent = "0";
+
+
+    document.getElementById(
+        "smsPurchasedBalance"
+    ).textContent = "0";
+
+}
 
     const status =
         document.getElementById(
