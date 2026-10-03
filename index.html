@@ -35410,9 +35410,287 @@ function updateSmsCharacterCount() {
 
 async function sendDebtSms() {
 
-    appAlert(
-        "SMS API холболтыг дараагийн алхамд холбоно."
-    );
+    const button =
+        document.getElementById(
+            "smsSendButton"
+        );
+
+    const status =
+        document.getElementById(
+            "smsStatus"
+        );
+
+    const message =
+        document.getElementById(
+            "smsMessage"
+        ).value.trim();
+
+
+    /* ==========================================
+       DEBT
+    ========================================== */
+
+    const debt =
+        debts.find(
+            item =>
+                String(item.id) ===
+                String(currentSmsDebtId)
+        );
+
+
+    if (!debt) {
+        appAlert(
+            "Өрийн мэдээлэл олдсонгүй."
+        );
+        return;
+    }
+
+
+    const phone =
+        String(debt.phone || "")
+            .replace(/\D/g, "")
+            .slice(-8);
+
+
+    if (phone.length !== 8) {
+        appAlert(
+            "Утасны дугаар буруу байна."
+        );
+        return;
+    }
+
+
+    /* ==========================================
+       MESSAGE CHECK
+    ========================================== */
+
+    if (!message) {
+        appAlert(
+            "Мессежээ оруулна уу."
+        );
+        return;
+    }
+
+
+    if (message.length > 159) {
+        appAlert(
+            "Мессеж 159 тэмдэгтээс хэтэрч болохгүй."
+        );
+        return;
+    }
+
+
+    /* ==========================================
+       LOCAL BALANCE CHECK
+    ========================================== */
+
+    const planBalance =
+        Number(
+            document.getElementById(
+                "smsPlanBalance"
+            ).textContent
+        ) || 0;
+
+
+    const purchasedBalance =
+        Number(
+            document.getElementById(
+                "smsPurchasedBalance"
+            ).textContent
+        ) || 0;
+
+
+    if (
+        planBalance <= 0 &&
+        purchasedBalance <= 0
+    ) {
+
+        appAlert(
+            "SMS үлдэгдэл хүрэлцэхгүй байна."
+        );
+
+        return;
+    }
+
+
+    /* ==========================================
+       SESSION
+    ========================================== */
+
+    const {
+        data: {
+            session
+        },
+        error: sessionError
+    } =
+        await supabaseClient.auth.getSession();
+
+
+    if (
+        sessionError ||
+        !session?.access_token
+    ) {
+
+        appAlert(
+            "Нэвтрэх эрх олдсонгүй. Дахин нэвтэрнэ үү."
+        );
+
+        return;
+    }
+
+
+    /* ==========================================
+       LOADING
+    ========================================== */
+
+    button.disabled =
+        true;
+
+    button.textContent =
+        "Илгээж байна...";
+
+
+    status.style.display =
+        "none";
+
+    status.textContent =
+        "";
+
+
+    try {
+
+        /* ======================================
+           SEND
+        ====================================== */
+
+        const response =
+            await fetch(
+                "/api/send-sms",
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/json",
+
+                        "Authorization":
+                            `Bearer ${session.access_token}`
+                    },
+
+                    body: JSON.stringify({
+                        phone: phone,
+                        message: message
+                    })
+                }
+            );
+
+
+        const result =
+            await response.json();
+
+
+        if (
+            !response.ok ||
+            !result.success
+        ) {
+
+            throw new Error(
+                result.message ||
+                "SMS илгээж чадсангүй."
+            );
+
+        }
+
+
+        /* ======================================
+           SUCCESS
+        ====================================== */
+
+        status.style.display =
+            "block";
+
+        status.style.background =
+            "#ecfdf5";
+
+        status.style.color =
+            "#047857";
+
+        status.textContent =
+            "✓ SMS амжилттай илгээгдлээ.";
+
+
+        /*
+            Server аль balance-аас хассаныг
+            creditSource-оор буцааж байгаа.
+        */
+
+        if (
+            result.creditSource ===
+            "plan"
+        ) {
+
+            document.getElementById(
+                "smsPlanBalance"
+            ).textContent =
+                Math.max(
+                    0,
+                    planBalance - 1
+                );
+
+        } else if (
+            result.creditSource ===
+            "purchased"
+        ) {
+
+            document.getElementById(
+                "smsPurchasedBalance"
+            ).textContent =
+                Math.max(
+                    0,
+                    purchasedBalance - 1
+                );
+
+        }
+
+
+        /*
+            Мессежийг шууд хаахгүй.
+            Хэрэглэгч амжилттай явсныг харна.
+        */
+
+        button.textContent =
+            "✓ Илгээгдсэн";
+
+
+    } catch (error) {
+
+        console.error(
+            "SMS send error:",
+            error
+        );
+
+
+        status.style.display =
+            "block";
+
+        status.style.background =
+            "#fef2f2";
+
+        status.style.color =
+            "#b91c1c";
+
+        status.textContent =
+            error.message ||
+            "SMS илгээх үед алдаа гарлаа.";
+
+
+        button.disabled =
+            false;
+
+        button.textContent =
+            "📩 SMS илгээх";
+
+    }
 
 }
 </script>
