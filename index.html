@@ -36436,6 +36436,172 @@ async function selectSmsPackage(
 
     }
 }
+        /* ==========================================
+   SUBMIT SMS PURCHASE REQUEST
+========================================== */
+
+async function submitSmsPurchaseRequest() {
+
+    const button =
+        document.getElementById(
+            "submitSmsPurchaseButton"
+        );
+
+    try {
+
+        /* ==========================================
+           ONLINE CHECK
+        ========================================== */
+
+        if (!navigator.onLine) {
+
+            await appAlert(
+                "SMS багцын төлбөрийн хүсэлт илгээхийн тулд интернеттэй байна уу."
+            );
+
+            return;
+        }
+
+
+        /* ==========================================
+           SELECTED PACKAGE
+        ========================================== */
+
+        const smsCount =
+            Number(
+                window.selectedSmsPackage
+                    ?.smsCount
+            );
+
+
+        if (
+            ![50, 100, 200]
+                .includes(smsCount)
+        ) {
+
+            await appAlert(
+                "SMS багцаа сонгоно уу."
+            );
+
+            return;
+        }
+
+
+        /* ==========================================
+           LOADING
+        ========================================== */
+
+        const oldText =
+            button
+                ? button.innerHTML
+                : "";
+
+
+        if (button) {
+
+            button.disabled = true;
+
+            button.innerHTML =
+                "⏳ Хүсэлт илгээж байна...";
+
+        }
+
+
+        /* ==========================================
+           SECURE RPC
+        ========================================== */
+
+        const {
+            data: requestId,
+            error
+        } = await supabaseClient.rpc(
+            "create_sms_purchase_request",
+            {
+                p_sms_count: smsCount
+            }
+        );
+
+
+        if (error) {
+
+            console.error(
+                "SMS purchase request error:",
+                error
+            );
+
+
+            if (
+                String(
+                    error.message || ""
+                ).includes(
+                    "Pending SMS purchase request already exists"
+                )
+            ) {
+
+                await appAlert(
+                    "Танд хүлээгдэж буй SMS багцын төлбөрийн хүсэлт аль хэдийн байна."
+                );
+
+                return;
+            }
+
+
+            throw error;
+        }
+
+
+        console.log(
+            "SMS purchase request created:",
+            requestId
+        );
+
+
+        /* ==========================================
+           SUCCESS
+        ========================================== */
+
+        await appAlert(
+            `${smsCount} SMS багц авах хүсэлт амжилттай илгээгдлээ.\n\n` +
+            "Админ төлбөрийг шалгаж баталгаажуулсны дараа SMS үлдэгдэл автоматаар нэмэгдэнэ."
+        );
+
+
+        /* ==========================================
+           CLOSE
+        ========================================== */
+
+        closeSmsPurchaseModal();
+
+        window.selectedSmsPackage =
+            null;
+
+
+    } catch (error) {
+
+        console.error(
+            "Create SMS purchase request error:",
+            error
+        );
+
+
+        await appAlert(
+            "SMS багцын төлбөрийн хүсэлт илгээх үед алдаа гарлаа. Дахин оролдоно уу."
+        );
+
+
+    } finally {
+
+        if (button) {
+
+            button.disabled = false;
+
+            button.innerHTML =
+                "💳 Төлбөрийн хүсэлт илгээх";
+
+        }
+
+    }
+}
 </script>
 
 </body>
