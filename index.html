@@ -36961,6 +36961,88 @@ async function approveAdminSmsPurchase(
     }
 
 }
+        /* ==========================================
+   ADMIN — REJECT SMS PURCHASE
+========================================== */
+
+async function rejectAdminSmsPurchase(
+    requestId,
+    button
+) {
+
+    const confirmed =
+        await adminPaymentConfirm(
+            "Энэ SMS багцын төлбөрийн хүсэлтийг татгалзах уу?",
+            "Татгалзах"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const oldText =
+        button.textContent;
+
+
+    try {
+
+        button.disabled = true;
+
+        button.textContent =
+            "⏳ Татгалзаж байна...";
+
+
+        const { error } =
+            await supabaseClient.rpc(
+                "reject_sms_purchase_request",
+                {
+                    p_request_id:
+                        requestId,
+
+                    p_admin_note:
+                        "Админ SMS багцын хүсэлтийг татгалзсан"
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        await appAlert(
+            "SMS багцын хүсэлтийг татгалзлаа."
+        );
+
+
+        await loadAdminDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Reject SMS purchase error:",
+            error
+        );
+
+
+        await appAlert(
+            "SMS багцын хүсэлтийг татгалзах үед алдаа гарлаа."
+        );
+
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            oldText;
+
+    }
+
+}
 </script>
 
 </body>
