@@ -36873,6 +36873,94 @@ async function submitSmsPurchaseRequest() {
 
     }
 }
+        /* ==========================================
+   ADMIN — APPROVE SMS PURCHASE
+========================================== */
+
+async function approveAdminSmsPurchase(
+    requestId,
+    button
+) {
+
+    const confirmed =
+        await adminPaymentConfirm(
+            "Энэ SMS багцын төлбөрийг зөвшөөрөх үү?",
+            "Зөвшөөрөх"
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    const oldText =
+        button.textContent;
+
+
+    try {
+
+        button.disabled = true;
+
+        button.textContent =
+            "⏳ Баталж байна...";
+
+
+        /* ==========================================
+           APPROVE
+        ========================================== */
+
+        const { error } =
+            await supabaseClient.rpc(
+                "approve_sms_purchase_request",
+                {
+                    p_request_id:
+                        requestId
+                }
+            );
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        await appAlert(
+            "SMS багцын төлбөрийг зөвшөөрлөө.\n\n" +
+            "Хэрэглэгчийн нэмэлт SMS үлдэгдэл амжилттай нэмэгдлээ."
+        );
+
+
+        /* ==========================================
+           REFRESH ADMIN
+        ========================================== */
+
+        await loadAdminDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Approve SMS purchase error:",
+            error
+        );
+
+
+        await appAlert(
+            "SMS багцын хүсэлтийг зөвшөөрөх үед алдаа гарлаа."
+        );
+
+
+    } finally {
+
+        button.disabled = false;
+
+        button.textContent =
+            oldText;
+
+    }
+
+}
 </script>
 
 </body>
