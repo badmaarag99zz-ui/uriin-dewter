@@ -17515,7 +17515,103 @@ body{
 
 </div>
 
+<!-- SMS MODAL -->
+<div
+    id="smsModal"
+    class="debt-modal"
+    onclick="closeSmsModalOutside(event)"
+>
+    <div
+        class="debt-modal-box sms-modal-box"
+        onclick="event.stopPropagation()"
+    >
 
+        <div class="debt-modal-header">
+
+            <div>
+                <h2>📩 SMS сануулга</h2>
+                <p>Өрийн сануулга мессеж илгээх</p>
+            </div>
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeSmsModal()"
+            >
+                ✕
+            </button>
+
+        </div>
+
+        <div class="sms-modal-content">
+
+            <div class="sms-recipient-box">
+                <div>
+                    <span>Хүлээн авагч</span>
+                    <strong id="smsRecipientName">—</strong>
+                </div>
+
+                <div id="smsRecipientPhone">
+                    —
+                </div>
+            </div>
+
+            <label class="sms-label">
+                Мессеж
+            </label>
+
+            <textarea
+                id="smsMessage"
+                maxlength="159"
+                placeholder="SMS мессеж..."
+                oninput="updateSmsCharacterCount()"
+            ></textarea>
+
+            <div class="sms-message-info">
+
+                <span id="smsCharacterCount">
+                    0 / 159
+                </span>
+
+                <span>
+                    1 SMS
+                </span>
+
+            </div>
+
+            <div class="sms-balance-box">
+
+                <div>
+                    <span>Багцын SMS</span>
+                    <strong id="smsPlanBalance">—</strong>
+                </div>
+
+                <div>
+                    <span>Нэмэлт SMS</span>
+                    <strong id="smsPurchasedBalance">—</strong>
+                </div>
+
+            </div>
+
+            <div
+                id="smsStatus"
+                class="sms-status"
+                style="display:none;"
+            ></div>
+
+            <button
+                type="button"
+                id="smsSendButton"
+                class="modal-save-btn"
+                onclick="sendDebtSms()"
+            >
+                📩 SMS илгээх
+            </button>
+
+        </div>
+
+    </div>
+</div>
 <!-- FORGOT PASSWORD MODAL -->
 
 <div
@@ -33268,6 +33364,166 @@ if (debtAmountInput) {
     cursor: not-allowed;
     transform: none;
 }
+    /* ==========================================
+   SMS MODAL
+========================================== */
+
+#smsModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 18px;
+
+    background: rgba(15, 23, 42, .45);
+    backdrop-filter: blur(3px);
+}
+
+.sms-modal-box {
+    width: 100%;
+    max-width: 480px;
+}
+
+.sms-modal-content {
+    padding: 4px 0 0;
+}
+
+.sms-recipient-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+
+    padding: 14px 16px;
+    margin-bottom: 18px;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+}
+
+.sms-recipient-box div:first-child {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sms-recipient-box span {
+    color: #64748b;
+    font-size: 12px;
+}
+
+.sms-recipient-box strong {
+    color: #0f172a;
+    font-size: 15px;
+}
+
+#smsRecipientPhone {
+    color: #2563eb;
+    font-weight: 700;
+}
+
+.sms-label {
+    display: block;
+    margin-bottom: 7px;
+
+    color: #334155;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+#smsMessage {
+    display: block;
+
+    width: 100%;
+    min-height: 120px;
+
+    padding: 13px 14px;
+
+    resize: vertical;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 13px;
+
+    outline: none;
+
+    font-family: inherit;
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+#smsMessage:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .08);
+}
+
+.sms-message-info {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 7px;
+    margin-bottom: 16px;
+
+    color: #64748b;
+    font-size: 12px;
+}
+
+.sms-balance-box {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+
+    margin-bottom: 16px;
+}
+
+.sms-balance-box > div {
+    padding: 12px 14px;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 13px;
+}
+
+.sms-balance-box span {
+    display: block;
+
+    margin-bottom: 5px;
+
+    color: #64748b;
+    font-size: 12px;
+}
+
+.sms-balance-box strong {
+    color: #0f172a;
+    font-size: 18px;
+}
+
+.sms-status {
+    margin-bottom: 12px;
+    padding: 10px 12px;
+
+    border-radius: 11px;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media(max-width:600px) {
+
+    .sms-balance-box {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .sms-modal-box {
+        max-height: 92vh;
+        overflow-y: auto;
+    }
+
+}
 </style>
 <script id="auth-v3-final-dom">
 (function(){
@@ -34864,7 +35120,208 @@ async function deleteMyAccount() {
         }
     }
 }
- 
+ /* ==========================================
+   DEBT SMS MODAL
+========================================== */
+
+let currentSmsDebtId = null;
+
+
+async function openSmsModal(debtId) {
+
+    const debt =
+        debts.find(
+            item =>
+                String(item.id) === String(debtId)
+        );
+
+    if (!debt) {
+        appAlert("Өрийн мэдээлэл олдсонгүй.");
+        return;
+    }
+
+
+    if (!debt.phone) {
+        appAlert("Утасны дугаар бүртгэлгүй байна.");
+        return;
+    }
+
+
+    const phone =
+        String(debt.phone)
+            .replace(/\D/g, "")
+            .slice(-8);
+
+
+    if (phone.length !== 8) {
+        appAlert("Утасны дугаар буруу байна.");
+        return;
+    }
+
+
+    const remaining =
+        Math.max(
+            0,
+            Number(debt.amount || 0) -
+            Number(debt.paid || 0)
+        );
+
+
+    if (remaining <= 0) {
+        appAlert("Энэ авлага бүрэн төлөгдсөн байна.");
+        return;
+    }
+
+
+    currentSmsDebtId =
+        debt.id;
+
+
+    document.getElementById(
+        "smsRecipientName"
+    ).textContent =
+        debt.name || "Нэргүй";
+
+
+    document.getElementById(
+        "smsRecipientPhone"
+    ).textContent =
+        phone;
+
+
+    let message =
+        `Өрийн дэвтэр: Таны ${formatMoney(remaining)} төлбөр`;
+
+
+    if (debt.dueDate) {
+
+        message +=
+            ` ${debt.dueDate}-нд төлөгдөх хугацаатай.`;
+
+    } else {
+
+        message +=
+            ` төлөгдөөгүй байна.`;
+
+    }
+
+
+    message +=
+        " Төлбөрөө хугацаанд нь төлнө үү.";
+
+
+    /*
+        SendSMS 159 тэмдэгтийн хязгаар.
+        Илүү гарвал автоматаар тайрна.
+    */
+
+    message =
+        message.slice(
+            0,
+            159
+        );
+
+
+    document.getElementById(
+        "smsMessage"
+    ).value =
+        message;
+
+
+    updateSmsCharacterCount();
+
+
+    /*
+        Balance түр loading.
+        Дараагийн API алхамд бодитоор авна.
+    */
+
+    document.getElementById(
+        "smsPlanBalance"
+    ).textContent =
+        "…";
+
+
+    document.getElementById(
+        "smsPurchasedBalance"
+    ).textContent =
+        "…";
+
+
+    const status =
+        document.getElementById(
+            "smsStatus"
+        );
+
+    status.style.display =
+        "none";
+
+    status.textContent =
+        "";
+
+
+    document.getElementById(
+        "smsModal"
+    ).style.display =
+        "flex";
+}
+
+
+function closeSmsModal() {
+
+    document.getElementById(
+        "smsModal"
+    ).style.display =
+        "none";
+
+
+    currentSmsDebtId =
+        null;
+
+}
+
+
+function closeSmsModalOutside(event) {
+
+    if (
+        event.target.id ===
+        "smsModal"
+    ) {
+
+        closeSmsModal();
+
+    }
+
+}
+
+
+function updateSmsCharacterCount() {
+
+    const message =
+        document.getElementById(
+            "smsMessage"
+        ).value;
+
+
+    document.getElementById(
+        "smsCharacterCount"
+    ).textContent =
+        `${message.length} / 159`;
+
+}
+
+
+/*
+    Дараагийн алхамд SendSMS API-тай холбоно.
+*/
+
+async function sendDebtSms() {
+
+    appAlert(
+        "SMS API холболтыг дараагийн алхамд холбоно."
+    );
+
+}
 </script>
 
 </body>
