@@ -35298,8 +35298,12 @@ let message = "";
 
 if (shortDueDate) {
 
-    message =
-        `Та "${senderName}"-т ${shortDueDate}-нд ${formatMoney(remaining)} төлбөртэй байна. Баярлалаа.`;
+  const smsAmount =
+    formatMoney(remaining)
+        .replace(/\s*₮/g, "₮");
+
+message =
+    `"${senderName}"-т ${shortDueDate}-нд ${smsAmount} төлбөртэй. Баярлалаа.`;
 
 } else {
 
