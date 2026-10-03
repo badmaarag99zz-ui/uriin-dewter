@@ -26772,6 +26772,7 @@ window.addEventListener(
         </div>
 
         <div
+            class="subscription-plan-price"
             style="
                 font-size:20px;
                 font-weight:800;
@@ -26779,6 +26780,17 @@ window.addEventListener(
             "
         >
             9,900₮
+        </div>
+
+        <div
+            style="
+                margin-top:6px;
+                font-size:12px;
+                font-weight:700;
+                color:#16a34a;
+            "
+        >
+            🎁 +50 SMS
         </div>
     </button>
 
@@ -26810,6 +26822,7 @@ window.addEventListener(
         </div>
 
         <div
+            class="subscription-plan-price"
             style="
                 font-size:20px;
                 font-weight:800;
@@ -26817,6 +26830,17 @@ window.addEventListener(
             "
         >
             24,900₮
+        </div>
+
+        <div
+            style="
+                margin-top:6px;
+                font-size:12px;
+                font-weight:700;
+                color:#16a34a;
+            "
+        >
+            🎁 +100 SMS
         </div>
     </button>
 
@@ -26848,6 +26872,7 @@ window.addEventListener(
         </div>
 
         <div
+            class="subscription-plan-price"
             style="
                 font-size:20px;
                 font-weight:800;
@@ -26855,6 +26880,17 @@ window.addEventListener(
             "
         >
             44,900₮
+        </div>
+
+        <div
+            style="
+                margin-top:6px;
+                font-size:12px;
+                font-weight:700;
+                color:#16a34a;
+            "
+        >
+            🎁 +200 SMS
         </div>
     </button>
 
@@ -26904,6 +26940,7 @@ window.addEventListener(
         </div>
 
         <div
+            class="subscription-plan-price"
             style="
                 font-size:20px;
                 font-weight:800;
@@ -26911,6 +26948,17 @@ window.addEventListener(
             "
         >
             74,900₮
+        </div>
+
+        <div
+            style="
+                margin-top:6px;
+                font-size:12px;
+                font-weight:700;
+                color:#16a34a;
+            "
+        >
+            🎁 +300 SMS
         </div>
 
     </button>
@@ -27364,7 +27412,7 @@ function selectSubscriptionPlan(button) {
 
             const price =
                 item.querySelector(
-                    "div:last-child"
+                    ".subscription-plan-price"
                 );
 
             if (price) {
@@ -27387,7 +27435,7 @@ function selectSubscriptionPlan(button) {
 
     const selectedPrice =
         button.querySelector(
-            "div:last-child"
+           ".subscription-plan-price"
         );
 
     if (selectedPrice) {
