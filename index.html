@@ -35189,38 +35189,153 @@ async function openSmsModal(debtId) {
         phone;
 
 
-    let message =
-        `Өрийн дэвтэр: Таны ${formatMoney(remaining)} төлбөр`;
+  /* ==========================================
+   SMS DEFAULT MESSAGE
+========================================== */
 
+let senderName = "";
 
-    if (debt.dueDate) {
+/*
+    Дэлгүүрийн нэрийг profile-оос авна.
+    Байхгүй бол эзний утсыг ашиглана.
+*/
 
-        message +=
-            ` ${debt.dueDate}-нд төлөгдөх хугацаатай.`;
+try {
 
-    } else {
+    const {
+        data: { user }
+    } = await supabaseClient.auth.getUser();
 
-        message +=
-            ` төлөгдөөгүй байна.`;
+    if (user) {
+
+        const {
+            data: smsProfile
+        } = await supabaseClient
+            .from("profiles")
+            .select("shop_name, phone")
+            .eq("id", user.id)
+            .single();
+
+        if (smsProfile) {
+
+            senderName =
+                String(
+                    smsProfile.shop_name || ""
+                ).trim();
+
+            if (!senderName) {
+
+                senderName =
+                    String(
+                        smsProfile.phone || ""
+                    )
+                    .replace(/\D/g, "")
+                    .slice(-8);
+
+            }
+
+        }
 
     }
 
+} catch (error) {
 
-    message +=
-        " Төлбөрөө хугацаанд нь төлнө үү.";
+    console.error(
+        "SMS sender info error:",
+        error
+    );
+
+}
 
 
-    /*
-        SendSMS 159 тэмдэгтийн хязгаар.
-        Илүү гарвал автоматаар тайрна.
-    */
+/*
+    Аль аль нь байхгүй бол
+    ерөнхий нэр ашиглана.
+*/
+
+if (!senderName) {
+    senderName = "Өрийн дэвтэр";
+}
+
+
+/*
+    Огноо:
+    2026-10-02 → 10/02
+*/
+
+let shortDueDate = "";
+
+if (debt.dueDate) {
+
+    const parts =
+        String(debt.dueDate)
+            .split("-");
+
+    if (parts.length === 3) {
+
+        shortDueDate =
+            `${parts[1]}/${parts[2]}`;
+
+    }
+
+}
+
+
+/*
+    Үндсэн SMS
+*/
+
+let message = "";
+
+if (shortDueDate) {
 
     message =
-        message.slice(
-            0,
-            159
+        `${senderName}: ${formatMoney(remaining)} төлбөрийн хугацаа ${shortDueDate}. Санууллаа, баярлалаа.`;
+
+} else {
+
+    message =
+        `${senderName}: ${formatMoney(remaining)} төлбөрийн сануулга. Баярлалаа.`;
+
+}
+
+
+/*
+    70 тэмдэгтээс хэтэрвэл
+    sender нэрийг богиносгоно.
+*/
+
+if (message.length > 70) {
+
+    const body =
+        shortDueDate
+            ? `${formatMoney(remaining)} төлбөрийн хугацаа ${shortDueDate}. Санууллаа, баярлалаа.`
+            : `${formatMoney(remaining)} төлбөрийн сануулга. Баярлалаа.`;
+
+    const availableSenderLength =
+        Math.max(
+            1,
+            70 - body.length - 2
         );
 
+    senderName =
+        senderName.slice(
+            0,
+            availableSenderLength
+        );
+
+    message =
+        `${senderName}: ${body}`;
+
+}
+
+
+document.getElementById(
+    "smsMessage"
+).value =
+    message;
+
+updateSmsCharacterCount();
 
     document.getElementById(
         "smsMessage"
@@ -35390,16 +35505,44 @@ function closeSmsModalOutside(event) {
 
 function updateSmsCharacterCount() {
 
-    const message =
+    const textarea =
         document.getElementById(
             "smsMessage"
-        ).value;
+        );
+
+    const counter =
+        document.getElementById(
+            "smsCharacterCount"
+        );
+
+    const message =
+        textarea.value;
+
+    const length =
+        message.length;
 
 
-    document.getElementById(
-        "smsCharacterCount"
-    ).textContent =
-        `${message.length} / 159`;
+    counter.textContent =
+        `${length} / 70`;
+
+
+    if (length > 70) {
+
+        counter.style.color =
+            "#dc2626";
+
+        counter.style.fontWeight =
+            "700";
+
+    } else {
+
+        counter.style.color =
+            "#64748b";
+
+        counter.style.fontWeight =
+            "400";
+
+    }
 
 }
 
@@ -35472,10 +35615,10 @@ async function sendDebtSms() {
     }
 
 
-    if (message.length > 159) {
-        appAlert(
-            "Мессеж 159 тэмдэгтээс хэтэрч болохгүй."
-        );
+  if (message.length > 70) {
+       appAlert(
+    "Монгол SMS 70 тэмдэгтээс хэтэрч болохгүй."
+);
         return;
     }
 
