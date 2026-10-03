@@ -15509,7 +15509,47 @@ body{
             </div>
 
         </div>
+<!-- ==========================================
+     ADMIN SMS PURCHASE REQUESTS
+========================================== -->
 
+<div
+    class="admin-payment-card"
+    style="margin-top:16px;"
+>
+
+    <div class="admin-payment-header">
+
+        <div>
+            <strong>
+                📨 SMS багцын хүсэлтүүд
+            </strong>
+
+            <small>
+                Хүлээгдэж буй SMS худалдан авалт
+            </small>
+        </div>
+
+        <button
+            type="button"
+            class="admin-refresh-btn"
+            onclick="loadAdminDashboard()"
+        >
+            ↻ Шинэчлэх
+        </button>
+
+    </div>
+
+
+    <div id="adminSmsPurchaseRequests">
+
+        <div class="admin-loading">
+            Уншиж байна...
+        </div>
+
+    </div>
+
+</div>
     </div>
 
 </section>
@@ -34177,7 +34217,44 @@ async function loadAdminDashboard() {
             requests || [],
             users || []
         );
+/* =====================================
+   PENDING SMS PURCHASE REQUESTS
+===================================== */
 
+const {
+    data: smsRequests,
+    error: smsRequestsError
+} = await supabaseClient
+    .from("sms_purchase_requests")
+    .select(`
+        id,
+        user_id,
+        sms_count,
+        amount,
+        status,
+        created_at
+    `)
+    .eq(
+        "status",
+        "pending"
+    )
+    .order(
+        "created_at",
+        {
+            ascending: false
+        }
+    );
+
+
+if (smsRequestsError) {
+    throw smsRequestsError;
+}
+
+
+renderAdminSmsPurchaseRequests(
+    smsRequests || [],
+    users || []
+);
 
     } catch (error) {
 
@@ -34384,7 +34461,201 @@ function renderAdminPaymentRequests(
         }).join("");
 
 }
+/* ==========================================
+   RENDER SMS PURCHASE REQUESTS
+========================================== */
 
+function renderAdminSmsPurchaseRequests(
+    requests,
+    users
+) {
+
+    const box =
+        document.getElementById(
+            "adminSmsPurchaseRequests"
+        );
+
+
+    if (!box) {
+        return;
+    }
+
+
+    /* ==========================================
+       EMPTY
+    ========================================== */
+
+    if (!requests.length) {
+
+        box.innerHTML = `
+            <div style="
+                padding:30px 10px;
+                text-align:center;
+                color:#94a3b8;
+                font-size:13px;
+            ">
+                Одоогоор хүлээгдэж буй
+                SMS багцын хүсэлт алга.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    /* ==========================================
+       REQUESTS
+    ========================================== */
+
+    box.innerHTML =
+        requests.map(function(request) {
+
+            const user =
+                users.find(function(item) {
+                    return item.id ===
+                        request.user_id;
+                });
+
+
+            const phone =
+                escapeAdminHtml(
+                    user?.phone || "—"
+                );
+
+
+            const created =
+                request.created_at
+                    ? new Date(
+                        request.created_at
+                      ).toLocaleString(
+                        "mn-MN"
+                      )
+                    : "—";
+
+
+            const smsCount =
+                Number(
+                    request.sms_count || 0
+                );
+
+
+            const amount =
+                Number(
+                    request.amount || 0
+                ).toLocaleString(
+                    "mn-MN"
+                );
+
+
+            return `
+                <div style="
+                    padding:16px 0;
+                    border-bottom:1px solid #e2e8f0;
+                ">
+
+                    <div style="
+                        display:flex;
+                        align-items:flex-start;
+                        justify-content:space-between;
+                        gap:12px;
+                    ">
+
+                        <div>
+
+                            <div style="
+                                font-size:15px;
+                                font-weight:800;
+                                color:#0f172a;
+                            ">
+                                📨 ${smsCount} SMS
+                            </div>
+
+                            <div style="
+                                margin-top:5px;
+                                font-size:13px;
+                                color:#64748b;
+                            ">
+                                📱 ${phone}
+                            </div>
+
+                        </div>
+
+
+                        <strong style="
+                            color:#2563eb;
+                            font-size:16px;
+                            white-space:nowrap;
+                        ">
+                            ${amount}₮
+                        </strong>
+
+                    </div>
+
+
+                    <div style="
+                        margin-top:10px;
+                        font-size:12px;
+                        color:#64748b;
+                    ">
+                        ${created}
+                    </div>
+
+
+                    <div style="
+                        display:flex;
+                        gap:8px;
+                        margin-top:13px;
+                    ">
+
+                        <button
+                            type="button"
+                            onclick="approveAdminSmsPurchase(
+                                '${request.id}',
+                                this
+                            )"
+                            style="
+                                flex:1;
+                                border:0;
+                                padding:10px;
+                                border-radius:10px;
+                                background:#087443;
+                                color:white;
+                                font-weight:750;
+                                cursor:pointer;
+                            "
+                        >
+                            Зөвшөөрөх
+                        </button>
+
+
+                        <button
+                            type="button"
+                            onclick="rejectAdminSmsPurchase(
+                                '${request.id}',
+                                this
+                            )"
+                            style="
+                                flex:1;
+                                border:1px solid #fecaca;
+                                padding:10px;
+                                border-radius:10px;
+                                background:#fff;
+                                color:#dc2626;
+                                font-weight:750;
+                                cursor:pointer;
+                            "
+                        >
+                            Татгалзах
+                        </button>
+
+                    </div>
+
+                </div>
+            `;
+
+        }).join("");
+
+}
 
 /* ==========================================
    ADMIN HTML ESCAPE
