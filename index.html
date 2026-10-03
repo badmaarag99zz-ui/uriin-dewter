@@ -26111,49 +26111,66 @@ if ("serviceWorker" in navigator) {
    PWA INSTALL
 ========================================== */
 
-let deferredInstallPrompt =
-    null;
-
+let deferredInstallPrompt = null;
 
 const installAppBtn =
-    document.getElementById(
-        "installAppBtn"
-    );
+    document.getElementById("installAppBtn");
 
-/* Утасны browser дээр install товчийг харуулах */
-const isMobileBrowser =
-    /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+const userAgent =
+    navigator.userAgent || navigator.vendor || window.opera;
+
+const isAndroid =
+    /Android/i.test(userAgent);
+
+const isIOS =
+    /iPhone|iPad|iPod/i.test(userAgent);
+
+const isFacebookBrowser =
+    /FBAN|FBAV|FB_IAB|Instagram/i.test(userAgent);
 
 const isInstalledApp =
     window.matchMedia("(display-mode: standalone)").matches ||
     window.navigator.standalone === true;
 
+
+/* ==========================================
+   INSTALL ТОВЧ ХАРУУЛАХ
+========================================== */
+
 if (
     installAppBtn &&
-    isMobileBrowser &&
+    (isAndroid || isIOS) &&
     !isInstalledApp
 ) {
     installAppBtn.style.display = "block";
 }
+
+
+/* ==========================================
+   ANDROID INSTALL EVENT
+========================================== */
+
 window.addEventListener(
     "beforeinstallprompt",
     function(event) {
 
         event.preventDefault();
 
-        deferredInstallPrompt =
-            event;
+        deferredInstallPrompt = event;
 
-        if (installAppBtn) {
-
-            installAppBtn.style.display =
-                "block";
-
+        if (
+            installAppBtn &&
+            !isInstalledApp
+        ) {
+            installAppBtn.style.display = "block";
         }
-
     }
 );
 
+
+/* ==========================================
+   INSTALL BUTTON
+========================================== */
 
 if (installAppBtn) {
 
@@ -26161,80 +26178,97 @@ if (installAppBtn) {
         "click",
         async function() {
 
-            if (!deferredInstallPrompt) {
+            /* FACEBOOK / INSTAGRAM BROWSER */
+
+            if (isFacebookBrowser) {
+
+                alert(
+                    "📲 Өрийн дэвтэр суулгах\n\n" +
+                    (isIOS
+                        ? "Facebook-ийн browser-оос шууд суулгах боломжгүй.\n\n" +
+                          "Баруун доорх/дээд талын цэсийг нээгээд “Open in Safari” сонгоно уу.\n\n" +
+                          "Safari дээр Share → Add to Home Screen дарна."
+                        : "Facebook-ийн browser-оос шууд суулгах боломжгүй.\n\n" +
+                          "Баруун дээд талын ⋮ цэсийг дараад “Open in Chrome” сонгоно уу.\n\n" +
+                          "Chrome дээр нээгээд “Апп суулгах” товчийг дахин дарна."
+                    )
+                );
+
                 return;
             }
 
-            deferredInstallPrompt.prompt();
 
-            const result =
-                await deferredInstallPrompt.userChoice;
+            /* IPHONE / IPAD */
 
-            console.log(
-                "Install result:",
-                result.outcome
+            if (isIOS) {
+
+                alert(
+                    "📱 iPhone дээр суулгах\n\n" +
+                    "1. Safari browser-оор энэ хуудсыг нээнэ.\n\n" +
+                    "2. Share товчийг дарна.\n\n" +
+                    "3. “Add to Home Screen” сонгоно.\n\n" +
+                    "4. “Add” дарна."
+                );
+
+                return;
+            }
+
+
+            /* ANDROID / CHROME */
+
+            if (deferredInstallPrompt) {
+
+                deferredInstallPrompt.prompt();
+
+                const result =
+                    await deferredInstallPrompt.userChoice;
+
+                console.log(
+                    "Install result:",
+                    result.outcome
+                );
+
+                deferredInstallPrompt = null;
+
+                if (result.outcome === "accepted") {
+                    installAppBtn.style.display = "none";
+                }
+
+                return;
+            }
+
+
+            /* INSTALL EVENT ОДООХОНДОО БЭЛЭН БИШ */
+
+            alert(
+                "📲 Апп суулгах\n\n" +
+                "Chrome-ийн ⋮ цэсийг дараад " +
+                "“Install app” эсвэл “Add to Home screen” сонгоно уу."
             );
-
-            deferredInstallPrompt = null;
-
-            installAppBtn.style.display =
-                "none";
         }
     );
-
 }
+
+
+/* ==========================================
+   INSTALL SUCCESS
+========================================== */
 
 window.addEventListener(
     "appinstalled",
     function() {
 
-        deferredInstallPrompt =
-            null;
+        deferredInstallPrompt = null;
 
         if (installAppBtn) {
-
-            installAppBtn.style.display =
-                "none";
-
+            installAppBtn.style.display = "none";
         }
-
     }
 );
 
 </script>
 <script>
-(function () {
 
-    const iphoneInstallBtn =
-        document.getElementById("iphoneInstallBtn");
-
-    if (!iphoneInstallBtn) return;
-
-    const isIOS =
-        /iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    const isStandalone =
-        window.navigator.standalone === true ||
-        window.matchMedia("(display-mode: standalone)").matches;
-
-    if (isIOS && !isStandalone) {
-
-        iphoneInstallBtn.style.display = "block";
-
-        iphoneInstallBtn.addEventListener("click", function () {
-
-            alert(
-                "📱 iPhone дээр суулгахын тулд:\n\n" +
-                "1. Safari-ийн доорх Share товчийг дарна уу.\n\n" +
-                "2. “Add to Home Screen” сонгоно уу.\n\n" +
-                "3. “Add” дарна уу."
-            );
-
-        });
-
-    }
-
-})();
 </script>
     <div
     id="helpModal"
