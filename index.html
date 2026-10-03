@@ -23899,7 +23899,10 @@ function openDetailModal(id) {
 
     if (!debt) return;
 
-
+const safeId =
+    String(debt.id || "")
+        .replace(/\\/g, "\\\\")
+        .replace(/'/g, "\\'");
     const remaining =
         Math.max(
             0,
@@ -24078,7 +24081,19 @@ function openDetailModal(id) {
                 }
 
             </div>
-
+${
+    debt.phone && !isDone
+        ? `
+            <button
+                type="button"
+                class="sms-send-btn"
+                onclick="event.stopPropagation(); openSmsModal('${safeId}')"
+            >
+                📩 SMS сануулга илгээх
+            </button>
+        `
+        : ""
+}
 <!-- НИЙТ ӨР / ТӨЛСӨН -->
 
 <div class="detail-stats">
@@ -33215,7 +33230,44 @@ if (debtAmountInput) {
     #profileEditModal > .profile-edit-modal > #saveProfileButton { width: calc(100% - 48px) !important; margin-left: 24px !important; margin-right: 24px !important; margin-bottom: 26px !important; }
     #registerModal h2, #forgotPasswordModal h2, #changePhoneModal h2, #profileEditModal h2 { font-size: 23px !important; }
 }
+/* ==========================================
+   SMS — CUSTOMER DETAIL
+========================================== */
 
+.sms-send-btn {
+    width: 100%;
+    margin-top: 12px;
+    padding: 13px 16px;
+
+    border: none;
+    border-radius: 13px;
+
+    background: #2563eb;
+    color: #ffffff;
+
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform .15s ease,
+        opacity .15s ease;
+}
+
+.sms-send-btn:hover {
+    transform: translateY(-1px);
+}
+
+.sms-send-btn:active {
+    transform: translateY(0);
+}
+
+.sms-send-btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+}
 </style>
 <script id="auth-v3-final-dom">
 (function(){
