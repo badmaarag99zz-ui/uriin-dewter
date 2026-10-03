@@ -17696,6 +17696,160 @@ body{
         </div>
 
     </div>
+    <!-- ==========================================
+     SMS PAYMENT INFO
+========================================== -->
+
+<div
+    id="smsPurchasePaymentInfo"
+    style="
+        display:none;
+        margin-top:8px;
+        padding:16px;
+        background:#f8fafc;
+        border:1px solid #e2e8f0;
+        border-radius:16px;
+    "
+>
+
+    <div
+        style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-bottom:14px;
+        "
+    >
+        <div
+            style="
+                width:40px;
+                height:40px;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                border-radius:12px;
+                background:#eff6ff;
+                font-size:20px;
+            "
+        >
+            🏦
+        </div>
+
+        <div>
+            <strong
+                style="
+                    display:block;
+                    color:#0f172a;
+                    font-size:14px;
+                "
+            >
+                Банкны шилжүүлэг
+            </strong>
+
+            <span
+                style="
+                    color:#64748b;
+                    font-size:12px;
+                "
+            >
+                Доорх дансанд төлбөрөө шилжүүлнэ үү
+            </span>
+        </div>
+    </div>
+
+
+    <!-- БАНК -->
+
+    <div class="sms-payment-row">
+        <span>Банк</span>
+        <strong>ХААН Банк</strong>
+    </div>
+
+
+    <!-- ДАНС ЭЗЭМШИГЧ -->
+
+    <div class="sms-payment-row">
+        <span>Данс эзэмшигч</span>
+        <strong>БАДМААРАГ</strong>
+    </div>
+
+
+    <!-- IBAN -->
+
+    <div class="sms-payment-row">
+        <span>IBAN</span>
+        <strong>53000500</strong>
+    </div>
+
+
+    <!-- ДАНС -->
+
+    <div class="sms-payment-block">
+
+        <span>Дансны дугаар</span>
+
+        <div>
+            <strong id="smsPurchaseAccountNumber">
+                5001803761
+            </strong>
+
+            <button
+                type="button"
+                onclick="copySmsPurchaseAccount()"
+            >
+                📋 Хуулах
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- ГҮЙЛГЭЭНИЙ УТГА -->
+
+    <div class="sms-payment-block">
+
+        <span>Гүйлгээний утга</span>
+
+        <div>
+            <strong id="smsPurchaseTransferNote">
+                —
+            </strong>
+
+            <button
+                type="button"
+                onclick="copySmsPurchaseTransferNote()"
+            >
+                📋 Хуулах
+            </button>
+        </div>
+
+    </div>
+
+
+    <!-- ТӨЛӨХ ДҮН -->
+
+    <div class="sms-payment-row sms-payment-total">
+
+        <span>Төлөх дүн</span>
+
+        <strong id="smsPurchaseAmount">
+            —
+        </strong>
+
+    </div>
+
+
+    <button
+        type="button"
+        id="submitSmsPurchaseButton"
+        class="modal-save-btn"
+        onclick="submitSmsPurchaseRequest()"
+        style="margin-top:14px;"
+    >
+        💳 Төлбөрийн хүсэлт илгээх
+    </button>
+
+</div>
 </div>
 <!-- FORGOT PASSWORD MODAL -->
 
@@ -33721,6 +33875,85 @@ if (debtAmountInput) {
     font-weight: 900;
     white-space: nowrap;
 }
+    /* ==========================================
+   SMS PURCHASE PAYMENT
+========================================== */
+
+.sms-payment-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+
+    font-size: 13px;
+}
+
+.sms-payment-row span,
+.sms-payment-block > span {
+    color: #64748b;
+}
+
+.sms-payment-row strong {
+    color: #0f172a;
+}
+
+
+/* ACCOUNT / TRANSFER NOTE */
+
+.sms-payment-block {
+    padding: 10px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.sms-payment-block > span {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 12px;
+}
+
+.sms-payment-block > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.sms-payment-block strong {
+    color: #0f172a;
+    font-size: 15px;
+}
+
+.sms-payment-block button {
+    flex-shrink: 0;
+
+    border: 0;
+    padding: 7px 10px;
+    border-radius: 9px;
+
+    background: #e2e8f0;
+    color: #334155;
+
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+
+/* TOTAL */
+
+.sms-payment-total {
+    padding-top: 12px;
+    border-bottom: 0;
+}
+
+.sms-payment-total strong {
+    color: #2563eb;
+    font-size: 18px;
+    font-weight: 900;
+}
 </style>
 <script id="auth-v3-final-dom">
 (function(){
@@ -36060,7 +36293,7 @@ function closeSmsPurchaseModalOutside(event) {
    SELECT SMS PACKAGE
 ========================================== */
 
-function selectSmsPackage(
+async function selectSmsPackage(
     smsCount,
     amount
 ) {
@@ -36071,25 +36304,137 @@ function selectSmsPackage(
         200: 19900
     };
 
+
     if (
         allowedPackages[smsCount] !==
         amount
     ) {
-        appAlert(
+
+        await appAlert(
             "SMS багцын мэдээлэл буруу байна."
         );
+
         return;
     }
 
-    console.log(
-        "SMS PACKAGE:",
-        smsCount,
-        amount
-    );
 
-    appAlert(
-        `${smsCount} SMS — ${amount.toLocaleString()}₮`
-    );
+    /* ==========================================
+       SAVE SELECTED PACKAGE
+    ========================================== */
+
+    window.selectedSmsPackage = {
+        smsCount: smsCount,
+        amount: amount
+    };
+
+
+    /* ==========================================
+       SHOW PAYMENT INFO
+    ========================================== */
+
+    const paymentInfo =
+        document.getElementById(
+            "smsPurchasePaymentInfo"
+        );
+
+    const amountElement =
+        document.getElementById(
+            "smsPurchaseAmount"
+        );
+
+
+    if (paymentInfo) {
+        paymentInfo.style.display =
+            "block";
+    }
+
+
+    if (amountElement) {
+
+        amountElement.textContent =
+            Number(amount)
+                .toLocaleString("mn-MN")
+            + "₮";
+
+    }
+
+
+    /* ==========================================
+       TRANSFER NOTE = USER PHONE
+    ========================================== */
+
+    const noteElement =
+        document.getElementById(
+            "smsPurchaseTransferNote"
+        );
+
+
+    try {
+
+        const user =
+            await getCurrentUser();
+
+
+        if (!user || !user.id) {
+
+            if (noteElement) {
+                noteElement.textContent = "—";
+            }
+
+            return;
+        }
+
+
+        const {
+            data: profile,
+            error
+        } = await supabaseClient
+            .from("profiles")
+            .select("phone")
+            .eq("id", user.id)
+            .single();
+
+
+        if (error) {
+            throw error;
+        }
+
+
+        let phone =
+            String(
+                profile?.phone ||
+                user.phone ||
+                ""
+            )
+            .replace(/\D/g, "");
+
+
+        if (phone.length > 8) {
+            phone = phone.slice(-8);
+        }
+
+
+        if (noteElement) {
+
+            noteElement.textContent =
+                phone || "—";
+
+        }
+
+
+    } catch (error) {
+
+        console.error(
+            "SMS transfer note error:",
+            error
+        );
+
+
+        if (noteElement) {
+            noteElement.textContent = "—";
+        }
+
+    }
 }
 </script>
 
