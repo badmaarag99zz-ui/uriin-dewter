@@ -34470,14 +34470,15 @@ const {
     error: smsRequestsError
 } = await supabaseClient
     .from("sms_purchase_requests")
-    .select(`
-        id,
-        user_id,
-        sms_count,
-        amount,
-        status,
-        created_at
-    `)
+   .select(`
+    id,
+    user_id,
+    sms_count,
+    amount,
+    status,
+    created_at,
+    receipt_path
+`)
     .eq(
         "status",
         "pending"
@@ -34917,8 +34918,35 @@ function renderAdminSmsPurchaseRequests(
                         color:#64748b;
                     ">
                         ${created}
-                    </div>
 
+                    </div>
+${request.receipt_path ? `
+    <button
+        type="button"
+        onclick="viewAdminSmsReceipt('${request.id}')"
+        style="
+            width:100%;
+            margin-top:12px;
+            padding:11px;
+            border:1px solid #bfdbfe;
+            border-radius:10px;
+            background:#eff6ff;
+            color:#1d4ed8;
+            font-weight:750;
+            cursor:pointer;
+        "
+    >
+        📎 Баримт харах
+    </button>
+` : `
+    <div style="
+        margin-top:12px;
+        font-size:12px;
+        color:#dc2626;
+    ">
+        Баримт хавсаргаагүй
+    </div>
+`}
 
                     <div style="
                         display:flex;
@@ -37268,6 +37296,52 @@ const {
         }
 
     }
+}
+        /* ==========================================
+   ADMIN — VIEW SMS RECEIPT
+========================================== */
+
+async function viewAdminSmsReceipt(requestId) {
+
+    try {
+
+        const { data: request, error } =
+            await supabaseClient
+                .from("sms_purchase_requests")
+                .select("receipt_path")
+                .eq("id", requestId)
+                .single();
+
+        if (error) throw error;
+
+        if (!request?.receipt_path) {
+            await appAlert("Баримт хавсаргаагүй байна.");
+            return;
+        }
+
+        const { data, error: urlError } =
+            await supabaseClient.storage
+                .from("payment-receipts")
+                .createSignedUrl(request.receipt_path, 60);
+
+        if (urlError) throw urlError;
+
+        window.open(
+            data.signedUrl,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    } catch (error) {
+
+        console.error("SMS receipt error:", error);
+
+        await appAlert(
+            "SMS төлбөрийн баримтыг нээж чадсангүй."
+        );
+
+    }
+
 }
         /* ==========================================
    ADMIN — APPROVE SMS PURCHASE
