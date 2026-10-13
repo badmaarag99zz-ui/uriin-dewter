@@ -27941,16 +27941,23 @@ async function copySubscriptionAccount() {
                SECURE PAYMENT REQUEST
             ============================== */
 
-            const {
-                data: requestId,
-                error
-            } = await supabaseClient.rpc(
-                "create_payment_request",
-                {
-                    p_plan_months: months
-                }
-            );
+           /* ==========================================
+   UPLOAD RECEIPT + CREATE REQUEST
+========================================== */
 
+const receiptPath =
+    await uploadPaymentReceipt("subscriptionReceipt");
+
+const {
+    data: requestId,
+    error
+} = await supabaseClient.rpc(
+    "create_payment_request",
+    {
+        p_plan_months: months,
+        p_receipt_path: receiptPath
+    }
+);
 
             if (error) {
 
@@ -28017,10 +28024,10 @@ async function copySubscriptionAccount() {
                 error
             );
 
-            await appAlert(
-                "Төлбөрийн хүсэлт илгээх үед алдаа гарлаа. Дахин оролдоно уу."
-            );
-
+         await appAlert(
+    error.message ||
+    "Төлбөрийн хүсэлт илгээх үед алдаа гарлаа."
+);
 
         } finally {
 
