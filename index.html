@@ -37174,15 +37174,19 @@ async function submitSmsPurchaseRequest() {
            SECURE RPC
         ========================================== */
 
-        const {
-            data: requestId,
-            error
-        } = await supabaseClient.rpc(
-            "create_sms_purchase_request",
-            {
-                p_sms_count: smsCount
-            }
-        );
+      const receiptPath =
+    await uploadPaymentReceipt("smsPurchaseReceipt");
+
+const {
+    data: requestId,
+    error
+} = await supabaseClient.rpc(
+    "create_sms_purchase_request",
+    {
+        p_sms_count: smsCount,
+        p_receipt_path: receiptPath
+    }
+);
 
 
         if (error) {
@@ -37247,10 +37251,10 @@ async function submitSmsPurchaseRequest() {
         );
 
 
-        await appAlert(
-            "SMS багцын төлбөрийн хүсэлт илгээх үед алдаа гарлаа. Дахин оролдоно уу."
-        );
-
+     await appAlert(
+    error.message ||
+    "SMS багцын төлбөрийн хүсэлт илгээх үед алдаа гарлаа."
+);
 
     } finally {
 
