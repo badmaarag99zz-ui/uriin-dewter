@@ -34386,9 +34386,10 @@ async function loadAdminDashboard() {
                 id,
                 user_id,
                 plan_months,
-                amount,
-                status,
-                created_at
+              amount,
+status,
+receipt_path,
+created_at
             `)
             .eq(
                 "status",
@@ -34621,7 +34622,33 @@ function renderAdminPaymentRequests(
                         • ${created}
                     </div>
 
-
+${request.receipt_path ? `
+    <button
+        type="button"
+        onclick="viewAdminPaymentReceipt('${request.id}')"
+        style="
+            width:100%;
+            margin-top:12px;
+            padding:11px;
+            border:1px solid #bbf7d0;
+            border-radius:10px;
+            background:#f0fdf4;
+            color:#087443;
+            font-weight:750;
+            cursor:pointer;
+        "
+    >
+        📎 Баримт харах
+    </button>
+` : `
+    <div style="
+        margin-top:12px;
+        font-size:12px;
+        color:#94a3b8;
+    ">
+        Баримт хавсаргаагүй
+    </div>
+`}
                     <div style="
                         display:flex;
                         gap:8px;
@@ -34668,6 +34695,55 @@ function renderAdminPaymentRequests(
             `;
 
         }).join("");
+
+}
+    async function viewAdminPaymentReceipt(requestId) {
+
+    try {
+
+        const { data: request, error: requestError } =
+            await supabaseClient
+                .from("payment_requests")
+                .select("receipt_path")
+                .eq("id", requestId)
+                .single();
+
+        if (requestError) throw requestError;
+
+        if (!request?.receipt_path) {
+            alert("Баримт олдсонгүй.");
+            return;
+        }
+
+        const { data, error } =
+            await supabaseClient.storage
+                .from("payment-receipts")
+                .createSignedUrl(
+                    request.receipt_path,
+                    60
+                );
+
+        if (error) throw error;
+
+        window.open(
+            data.signedUrl,
+            "_blank",
+            "noopener,noreferrer"
+        );
+
+    } catch (error) {
+
+        console.error(
+            "Баримт нээхэд алдаа:",
+            error
+        );
+
+        alert(
+            "Баримт нээж чадсангүй: " +
+            error.message
+        );
+
+    }
 
 }
 /* ==========================================
