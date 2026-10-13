@@ -17997,7 +17997,20 @@ body{
 
     </div>
 
-
+<div style="margin-top:16px;">
+    <label style="display:block;font-weight:700;margin-bottom:8px;">
+        📎 Шилжүүлгийн баримт *
+    </label>
+    <input
+        type="file"
+        id="smsPurchaseReceipt"
+        accept="image/jpeg,image/png,image/webp"
+        style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:12px;"
+    >
+    <small style="color:#64748b;">
+        JPG, PNG, WebP зураг · 5 MB хүртэл
+    </small>
+</div>
     <button
         type="button"
         id="submitSmsPurchaseButton"
@@ -27411,6 +27424,20 @@ window.addEventListener(
         </strong>
     </div>
 
+</div>
+        <div style="margin-top:16px;">
+    <label style="display:block;font-weight:700;margin-bottom:8px;">
+        📎 Шилжүүлгийн баримт *
+    </label>
+    <input
+        type="file"
+        id="subscriptionReceipt"
+        accept="image/jpeg,image/png,image/webp"
+        style="width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:12px;"
+    >
+    <small style="color:#64748b;">
+        JPG, PNG, WebP зураг · 5 MB хүртэл
+    </small>
 </div>
         <button
             type="button"
@@ -37000,6 +37027,31 @@ async function selectSmsPackage(
         }
 
     }
+}
+        function validatePaymentReceipt(inputId) {
+
+    const input = document.getElementById(inputId);
+    const file = input?.files?.[0];
+
+    if (!file) {
+        throw new Error("Шилжүүлгийн баримтаа хавсаргана уу.");
+    }
+
+    const allowedTypes = [
+        "image/jpeg",
+        "image/png",
+        "image/webp"
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
+        throw new Error("Зөвхөн JPG, PNG, WebP зураг оруулна уу.");
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+        throw new Error("Баримтын хэмжээ 5 MB-аас бага байх ёстой.");
+    }
+
+    return file;
 }
         /* ==========================================
    SUBMIT SMS PURCHASE REQUEST
