@@ -37054,6 +37054,45 @@ async function selectSmsPackage(
     return file;
 }
         /* ==========================================
+   UPLOAD PAYMENT RECEIPT
+========================================== */
+
+async function uploadPaymentReceipt(inputId) {
+
+    const file = validatePaymentReceipt(inputId);
+
+    const {
+        data: { user },
+        error: authError
+    } = await supabaseClient.auth.getUser();
+
+    if (authError) throw authError;
+
+    if (!user) {
+        throw new Error("Дахин нэвтэрнэ үү.");
+    }
+
+    const extension = {
+        "image/jpeg": "jpg",
+        "image/png": "png",
+        "image/webp": "webp"
+    }[file.type];
+
+    const path =
+        `${user.id}/${crypto.randomUUID()}.${extension}`;
+
+    const { error } = await supabaseClient.storage
+        .from("payment-receipts")
+        .upload(path, file, {
+            contentType: file.type,
+            upsert: false
+        });
+
+    if (error) throw error;
+
+    return path;
+}
+        /* ==========================================
    SUBMIT SMS PURCHASE REQUEST
 ========================================== */
 
